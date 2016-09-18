@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/cchanna/tabletalk/issues"
   },
-  "homepage": "https://github.com/cchanna/tabletalk#readme"
+  "homepage": "https://github.com/cchanna/tabletalk#readme",
+  "dependencies": {
+    "express": "4.14.0"
+  }
 }
