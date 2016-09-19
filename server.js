@@ -1,19 +1,25 @@
 "use strict";
-const express = require('express');
-let app = express();
-app.use(express.static('public'));
 
-const PORT = process.env.PORT
-if (!PORT) {
-  console.error('PORT vnvironment variable must be set');
-  console.log('Exiting');
-  return 1;
+const REQUIRED_ENVS = [
+  'PORT'
+];
+for(let i=0; i < REQUIRED_ENVS.length; i++) {
+  if (!process.env[REQUIRED_ENVS[i]]) {
+    console.error('ERROR: ' + REQUIRED_ENVS[i] + ' environment variable must be set');
+  }
 }
 
-app.get('/', function(req, res) {
-  res.send('hello world');
+const express = require('express');
+let app = express();
+
+
+app.use(express.static('public'));
+
+
+app.get('*', (req, res) => {
+
 });
 
-app.listen(PORT, function() {
-  console.log('Server started on port ' + PORT);
+app.listen(process.env.PORT, function() {
+  console.log('Server started on port ' + process.env.PORT);
 })
