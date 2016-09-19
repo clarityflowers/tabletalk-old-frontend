@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/cchanna/tabletalk#readme",
   "dependencies": {
-    "express": "4.14.0"
+    "express": "4.14.0",
+    "webpack": "1.13.2"
   },
   "devDependencies": {
     "css-loader": "0.25.0",
