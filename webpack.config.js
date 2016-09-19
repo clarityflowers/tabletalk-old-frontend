@@ -1,5 +1,7 @@
+const path = require('path');
+
 module.exports = {
-  entry: './public/index.js',
+  entry: './modules/index.js',
   output: {
     path: 'public',
     filename: 'bundle.js',
@@ -12,7 +14,19 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader?presets[]=es2015'
       },
-      { test: /\.css$/, loader: 'style!css'}
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+      },
     ]
+  },
+  resolve: {
+    root: [
+      path.join(__dirname, 'modules'),
+      path.join(__dirname, 'style')
+    ]
+  },
+  sassLoader: {
+    includePaths: [ 'style' ]
   }
 };
