@@ -1,4 +1,5 @@
 const path = require('path');
+const InlineEnvironmentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 
 module.exports = {
   entry: './app/index.js',
@@ -23,5 +24,12 @@ module.exports = {
   },
   sassLoader: {
     includePaths: [ 'app' ]
-  }
+  },
+  plugins: [
+    new InlineEnvironmentVariablesPlugin([
+      'GOOGLE_CLIENT_ID',
+      'PORT',
+      'NODE_ENV'
+    ])
+  ]
 };

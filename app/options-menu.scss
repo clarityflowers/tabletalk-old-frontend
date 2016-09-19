@@ -1,0 +1,132 @@
+@import 'colors';
+
+#optionsMenu {
+  $right: 20px;
+  $num: 3;
+  $num-dividers: 1;
+  $size: 36px;
+  $height: $size * $num + 4px * $num-dividers;
+  $padding: 20px;
+  $adjustment: $size * .1;
+  $hidden: -$padding - $height - 8px ;
+  $closed: -$padding - $height + $size;
+  $open: -$padding;
+  color: red;
+  top: 0;
+  right: $right;
+  position: fixed;
+  z-index: 100;
+  font-size: 20px;
+  &.hidden {
+    .banner {
+      top: $hidden;
+      transition-delay: .3s;
+    }
+    .labels {
+      .label-container {
+        transition-duration: .3s;
+        transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+        &#name {
+          transition-delay: .1s;
+        }
+      }
+    }
+  }
+  &.closed {
+    .banner {
+      top: $closed;
+      transition-delay: .1s
+    }
+    .labels .label-container {
+      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+      transition-duration: .3s;
+      &#name {
+        transition-duration: .5s;
+        transition-delay: .5s;
+      }
+
+    }
+  }
+  &.open {
+    .banner {
+      top: $open;
+    }
+    .labels .label-container {
+      transition-duration: .5s;
+      transition-delay: .2s;
+      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    }
+  }
+  .banner {
+    transition: top .3s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    box-shadow: $box-shadow;
+    background-color: $hearts;
+    position: absolute;
+    right: 0;
+    width: $size;
+    height: $height + $padding;
+    display: flex;
+    flex-direction: column-reverse;;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 2;
+    .divider {
+      height: 0;
+      width: 80%;
+      display: inline-block;
+      border-width: .05rem;
+      border-style: inset;
+      border-color: $hearts-shadow;
+      border-radius: .1rem;
+      margin-top: .1rem;
+    }
+    button {
+      padding: 0;
+      border: none;
+      width: $size;
+      height: $size;
+      // padding: 0 ($options-size * .01) 0 0;
+      display: inline-block;
+      position: relative;
+      font-size: $size * .7;
+      text-align: center;
+      font-family: 'Icomoon';
+      color: white;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+  .labels {
+    color: white;
+    font-family: 'Junction';
+    z-index: 1;
+    position: absolute;
+    right: 20px;
+    top: 4px;
+    font-size: 20px;
+    .label-container {
+      transition-property: width;
+      // position: relative;
+      overflow: hidden;
+      height: $size;
+      text-align: left;
+      float: right;
+      .label {
+        white-space: nowrap;
+        font-size: 20px;
+        text-shadow: $text-shadow;
+        cursor: pointer;
+        padding: 16px ($size - $right) 10px 20px;
+        margin: -10px;
+        left: 0;
+        display: inline-block;
+        overflow: visible;
+        width: auto;
+        font-weight: bold;
+        transition-property: transform;
+        transition-duration: .2s;
+        transition-timing-function: ease-in-out;
+      }
+    }
+  }
+}

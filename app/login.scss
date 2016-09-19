@@ -1,0 +1,66 @@
+@import 'colors';
+
+#app {
+  #login {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    font-size: 20px;
+    margin: 0;
+    &.home-leave {
+      button {
+        transform: scale(1);
+      }
+      &.home-leave-active {
+        button {
+          transform: scale(0);
+          transition: transform .5s cubic-bezier(0.885, -0.520, 0.925, 0.770);
+          transition-delay: .3s;
+        }
+      }
+    }
+    &.home-enter, &.home-appear {
+      button {
+        transform: scale(0);
+      }
+      &.home-enter-active, &.home-appear-active {
+        button {
+          transform: scale(1);
+          transition: transform .5s cubic-bezier(0.545, 0.170, 0.305, 1.455);
+          transition-delay: .5s;
+        }
+      }
+    }
+    button {
+      &::-moz-focus-inner {
+        border: 0;
+      }
+      &.clicked {
+        background-color: $confetti;
+      }
+      &:not(.clicked) {
+        cursor: pointer;
+      }
+      outline: none;
+      width: 11.4em;
+      height: 2em;
+      font-size: 2em;
+      border: .25em solid $hearts;
+      border-radius: 0;
+      padding: .1em 0 0 0;
+      box-shadow: $box-shadow, $border-shadow;
+      position: relative;
+      margin: 0 auto;
+      display: inline-block;
+      background-color: $hearts-light;
+      font-family: 'League Spartan';
+      color: #FE4365;
+    }
+
+  }
+}
