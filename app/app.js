@@ -1,6 +1,6 @@
 import React from 'react';
-import 'app.scss';
-import Content from 'content.js';
+import './app.scss';
+import Content from './content.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
     return (
       <div id='app'>
-        Hello world!
+        g
       </div>
     )
   }

@@ -18,14 +18,10 @@ module.exports = {
         test: /\.scss$/,
         loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
       },
-    ]
-  },
-  resolve: {
-    root: [
-      path.join(__dirname, 'app'),
+      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
   },
   sassLoader: {
-    includePaths: [ 'style' ]
+    includePaths: [ 'app' ]
   }
 };
