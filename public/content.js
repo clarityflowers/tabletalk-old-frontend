@@ -1,1 +1,3 @@
-module.exports = "Hello world from content.js";
+let result = "hello"
+
+export default result;

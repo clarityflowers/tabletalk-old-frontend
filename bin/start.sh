@@ -4,5 +4,5 @@ then
   webpack
   node server.js
 else
-  webpack-dev-server --content-base public/ --inline --colors --progress
+  webpack-dev-server --content-base public/ --inline --colors
 fi

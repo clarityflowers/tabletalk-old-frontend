@@ -12,13 +12,7 @@ for(let i=0; i < REQUIRED_ENVS.length; i++) {
 const express = require('express');
 let app = express();
 
-
 app.use(express.static('public'));
-
-
-app.get('*', (req, res) => {
-
-});
 
 app.listen(process.env.PORT, function() {
   console.log('Server started on port ' + process.env.PORT);
