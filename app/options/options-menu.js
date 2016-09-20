@@ -3,7 +3,7 @@ import React from 'react';
 // style
 import './options-menu.scss';
 // components
-import { HoverWiggle } from './hover-animate.js';
+import { HoverWiggle } from 'utils/hover-animate.js';
 
 class Label extends React.Component {
   constructor(props) {
@@ -12,7 +12,8 @@ class Label extends React.Component {
       width: 0,
       hover: 0,
       clicked: 0,
-      timeouts:=
+      firstClickTimeout: null,
+      secondClickTimeout: null
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -31,20 +32,19 @@ class Label extends React.Component {
     this.setState({hover: this.state.hover - 1});
   }
   clickTimeout() {
-    timeouts = this.state.timeouts;
-    timeouts.shift();
     this.setState({
-      clicked: this.state.clicked - 1,
-      timeouts:
+      clicked: this.state.clicked - 1
     });
   }
   click() {
-    clearTimeout(this.state.timeouts[0]);
-    clearTimeout(this.state.timeouts[1]);
-    let timeout = setTimeout(this.clickTimeout.bind(this), 150);
+    clearTimeout(this.state.firstClickTimeout);
+    clearTimeout(this.state.secondClickTimeout);
+    let firstClickTimeout = setTimeout(this.clickTimeout.bind(this), 150);
+    let secondClickTimeout = setTimeout(this.clickTimeout.bind(this), 1000);
     this.setState({
       clicked: 2,
-      timeout: timeout
+      firstClickTimeout: firstClickTimeout,
+      secondClickTimeout: secondClickTimeout
     });
     this.props.onClick();
   }

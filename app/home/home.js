@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // components
 import Login from './login.js';
 // utilities
-import Auth from './auth.js';
+import Auth from 'utils/auth.js';
 // style
 import './home.scss';
 

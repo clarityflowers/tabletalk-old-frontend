@@ -2,13 +2,13 @@
 import React from 'react';
 import update from 'react-addons-update';
 // components
-import OptionsMenu from './options-menu.js';
-import Home from './home.js';
+import OptionsMenu from './options/options-menu.js';
+import Home from './home/home.js';
 // style
 import './app.scss';
 // utils
-import GoogleApiLoader from './google-api-loader.js';
-import Auth from './auth.js';
+import GoogleApiLoader from 'utils/google-api-loader.js';
+import Auth from 'utils/auth.js';
 
 class App extends React.Component {
   constructor(props) {

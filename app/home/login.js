@@ -3,7 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // components
-import { HoverBuzz } from './hover-animate.js';
+import { HoverBuzz } from 'utils/hover-animate.js';
 // style
 import './login.scss';
 
