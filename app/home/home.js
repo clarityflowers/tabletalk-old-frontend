@@ -1,11 +1,7 @@
-// libraries
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-// components
 import Login from './login.js';
-// utilities
 import Auth from 'utils/auth.js';
-// style
 import './home.scss';
 
 class Home extends React.Component {

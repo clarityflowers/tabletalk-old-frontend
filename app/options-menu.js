@@ -1,9 +1,6 @@
-// libraries
 import React from 'react';
-// style
-import './options-menu.scss';
-// components
 import { HoverWiggle } from './hover-animate.js';
+import './options-menu.scss';
 
 class Label extends React.Component {
   constructor(props) {
