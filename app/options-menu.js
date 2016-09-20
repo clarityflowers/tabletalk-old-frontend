@@ -1,11 +1,19 @@
+// libraries
 import React from 'react';
+// style
 import './options-menu.scss';
+// components
+import { HoverWiggle } from './hover-animate.js';
 
 class Label extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0
+      width: 0,
+      hover: 0,
+      clicked: 0,
+      firstClickTimeout: null,
+      secondClickTimeout: null
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -14,19 +22,54 @@ class Label extends React.Component {
       this.setState({width: scrollWidth});
     }
   }
+  mouseEnter() {
+    this.setState({hover: 2});
+    setTimeout(() => {
+      this.setState({hover: this.state.hover - 1});
+    }, 150);
+  }
+  mouseLeave() {
+    this.setState({hover: this.state.hover - 1});
+  }
+  clickTimeout() {
+    this.setState({
+      clicked: this.state.clicked - 1
+    });
+  }
+  click() {
+    clearTimeout(this.state.firstClickTimeout);
+    clearTimeout(this.state.secondClickTimeout);
+    let firstClickTimeout = setTimeout(this.clickTimeout.bind(this), 150);
+    let secondClickTimeout = setTimeout(this.clickTimeout.bind(this), 1000);
+    this.setState({
+      clicked: 2,
+      firstClickTimeout: firstClickTimeout,
+      secondClickTimeout: secondClickTimeout
+    });
+    this.props.onClick();
+  }
   render() {
     let style = {
-      width: 0
+      width: 0,
+      left: 0
     }
     if (!this.props.hidden) {
       style.width = this.state.width;
+      if (this.state.clicked > 1) {
+        style.left = 10;
+      }
+      else if (this.state.clicked == 0 && this.state.hover > 0) {
+        style.left = -10;
+      }
     }
     return (
       <div className='label-container' style={style} id={this.props.id}>
         <div  className='label'
               ref='label'
               id={this.props.id}
-              onClick={this.props.onClick}>
+              onClick={this.click.bind(this)}
+              onMouseEnter={this.mouseEnter.bind(this)}
+              onMouseLeave={this.mouseLeave.bind(this)}>
           {this.props.text}
         </div>
       </div>
@@ -51,7 +94,9 @@ const Labels = (props) => {
 
 const OptionsButton = (props) => {
   return (
-    <button onClick = {props.onClick}>{props.children}</button>
+    <HoverWiggle>
+      <button onClick = {props.onClick}>{props.children}</button>
+    </HoverWiggle>
   )
 }
 
@@ -80,7 +125,9 @@ class OptionsMenu extends React.Component {
     }
   }
   toggle() {
-    this.setState({open: !this.state.open});
+    this.setState({
+      open: !this.state.open
+    });
   }
   signout() {
     this.setState({open: false});
