@@ -29,15 +29,7 @@ class Label extends React.Component {
     });
   }
   click() {
-    // clearTimeout(this.state.firstClickTimeout);
-    // clearTimeout(this.state.secondClickTimeout);
-    // let firstClickTimeout = setTimeout(this.clickTimeout.bind(this), 150);
-    // let secondClickTimeout = setTimeout(this.clickTimeout.bind(this), 1000);
-    // this.setState({
-    //   clicked: 2,
-    //   firstClickTimeout: firstClickTimeout,
-    //   secondClickTimeout: secondClickTimeout
-    // });
+    this.mouseLeave();
     this.props.onClick();
   }
   render() {
@@ -61,7 +53,8 @@ class Label extends React.Component {
               id={this.props.id}
               onClick={this.click.bind(this)}
               onMouseEnter={this.mouseEnter.bind(this)}
-              onMouseLeave={this.mouseLeave.bind(this)}>
+              onMouseLeave={this.mouseLeave.bind(this)}
+              onTouchMove={this.mouseLeave.bind(this)}>
           {this.props.text}
         </div>
       </div>
@@ -102,12 +95,16 @@ const OptionsButton = (props) => {
   let mouseLeave = () => {
     props.mouseLeave(props.name);
   }
+  let click = () => {
+    mouseLeave();
+    props.onClick();
+  }
   let className='';
   if (props.isHovering) {
     className='anim-wiggle';
   }
   return (
-    <button onClick={props.onClick}
+    <button onClick={click}
             className={className}
             onMouseEnter={mouseEnter}
             onMouseLeave={mouseLeave}>
@@ -206,6 +203,7 @@ class OptionsMenu extends React.Component {
     }, time);
   }
   mouseEnter(key) {
+    console.log('MOUSE ENTER: ' + key);
     let option = this.state[key];
     if (option.animationStep > 0) {
       option = update(option, {
@@ -222,6 +220,7 @@ class OptionsMenu extends React.Component {
     this.setState({[key]: option});
   }
   mouseLeave(key) {
+    console.log('MOUSE LEAVE: ' + key);
     let option = update(this.state[key], {
       isHovering: {$set: false}
     });
