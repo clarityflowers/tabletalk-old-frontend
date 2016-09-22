@@ -258,6 +258,11 @@ class OptionsMenu extends React.Component {
     }
     return result;
   }
+  componentWillUnmount() {
+    clearTimeout(this.timeouts.name);
+    clearTimeout(this.timeouts.toggle);
+    clearTimeout(this.timeouts.signout);
+  }
   render() {
     let className = 'hidden';
     if (this.props.loggedIn) {
