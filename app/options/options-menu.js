@@ -50,7 +50,7 @@ class Label extends React.Component {
       if (this.state.clicked > 1) {
         style.left = 10;
       }
-      else if (this.state.clicked == 0 && this.props.isHovering > 1) {
+      else if (this.props.isHovering) {
         style.left = -10;
       }
     }
@@ -157,17 +157,23 @@ class OptionsMenu extends React.Component {
     this.state = {
       open: false,
       isToggling: 0,
-      isHovering: {
-        name: 0,
-        signout: 0,
-        toggle: 0
+      name: {
+        isHovering: false,
+        animationStep: 0
       },
-      timeouts: {
-        name: null,
-        signout: null,
-        toggle: null
+      signout: {
+        isHovering: false,
+        animationStep: 0
+      },
+      toggle: {
+        isHovering: false,
+        animationStep: 0
       }
-
+    }
+    this.timeouts = {
+      name: 0,
+      signout: 0,
+      toggle: 0
     }
   }
   toggle() {
@@ -176,47 +182,50 @@ class OptionsMenu extends React.Component {
       isToggling: 3
     });
   }
-  hover(key) {
-    let isHovering = this.state.isHovering;
-    let timeouts = this.state.timeouts;
-    isHovering[key] = 3;
-    clearTimeout(timeouts[key]);
-    timeouts[key] = setTimeout(() => {
-      let timeouts = this.state.timeouts;
-      let isHovering = this.state.isHovering;
-      isHovering[key] = isHovering[key] - 1;
-      timeouts[key] = setTimeout(() => {
-        let isHovering = this.state.isHovering;
-        isHovering[key] = isHovering[key] - 1;
-        this.setState({isHovering: isHovering});
-      }, 600);
-      this.setState({
-        isHovering: isHovering,
-        timeouts: timeouts
-      });
-    }, 150);
-    this.setState({
-      isHovering: isHovering,
-      timeouts: timeouts
-    });
+  hoverAnimationStepThree(key) {
+    this.setState({[key]: update(this.state[key], {
+      animationStep: {$set: 0},
+    })});
+  }
+  hoverAnimationStepTwo(key) {
+    this.safeTimeout(key, 600, this.hoverAnimationStepThree.bind(this));
+    this.setState({[key]: update(this.state[key], {
+      animationStep: {$set: 2},
+    })});
+  }
+  hoverAnimationStepOne(key) {
+    this.safeTimeout(key, 150, this.hoverAnimationStepTwo.bind(this));
+    this.setState({[key]: update(this.state[key], {
+      animationStep: {$set: 1},
+    })});
+  }
+  safeTimeout(key, time, cb) {
+    clearTimeout(this.timeouts[key]);
+    this.timeouts[key] = setTimeout(() => {
+      cb(key);
+    }, time);
   }
   mouseEnter(key) {
-    let isHovering = this.state.isHovering;
-    if (isHovering[key]) {
-      isHovering[key] = 0;
-      this.setState({isHovering: isHovering});
-      setTimeout(() => {
-        this.hover(key);
-      }, 70);
+    let option = this.state[key];
+    if (option.animationStep > 0) {
+      option = update(option, {
+        animationStep: {$set: -1}
+      })
+      this.safeTimeout(key, 70, this.hoverAnimationStepOne.bind(this));
     }
     else {
-      this.hover(key);
+      this.safeTimeout(key, 0, this.hoverAnimationStepOne.bind(this));
     }
+    option = update(option, {
+      isHovering: {$set: true}
+    });
+    this.setState({[key]: option});
   }
   mouseLeave(key) {
-    let isHovering = this.state.isHovering;
-    isHovering[key] = isHovering[key] - 1;
-    this.setState({isHovering: isHovering});
+    let option = update(this.state[key], {
+      isHovering: {$set: false}
+    });
+    this.setState({[key]: option});
   }
   signout() {
     this.setState({open: false});
@@ -224,6 +233,30 @@ class OptionsMenu extends React.Component {
   }
   goToUserSettings() {
     this.toggle();
+  }
+  calcLabelHover(key) {
+    let result = false
+    if (this.state[key].animationStep != -1) {
+      if (this.state[key].isHovering) {
+        result = true;
+      }
+      else if (this.state[key].animationStep == 1) {
+        result = true;
+      }
+    }
+    return result;
+  }
+  calcButtonHover(key) {
+    let result = false
+    if (this.state[key].animationStep != -1) {
+      if (this.state[key].isHovering) {
+        result = true;
+      }
+      else if (this.state[key].animationStep > 0) {
+        result = true;
+      }
+    }
+    return result;
   }
   render() {
     let className = 'hidden';
@@ -245,7 +278,11 @@ class OptionsMenu extends React.Component {
           mouseEnter={this.mouseEnter.bind(this)}
           mouseLeave={this.mouseLeave.bind(this)}
           toggle={this.toggle.bind(this)}
-          isHovering={this.state.isHovering}
+          isHovering={{
+            name: this.calcLabelHover('name'),
+            toggle: this.calcLabelHover('toggle'),
+            signout: this.calcLabelHover('signout'),
+          }}
           isToggling={this.state.isToggling}
           goToUserSettings={this.goToUserSettings.bind(this)}
         />
@@ -254,7 +291,11 @@ class OptionsMenu extends React.Component {
           toggle={this.toggle.bind(this)}
           mouseEnter={this.mouseEnter.bind(this)}
           mouseLeave={this.mouseLeave.bind(this)}
-          isHovering={this.state.isHovering}
+          isHovering={{
+            name: this.calcButtonHover('name'),
+            toggle: this.calcButtonHover('toggle'),
+            signout: this.calcButtonHover('signout'),
+          }}
           goToUserSettings={this.goToUserSettings.bind(this)}
         />
       </div>
