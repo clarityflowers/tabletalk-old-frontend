@@ -136,3 +136,10 @@
     }
   }
 }
+
+@media only screen
+  and (max-device-width: 400px) {
+  #app #optionsMenu {
+    font-size: 16px;
+  }
+}

@@ -68,3 +68,10 @@
 
   }
 }
+
+@media only screen
+  and (max-device-width: 400px) {
+  #app #login {
+    font-size: 12px;
+  }
+}
