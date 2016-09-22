@@ -7,8 +7,7 @@ class Label extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 0,
-      clicked: 0,
+      width: 0
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -23,11 +22,6 @@ class Label extends React.Component {
   mouseLeave() {
     this.props.mouseLeave(this.props.name);
   }
-  clickTimeout() {
-    this.setState({
-      clicked: this.state.clicked - 1
-    });
-  }
   click() {
     this.mouseLeave();
     this.props.onClick();
@@ -39,7 +33,7 @@ class Label extends React.Component {
     }
     if (!this.props.hidden) {
       style.width = this.state.width;
-      if (this.state.clicked > 1) {
+      if (this.props.isToggling) {
         style.left = 10;
       }
       else if (this.props.isHovering) {
@@ -75,7 +69,8 @@ const Labels = (props) => {
               onClick={nameOnClick}
               isHovering={nameHover}
               mouseEnter={props.mouseEnter}
-              mouseLeave={props.mouseLeave}/>
+              mouseLeave={props.mouseLeave}
+              isToggling={props.isToggling}/>
       <Label  hidden={!props.open}
               text='Sign off'
               id='signout'
@@ -153,7 +148,7 @@ class OptionsMenu extends React.Component {
     super(props);
     this.state = {
       open: false,
-      isToggling: 0,
+      isToggling: false,
       name: {
         isHovering: false,
         animationStep: 0
@@ -168,16 +163,23 @@ class OptionsMenu extends React.Component {
       }
     }
     this.timeouts = {
-      name: 0,
-      signout: 0,
-      toggle: 0
+      name: null,
+      signout: null,
+      toggle: null,
+      toggling: null
     }
+  }
+  endToggle() {
+    this.setState({
+      isToggling: false
+    })
   }
   toggle() {
     this.setState({
       open: !this.state.open,
-      isToggling: 3
+      isToggling: true
     });
+    this.safeTimeout('toggling',150,this.endToggle.bind(this));
   }
   hoverAnimationStepThree(key) {
     this.setState({[key]: update(this.state[key], {
