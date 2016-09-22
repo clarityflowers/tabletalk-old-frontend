@@ -194,7 +194,7 @@ class OptionsMenu extends React.Component {
     })});
   }
   hoverAnimationStepOne(key) {
-    this.safeTimeout(key, 150, this.hoverAnimationStepTwo.bind(this));
+    this.safeTimeout(key, 200, this.hoverAnimationStepTwo.bind(this));
     this.setState({[key]: update(this.state[key], {
       animationStep: {$set: 1},
     })});
