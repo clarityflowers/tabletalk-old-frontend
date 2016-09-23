@@ -34,7 +34,8 @@ module.exports = {
     new InlineEnvironmentVariablesPlugin([
       'GOOGLE_CLIENT_ID',
       'PORT',
-      'NODE_ENV'
+      'NODE_ENV',
+      'API_URL'
     ])
   ]
 };

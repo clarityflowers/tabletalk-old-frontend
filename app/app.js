@@ -12,10 +12,14 @@ class App extends React.Component {
     this.state = {
       options: false,
       googleAuth: {
-        user: {
-          email: null
-        },
         loaded: false,
+        isLoggedIn: false
+      },
+      apiAuth: {
+        user: {
+          id: null,
+          name: null
+        },
         isLoggedIn: false
       }
     }
@@ -23,25 +27,17 @@ class App extends React.Component {
   setAuthReady() {
     this.setState({googleAuth: update(this.state.googleAuth, {loaded: {$set: true}})});
   }
+  updateAuth(apiAuth) {
+    this.setState({apiAuth: apiAuth});
+  }
   onSignInChange(isSignedIn) {
     let googleAuth = this.state.googleAuth;
     googleAuth = update(googleAuth, {loaded: {$set: true}});
     if (isSignedIn) {
       let user = GoogleApiLoader.getAuth2().currentUser.get();
-      let profile = user.getBasicProfile();
       let response = user.getAuthResponse();
-      if (user) {
-        var profileProxy = {};
-        profileProxy.email = profile.getEmail();
-        googleAuth = update(googleAuth, {user: {$set: profileProxy}});
-      }
       if (response) {
-        Auth.login(response.id_token, (success) => {
-          this.forceUpdate();
-        });
-      }
-      else {
-        googleAuth = update(googleAuth, {user: {$set: null}});
+        Auth.login(response.id_token, this.updateAuth.bind(this));
       }
     }
     googleAuth = update(googleAuth, {isLoggedIn: {$set: isSignedIn}});
@@ -99,7 +95,6 @@ class App extends React.Component {
       if (this.state.googleAuth.isLoggedIn) {
         if (Auth.loggedIn()) {
           loggedIn = true;
-          name=this.state.googleAuth.user.email;
         }
       }
       children = (
@@ -116,7 +111,7 @@ class App extends React.Component {
         <OptionsMenu
           loggedIn={loggedIn && this.state.options}
           onSignOut={this.signOut}
-          name={this.state.googleAuth.user.email}
+          name={this.state.apiAuth.user.name}
         />
         {children}
       </div>
