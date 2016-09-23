@@ -1,13 +1,11 @@
-'use strict'
-
 var clientsLoaded = 0;
 
 var sign2Loaded = false;
 var auth2Loaded = false;
 var auth2;
 
-module.exports = {
-  authLoaded: function (callback) {
+class GoogleApiLoader {
+  static authLoaded(callback) {
     var check = function () {
       if (auth2Loaded && sign2Loaded) {
         callback();
@@ -20,8 +18,9 @@ module.exports = {
     }
 
     check();
-  },
-  gapiLoaded: function (callback) {
+  }
+
+  static gapiLoaded(callback) {
     var hasgapi = function () {
       if (typeof (gapi) !== "undefined" && gapi.client) {
         callback();
@@ -34,11 +33,13 @@ module.exports = {
     }
 
     hasgapi();
-  },
-  getAuth2: function () {
+  }
+
+  static getAuth2() {
     return auth2;
-  },
-  signIn: function () {
+  }
+
+  static signIn() {
     var options = new gapi.auth2.SigninOptionsBuilder({
       scopes: ['email']
     });
@@ -47,8 +48,9 @@ module.exports = {
     }, function (fail) {
       // TODO on signin failure
     });
-  },
-  signOut: function () {
+  }
+
+  static signOut() {
     this.getAuth2().signOut().then(function (success) {
       // TODO on signout success
     }, function (fail) {
@@ -57,8 +59,7 @@ module.exports = {
   }
 };
 
-
-module.exports.gapiLoaded(function () {
+GoogleApiLoader.gapiLoaded(() => {
   gapi.load('auth2', function () {
     auth2 = gapi.auth2.init({
       client_id: process.env.GOOGLE_CLIENT_ID,
@@ -75,3 +76,5 @@ module.exports.gapiLoaded(function () {
       clientsLoaded++;
   }
 });
+
+export default GoogleApiLoader;

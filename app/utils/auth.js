@@ -1,7 +1,9 @@
 'use strict'
 
-module.exports = {
-  login(token, cb) {
+import { User } from 'utils/api.js'
+
+class Auth {
+  static login(token, cb) {
     if (localStorage.auth && localStorage.auth.token) {
       if (cb) {
         cb({
@@ -14,7 +16,7 @@ module.exports = {
       }
     }
     else {
-      apiLogin(token, (res) => {
+      User.login(token, (res) => {
         let result = {
           isLoggedIn: false,
           user: {
@@ -39,49 +41,25 @@ module.exports = {
         if (cb) { cb(result); }
       });
     }
-  },
+  }
 
-  getToken() {
+  static getToken() {
     if (localStorage.auth) {
       return localStorage.auth.token;
     }
     else {
       return null;
     }
-  },
+  }
 
-  logout() {
+  static logout() {
     delete localStorage.auth
-  },
+  }
 
-  loggedIn() {
+  static loggedIn() {
     return !!localStorage.auth
-  },
+  }
 }
 
-function apiLogin(token, cb) {
-  var request = new XMLHttpRequest();
-  request.open('POST', process.env.API_URL + '/login', true);
-  request.setRequestHeader('Content-Type', 'application/json');
-  request.setRequestHeader('token', token);
 
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      var data = JSON.parse(request.responseText);
-      cb({
-        authenticated: true,
-        token: data.token,
-        name: data.name,
-        user: data.user
-      })
-    } else {
-      cb({ authenticated: false })
-    }
-  };
-
-  request.onerror = function() {
-    // There was a connection error of some sort
-  };
-
-  request.send();
-}
+export default Auth;
