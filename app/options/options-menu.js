@@ -205,7 +205,6 @@ class OptionsMenu extends React.Component {
     }, time);
   }
   mouseEnter(key) {
-    console.log('MOUSE ENTER: ' + key);
     let option = this.state[key];
     if (option.animationStep > 0) {
       option = update(option, {
@@ -222,7 +221,6 @@ class OptionsMenu extends React.Component {
     this.setState({[key]: option});
   }
   mouseLeave(key) {
-    console.log('MOUSE LEAVE: ' + key);
     let option = update(this.state[key], {
       isHovering: {$set: false}
     });
