@@ -97,23 +97,17 @@ class App extends React.Component {
           loggedIn = true;
         }
       }
-      children = (
-        <div>
-        {this.props.children && React.cloneElement(this.props.children, {
-          loggedIn: loggedIn,
-          onSignIn: this.signIn
-        })}
-        </div>
-      )
     }
+    let target = this.props.location.query.game;
     return (
       <div id='app'>
-        <OptionsMenu
-          loggedIn={loggedIn && this.state.options}
-          onSignOut={this.signOut}
-          name={this.state.apiAuth.user.name}
-        />
-        {children}
+        <OptionsMenu loggedIn={loggedIn && this.state.options}
+                     onSignOut={this.signOut}
+                     name={this.state.apiAuth.user.name}/>
+        <Home loading={!this.state.googleAuth.loaded}
+              loggedIn={loggedIn}
+              onSignIn={this.signIn}
+              target={target}/>
       </div>
     )
   }

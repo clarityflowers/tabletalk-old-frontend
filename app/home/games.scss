@@ -1,0 +1,58 @@
+@import 'utils/colors';
+
+#app #home #games {
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px;
+  box-sizing: border-box;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+  .game {
+    margin: 20px;
+    position: relative;
+    margin: 50px 0px 50px 50px;
+    .game-icon {
+      position: absolute;
+      left: -50px;
+      top: -15px;
+      width: 60px;
+      height: 60px;
+      border: 10px solid $hearts;
+      border-radius: 200vh;
+      // background-color: $hearts-light;
+      box-shadow: $box-shadow, $border-shadow;
+      display: inline-block;
+      flex: none;
+      // from http://www.colourlovers.com/palette/3352142
+      $fireworth: hsl(21, 88%, 52%);
+      $cold-breath: hsl(203, 57%, 97%);
+      $rained-flowers-today: hsl(201, 98%, 44%);
+      $deep: hsl(201, 98%, 23%);
+      $necessita: hsl(201, 100%, 11%);
+      $width: 20px;
+      $opacity: .8;
+      $desaturate: 20%;
+      $stripes: desaturate(fade-out($fireworth, $opacity), $desaturate) 0px,
+                desaturate(fade-out($fireworth, $opacity), $desaturate) ($width),
+                desaturate(fade-out($necessita, $opacity), $desaturate) ($width),
+                desaturate(fade-out($necessita, $opacity), $desaturate) ($width * 2),
+                desaturate(fade-out($rained-flowers-today, $opacity), $desaturate) ($width * 2),
+                desaturate(fade-out($rained-flowers-today, $opacity), $desaturate) ($width * 3),
+                desaturate(fade-out($deep, $opacity), $desaturate) ($width * 3),
+                desaturate(fade-out($deep, $opacity), $desaturate) ($width * 4);
+      background-color: $cold-breath;
+      background-image: repeating-linear-gradient(45deg, $stripes), repeating-linear-gradient(135deg, $stripes);
+    }
+    .game-box {
+      flex: 1;
+      font-size: 30px;
+      color: $hearts-light;
+      text-shadow: $text-shadow;
+      padding: 10px 10px 3px 40px;
+      font-family: 'League Spartan';
+      display: inline-block;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import cx from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { HoverBuzz } from 'utils/hover-animate.js';
 import './login.scss';
@@ -16,10 +16,12 @@ class GoogleLogin extends React.Component {
     this.props.onClick()
   }
   render() {
-    let className = '';
-    if (this.state.clicked) {
-      className = 'clicked';
-    }
+    let className = cx({
+      clicked: this.state.clicked,
+      leaving: this.props.leaving,
+      entering: this.props.entering,
+      animating: this.props.animating
+    });
     return (
       <HoverBuzz off={this.state.clicked}>
         <button
@@ -38,16 +40,44 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ready: false
+      entering: false,
+      leaving: false,
+      animating: false
     }
+  }
+  componentWillEnter(callback) {
+    this.setState({entering: true});
+    setTimeout(() => {
+      this.setState({animating: true});
+      setTimeout(callback, 1000);
+    }, 1);
+  }
+  componentDidEnter() {
+    this.setState({
+      animating: false,
+      entering: false
+    })
+  }
+  componentWillLeave(callback) {
+    this.setState({leaving: true});
+    setTimeout(() => {
+      this.setState({animating: true});
+      setTimeout(callback, 1000);
+    }, 1);
+  }
+  componentDidLeave() {
+    this.props.doneAnimating();
   }
   render() {
     return (
       <div id='login'>
-        <GoogleLogin onClick={this.props.onSignIn}/>
+        <GoogleLogin onClick={this.props.onSignIn}
+                     leaving={this.state.leaving}
+                     entering={this.state.entering}
+                     animating={this.state.animating}/>
       </div>
     )
   }
 }
 
-export default withRouter(Login);
+export default Login;

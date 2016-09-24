@@ -2,6 +2,7 @@
 $hearts: hsla(349, 99%, 63%, 1);
 $hearts-light: lighten($hearts, 35%);
 $confetti: hsla(2, 94%, 80%, 1);
+$confetti-dark: desaturate(darken($confetti, 30%), 50%);
 $hearts-shadow: fade-out(darken($confetti, 60%), .6);
 $champaign: hsla(25, 86%, 83%, 1);
 $euphoria: hsla(60, 22%, 72%, 1);

@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactTransitionGroup from 'react-addons-transition-group';
 import Login from './login.js';
+import Games from './games.js'
 import Auth from 'utils/auth.js';
 import './home.scss';
 
@@ -8,31 +9,42 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      animating: false
     }
+  }
+  componentWillReceiveProps(newProps) {
+    if (!this.props.loading && newProps.loggedIn != this.props.loggedIn) {
+      this.setState({animating: true});
+    }
+  }
+  doneAnimating() {
+    let duration = this.props.loggedIn ? 1500 : 500;
+    setTimeout(() => {
+      this.setState({animating: false});
+    }, duration);
   }
   render() {
     let login = null;
-    let content = null;
-    if (!this.props.loading) {
+    let children = null;
+    if (!this.props.loading && !this.state.animating) {
       if (this.props.loggedIn) {
-        content = this.props.children
+        children = (
+          <Games key='games'
+                 doneAnimating={this.doneAnimating.bind(this)}/>
+        )
       }
       else {
-        login = <Login onSignIn={this.props.onSignIn}/>
+        children = (
+          <Login onSignIn={this.props.onSignIn}
+                 key='login'
+                 doneAnimating={this.doneAnimating.bind(this)}/>
+        )
       }
     }
     return (
-      <div id='home'>
-        <ReactCSSTransitionGroup
-          transitionName="home"
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={1000}
-          transitionAppear={true}
-          transitionAppearTimeout={1000}>
-          {login}
-        </ReactCSSTransitionGroup>
-        {content}
-      </div>
+      <ReactTransitionGroup className='content' component='div' id='home'>
+        {children}
+      </ReactTransitionGroup>
     )
   }
 }

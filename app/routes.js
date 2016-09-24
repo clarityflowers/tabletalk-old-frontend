@@ -5,7 +5,6 @@ import Home from './home/home.js';
 
 
 module.exports = (
-  <Route path="/" component={App}>
-    <IndexRoute component={Home} />
+  <Route path='/' component={App}>
   </Route>
 )

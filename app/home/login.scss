@@ -16,30 +16,6 @@
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
-    &.home-leave {
-      button {
-        transform: scale(1);
-      }
-      &.home-leave-active {
-        button {
-          transform: scale(0);
-          transition: transform .5s cubic-bezier(0.885, -0.520, 0.925, 0.770);
-          transition-delay: .3s;
-        }
-      }
-    }
-    &.home-enter, &.home-appear {
-      button {
-        transform: scale(0);
-      }
-      &.home-enter-active, &.home-appear-active {
-        button {
-          transform: scale(1);
-          transition: transform .5s cubic-bezier(0.545, 0.170, 0.305, 1.455);
-          transition-delay: .5s;
-        }
-      }
-    }
     button {
       &::-moz-focus-inner {
         border: 0;
@@ -49,6 +25,23 @@
       }
       &:not(.clicked) {
         cursor: pointer;
+      }
+
+      &.leaving {
+        transform: scale(1);
+        &.animating {
+          transform: scale(0);
+          transition: transform .5s cubic-bezier(0.885, -0.520, 0.925, 0.770);
+          transition-delay: .3s;
+        }
+      }
+      &.entering {
+        transform: scale(0);
+        &.animating {
+          transform: scale(1);
+          transition: transform .5s cubic-bezier(0.545, 0.170, 0.305, 1.455);
+          transition-delay: .5s;
+        }
       }
       outline: none;
       width: 11.4em;
