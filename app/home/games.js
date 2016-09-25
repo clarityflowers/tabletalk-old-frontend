@@ -6,17 +6,48 @@ import cx from 'classnames';
 import './games.scss';
 
 let GameIcon = (props) => {
+  let className = cx(
+    'icon',
+    {
+      off: props.position == 0,
+      dot: props.position == 1,
+      entering: props.entering,
+      leaving: props.leaving
+    }
+  )
   return (
-    <div className='game-icon'/>
+    <div className={className}/>
   );
 }
 
-let GameBox = (props) => {
-  return (
-    <div className='game-box'>
-      {props.name}
-    </div>
-  )
+class GameBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: 0
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    let {scrollWidth, innerText} = this.refs.box;
+    if (scrollWidth != this.state.width) {
+      this.setState({width: scrollWidth});
+    }
+  }
+  render() {
+    let style = {
+      width: 0
+    }
+    if (this.props.position == 1) {
+      style.width = this.state.width;
+    }
+    return (
+      <div className='box-container' style={style}>
+        <div className='box' ref='box'>
+        {this.props.name}
+        </div>
+      </div>
+    )
+  }
 }
 
 class Game extends React.Component {
@@ -25,42 +56,70 @@ class Game extends React.Component {
     this.state = {
       entering: false,
       leaving: false,
-      animating: false
+      position: 0
+    }
+    this.timeout = null;
+    this.enterCallback = null;
+    this.leaveCallback = null;
+    this.ready = true;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.timeout) {
+      if (this.state.entering) {
+        this.timeout = setTimeout(() => {
+          this.timeout = null;
+          if (this.state.position < 3) {
+            this.setState({position: this.state.position + 1});
+          }
+          else if (this.enterCallback) {
+            this.enterCallback();
+            this.enterCallback = null;
+          }
+        }, 500);
+      }
+      else if (this.state.leaving) {
+        this.timeout = setTimeout(() => {
+          this.timeout = null;
+          if (this.state.position > 0) {
+              this.setState({position: this.state.position - 1});
+          }
+          else if (this.leaveCallback) {
+            this.leaveCallback();
+          }
+        }, 500);
+      }
     }
   }
+
   componentWillEnter(callback) {
+    this.enterCallback = callback;
     this.setState({entering: true});
-    setTimeout(() => {
-      this.setState({animating: true});
-      setTimeout(callback, 1000);
-    }, 1);
   }
   componentDidEnter() {
     this.setState({
-      animating: false,
       entering: false
     })
+    this.props.doneEntering();
   }
   componentWillLeave(callback) {
-    this.setState({leaving: true});
-    setTimeout(() => {
-      this.setState({animating: true});
-      setTimeout(callback, 1000);
-    }, 1);
+    this.leaveCallback = callback;
+    this.setState({
+      leaving: true
+    });
   }
   componentDidLeave() {
-    this.props.doneAnimating();
+    this.props.doneLeaving();
   }
   render() {
-    let className = cx({
-      leaving: this.props.leaving,
-      entering: this.props.entering,
-      animating: this.props.animating
-    });
+    let iconPosition = Math.min(this.state.position, 2);
+    let boxPosition = Math.max(this.state.position - 2, 0);
     return (
       <div className='game'>
-      <GameIcon/>
-      <GameBox name={this.props.name}/>
+        <GameIcon position={iconPosition}
+                  entering={this.state.entering}
+                  leaving={this.state.leaving}/>
+        <GameBox name={this.props.name}
+                 position={boxPosition}/>
       </div>
     );
   }
@@ -71,14 +130,27 @@ class Games extends React.Component {
     super(props);
     this.state = {
       activeGames: 0,
+      entering: false,
+      leaving: false
     };
-    this.closedGames = 0;
+    this.gamesDoneEntering = 0;
+    this.gamesDoneLeaving = 0;
     this.callback = null;
     this.games = [
       {
         name: "Stranger Worlds",
         type: 0,
         id: 1
+      },
+      {
+        name: "Apocalybs3 Worlb",
+        type: 0,
+        id: 3
+      },
+      {
+        name: "MONSTE2HEA2TS",
+        type: 0,
+        id: 4
       },
       {
         name: "World of Adventure",
@@ -88,39 +160,63 @@ class Games extends React.Component {
     ];
   }
   animateInGames(callback) {
+    console.log('ANIMATE IN GAMES');
     this.setState({
-      activeGames: this.state.activeGames + 1
+      activeGames: this.state.activeGames + 1,
+      entering: true
     });
     if (this.state.activeGames < this.games.length) {
-      setTimeout(() => {this.animateInGames(callback)}, 1000);
+      setTimeout(() => {this.animateInGames(callback)}, 300);
     }
     else {
       callback();
     }
   }
   animateOutGames() {
+    console.log('ANIMATE OUT GAMES');
     this.setState({
-      activeGames: this.state.activeGames - 1
+      leaving: true
     });
-    if (this.state.activeGames > 0) {
-      setTimeout(() => {this.animateOutGames()}, 1000);
+    if (!this.state.entering) {
+      this.setState({
+        activeGames: this.state.activeGames - 1,
+      });
+      if (this.state.activeGames > 0) {
+        setTimeout(() => {this.animateOutGames()}, 300);
+      }
+    }
+  }
+  onGameDoneEntering() {
+    console.log('ON GAME DONE ENTERING');
+    this.gamesDoneEntering++;
+    if (this.gamesDoneEntering == this.gamesEnteringCount) {
+      this.setState({
+        entering: false
+      })
+      if (this.state.leaving) {
+        this.animateOutGames();
+      }
     }
   }
   onGameDoneLeaving() {
-    this.closedGames++;
-    if (this.closedGames == this.games.length) {
+    console.log('ON GAME DONE LEAVING');
+    this.gamesDoneLeaving++;
+    if (this.gamesDoneLeaving == this.games.length) {
       setTimeout(() => {this.callback()});
     }
   }
   componentWillEnter(callback) {
+    console.log('COMPONENT WILL ENTER');
     if (this.games.length == 0) {
       callback();
     }
     else {
+      this.gamesEnteringCount = this.games.length;
       this.animateInGames(callback);
     }
   }
   componentWillLeave(callback) {
+    console.log('COMPONENT WILL LEAVE');
     this.callback = callback;
     if (this.games.length == 0) {
       callback();
@@ -130,6 +226,7 @@ class Games extends React.Component {
     }
   }
   componentDidLeave() {
+    console.log('COMPONENT DID LEAVE');
     this.props.doneAnimating();
   }
   render() {
@@ -138,7 +235,8 @@ class Games extends React.Component {
       games.push(
         <Game name={this.games[i].name}
               key={this.games[i].id}
-              doneAnimating={this.onGameDoneLeaving.bind(this)}/>
+              doneEntering={this.onGameDoneEntering.bind(this)}
+              doneLeaving={this.onGameDoneLeaving.bind(this)}/>
       )
     }
     return (
