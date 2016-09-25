@@ -18,10 +18,10 @@ class Home extends React.Component {
     }
   }
   doneAnimating() {
-    let duration = this.props.loggedIn ? 1500 : 500;
-    setTimeout(() => {
-      this.setState({animating: false});
-    }, duration);
+    // let duration = this.props.loggedIn ? 150 : 50;
+    // setTimeout(() => {
+    this.setState({animating: false});
+    // }, duration);
   }
   render() {
     let login = null;

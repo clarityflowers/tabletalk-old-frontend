@@ -65,7 +65,11 @@ class Game extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (!this.timeout) {
+      let duration = 500;
       if (this.state.entering) {
+        if (this.state.position == 1) {
+          duration = 700;
+        }
         this.timeout = setTimeout(() => {
           this.timeout = null;
           if (this.state.position < 3) {
@@ -75,9 +79,12 @@ class Game extends React.Component {
             this.enterCallback();
             this.enterCallback = null;
           }
-        }, 500);
+        }, duration);
       }
       else if (this.state.leaving) {
+        if (this.state.position == 0) {
+          duration = 700;
+        }
         this.timeout = setTimeout(() => {
           this.timeout = null;
           if (this.state.position > 0) {

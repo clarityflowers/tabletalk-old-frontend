@@ -2,6 +2,7 @@
 
 #app #home #games {
   width: 100%;
+  max-width: 850px;
   min-height: 100vh;
   padding: 80px;
   box-sizing: border-box;
@@ -46,7 +47,7 @@
       background-color: $cold-breath;
       background-image: repeating-linear-gradient(45deg, $stripes), repeating-linear-gradient(135deg, $stripes);
       transition-property: left, width, height, top;
-      transition-duration: .5s;
+      transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
       &.off, &.dot {
         width: 5px;
@@ -55,7 +56,7 @@
         left: -21px;
       }
       &.off {
-        left: -200px;
+        left: -50vw;
       }
       &.off, &.dot.entering {
         box-shadow: $box-shadow;
