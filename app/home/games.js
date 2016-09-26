@@ -50,6 +50,47 @@ class GameBox extends React.Component {
   }
 }
 
+let Plus = (props) => {
+  let className = cx(
+    'plus',
+    {
+      off: props.position == 0,
+      dot: props.position == 1
+    }
+  )
+  return(
+    <div className={className}>
+      <div className='vertical'/>
+      <div className='horizontal'/>
+      <div className='shadow-fix'/>
+    </div>
+  )
+}
+
+let NewGame = (props) => {
+  return (
+    <div className='game'>
+      <Plus position={props.position}
+            entering={props.entering}
+            leaving={props.leaving}/>
+    </div>
+  )
+}
+
+let OldGame = (props) => {
+  let iconPosition = Math.min(props.position, 2);
+  let boxPosition = Math.max(props.position - 2, 0);
+  return (
+    <div className='game'>
+      <GameIcon position={iconPosition}
+                entering={props.entering}
+                leaving={props.leaving}/>
+      <GameBox name={props.name}
+               position={boxPosition}/>
+    </div>
+  );
+}
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -118,17 +159,23 @@ class Game extends React.Component {
     this.props.doneLeaving();
   }
   render() {
-    let iconPosition = Math.min(this.state.position, 2);
-    let boxPosition = Math.max(this.state.position - 2, 0);
-    return (
-      <div className='game'>
-        <GameIcon position={iconPosition}
-                  entering={this.state.entering}
-                  leaving={this.state.leaving}/>
-        <GameBox name={this.props.name}
-                 position={boxPosition}/>
-      </div>
-    );
+    let content = null;
+    if (this.props.newGame) {
+      content = (
+        <NewGame position={this.state.position}
+                 entering={this.state.entering}
+                 leaving={this.state.leaving}/>
+      )
+    }
+    else {
+      content = (
+        <OldGame name={this.props.name}
+                 position={this.state.position}
+                 entering={this.state.entering}
+                 leaving={this.state.leaving}/>
+      )
+    }
+    return content;
   }
 }
 
@@ -167,12 +214,12 @@ class Games extends React.Component {
     ];
   }
   animateInGames(callback) {
-    console.log('ANIMATE IN GAMES');
+    let activeGames = this.state.activeGames + 1;
     this.setState({
-      activeGames: this.state.activeGames + 1,
+      activeGames: activeGames,
       entering: true
     });
-    if (this.state.activeGames < this.games.length) {
+    if (activeGames < this.games.length + 1) {
       setTimeout(() => {this.animateInGames(callback)}, 300);
     }
     else {
@@ -180,7 +227,6 @@ class Games extends React.Component {
     }
   }
   animateOutGames() {
-    console.log('ANIMATE OUT GAMES');
     this.setState({
       leaving: true
     });
@@ -194,7 +240,6 @@ class Games extends React.Component {
     }
   }
   onGameDoneEntering() {
-    console.log('ON GAME DONE ENTERING');
     this.gamesDoneEntering++;
     if (this.gamesDoneEntering == this.gamesEnteringCount) {
       this.setState({
@@ -206,34 +251,20 @@ class Games extends React.Component {
     }
   }
   onGameDoneLeaving() {
-    console.log('ON GAME DONE LEAVING');
     this.gamesDoneLeaving++;
-    if (this.gamesDoneLeaving == this.games.length) {
+    if (this.gamesDoneLeaving == this.games.length + 1) {
       setTimeout(() => {this.callback()});
     }
   }
   componentWillEnter(callback) {
-    console.log('COMPONENT WILL ENTER');
-    if (this.games.length == 0) {
-      callback();
-    }
-    else {
-      this.gamesEnteringCount = this.games.length;
-      this.animateInGames(callback);
-    }
+    this.gamesEnteringCount = this.games.length + 1;
+    this.animateInGames(callback);
   }
   componentWillLeave(callback) {
-    console.log('COMPONENT WILL LEAVE');
     this.callback = callback;
-    if (this.games.length == 0) {
-      callback();
-    }
-    else {
-      this.animateOutGames();
-    }
+    this.animateOutGames();
   }
   componentDidLeave() {
-    console.log('COMPONENT DID LEAVE');
     this.props.doneAnimating();
   }
   render() {
@@ -244,7 +275,15 @@ class Games extends React.Component {
               key={this.games[i].id}
               doneEntering={this.onGameDoneEntering.bind(this)}
               doneLeaving={this.onGameDoneLeaving.bind(this)}/>
-      )
+      );
+    }
+    if (this.state.activeGames == this.games.length + 1) {
+      games.push(
+        <Game newGame
+              key='new'
+              doneEntering={this.onGameDoneEntering.bind(this)}
+              doneLeaving={this.onGameDoneLeaving.bind(this)}/>
+      );
     }
     return (
       <div id='games'>

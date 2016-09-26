@@ -53,7 +53,7 @@
         width: 5px;
         height: 5px;
         top: 14px;
-        left: -21px;
+        left: -27px;
       }
       &.off {
         left: -50vw;
@@ -81,6 +81,114 @@
       transition-property: width;
       transition-duration: .5s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    }
+    .plus {
+      position: absolute;
+      left: -48px;
+      top: -15px;
+      width: 80px;
+      height: 80px;
+      // border: 10px solid white;
+      // background-color: white;
+      // border-radius: 200vh;
+      display: inline-block;
+      flex: none;
+      .vertical, .horizontal, .shadow-fix {
+        position: absolute;
+        transition-duration: .7s;
+        transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+        &:before {
+          transition-duration: .7s;
+          transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+        }
+      }
+      .vertical, .horizontal {
+        box-shadow: 0px 0px 2px 1px $hearts-shadow;
+        background-color: $hearts-shadow;
+        &:before {
+          top: -2px;
+          left: 2px;
+          content: '';
+          position: absolute;
+          background-color: $hearts;
+        }
+      }
+      .vertical, .shadow-fix {
+        width: 16px;
+        height: 48px;
+      }
+      .vertical {
+        top: 18px;
+        left: 30px;
+        &:before {
+          width: 16px;
+          height: 48px;
+        }
+        transition-property: height, top, box-shadow;
+      }
+      .horizontal {
+        top: 34px;
+        left: 14px;
+        width: 48px;
+        height: 16px;
+        &:before {
+          width: 48px;
+          height: 16px;
+        }
+        transition-property: width, left, box-shadow;
+      }
+      .shadow-fix {
+        background-color: $hearts;
+        top: 16px;
+        left: 32px;
+        border-width: 0px;
+        border-style: solid;
+        border-color: $hearts;
+        transition-property: 'border-width', 'border-radius', width, height, top, left, box-shadow;
+        box-shadow: 0 0 0 0 transparent;
+        border-radius: 0;
+        width: 16px;
+        height: 25px;
+        top: 27px;
+      }
+      transition-property: left;
+      transition-duration: .7s;
+      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+      &.off, &.dot {
+        // width: 5px;
+        // height: 5px;
+        // top: 14px;
+        // left: -27px;
+        .vertical {
+          height: 0;
+          top: 42px;
+          box-shadow: none;
+          &:before {
+
+            height: 0;
+          }
+        }
+        .horizontal {
+          width: 0;
+          left: 38px;
+          box-shadow: none;
+          &:before {
+            width: 0;
+          }
+        }
+        .shadow-fix {
+          // border-width: 10px;
+          border-radius: 30px;
+          box-shadow: $box-shadow;
+          width: 25px;
+          height: 25px;
+          top: 27px;
+          left: 27px
+        }
+      }
+      &.off {
+        left: -50vw;
+      }
     }
   }
 }
