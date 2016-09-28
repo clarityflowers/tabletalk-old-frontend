@@ -40,9 +40,15 @@ class GameBox extends React.Component {
     if (this.props.position == 1) {
       style.width = this.state.width;
     }
+    let className = cx(
+      'box',
+      {
+        off: this.props.position == 0
+      }
+    )
     return (
       <div className='box-container' style={style}>
-        <div className='box' ref='box'>
+        <div className={className} ref='box'>
         {this.props.name}
         </div>
       </div>
@@ -60,9 +66,11 @@ let Plus = (props) => {
   )
   return(
     <div className={className}>
+      <div className='dot-front'/>
       <div className='vertical'/>
       <div className='horizontal'/>
       <div className='shadow-fix'/>
+      <div className='dot-shadow'/>
     </div>
   )
 }
@@ -220,7 +228,7 @@ class Games extends React.Component {
       entering: true
     });
     if (activeGames < this.games.length + 1) {
-      setTimeout(() => {this.animateInGames(callback)}, 300);
+      setTimeout(() => {this.animateInGames(callback)}, 200);
     }
     else {
       callback();
@@ -235,7 +243,7 @@ class Games extends React.Component {
         activeGames: this.state.activeGames - 1,
       });
       if (this.state.activeGames > 0) {
-        setTimeout(() => {this.animateOutGames()}, 300);
+        setTimeout(() => {this.animateOutGames()}, 100);
       }
     }
   }

@@ -10,6 +10,7 @@
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
   user-select: none;          /* Likely future */
+  cursor: default;
   .game {
     margin: 20px;
     position: relative;
@@ -53,7 +54,7 @@
         width: 5px;
         height: 5px;
         top: 14px;
-        left: -27px;
+        left: -21px;
       }
       &.off {
         left: -50vw;
@@ -62,6 +63,9 @@
         box-shadow: $box-shadow;
         background-color: $hearts;
         background-image: none;
+      }
+      &:not(.dot):not(.off) {
+        cursor: pointer;
       }
     }
     .box-container {
@@ -76,6 +80,9 @@
         white-space: nowrap;
         float: right;
         overflow: visible;
+        &:not(.off) {
+          cursor: pointer;
+        }
       }
       overflow: hidden;
       transition-property: width;
@@ -93,14 +100,10 @@
       // border-radius: 200vh;
       display: inline-block;
       flex: none;
-      .vertical, .horizontal, .shadow-fix {
+      .vertical, .horizontal, .shadow-fix, .dot-front, .dot-shadow {
         position: absolute;
         transition-duration: .7s;
-        transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
-        &:before {
-          transition-duration: .7s;
-          transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
-        }
+        transition-timing-function: cubic-bezier(0.730, -1, 0.375, 2);
       }
       .vertical, .horizontal {
         box-shadow: 0px 0px 2px 1px $hearts-shadow;
@@ -111,6 +114,8 @@
           content: '';
           position: absolute;
           background-color: $hearts;
+          transition-duration: .7s;
+          transition-timing-function: cubic-bezier(0.730, -1, 0.375, 2);
         }
       }
       .vertical, .shadow-fix {
@@ -120,6 +125,7 @@
       .vertical {
         top: 18px;
         left: 30px;
+        z-index: 2;
         &:before {
           width: 16px;
           height: 48px;
@@ -131,6 +137,7 @@
         left: 14px;
         width: 48px;
         height: 16px;
+        z-index: 3;
         &:before {
           width: 48px;
           height: 16px;
@@ -138,27 +145,38 @@
         transition-property: width, left, box-shadow;
       }
       .shadow-fix {
-        background-color: $hearts;
         top: 16px;
         left: 32px;
-        border-width: 0px;
-        border-style: solid;
-        border-color: $hearts;
-        transition-property: 'border-width', 'border-radius', width, height, top, left, box-shadow;
-        box-shadow: 0 0 0 0 transparent;
-        border-radius: 0;
-        width: 16px;
-        height: 25px;
-        top: 27px;
+        transition-property: height, top, box-shadow;
+        z-index: 4;
+      }
+      .shadow-fix, .dot-front {
+        background-color: $hearts;
+      }
+      .dot-front {
+        height: 0;
+        width: 0;
+        top: 40px;
+        left: 40px;
+        border-radius: 30px;
+        z-index: 5;
+        transition-property: height, top, width, left;
+      }
+      .dot-shadow {
+        border-radius: 30px;
+        z-index: 1;
+        height: 0;
+        width: 0;
+        top: 42px;
+        left: 38px;
+        box-shadow: none;
+        background-color: $hearts-shadow;
+        transition-property: height, top, width, left, box-shadow;
       }
       transition-property: left;
       transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
       &.off, &.dot {
-        // width: 5px;
-        // height: 5px;
-        // top: 14px;
-        // left: -27px;
         .vertical {
           height: 0;
           top: 42px;
@@ -177,17 +195,30 @@
           }
         }
         .shadow-fix {
-          // border-width: 10px;
-          border-radius: 30px;
-          box-shadow: $box-shadow;
+          height: 0;
+          top: 42px;
+        }
+        .dot-front {
           width: 25px;
           height: 25px;
           top: 27px;
-          left: 27px
+          left: 27px;
+        }
+        .dot-shadow {
+          width: 25px;
+          height: 25px;
+          top: 29px;
+          left: 25px;
+          box-shadow: 0px 0px 2px 1px $hearts-shadow;
         }
       }
       &.off {
         left: -50vw;
+      }
+      &:not(.dot):not(.off) {
+        .horizontal, .shadow-fix {
+          cursor: pointer;
+        }
       }
     }
   }
