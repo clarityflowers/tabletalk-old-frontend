@@ -4,6 +4,7 @@
   width: 100%;
   max-width: 850px;
   min-height: 100vh;
+  // overflow-x: hidden;
   padding: 80px;
   box-sizing: border-box;
   -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -16,7 +17,25 @@
     position: relative;
     margin: 50px 0px 50px 50px;
     padding-left: 20px;
+    height: 50px;
     padding-right: 10px;
+    transition-property: left, height, margin, padding;
+    transition-duration: .7s;
+    left: 0vw;
+    transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    &.swipe {
+      &.left {
+        left: -100vw;
+      }
+      &.right {
+        left: 200vw;
+      }
+    }
+    &.off {
+      height: 0;
+      margin: 0;
+      padding: 0;
+    }
     .icon {
       position: absolute;
       left: -50px;
@@ -24,7 +43,7 @@
       width: 60px;
       height: 60px;
       border: 10px solid $hearts;
-      border-radius: 200vh;
+      border-radius: 1500vh;
       box-shadow: $box-shadow, $border-shadow;
       display: inline-block;
       flex: none;
@@ -69,6 +88,7 @@
       }
     }
     .box-container {
+      text-align: left;
       .box {
         flex: 1;
         font-size: 30px;

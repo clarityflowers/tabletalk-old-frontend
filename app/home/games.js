@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
+import { Link } from 'react-router';
 import cx from 'classnames';
 import './games.scss';
 
@@ -16,7 +17,9 @@ let GameIcon = (props) => {
     }
   )
   return (
-    <div className={className}/>
+    <Link to={{pathname: '/', query: {game: props.gameId}}}>
+      <div className={className}/>
+    </Link>
   );
 }
 
@@ -48,9 +51,12 @@ class GameBox extends React.Component {
     )
     return (
       <div className='box-container' style={style}>
-        <div className={className} ref='box'>
-        {this.props.name}
-        </div>
+        <Link to={{pathname: '/', query: {game: this.props.gameId}}}>
+          <div className={className}
+               ref='box'>
+            {this.props.name}
+          </div>
+        </Link>
       </div>
     )
   }
@@ -76,8 +82,17 @@ let Plus = (props) => {
 }
 
 let NewGame = (props) => {
+  let className = cx( // TODO duplication
+    'game',
+    {
+      swipe: props.swipe != 0,
+      left: props.swipe < 0,
+      right: props.swipe > 0,
+      off: props.swipe <= -2 || props.swipe >= 2
+    }
+  )
   return (
-    <div className='game'>
+    <div className={className}>
       <Plus position={props.position}
             entering={props.entering}
             leaving={props.leaving}/>
@@ -88,13 +103,24 @@ let NewGame = (props) => {
 let OldGame = (props) => {
   let iconPosition = Math.min(props.position, 2);
   let boxPosition = Math.max(props.position - 2, 0);
+  let className = cx(
+    'game',
+    {
+      swipe: props.swipe != 0,
+      left: props.swipe < 0,
+      right: props.swipe > 0,
+      off: props.swipe == -2 || props.swipe == 2
+    }
+  )
   return (
-    <div className='game'>
+    <div className={className}>
       <GameIcon position={iconPosition}
                 entering={props.entering}
-                leaving={props.leaving}/>
+                leaving={props.leaving}
+                gameId={props.gameId}/>
       <GameBox name={props.name}
-               position={boxPosition}/>
+               position={boxPosition}
+               gameId={props.gameId}/>
     </div>
   );
 }
@@ -172,7 +198,8 @@ class Game extends React.Component {
       content = (
         <NewGame position={this.state.position}
                  entering={this.state.entering}
-                 leaving={this.state.leaving}/>
+                 leaving={this.state.leaving}
+                 swipe={this.props.swipe}/>
       )
     }
     else {
@@ -180,7 +207,9 @@ class Game extends React.Component {
         <OldGame name={this.props.name}
                  position={this.state.position}
                  entering={this.state.entering}
-                 leaving={this.state.leaving}/>
+                 leaving={this.state.leaving}
+                 gameId={this.props.gameId}
+                 swipe={this.props.swipe}/>
       )
     }
     return content;
@@ -193,11 +222,13 @@ class Games extends React.Component {
     this.state = {
       activeGames: 0,
       entering: false,
-      leaving: false
+      leaving: false,
+      animation: 0
     };
     this.gamesDoneEntering = 0;
     this.gamesDoneLeaving = 0;
     this.callback = null;
+    this.timeout = null;
     this.games = [
       {
         name: "Stranger Worlds",
@@ -275,26 +306,103 @@ class Games extends React.Component {
   componentDidLeave() {
     this.props.doneAnimating();
   }
+  hasTarget(target) {
+    let hasTarget = false;
+    for (let i=0; i < this.games.length; i++) {
+      hasTarget = hasTarget || (target == this.games[i].id);
+    }
+    return hasTarget
+  }
+  targetIsFirstGame(target) {
+    return this.games[0].id == target;
+  }
+  componentWillMount() {
+    if (this.hasTarget(this.props.target)) {
+      this.setState({
+        animation: 2,
+        target: this.props.target
+      });
+    }
+  }
+  componentWillReceiveProps(newProps) {
+    let hasTarget = this.hasTarget(newProps.target);
+    let hadTarget = this.hasTarget(this.props.target);
+    if (hasTarget != hadTarget) {
+      let target = null;
+      let animation = 1;
+      if (hasTarget) {
+        target = newProps.target;
+      }
+      else {
+        target = this.props.target;
+      }
+      this.setState({
+        animation: 1,
+        target: target,
+      });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.animation == 1) {
+      if (this.hasTarget(this.props.target)) {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          this.setState({animation: 2});
+        }, 500)
+      }
+      else {
+        let duration = 500;
+        if (this.targetIsFirstGame(this.state.target)) {
+          duration = 0;
+        }
+        clearTimeout(this.props.target);
+        this.timeout = setTimeout(() => {
+          this.setState({animation: 0});
+        }, duration);
+      }
+    }
+  }
   render() {
     let games = [];
+    let alternate = 1;
+    if (this.state.animation == 2 && this.games[0].id != this.props.target) {
+      alternate = 2;
+    }
     for (let i=0; i < this.games.length && i < this.state.activeGames; i++) {
+      let isTarget = this.props.target == this.games[i].id;
+      let wasTarget = this.state.target == this.games[i].id;
+      let swipe = 0;
+      if (this.state.animation && !wasTarget) {
+        swipe = alternate;
+        alternate *= -1;
+      }
       games.push(
         <Game name={this.games[i].name}
               key={this.games[i].id}
+              gameId={this.games[i].id}
               doneEntering={this.onGameDoneEntering.bind(this)}
-              doneLeaving={this.onGameDoneLeaving.bind(this)}/>
+              doneLeaving={this.onGameDoneLeaving.bind(this)}
+              isTarget={isTarget}
+              swipe={swipe}>
+        </Game>
       );
     }
     if (this.state.activeGames == this.games.length + 1) {
+      let swipe = 0;
+      if (this.state.animation) {
+        swipe = alternate;
+      }
       games.push(
         <Game newGame
               key='new'
               doneEntering={this.onGameDoneEntering.bind(this)}
-              doneLeaving={this.onGameDoneLeaving.bind(this)}/>
+              doneLeaving={this.onGameDoneLeaving.bind(this)}
+              swipe={swipe}/>
       );
     }
     return (
       <div id='games'>
+        <Link to='/'>test</Link>
         <ReactTransitionGroup>
           {games}
         </ReactTransitionGroup>

@@ -30,7 +30,9 @@ class Home extends React.Component {
       if (this.props.loggedIn) {
         children = (
           <Games key='games'
-                 doneAnimating={this.doneAnimating.bind(this)}/>
+                 doneAnimating={this.doneAnimating.bind(this)}
+                 target={this.props.target}>
+          </Games>
         )
       }
       else {
