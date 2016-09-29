@@ -406,7 +406,9 @@ class Games extends React.Component {
     let backClass = cx(
       'back',
       {
-        off: !this.hasTarget(this.props.target)
+        off: !this.hasTarget(this.props.target) ||
+              this.state.entering ||
+              this.state.leaving
       }
     )
     return (
