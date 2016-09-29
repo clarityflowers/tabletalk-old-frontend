@@ -343,22 +343,25 @@ class Games extends React.Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.animation == 1) {
-      if (this.hasTarget(this.props.target)) {
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          this.setState({animation: 2});
-        }, 500)
-      }
-      else {
-        let duration = 500;
-        if (this.targetIsFirstGame(this.state.target)) {
-          duration = 0;
+    if (this.state.animation != prevState.animation ||
+        this.props.target != prevProps.target) {
+      if (this.state.animation == 1) {
+        if (this.hasTarget(this.props.target)) {
+          clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            this.setState({animation: 2});
+          }, 500)
         }
-        clearTimeout(this.props.target);
-        this.timeout = setTimeout(() => {
-          this.setState({animation: 0});
-        }, duration);
+        else {
+          let duration = 500;
+          if (this.targetIsFirstGame(this.state.target)) {
+            duration = 0;
+          }
+          clearTimeout(this.props.target);
+          this.timeout = setTimeout(() => {
+            this.setState({animation: 0});
+          }, duration);
+        }
       }
     }
   }
@@ -400,9 +403,15 @@ class Games extends React.Component {
               swipe={swipe}/>
       );
     }
+    let backClass = cx(
+      'back',
+      {
+        off: !this.hasTarget(this.props.target)
+      }
+    )
     return (
       <div id='games'>
-        <Link to='/'>test</Link>
+        <Link to='/' className={backClass}>&lt;</Link>
         <ReactTransitionGroup>
           {games}
         </ReactTransitionGroup>
