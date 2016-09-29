@@ -1,5 +1,6 @@
 import React from 'react';
 import update from 'react-addons-update';
+import { browserHistory } from 'react-router';
 import OptionsMenu from './options/options-menu.js';
 import Home from './home/home.js';
 import GoogleApiLoader from 'utils/google-api-loader.js';
@@ -60,6 +61,7 @@ class App extends React.Component {
       GoogleApiLoader.signOut();
     }
     Auth.logout();
+    browserHistory.push('/');
   }
   openOptions() {
     this.setState({options: true});

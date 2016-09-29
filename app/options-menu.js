@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import { HoverWiggle } from './hover-animate.js';
 import './options-menu.scss';
 
