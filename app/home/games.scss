@@ -4,8 +4,7 @@
   width: 100%;
   max-width: 850px;
   min-height: 100vh;
-  // overflow-x: hidden;
-  padding: 80px 80px 0 80px;
+  padding: 8em 8em 0 8em;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -15,30 +14,31 @@
   user-select: none;          /* Likely future */
   cursor: default;
   position: relative;
+  font-size: 10px;
   .back {
     font-family: 'Icomoon';
     color: $hearts-light;
     background-color: $hearts;
     box-shadow: $box-shadow;
-    border-radius: 10px;
-    font-size: 25px;
-    padding: 5px;
+    border-radius: .4em;
+    font-size: 2.5em;
+    padding: .2em;
     position: absolute;
-    top: 50px;
-    left: 100px;
+    top: 2em;
+    left: 4em;
     text-decoration: none;
     transition: top .7s cubic-bezier(0.7,-0.7,0.4,1.8);
     &.off {
-      top: -50px;
+      top: -2em;
     }
   }
   .game {
-    margin: 20px;
+    margin: 2em;
     position: relative;
-    margin: 50px 0px 50px 50px;
-    padding-left: 20px;
-    height: 50px;
-    padding-right: 10px;
+    margin: 5em 0 5em 5em;
+    padding-left: 2em;
+    height: 5em;
+    padding-right: 1em;
     transition-property: left, height, margin, padding;
     transition-duration: .7s;
     max-width: 850px;
@@ -59,11 +59,11 @@
     }
     .icon {
       position: absolute;
-      left: -50px;
-      top: -15px;
-      width: 60px;
-      height: 60px;
-      border: 10px solid $hearts;
+      left: -5em;
+      top: -1.5em;
+      width: 6em;
+      height: 6em;
+      border: 1em solid $hearts;
       border-radius: 1500vh;
       box-shadow: $box-shadow, $border-shadow;
       display: inline-block;
@@ -91,10 +91,10 @@
       transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
       &.off, &.dot {
-        width: 5px;
-        height: 5px;
-        top: 14px;
-        left: -21px;
+        width: .5em;
+        height: .5em;
+        top: 1.4em;
+        left: -2.1em;
       }
       &.off {
         left: -50vw;
@@ -112,10 +112,10 @@
       text-align: left;
       .box {
         flex: 1;
-        font-size: 30px;
+        font-size: 3em;
         color: $hearts-light;
         text-shadow: $text-shadow;
-        padding: 10px 0px 3px 20px;
+        padding: .3em 0px .1em .6em;
         font-family: 'League Spartan';
         display: inline-block;
         white-space: nowrap;
@@ -132,13 +132,10 @@
     }
     .plus {
       position: absolute;
-      left: -48px;
-      top: -15px;
-      width: 80px;
-      height: 80px;
-      // border: 10px solid white;
-      // background-color: white;
-      // border-radius: 200vh;
+      left: -4.8em;
+      top: -1.5em;
+      width: 8em;
+      height: 8em;
       display: inline-block;
       flex: none;
       .vertical, .horizontal, .shadow-fix, .dot-front, .dot-shadow {
@@ -150,44 +147,45 @@
         box-shadow: 0px 0px 2px 1px $hearts-shadow;
         background-color: $hearts-shadow;
         &:before {
-          top: -2px;
-          left: 2px;
+          // top: -2px;
+          // left: 2px;
           content: '';
           position: absolute;
           background-color: $hearts;
           transition-duration: .7s;
+          transform: translate(2px, -2px);
           transition-timing-function: cubic-bezier(0.730, -1, 0.375, 2);
         }
       }
       .vertical, .shadow-fix {
-        width: 16px;
-        height: 48px;
+        width: 1.6em;
+        height: 4.8em;
+        top: 1.6em;
+        left: 3.2em;
       }
       .vertical {
-        top: 18px;
-        left: 30px;
+        transform: translate(-2px, 2px);
         z-index: 2;
         &:before {
-          width: 16px;
-          height: 48px;
+          width: 1.6em;
+          height: 4.8em;
         }
         transition-property: height, top, box-shadow;
       }
       .horizontal {
-        top: 34px;
-        left: 14px;
-        width: 48px;
-        height: 16px;
+        top: 3.2em;
+        left: 1.6em;
+        width: 4.8em;
+        height: 1.6em;
         z-index: 3;
+        transform: translate(-2px, 2px);
         &:before {
-          width: 48px;
-          height: 16px;
+          width: 4.8em;
+          height: 1.6em;
         }
         transition-property: width, left, box-shadow;
       }
       .shadow-fix {
-        top: 16px;
-        left: 32px;
         transition-property: height, top, box-shadow;
         z-index: 4;
       }
@@ -197,19 +195,20 @@
       .dot-front {
         height: 0;
         width: 0;
-        top: 40px;
-        left: 40px;
-        border-radius: 30px;
+        top: 4.0em;
+        left: 4.0em;
+        border-radius: 3.0em;
         z-index: 5;
         transition-property: height, top, width, left;
       }
       .dot-shadow {
-        border-radius: 30px;
+        border-radius: 3.0em;
         z-index: 1;
         height: 0;
         width: 0;
-        top: 42px;
-        left: 38px;
+        top: 4em;
+        left: 4em;
+        transform: translate(-2px, 2px);
         box-shadow: none;
         background-color: $hearts-shadow;
         transition-property: height, top, width, left, box-shadow;
@@ -220,7 +219,7 @@
       &.off, &.dot {
         .vertical {
           height: 0;
-          top: 42px;
+          top: 4em;
           box-shadow: none;
           &:before {
 
@@ -229,7 +228,7 @@
         }
         .horizontal {
           width: 0;
-          left: 38px;
+          left: 4em;
           box-shadow: none;
           &:before {
             width: 0;
@@ -237,19 +236,19 @@
         }
         .shadow-fix {
           height: 0;
-          top: 42px;
+          top: 4em;
         }
         .dot-front {
-          width: 25px;
-          height: 25px;
-          top: 27px;
-          left: 27px;
+          width: 2.5em;
+          height: 2.5em;
+          top: 2.7em;
+          left: 2.7em;
         }
         .dot-shadow {
-          width: 25px;
-          height: 25px;
-          top: 29px;
-          left: 25px;
+          width: 2.5em;
+          height: 2.5em;
+          top: 2.7em;
+          left: 2.7em;
           box-shadow: 0px 0px 2px 1px $hearts-shadow;
         }
       }
@@ -261,6 +260,17 @@
           cursor: pointer;
         }
       }
+    }
+  }
+}
+
+@media only screen
+  and (max-device-width: 400px) {
+  #app #home #games {
+    font-size: 7px;
+    padding: 7em 1em 0 1em;
+    .back {
+      left: 1.3em;
     }
   }
 }

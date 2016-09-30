@@ -408,7 +408,8 @@ class Games extends React.Component {
       {
         off: !this.hasTarget(this.props.target) ||
               this.state.entering ||
-              this.state.leaving
+              this.state.leaving ||
+              this.state.activeGames == 0
       }
     )
     return (
