@@ -1,6 +1,6 @@
 'use strict'
 
-import { User } from 'utils/api.js'
+import User from 'api/user.js'
 
 class Auth {
   static login(token, cb) {

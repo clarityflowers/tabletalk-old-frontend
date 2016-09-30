@@ -33,12 +33,12 @@
     }
   }
   .game {
-    margin: 2em;
+    // margin: 2em;
     position: relative;
-    margin: 5em 0 5em 5em;
-    padding-left: 2em;
+    // margin: 5em 0 5em 5em;
+    padding: 3em 1em 3em 7em;
     height: 5em;
-    padding-right: 1em;
+    // padding-right: 1em;
     transition-property: left, height, margin, padding;
     transition-duration: .7s;
     max-width: 850px;
@@ -59,8 +59,8 @@
     }
     .icon {
       position: absolute;
-      left: -5em;
-      top: -1.5em;
+      left: 0em;
+      top: 1.5em;
       width: 6em;
       height: 6em;
       border: 1em solid $hearts;
@@ -87,14 +87,15 @@
                 desaturate(fade-out($deep, $opacity), $desaturate) ($width * 4);
       background-color: $cold-breath;
       background-image: repeating-linear-gradient(45deg, $stripes), repeating-linear-gradient(135deg, $stripes);
-      transition-property: left, width, height, top;
+      transition-property: left, width, height, top, margin;
       transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
       &.off, &.dot {
-        width: .5em;
-        height: .5em;
-        top: 1.4em;
-        left: -2.1em;
+        margin: 3em;
+        width: 0;
+        height: 0;
+        // top: 4.1em;
+        // left: 2.8em;
       }
       &.off {
         left: -50vw;
@@ -132,8 +133,8 @@
     }
     .plus {
       position: absolute;
-      left: -4.8em;
-      top: -1.5em;
+      left: 0em;
+      top: 1.5em;
       width: 8em;
       height: 8em;
       display: inline-block;
@@ -195,8 +196,8 @@
       .dot-front {
         height: 0;
         width: 0;
-        top: 4.0em;
-        left: 4.0em;
+        top: 3.5em;
+        left: 3.5em;
         border-radius: 3.0em;
         z-index: 5;
         transition-property: height, top, width, left;
@@ -206,8 +207,8 @@
         z-index: 1;
         height: 0;
         width: 0;
-        top: 4em;
-        left: 4em;
+        top: 3.5em;
+        left: 3.5em;
         transform: translate(-2px, 2px);
         box-shadow: none;
         background-color: $hearts-shadow;
@@ -239,14 +240,14 @@
           top: 4em;
         }
         .dot-front {
-          width: 2.5em;
-          height: 2.5em;
+          width: 2em;
+          height: 2em;
           top: 2.7em;
           left: 2.7em;
         }
         .dot-shadow {
-          width: 2.5em;
-          height: 2.5em;
+          width: 2em;
+          height: 2em;
           top: 2.7em;
           left: 2.7em;
           box-shadow: 0px 0px 2px 1px $hearts-shadow;

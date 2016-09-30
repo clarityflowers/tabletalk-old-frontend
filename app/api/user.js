@@ -10,7 +10,7 @@ function post(url, token, data, onload, onerror) {
   request.send(data);
 }
 
-export class User {
+export default class Auth {
   static login(token, cb) {
     let onload = function() {
       if (this.status >= 200 && this.status < 400) {

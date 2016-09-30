@@ -4,6 +4,7 @@ import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import { Link } from 'react-router';
 import cx from 'classnames';
+import GameApi from 'api/game.js'
 import './games.scss';
 
 let GameIcon = (props) => {
@@ -81,18 +82,21 @@ let Plus = (props) => {
   )
 }
 
-let NewGame = (props) => {
-  let className = cx( // TODO duplication
+let getGameClassName = (swipe, position) => {
+  return cx(
     'game',
     {
-      swipe: props.swipe != 0,
-      left: props.swipe < 0,
-      right: props.swipe > 0,
-      off: props.swipe <= -2 || props.swipe >= 2
+      swipe: swipe != 0,
+      left: swipe < 0,
+      right: swipe > 0,
+      off: swipe <= -2 || swipe >= 2 || position == 0
     }
-  )
+  );
+}
+
+let NewGame = (props) => {
   return (
-    <div className={className}>
+    <div className={getGameClassName(props.swipe, props.position)}>
       <Plus position={props.position}
             entering={props.entering}
             leaving={props.leaving}/>
@@ -101,19 +105,10 @@ let NewGame = (props) => {
 }
 
 let OldGame = (props) => {
-  let iconPosition = Math.min(props.position, 2);
-  let boxPosition = Math.max(props.position - 2, 0);
-  let className = cx(
-    'game',
-    {
-      swipe: props.swipe != 0,
-      left: props.swipe < 0,
-      right: props.swipe > 0,
-      off: props.swipe == -2 || props.swipe == 2
-    }
-  )
+  let iconPosition = Math.min(props.position, 3);
+  let boxPosition = Math.max(props.position - 3, 0);
   return (
-    <div className={className}>
+    <div className={getGameClassName(props.swipe, props.position)}>
       <GameIcon position={iconPosition}
                 entering={props.entering}
                 leaving={props.leaving}
@@ -140,14 +135,14 @@ class Game extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (!this.timeout) {
-      let duration = 500;
+      let duration = 300;
       if (this.state.entering) {
-        if (this.state.position == 1) {
-          duration = 700;
+        if (this.state.position == 2 || this.state.position == 1) {
+          duration = 300;
         }
         this.timeout = setTimeout(() => {
           this.timeout = null;
-          if (this.state.position < 3) {
+          if (this.state.position < 4) {
             this.setState({position: this.state.position + 1});
           }
           else if (this.enterCallback) {
@@ -157,8 +152,8 @@ class Game extends React.Component {
         }, duration);
       }
       else if (this.state.leaving) {
-        if (this.state.position == 0) {
-          duration = 700;
+        if (this.state.position >= 1) {
+          duration = 500;
         }
         this.timeout = setTimeout(() => {
           this.timeout = null;
@@ -221,44 +216,69 @@ class Games extends React.Component {
     super(props);
     this.state = {
       activeGames: 0,
+      loaded: false,
       entering: false,
       leaving: false,
-      animation: 0
+      animation: 0,
+      games: [],
+      gameHash: {}
     };
     this.gamesDoneEntering = 0;
     this.gamesDoneLeaving = 0;
     this.callback = null;
     this.timeout = null;
-    this.games = [
-      {
-        name: "Stranger Worlds",
-        type: 0,
-        id: 1
-      },
-      {
-        name: "Apocalybs3 Worlb",
-        type: 0,
-        id: 3
-      },
-      {
-        name: "MONSTE2HEA2TS",
-        type: 0,
-        id: 4
-      },
-      {
-        name: "World of Adventure",
-        type: 0,
-        id: 2
+  }
+  getGames() {
+    console.log('GET GAMES');
+    let gameHash = {}
+    let success = (data) => {
+      let games = [];
+      for (let i=0; i < data.length; i++) {
+        let newGame = {
+          name: data[i].name,
+          id: data[i].id,
+          type: data[i].type
+        };
+        let index = this.state.gameHash[newGame.id];
+        if (index) {
+          let game = this.state.games[index];
+          if (game) {
+            newGame.active = true;
+          }
+        }
+        games.push(newGame);
+        gameHash[newGame.id] = i;
       }
-    ];
+      let activeGames = 0;
+      if (!this.state.entering && this.state.loaded) {
+        console.log(this.state.entering)
+        activeGames = games.length + 1;
+      }
+      this.setState({
+        games: games,
+        gameHash: gameHash,
+        activeGames: activeGames,
+        loaded: true
+      })
+      console.log('success');
+      console.log('length=' + data.length)
+    }
+    GameApi.index(success);
+  }
+  componentDidMount() {
+    this.getGames();
+    setInterval(this.getGames.bind(this), 5000);
   }
   animateInGames(callback) {
-    let activeGames = this.state.activeGames + 1;
-    this.setState({
-      activeGames: activeGames,
-      entering: true
-    });
-    if (activeGames < this.games.length + 1) {
+    let activeGames = this.state.activeGames;
+    if (this.state.loaded) {
+      activeGames = this.state.activeGames + 1;
+      this.setState({
+        activeGames: activeGames,
+        entering: true
+      });
+    }
+    if (activeGames < this.state.games.length + 1) {
       setTimeout(() => {this.animateInGames(callback)}, 200);
     }
     else {
@@ -291,12 +311,12 @@ class Games extends React.Component {
   }
   onGameDoneLeaving() {
     this.gamesDoneLeaving++;
-    if (this.gamesDoneLeaving == this.games.length + 1) {
-      setTimeout(() => {this.callback()});
+    if (this.gamesDoneLeaving == this.state.games.length + 1) {
+      setTimeout(() => {if (this.callback) {this.callback()}});
     }
   }
   componentWillEnter(callback) {
-    this.gamesEnteringCount = this.games.length + 1;
+    this.gamesEnteringCount = this.state.games.length + 1;
     this.animateInGames(callback);
   }
   componentWillLeave(callback) {
@@ -308,13 +328,13 @@ class Games extends React.Component {
   }
   hasTarget(target) {
     let hasTarget = false;
-    for (let i=0; i < this.games.length; i++) {
-      hasTarget = hasTarget || (target == this.games[i].id);
+    for (let i=0; i < this.state.games.length; i++) {
+      hasTarget = hasTarget || (target == this.state.games[i].id);
     }
     return hasTarget
   }
   targetIsFirstGame(target) {
-    return this.games[0].id == target;
+    return this.state.games[0].id == target;
   }
   componentWillMount() {
     if (this.hasTarget(this.props.target)) {
@@ -364,25 +384,28 @@ class Games extends React.Component {
         }
       }
     }
+
   }
   render() {
     let games = [];
     let alternate = 1;
-    if (this.state.animation == 2 && this.games[0].id != this.props.target) {
+    if (this.state.animation == 2 && this.state.games[0].id != this.props.target) {
       alternate = 2;
     }
-    for (let i=0; i < this.games.length && i < this.state.activeGames; i++) {
-      let isTarget = this.props.target == this.games[i].id;
-      let wasTarget = this.state.target == this.games[i].id;
+    let length = Math.min(this.state.activeGames, this.state.games.length);
+    for (let i=0; i < length; i++) {
+      let game = this.state.games[i];
+      let isTarget = this.props.target == game.id;
+      let wasTarget = this.state.target == game.id;
       let swipe = 0;
       if (this.state.animation && !wasTarget) {
         swipe = alternate;
         alternate *= -1;
       }
       games.push(
-        <Game name={this.games[i].name}
-              key={this.games[i].id}
-              gameId={this.games[i].id}
+        <Game name={game.name}
+              key={game.id}
+              gameId={game.id}
               doneEntering={this.onGameDoneEntering.bind(this)}
               doneLeaving={this.onGameDoneLeaving.bind(this)}
               isTarget={isTarget}
@@ -390,7 +413,7 @@ class Games extends React.Component {
         </Game>
       );
     }
-    if (this.state.activeGames == this.games.length + 1) {
+    if (this.state.activeGames == this.state.games.length + 1) {
       let swipe = 0;
       if (this.state.animation) {
         swipe = alternate;
