@@ -259,16 +259,16 @@ class Games extends React.Component {
         activeGames = games.length + 1;
       }
       let target = this.state.target;
+      let animation = this.state.animation;
       if (this.props.target in gameHash) {
         target = this.props.target;
+        if (!this.state.loaded) {
+          animation = 2;
+        }
       }
       else
       {
         browserHistory.push('/');
-      }
-      let animation = this.state.animation;
-      if (!this.state.loaded) {
-        animation = 2;
       }
       this.setState({
         games: games,
@@ -294,7 +294,7 @@ class Games extends React.Component {
   }
   componentDidMount() {
     this.getGames();
-    this.refreshInterval = setInterval(this.getGames.bind(this), 5000);
+    // this.refreshInterval = setInterval(this.getGames.bind(this), 10000);
   }
   componentWillUnmount() {
     clearInterval(this.refreshInterval);
@@ -303,6 +303,7 @@ class Games extends React.Component {
     let activeGames = this.state.activeGames;
     if (this.state.loaded) {
       activeGames = this.state.activeGames + 1;
+      console.log('activeGames=' + activeGames);
       this.setState({
         activeGames: activeGames,
         entering: true
@@ -358,7 +359,7 @@ class Games extends React.Component {
     this.props.doneAnimating();
   }
   hasTarget(target) {
-    return target in this.state.gameHash;
+    return this.props.target != undefined && target in this.state.gameHash;
   }
   componentWillMount() {
     if (this.hasTarget(this.props.target)) {
@@ -434,6 +435,7 @@ class Games extends React.Component {
         </Game>
       );
     }
+    console.log(this.state);
     if (this.state.activeGames == this.state.games.length + 1) {
       let swipe = 0;
       if (this.state.animation) {
