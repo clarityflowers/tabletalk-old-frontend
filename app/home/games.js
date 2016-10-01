@@ -99,6 +99,15 @@ let getGameClassName = (swipe, position) => {
   );
 }
 
+const NEW_GAME_ANIMATION_STEPS = [
+  700,
+  10,
+  700,
+  10,
+  700,
+  0
+]
+
 class NewGame extends React.Component {
   constructor(props) {
     super(props);
@@ -107,23 +116,41 @@ class NewGame extends React.Component {
     }
     this.timeout = null;
   }
+  setTimeout(resolve, duration) {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(resolve, duration);
+  }
+  newGameAnimation() {
+    console.log('NEW GAME ANIMATION: ' + this.state.newGameStatus);
+    let duration = NEW_GAME_ANIMATION_STEPS[this.state.newGameStatus];
+    console.log('duration=' + duration);
+    if (duration) {
+      this.setState({ newGameStatus: this.state.newGameStatus + 1 });
+      this.setTimeout(this.newGameAnimation.bind(this), duration);
+    }
+  }
   plus() {
-    this.setState({
-      newGameStatus: 1
-    });
-    this.timeout = setTimeout(() => {
-      this.setState({
-        newGameStatus: 2
-      });
-      this.timeout = setTimeout(() => {
-        this.setState({
-          newGameStatus: 3
-        });
-      }, 1);
-    }, 700);
+    this.newGameAnimation();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
+  cancelNewGame() {
+    console.log('CANCEL NEW GAME: ' + this.state.newGameStatus);
+    if (this.state.newGameStatus == 0) {
+      return;
+    }
+    let duration = NEW_GAME_ANIMATION_STEPS[this.state.newGameStatus - 1];
+    console.log('duration=' + duration);
+    this.setState({ newGameStatus: this.state.newGameStatus - 1 });
+    this.setTimeout(this.cancelNewGame.bind(this), duration);
   }
   render() {
     let plusPosition = this.props.position;
+    let plusOnClick = null;
+    if (this.state.newGameStatus == 0) {
+      plusOnClick = this.plus.bind(this);
+    }
     if (this.state.newGameStatus == 1) {
       plusPosition = 1
     }
@@ -131,16 +158,34 @@ class NewGame extends React.Component {
       <Plus position={plusPosition}
             entering={this.props.entering}
             leaving={this.props.leaving}
-            onClick={this.plus.bind(this)}/>
+            onClick={plusOnClick}/>
     );
     if (this.state.newGameStatus >= 2) {
       let iconPosition = 1;
       if (this.state.newGameStatus >= 3) {
         iconPosition = 2;
       }
+      let cancel = null;
+      if (this.state.newGameStatus >= 4) {
+        let cancelClassName = cx(
+          'cancel',
+          'home-button',
+          {
+            off: this.state.newGameStatus == 4
+          }
+        )
+        cancel = (
+          <div className={cancelClassName}
+               onClick={this.cancelNewGame.bind(this)}>
+            x
+          </div>
+        )
+      }
+      let gameTypeSelector = null;
       content = (
         <div>
           <GameIcon position={iconPosition} closed/>
+          {cancel}
         </div>
       )
     }
@@ -414,8 +459,6 @@ class Games extends React.Component {
   componentWillReceiveProps(newProps) {
     let hasTarget = this.hasTarget(newProps.target);
     let hadTarget = this.hasTarget(this.props.target);
-    console.log('oldTarget=' + this.props.target + ' newTarget=' + newProps.target);
-    console.log('hasTarget=' + hasTarget + ' hadTarget=' + hadTarget);
     if (hasTarget != hadTarget) {
       let target = null;
       let animation = 1;
@@ -494,6 +537,7 @@ class Games extends React.Component {
     }
     let backClass = cx(
       'back',
+      'home-button',
       {
         off: !this.hasTarget(this.props.target) ||
               this.state.entering ||

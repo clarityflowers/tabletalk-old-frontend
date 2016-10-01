@@ -2,6 +2,20 @@
 
 #app {
   #home {
+    .home-button {
+      font-family: 'Icomoon';
+      color: $hearts-light;
+      background-color: $hearts;
+      box-shadow: $box-shadow;
+      border-radius: .4em;
+      font-size: 2.5em;
+      padding: .2em;
+      width: auto;
+      height: 1em;
+      width: 1em;
+      text-align: center;
+      text-decoration: none;
+    }
     background-color: transparent;
     width: 100%;
     height: auto;
