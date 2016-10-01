@@ -233,7 +233,6 @@ class Games extends React.Component {
     this.refreshInterval = null;
   }
   getGames() {
-    console.log('GET GAMES');
     let gameHash = {}
     let resolve = (data) => {
       let games = [];
@@ -255,7 +254,6 @@ class Games extends React.Component {
       }
       let activeGames = 0;
       if (!this.state.entering && !this.state.leaving && this.state.loaded) {
-        console.log(this.state.entering)
         activeGames = games.length + 1;
       }
       let target = this.state.target;
@@ -278,14 +276,13 @@ class Games extends React.Component {
         target: target,
         animation: animation
       })
-      console.log('success');
-      console.log(games);
     }
     let reject = (code, message) => {
-      console.error('error ' + code);
+      let error = 'ereror + code';
       if (message) {
-        console.log(message);
+        error += ': ' + message
       }
+      console.error(error);
       if (code == 401) {
         this.props.signOut();
       }
@@ -294,7 +291,6 @@ class Games extends React.Component {
   }
   componentDidMount() {
     this.getGames();
-    // this.refreshInterval = setInterval(this.getGames.bind(this), 10000);
   }
   componentWillUnmount() {
     clearInterval(this.refreshInterval);
@@ -303,7 +299,6 @@ class Games extends React.Component {
     let activeGames = this.state.activeGames;
     if (this.state.loaded) {
       activeGames = this.state.activeGames + 1;
-      console.log('activeGames=' + activeGames);
       this.setState({
         activeGames: activeGames,
         entering: true
@@ -435,7 +430,6 @@ class Games extends React.Component {
         </Game>
       );
     }
-    console.log(this.state);
     if (this.state.activeGames == this.state.games.length + 1) {
       let swipe = 0;
       if (this.state.animation) {
