@@ -34,20 +34,9 @@
     max-width: 850px;
     left: 0vw;
     transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
-    &.swipe {
-      &.left {
-        left: -100vw;
-      }
-      &.right {
-        left: 200vw;
-      }
-    }
     &.off {
       height: 1em;
       padding: 0 1em 0 7em;
-    }
-    &.off.swipe {
-      opacity: 0;
     }
     .cancel {
       position: absolute;
