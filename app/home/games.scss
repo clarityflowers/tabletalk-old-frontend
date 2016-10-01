@@ -113,7 +113,7 @@
         background-color: $hearts;
         background-image: none;
       }
-      &:not(.dot):not(.off) {
+      &:not(.dot):not(.off):not(.closed) {
         cursor: pointer;
       }
     }

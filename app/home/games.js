@@ -20,11 +20,17 @@ let GameIcon = (props) => {
       closed: props.closed
     }
   )
-  return (
-    <Link to={{pathname: '/', query: {game: props.gameId}}}>
-      <div className={className}/>
-    </Link>
-  );
+  let content = (
+    <div className={className}/>
+  )
+  if (!props.closed && !props.off && !props.dot) {
+    content = (
+      <Link to={{pathname: '/', query: {game: props.gameId}}}>
+        {content}
+      </Link>
+    )
+  }
+  return content;
 }
 
 class GameBox extends React.Component {

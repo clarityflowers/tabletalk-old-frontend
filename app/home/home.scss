@@ -15,6 +15,9 @@
       width: 1em;
       text-align: center;
       text-decoration: none;
+      &:not(.off) {
+        cursor: pointer;
+      }
     }
     background-color: transparent;
     width: 100%;
