@@ -142,8 +142,10 @@ class NewGame extends React.Component {
       this.setTimeout(this.newGameAnimation.bind(this), duration);
     }
   }
-  plus() {
-    this.newGameAnimation();
+  componentWillReceiveProps(newProps) {
+    if (newProps.isTarget && !this.props.isTarget) {
+      this.newGameAnimation();
+    }
   }
   componentWillUnmount() {
     clearTimeout(this.timeout);
@@ -158,19 +160,21 @@ class NewGame extends React.Component {
   }
   render() {
     let plusPosition = this.props.position;
-    let plusOnClick = null;
-    if (this.state.newGameStatus == 0) {
-      plusOnClick = this.plus.bind(this);
-    }
     if (this.state.newGameStatus == 1) {
       plusPosition = 1
     }
     let content = (
       <Plus position={plusPosition}
             entering={this.props.entering}
-            leaving={this.props.leaving}
-            onClick={plusOnClick}/>
+            leaving={this.props.leaving}/>
     );
+    if (this.state.newGameStatus == 0) {
+      content = (
+        <Link to={"/games/new"}>
+          {content}
+        </Link>
+      )
+    }
     if (this.state.newGameStatus >= 2) {
       let iconPosition = 1;
       if (this.state.newGameStatus >= 3) {

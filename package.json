@@ -39,5 +39,7 @@
     "url-loader": "0.5.7",
     "webpack": "1.13.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "webpack-dev-server": "1.16.1"
+  }
 }

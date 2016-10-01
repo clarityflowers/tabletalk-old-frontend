@@ -2,9 +2,11 @@ const path = require('path');
 const InlineEnvironmentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 
 module.exports = {
-  entry: './app/index.js',
+  entry: [
+    './app/index.js'
+  ],
   output: {
-    path: 'public',
+    path: '/public',
     filename: 'bundle.js',
     publicPath: '/'
   },
