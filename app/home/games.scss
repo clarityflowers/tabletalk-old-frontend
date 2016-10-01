@@ -35,7 +35,8 @@
   .game {
     position: relative;
     padding: 3em 1em 3em 7em;
-    height: 5em;
+    margin: 0 0 -1em 0;
+    height: 7em;
     transition-property: left, height, padding, margin;
     transition-duration: .7s;
     max-width: 850px;
@@ -50,9 +51,8 @@
       }
     }
     &.off {
-      height: 0;
-      margin: 0;
-      padding: 0;
+      height: 1em;
+      padding: 0 1em 0 7em;
     }
     &.off.swipe {
       opacity: 0;
@@ -87,7 +87,7 @@
                 desaturate(fade-out($deep, $opacity), $desaturate) ($width * 4);
       background-color: $cold-breath;
       background-image: repeating-linear-gradient(45deg, $stripes), repeating-linear-gradient(135deg, $stripes);
-      transition-property: left, width, height, top, margin;
+      transition-property: left, width, height, top, margin, border-width;
       transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
       &.off, &.dot {
@@ -96,6 +96,11 @@
         height: 0;
         // top: 4.1em;
         // left: 2.8em;
+      }
+      &.closed:not(.dot) {
+        width: 0;
+        height: 0;
+        border-width: 4em;
       }
       &.off {
         left: -50vw;
@@ -133,10 +138,10 @@
     }
     .plus {
       position: absolute;
-      left: 0em;
-      top: 1.5em;
-      width: 8em;
-      height: 8em;
+      left: 4em;
+      top: 5.6em;
+      width: 0;
+      height: 0;
       display: inline-block;
       flex: none;
       .vertical, .horizontal, .shadow-fix, .dot-front, .dot-shadow {
@@ -148,8 +153,6 @@
         box-shadow: 0px 0px 2px 1px $hearts-shadow;
         background-color: $hearts-shadow;
         &:before {
-          // top: -2px;
-          // left: 2px;
           content: '';
           position: absolute;
           background-color: $hearts;
@@ -161,8 +164,8 @@
       .vertical, .shadow-fix {
         width: 1.6em;
         height: 4.8em;
-        top: 1.6em;
-        left: 3.2em;
+        top: -2.4em;
+        left: -0.8em;
       }
       .vertical {
         transform: translate(-2px, 2px);
@@ -174,8 +177,8 @@
         transition-property: height, top, box-shadow;
       }
       .horizontal {
-        top: 3.2em;
-        left: 1.6em;
+        left: -2.4em;
+        top: -0.8em;
         width: 4.8em;
         height: 1.6em;
         z-index: 3;
@@ -196,8 +199,8 @@
       .dot-front {
         height: 0;
         width: 0;
-        top: 3.5em;
-        left: 3.5em;
+        top: 0;
+        left: 0;
         border-radius: 3.0em;
         z-index: 5;
         transition-property: height, top, width, left;
@@ -207,8 +210,8 @@
         z-index: 1;
         height: 0;
         width: 0;
-        top: 3.5em;
-        left: 3.5em;
+        top: 0;
+        left: 0;
         transform: translate(-2px, 2px);
         box-shadow: none;
         background-color: $hearts-shadow;
@@ -220,16 +223,15 @@
       &.off, &.dot {
         .vertical {
           height: 0;
-          top: 4em;
+          top: 0;
           box-shadow: none;
           &:before {
-
             height: 0;
           }
         }
         .horizontal {
           width: 0;
-          left: 4em;
+          left: 0;
           box-shadow: none;
           &:before {
             width: 0;
@@ -237,19 +239,19 @@
         }
         .shadow-fix {
           height: 0;
-          top: 4em;
+          top: 0;
         }
         .dot-front {
           width: 2em;
           height: 2em;
-          top: 2.7em;
-          left: 2.7em;
+          top: -1em;
+          left: -1em;
         }
         .dot-shadow {
           width: 2em;
           height: 2em;
-          top: 2.7em;
-          left: 2.7em;
+          top: -1em;
+          left: -1em;
           box-shadow: 0px 0px 2px 1px $hearts-shadow;
         }
       }

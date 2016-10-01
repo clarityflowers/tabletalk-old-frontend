@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
 import cx from 'classnames';
 import GameApi from 'api/game.js'
+import { HoverWiggle } from 'utils/hover-animate.js';
 import './games.scss';
 
 let GameIcon = (props) => {
@@ -15,7 +16,8 @@ let GameIcon = (props) => {
       off: props.position == 0,
       dot: props.position == 1,
       entering: props.entering,
-      leaving: props.leaving
+      leaving: props.leaving,
+      closed: props.closed
     }
   )
   return (
@@ -74,11 +76,13 @@ let Plus = (props) => {
   )
   return(
     <div className={className}>
-      <div className='dot-front'/>
-      <div className='vertical'/>
-      <div className='horizontal'/>
-      <div className='shadow-fix'/>
-      <div className='dot-shadow'/>
+      <HoverWiggle off={props.position < 2}>
+        <div className='dot-front' onClick={props.onClick}/>
+        <div className='vertical'/>
+        <div className='horizontal' onClick={props.onClick}/>
+        <div className='shadow-fix' onClick={props.onClick}/>
+        <div className='dot-shadow'/>
+      </HoverWiggle>
     </div>
   )
 }
@@ -95,14 +99,57 @@ let getGameClassName = (swipe, position) => {
   );
 }
 
-let NewGame = (props) => {
-  return (
-    <div className={getGameClassName(props.swipe, props.position)}>
-      <Plus position={props.position}
-            entering={props.entering}
-            leaving={props.leaving}/>
-    </div>
-  )
+class NewGame extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newGameStatus: 0
+    }
+    this.timeout = null;
+  }
+  plus() {
+    this.setState({
+      newGameStatus: 1
+    });
+    this.timeout = setTimeout(() => {
+      this.setState({
+        newGameStatus: 2
+      });
+      this.timeout = setTimeout(() => {
+        this.setState({
+          newGameStatus: 3
+        });
+      }, 1);
+    }, 700);
+  }
+  render() {
+    let plusPosition = this.props.position;
+    if (this.state.newGameStatus == 1) {
+      plusPosition = 1
+    }
+    let content = (
+      <Plus position={plusPosition}
+            entering={this.props.entering}
+            leaving={this.props.leaving}
+            onClick={this.plus.bind(this)}/>
+    );
+    if (this.state.newGameStatus >= 2) {
+      let iconPosition = 1;
+      if (this.state.newGameStatus >= 3) {
+        iconPosition = 2;
+      }
+      content = (
+        <div>
+          <GameIcon position={iconPosition} closed/>
+        </div>
+      )
+    }
+    return (
+      <div className={getGameClassName(this.props.swipe, this.props.position)}>
+        {content}
+      </div>
+    );
+  }
 }
 
 let OldGame = (props) => {
@@ -354,7 +401,7 @@ class Games extends React.Component {
     this.props.doneAnimating();
   }
   hasTarget(target) {
-    return this.props.target != undefined && target in this.state.gameHash;
+    return target != undefined && target in this.state.gameHash;
   }
   componentWillMount() {
     if (this.hasTarget(this.props.target)) {
@@ -367,6 +414,8 @@ class Games extends React.Component {
   componentWillReceiveProps(newProps) {
     let hasTarget = this.hasTarget(newProps.target);
     let hadTarget = this.hasTarget(this.props.target);
+    console.log('oldTarget=' + this.props.target + ' newTarget=' + newProps.target);
+    console.log('hasTarget=' + hasTarget + ' hadTarget=' + hadTarget);
     if (hasTarget != hadTarget) {
       let target = null;
       let animation = 1;
@@ -432,7 +481,7 @@ class Games extends React.Component {
     }
     if (this.state.activeGames == this.state.games.length + 1) {
       let swipe = 0;
-      if (this.state.animation) {
+      if (this.hasTarget(this.props.target)) {
         swipe = alternate;
       }
       games.push(
