@@ -33,13 +33,10 @@
     }
   }
   .game {
-    // margin: 2em;
     position: relative;
-    // margin: 5em 0 5em 5em;
     padding: 3em 1em 3em 7em;
     height: 5em;
-    // padding-right: 1em;
-    transition-property: left, height, margin, padding;
+    transition-property: left, height, padding, margin;
     transition-duration: .7s;
     max-width: 850px;
     left: 0vw;
@@ -56,6 +53,9 @@
       height: 0;
       margin: 0;
       padding: 0;
+    }
+    &.off.swipe {
+      opacity: 0;
     }
     .icon {
       position: absolute;

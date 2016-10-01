@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import update from 'react-addons-update';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import './options-menu.scss';
@@ -229,6 +230,7 @@ class OptionsMenu extends React.Component {
   signout() {
     this.setState({open: false});
     this.props.onSignOut();
+    browserHistory.push('/');
   }
   goToUserSettings() {
     this.toggle();

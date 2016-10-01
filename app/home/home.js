@@ -18,10 +18,7 @@ class Home extends React.Component {
     }
   }
   doneAnimating() {
-    // let duration = this.props.loggedIn ? 150 : 50;
-    // setTimeout(() => {
     this.setState({animating: false});
-    // }, duration);
   }
   render() {
     let login = null;
@@ -31,13 +28,14 @@ class Home extends React.Component {
         children = (
           <Games key='games'
                  doneAnimating={this.doneAnimating.bind(this)}
-                 target={this.props.target}>
+                 target={this.props.target}
+                 signOut={this.props.signOut}>
           </Games>
         )
       }
       else {
         children = (
-          <Login onSignIn={this.props.onSignIn}
+          <Login signIn={this.props.signIn}
                  key='login'
                  doneAnimating={this.doneAnimating.bind(this)}/>
         )

@@ -61,7 +61,6 @@ class App extends React.Component {
       GoogleApiLoader.signOut();
     }
     Auth.logout();
-    browserHistory.push('/');
   }
   openOptions() {
     this.setState({options: true});
@@ -108,7 +107,8 @@ class App extends React.Component {
                      name={this.state.apiAuth.user.name}/>
         <Home loading={!this.state.googleAuth.loaded}
               loggedIn={loggedIn}
-              onSignIn={this.signIn}
+              signIn={this.signIn}
+              signOut={this.signOut}
               target={target}/>
       </div>
     )

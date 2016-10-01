@@ -20,8 +20,11 @@ function shuffle(a) {
   }
 }
 
+let requestCount = 0;
+
 export default class Game {
-  static index(success, fail) {
+  static index(resolve, reject) {
+    // requestCount++;
     let games = [];
     let length = Math.random() * 5;
     let j=0;
@@ -37,6 +40,13 @@ export default class Game {
       })
       j++;
     }
-    success(games);
+    if (requestCount < 3) {
+      resolve(games);
+    }
+    else {
+      let code = 401
+      let message = "not logged in"
+      reject(code, message);
+    }
   }
 }

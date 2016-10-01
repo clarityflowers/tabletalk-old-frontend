@@ -71,7 +71,7 @@ class Login extends React.Component {
   render() {
     return (
       <div id='login'>
-        <GoogleLogin onClick={this.props.onSignIn}
+        <GoogleLogin onClick={this.props.signIn}
                      leaving={this.state.leaving}
                      entering={this.state.entering}
                      animating={this.state.animating}/>

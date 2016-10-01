@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
+import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
 import cx from 'classnames';
 import GameApi from 'api/game.js'
@@ -167,7 +168,9 @@ class Game extends React.Component {
       }
     }
   }
-
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
   componentWillEnter(callback) {
     this.enterCallback = callback;
     this.setState({entering: true});
@@ -227,11 +230,12 @@ class Games extends React.Component {
     this.gamesDoneLeaving = 0;
     this.callback = null;
     this.timeout = null;
+    this.refreshInterval = null;
   }
   getGames() {
     console.log('GET GAMES');
     let gameHash = {}
-    let success = (data) => {
+    let resolve = (data) => {
       let games = [];
       for (let i=0; i < data.length; i++) {
         let newGame = {
@@ -250,24 +254,50 @@ class Games extends React.Component {
         gameHash[newGame.id] = i;
       }
       let activeGames = 0;
-      if (!this.state.entering && this.state.loaded) {
+      if (!this.state.entering && !this.state.leaving && this.state.loaded) {
         console.log(this.state.entering)
         activeGames = games.length + 1;
+      }
+      let target = this.state.target;
+      if (this.props.target in gameHash) {
+        target = this.props.target;
+      }
+      else
+      {
+        browserHistory.push('/');
+      }
+      let animation = this.state.animation;
+      if (!this.state.loaded) {
+        animation = 2;
       }
       this.setState({
         games: games,
         gameHash: gameHash,
         activeGames: activeGames,
-        loaded: true
+        loaded: true,
+        target: target,
+        animation: animation
       })
       console.log('success');
-      console.log('length=' + data.length)
+      console.log(games);
     }
-    GameApi.index(success);
+    let reject = (code, message) => {
+      console.error('error ' + code);
+      if (message) {
+        console.log(message);
+      }
+      if (code == 401) {
+        this.props.signOut();
+      }
+    }
+    GameApi.index(resolve, reject);
   }
   componentDidMount() {
     this.getGames();
-    setInterval(this.getGames.bind(this), 5000);
+    this.refreshInterval = setInterval(this.getGames.bind(this), 5000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.refreshInterval);
   }
   animateInGames(callback) {
     let activeGames = this.state.activeGames;
@@ -320,6 +350,7 @@ class Games extends React.Component {
     this.animateInGames(callback);
   }
   componentWillLeave(callback) {
+    clearInterval(this.refreshInterval);
     this.callback = callback;
     this.animateOutGames();
   }
@@ -327,14 +358,7 @@ class Games extends React.Component {
     this.props.doneAnimating();
   }
   hasTarget(target) {
-    let hasTarget = false;
-    for (let i=0; i < this.state.games.length; i++) {
-      hasTarget = hasTarget || (target == this.state.games[i].id);
-    }
-    return hasTarget
-  }
-  targetIsFirstGame(target) {
-    return this.state.games[0].id == target;
+    return target in this.state.gameHash;
   }
   componentWillMount() {
     if (this.hasTarget(this.props.target)) {
@@ -374,9 +398,6 @@ class Games extends React.Component {
         }
         else {
           let duration = 500;
-          if (this.targetIsFirstGame(this.state.target)) {
-            duration = 0;
-          }
           clearTimeout(this.props.target);
           this.timeout = setTimeout(() => {
             this.setState({animation: 0});
@@ -389,7 +410,7 @@ class Games extends React.Component {
   render() {
     let games = [];
     let alternate = 1;
-    if (this.state.animation == 2 && this.state.games[0].id != this.props.target) {
+    if (this.state.animation == 2) {
       alternate = 2;
     }
     let length = Math.min(this.state.activeGames, this.state.games.length);
@@ -398,7 +419,7 @@ class Games extends React.Component {
       let isTarget = this.props.target == game.id;
       let wasTarget = this.state.target == game.id;
       let swipe = 0;
-      if (this.state.animation && !wasTarget) {
+      if (this.hasTarget(this.props.target) && !wasTarget) {
         swipe = alternate;
         alternate *= -1;
       }
