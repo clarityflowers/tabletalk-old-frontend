@@ -7,6 +7,7 @@ class Auth {
     if (localStorage.auth && localStorage.auth.token) {
       if (cb) {
         cb({
+          loaded: true,
           isLoggedIn: true,
           user: {
             id: localStorage.auth.id,
@@ -18,6 +19,7 @@ class Auth {
     else {
       User.login(token, (res) => {
         let result = {
+          loaded: true,
           isLoggedIn: false,
           user: {
             id: null,
@@ -31,6 +33,7 @@ class Auth {
             name: res.name
           }
           result = {
+            loaded: true,
             isLoggedIn: true,
             user: {
               id: res.user,

@@ -25,7 +25,7 @@ let GameIcon = (props) => {
   )
   if (!props.closed && !props.off && !props.dot) {
     content = (
-      <Link to={{pathname: '/', query: {game: props.gameId}}}>
+      <Link to={`/games/${props.gameId}`}>
         {content}
       </Link>
     )
@@ -70,7 +70,7 @@ class GameBox extends React.Component {
     )
     return (
       <div className='box-container' style={style}>
-        <Link to={{pathname: '/', query: {game: this.props.gameId}}}>
+        <Link to={`/games/${this.props.gameId}`}>
           <div className={className}
                ref='box'>
             {this.props.name}
@@ -111,14 +111,9 @@ let getGameClassName = (position) => {
   );
 }
 
-const NEW_GAME_ANIMATION_STEPS = [
-  900,
-  10,
-  900,
-  10,
-  900,
-  0
-]
+const NEW_GAME_ANIMATION_STEPS = [1600, 10, 900, 10, 900, 0]
+
+
 
 class NewGame extends React.Component {
   constructor(props) {
@@ -143,7 +138,17 @@ class NewGame extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    if (newProps.isTarget && !this.props.isTarget) {
+    if (this.props.isTarget != newProps.isTarget) {
+      if (newProps.isTarget) {
+        this.newGameAnimation();
+      }
+      else {
+        this.cancelNewGame();
+      }
+    }
+  }
+  componentDidMount() {
+    if (this.props.isTarget) {
       this.newGameAnimation();
     }
   }
@@ -159,48 +164,36 @@ class NewGame extends React.Component {
     this.setTimeout(this.cancelNewGame.bind(this), duration);
   }
   render() {
-    let plusPosition = this.props.position;
-    if (this.state.newGameStatus == 1) {
-      plusPosition = 1
+    let plusPosition = Math.min(this.props.position, 2);
+    if (this.props.position >= 2) {
+      if (this.state.newGameStatus == 1) {
+        plusPosition = Math.min(plusPosition, 1);
+      }
     }
     let content = (
+      <Link to={"/games/new"}>
       <Plus position={plusPosition}
-            entering={this.props.entering}
-            leaving={this.props.leaving}/>
-    );
-    if (this.state.newGameStatus == 0) {
-      content = (
-        <Link to={"/games/new"}>
-          {content}
-        </Link>
-      )
-    }
+      entering={this.props.entering}
+      leaving={this.props.leaving}/>
+      </Link>
+    )
     if (this.state.newGameStatus >= 2) {
       let iconPosition = 1;
-      if (this.state.newGameStatus >= 3) {
-        iconPosition = 2;
+      if (this.props.position < 3) {
+        iconPosition = this.props.position;
       }
-      let cancel = null;
-      if (this.state.newGameStatus >= 4) {
-        let cancelClassName = cx(
-          'cancel',
-          'home-button',
-          {
-            off: this.state.newGameStatus == 4
-          }
-        )
-        cancel = (
-          <div className={cancelClassName}
-               onClick={this.cancelNewGame.bind(this)}>
-            x
-          </div>
-        )
+      else
+      {
+        if (this.state.newGameStatus >= 3) {
+          iconPosition = 2;
+        }
+        if (this.state.newGameStatus >= 4) {
+        }
+        let gameTypeSelector = null;
       }
-      let gameTypeSelector = null;
       content = (
         <div>
           <GameIcon position={iconPosition} closed/>
-          {cancel}
         </div>
       )
     }
@@ -271,6 +264,7 @@ class Game extends React.Component {
     }
   }
   gameExit() {
+    console.log('game exit: ' + this.state.position);
     let duration = 0;
     if (this.state.position > 0) {
       duration = GAME_ANIMATION_STEPS_EXITING[this.state.position - 1];
@@ -312,7 +306,8 @@ class Game extends React.Component {
       content = (
         <NewGame position={this.state.position}
                  entering={this.state.entering}
-                 leaving={this.state.leaving}/>
+                 leaving={this.state.leaving}
+                 isTarget={this.props.isTarget}/>
       )
     }
     else {
@@ -321,7 +316,8 @@ class Game extends React.Component {
                  position={this.state.position}
                  entering={this.state.entering}
                  leaving={this.state.leaving}
-                 gameId={this.props.gameId}/>
+                 gameId={this.props.gameId}
+                 isTarget={this.props.isTarget}/>
       )
     }
     return content;
@@ -372,15 +368,15 @@ class Games extends React.Component {
       }
       let target = this.state.target;
       let animation = this.state.animation;
-      if (this.props.target in gameHash) {
-        target = this.props.target;
+      if (this.props.params.game == 'new' || this.props.params.game in gameHash) {
+        target = this.props.params.game;
         if (!this.state.loaded) {
           animation = 2;
         }
       }
       else
       {
-        browserHistory.push('/');
+        browserHistory.push('/games');
       }
       this.setState({
         games: games,
@@ -398,13 +394,15 @@ class Games extends React.Component {
       }
       console.error(error);
       if (code == 401) {
-        this.props.signOut();
+        this.props.auth.signOut();
       }
     }
     GameApi.index(resolve, reject);
   }
   componentDidMount() {
-    this.getGames();
+    if (this.props.auth.online) {
+      this.getGames();
+    }
   }
   componentWillUnmount() {
     clearInterval(this.refreshInterval);
@@ -468,39 +466,52 @@ class Games extends React.Component {
     this.props.doneAnimating();
   }
   hasTarget(target) {
-    return target != undefined && target in this.state.gameHash;
+    return (
+      target == 'new' || (
+        target != undefined &&
+        target in this.state.gameHash
+      )
+    );
   }
   componentWillMount() {
-    if (this.hasTarget(this.props.target)) {
+    if (this.hasTarget(this.props.params.game)) {
       this.setState({
         animation: 2,
-        target: this.props.target
+        target: this.props.params.game
       });
     }
   }
   componentWillReceiveProps(newProps) {
-    let hasTarget = this.hasTarget(newProps.target);
-    let hadTarget = this.hasTarget(this.props.target);
+    let hasTarget = this.hasTarget(newProps.params.game);
+    let hadTarget = this.hasTarget(this.props.params.game);
     if (hasTarget != hadTarget) {
       let target = null;
       let animation = 1;
       if (hasTarget) {
-        target = newProps.target;
+        target = newProps.params.game;
       }
       else {
-        target = this.props.target;
+        target = this.props.params.game;
       }
       this.setState({
         animation: 1,
         target: target,
       });
     }
+    if (this.props.auth.online != newProps.auth.online) {
+      if (newProps.auth.online) {
+        this.getGames();
+      }
+      else {
+        this.setState({ games: null });
+      }
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.animation != prevState.animation ||
-        this.props.target != prevProps.target) {
+        this.props.params.game != prevProps.params.game) {
       if (this.state.animation == 1) {
-        if (this.hasTarget(this.props.target)) {
+        if (this.hasTarget(this.props.params.game)) {
           clearTimeout(this.timeout);
           this.timeout = setTimeout(() => {
             this.setState({animation: 2});
@@ -508,7 +519,7 @@ class Games extends React.Component {
         }
         else {
           let duration = 500;
-          clearTimeout(this.props.target);
+          clearTimeout(this.props.params.game);
           this.timeout = setTimeout(() => {
             this.setState({animation: 0});
           }, duration);
@@ -526,9 +537,9 @@ class Games extends React.Component {
     let length = Math.min(this.state.activeGames, this.state.games.length);
     for (let i=0; i < length; i++) {
       let game = this.state.games[i];
-      let isTarget = this.props.target == game.id;
+      let isTarget = this.props.params.game == game.id;
       let wasTarget = this.state.target == game.id;
-      if (wasTarget || !this.hasTarget(this.props.target)) {
+      if (wasTarget || !this.hasTarget(this.props.params.game)) {
         games.push(
           <Game name={game.name}
                 key={game.id}
@@ -542,12 +553,15 @@ class Games extends React.Component {
     }
     if (this.state.activeGames == this.state.games.length + 1) {
       let swipe = 0;
-      if (!this.hasTarget(this.props.target)) {
+      let wasTarget = this.state.target == 'new';
+      let isTarget = this.props.params.game == 'new';
+      if (wasTarget || !this.hasTarget(this.props.params.game)) {
         games.push(
           <Game newGame
-          key='new'
-          doneEntering={this.onGameDoneEntering.bind(this)}
-          doneLeaving={this.onGameDoneLeaving.bind(this)}/>
+                key='new'
+                doneEntering={this.onGameDoneEntering.bind(this)}
+                doneLeaving={this.onGameDoneLeaving.bind(this)}
+                isTarget={isTarget}/>
         );
       }
     }
@@ -555,7 +569,7 @@ class Games extends React.Component {
       'back',
       'home-button',
       {
-        off: !this.hasTarget(this.props.target) ||
+        off: !this.hasTarget(this.props.params.game) ||
               this.state.entering ||
               this.state.leaving ||
               this.state.activeGames == 0
@@ -563,7 +577,7 @@ class Games extends React.Component {
     )
     return (
       <div id='games'>
-        <Link to='/' className={backClass}>&lt;</Link>
+        <Link to='/games' className={backClass}>&lt;</Link>
         <ReactTransitionGroup>
           {games}
         </ReactTransitionGroup>

@@ -238,7 +238,7 @@ class OptionsMenu extends React.Component {
   }
   signout() {
     this.setState({open: false});
-    this.props.onSignOut();
+    this.props.auth.signOut();
     browserHistory.push('/');
   }
   goToUserSettings() {
@@ -275,7 +275,7 @@ class OptionsMenu extends React.Component {
   }
   render() {
     let className = 'hidden';
-    if (this.props.loggedIn) {
+    if (this.props.auth.online && this.props.on) {
       if (this.state.open) {
         className = 'open';
       }
@@ -286,8 +286,8 @@ class OptionsMenu extends React.Component {
     return (
       <div id='optionsMenu' className={className}>
         <Labels
-          name={this.props.name}
-          loggedIn={this.props.loggedIn}
+          name={this.props.auth.name}
+          loggedIn={this.props.auth.online && this.props.on}
           open={this.state.open}
           signout={this.signout.bind(this)}
           mouseEnter={this.mouseEnter.bind(this)}

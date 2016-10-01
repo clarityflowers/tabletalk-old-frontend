@@ -17,6 +17,7 @@ class App extends React.Component {
         isLoggedIn: false
       },
       apiAuth: {
+        loaded: true,
         user: {
           id: null,
           name: null
@@ -30,9 +31,16 @@ class App extends React.Component {
   }
   updateAuth(apiAuth) {
     this.setState({apiAuth: apiAuth});
+    if (apiAuth.isLoggedIn && this.props.location.pathname == "/") {
+      browserHistory.push('/games');
+    }
   }
   onSignInChange(isSignedIn) {
     let googleAuth = this.state.googleAuth;
+    let apiAuth = this.state.apiAuth;
+    if (!googleAuth.loaded) {
+      apiAuth = update(apiAuth, {loaded: {$set: false}});
+    }
     googleAuth = update(googleAuth, {loaded: {$set: true}});
     if (isSignedIn) {
       let user = GoogleApiLoader.getAuth2().currentUser.get();
@@ -42,7 +50,10 @@ class App extends React.Component {
       }
     }
     googleAuth = update(googleAuth, {isLoggedIn: {$set: isSignedIn}});
-    this.setState({googleAuth: googleAuth});
+    this.setState({
+      googleAuth: googleAuth,
+      apiAuth: apiAuth
+    });
   }
   onAuthLoaded() {
     GoogleApiLoader.getAuth2().isSignedIn.listen(this.onSignInChange.bind(this));
@@ -60,6 +71,16 @@ class App extends React.Component {
     if (GoogleApiLoader.getAuth2().isSignedIn.get()) {
       GoogleApiLoader.signOut();
     }
+    this.setState({
+      apiAuth: {
+        isLoggedIn: false,
+        loaded: true,
+        user: {
+          id: null,
+          name: null
+        }
+      }
+    })
     Auth.logout();
   }
   openOptions() {
@@ -85,11 +106,6 @@ class App extends React.Component {
     }
   }
   render() {
-    let children = (
-      <div>
-        <Home loading/>
-      </div>
-    )
     let loggedIn = false;
     let name = '';
     if (this.state.googleAuth.loaded) {
@@ -100,16 +116,26 @@ class App extends React.Component {
       }
     }
     let target = this.props.location.query.game;
+    let auth = {
+      name: this.state.apiAuth.user.name,
+      online: this.state.apiAuth.isLoggedIn,
+      signIn: this.signIn.bind(this),
+      signOut: this.signOut.bind(this)
+    }
+    let loading = !(this.state.googleAuth.loaded && this.state.apiAuth.loaded);
+    let children = this.props.children;
+    if (children) {
+      children = React.cloneElement(children, {
+        auth: auth
+      })
+    }
     return (
       <div id='app'>
-        <OptionsMenu loggedIn={loggedIn && this.state.options}
-                     onSignOut={this.signOut}
-                     name={this.state.apiAuth.user.name}/>
-        <Home loading={!this.state.googleAuth.loaded}
-              loggedIn={loggedIn}
-              signIn={this.signIn}
-              signOut={this.signOut}
-              target={target}/>
+        <OptionsMenu on={this.state.options} auth={auth}/>
+        <Home loading={loading}
+              auth={auth}>
+          {children}
+        </Home>
       </div>
     )
   }
