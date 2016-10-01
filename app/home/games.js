@@ -68,16 +68,24 @@ class GameBox extends React.Component {
         off: this.props.position == 0
       }
     )
+    let content = (
+      <div className={className}
+           ref='box'>
+        {this.props.name}
+      </div>
+    );
+    if (this.props.gameId != 'new') {
+      content = (
+        <Link to={`/games/${this.props.gameId}`}>
+          {content}
+        </Link>
+      );
+    }
     return (
       <div className='box-container' style={style}>
-        <Link to={`/games/${this.props.gameId}`}>
-          <div className={className}
-               ref='box'>
-            {this.props.name}
-          </div>
-        </Link>
+        {content}
       </div>
-    )
+    );
   }
 }
 
@@ -179,6 +187,7 @@ class NewGame extends React.Component {
     )
     if (this.state.newGameStatus >= 2) {
       let iconPosition = 1;
+      let boxPosition = 0;
       if (this.props.position < 3) {
         iconPosition = this.props.position;
       }
@@ -188,12 +197,14 @@ class NewGame extends React.Component {
           iconPosition = 2;
         }
         if (this.state.newGameStatus >= 4) {
+          boxPosition = 1;
         }
         let gameTypeSelector = null;
       }
       content = (
         <div>
           <GameIcon position={iconPosition} closed/>
+          <GameBox gameId='new' position={boxPosition} name='New Game'/>
         </div>
       )
     }
@@ -575,11 +586,18 @@ class Games extends React.Component {
               this.state.activeGames == 0
       }
     )
+    let children = this.props.children;
+    if (!this.props.auth.online) {
+      children = null;
+    }
     return (
       <div id='games'>
         <Link to='/games' className={backClass}>&lt;</Link>
-        <ReactTransitionGroup>
+        <ReactTransitionGroup component='div'>
           {games}
+        </ReactTransitionGroup>
+        <ReactTransitionGroup component='div' className='children'>
+          {children}
         </ReactTransitionGroup>
       </div>
     );

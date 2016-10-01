@@ -1,5 +1,5 @@
 'use strict'
 
-export GameTypes = {
+export let GameTypes = {
   0: 'World of Adventure'
 }

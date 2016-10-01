@@ -27,12 +27,8 @@ export default class Game {
     // requestCount++;
     let games = [];
     let length = Math.random() * 5;
-    length = 0;
     let j=0;
     for (let i=0; i < length; i++) {
-      if (Math.random() > 0.5) {
-        j++;
-      }
       let name = "Game #" + j;
       games.push({
         name: name,
@@ -40,6 +36,9 @@ export default class Game {
         id: j
       })
       j++;
+      if (Math.random() > 0.5) {
+        j++;
+      }
     }
     if (requestCount < 3) {
       resolve(games);

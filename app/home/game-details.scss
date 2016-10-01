@@ -1,0 +1,76 @@
+@import 'utils/colors';
+
+#app #home #games div.game-details {
+  max-width: 100%;
+  $background: lighten($balloons, 30%);
+  $color: darken($balloons, 30%);
+  background-color: $background;
+  color: $color;
+  box-shadow: $box-shadow;
+  font-family: 'League Spartan';
+  font-size: 20px;
+  position: relative;
+  padding: 1em;
+  overflow: hidden;
+  div.header {
+    span.enter {
+      background-color: $hearts;
+      box-shadow: $box-shadow;
+      color: $hearts-light;
+      padding: .5em .5em .2em .5em;
+    }
+    padding: 1em;
+    text-align: center;
+  }
+  div.details {
+    width: auto;
+    max-width: 300px;
+    div.players {
+      h1 {
+        font-size: 1em;
+        border-bottom: .25em solid $color;
+        margin-bottom: .5em;
+      }
+      ul {
+        margin: 0;
+        list-style: none;
+        list-style-type: none;
+        padding-left: 1em;
+        li.player {
+          // position: absolute;
+          // right: 0;
+          // top: 0;
+          color: $color;
+          // margin: .9em .9em 0 0;
+          white-space: nowrap;
+          .icon {
+            position: relative;
+            top: .1em;
+            border-radius: 1em;
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            text-align: center;
+            padding: .25em .25em .25em .25em;
+            margin-right: .25em;
+            font-family: 'Icomoon';
+            &.me {
+              background-color: $color;
+              color: $background;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen
+  and (max-device-width: 800px) {
+  #app #home #games .game-details {
+    font-size: 15px;
+    .header {
+      text-align: left;
+    }
+  }
+}

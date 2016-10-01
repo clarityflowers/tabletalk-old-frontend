@@ -24,6 +24,9 @@
       top: -2em;
     }
   }
+  .children {
+    width: 100%;
+  }
   .game {
     position: relative;
     padding: 3em 1em 3em 7em;
@@ -263,9 +266,10 @@
   and (max-device-width: 600px) {
   #app #home #games {
     font-size: 7px;
-    padding: 7em 1em 0 6em;
+    padding: 7em 2em 0 2em;
     .back {
-      left: 1.3em;
+      left: 1.7em;
+      top: 1.5em;
     }
   }
 }
