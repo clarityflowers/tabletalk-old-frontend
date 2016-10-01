@@ -16,6 +16,7 @@ else {
 
   var config = require('./webpack.config.js');
   config.entry.unshift("webpack-dev-server/client?http://localhost:8080/")
+  config.output.path = '/' + config.output.path;
 
   var port = process.env.PORT;
   var ip = '0.0.0.0';
