@@ -40,11 +40,20 @@ class GameBox extends React.Component {
       width: 0
     }
   }
-  componentDidUpdate(prevProps, prevState) {
+  updateWidth() {
     let {scrollWidth, innerText} = this.refs.box;
     if (scrollWidth != this.state.width) {
       this.setState({width: scrollWidth});
     }
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateWidth.bind(this));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWidth.bind(this));
+  }
+  componentDidUpdate(prevProps, prevState) {
+    this.updateWidth();
   }
   render() {
     let style = {

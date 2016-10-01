@@ -12,10 +12,19 @@ class Label extends React.Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
+    this.updateWidth();
+  }
+  updateWidth() {
     let {scrollWidth, innerText} = this.refs.label;
     if (scrollWidth != this.state.width) {
       this.setState({width: scrollWidth});
     }
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateWidth.bind(this));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWidth.bind(this));
   }
   mouseEnter() {
     this.props.mouseEnter(this.props.name);
