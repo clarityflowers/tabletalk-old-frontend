@@ -2,19 +2,20 @@
 const express = require('express');
 
 if (process.env.NODE_ENV == 'production') {
-  let app = express();
-
+  const fallback = require('express-history-api-fallback')
+  const app = express();
+  const root = `${__dirname}/public`;
   app.use(express.static('public'));
-
+  app.use(fallback('index.html', { root } ));
   app.listen(process.env.PORT, function() {
     console.log('Server started on port ' + process.env.PORT);
   })
 }
 else {
-  var webpack = require('webpack');
-  var WebpackDevServer = require('webpack-dev-server');
-
+  const webpack = require('webpack');
+  const WebpackDevServer = require('webpack-dev-server');
   var config = require('./webpack.config.js');
+
   config.entry.unshift("webpack-dev-server/client?http://localhost:8080/")
   config.output.path = '/' + config.output.path;
 
