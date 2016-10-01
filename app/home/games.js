@@ -275,7 +275,6 @@ class Game extends React.Component {
     }
   }
   gameExit() {
-    console.log('game exit: ' + this.state.position);
     let duration = 0;
     if (this.state.position > 0) {
       duration = GAME_ANIMATION_STEPS_EXITING[this.state.position - 1];
