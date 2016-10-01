@@ -112,11 +112,11 @@ let getGameClassName = (position) => {
 }
 
 const NEW_GAME_ANIMATION_STEPS = [
-  700,
+  900,
   10,
-  700,
+  900,
   10,
-  700,
+  900,
   0
 ]
 
@@ -149,12 +149,10 @@ class NewGame extends React.Component {
     clearTimeout(this.timeout);
   }
   cancelNewGame() {
-    console.log('CANCEL NEW GAME: ' + this.state.newGameStatus);
     if (this.state.newGameStatus == 0) {
       return;
     }
     let duration = NEW_GAME_ANIMATION_STEPS[this.state.newGameStatus - 1];
-    console.log('duration=' + duration);
     this.setState({ newGameStatus: this.state.newGameStatus - 1 });
     this.setTimeout(this.cancelNewGame.bind(this), duration);
   }
