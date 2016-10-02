@@ -7,8 +7,12 @@ class GameDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      off: true,
+      loading: true,
       game: {
         type: 0,
+        maxPlayers: 5,
+        admin: false,
         players: [
           {
             name: 'cerisa',
@@ -20,11 +24,46 @@ class GameDetails extends React.Component {
             admin: false,
             me: false
           }
-        ],
-        maxPlayers: 5,
-        admin: false
+        ]
       }
-    }
+    };
+    this.timeout = null;
+  }
+  setTimeout(resolve, duration) {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(resolve, duration);
+  }
+  enter(callback) {
+    this.setState({
+      off: false
+    });
+    this.setTimeout(() => {
+      callback();
+    }, 700);
+  }
+  leave(callback) {
+    this.setState({
+      off: true
+    });
+    this.setTimeout(() => {
+      callback();
+    }, 700);
+  }
+  componentWillAppear(callback) {
+    console.log('component will appear');
+    this.setTimeout(() => {
+      this.enter(callback);
+    }, 1500);
+  }
+  componentWillEnter(callback) {
+    console.log('component will enter');
+    this.setTimeout(() => {
+      this.enter(callback);
+    }, 1500);
+  }
+  componentWillLeave(callback) {
+    console.log('component will leave');
+    this.leave(callback);
   }
   render() {
     let game = this.state.game;
@@ -42,7 +81,7 @@ class GameDetails extends React.Component {
         }
       )
       players.push(
-        <li className='player'>
+        <li className='player' key={player.name}>
           <span className={iconClass}>{icon}</span>
           <span className='name'>
             {player.name}
@@ -63,8 +102,15 @@ class GameDetails extends React.Component {
         playerCount + 's';
       }
     }
+    let className = cx(
+      'game-details',
+      {
+        loading: this.state.loading,
+        off: this.state.off
+      }
+    );
     return (
-      <div className='game-details'>
+      <div className={className}>
         <div className='header'>
           <span className='enter'>Enter</span>
         </div>

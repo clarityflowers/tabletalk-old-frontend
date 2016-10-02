@@ -589,6 +589,11 @@ class Games extends React.Component {
     if (!this.props.auth.online) {
       children = null;
     }
+    else if (children) {
+      children = React.cloneElement(children, {
+        key: this.props.location.pathname
+      });
+    }
     return (
       <div id='games'>
         <Link to='/games' className={backClass}>&lt;</Link>
