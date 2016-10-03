@@ -301,7 +301,6 @@ class Game extends React.Component {
     this.setState({
       entering: false
     })
-    this.props.doneEntering();
   }
   componentWillLeave(callback) {
     this.leaveCallback = callback;
@@ -344,176 +343,190 @@ class Games extends React.Component {
       leaving: false,
       animation: 0,
       games: [],
-      gameHash: {}
+      gameHash: {},
+      queue: []
     };
     this.gamesDoneEntering = 0;
     this.gamesDoneLeaving = 0;
-    this.callback = null;
+    this.enterCallback = null;
+    this.leaveCallback = null;
     this.timeout = null;
     this.refreshInterval = null;
   }
-  getGames() {
-    let gameHash = {}
-    let resolve = (data) => {
-      let games = [];
-      for (let i=0; i < data.length; i++) {
-        let newGame = {
-          name: data[i].name,
-          id: data[i].id,
-          type: data[i].type
-        };
-        let index = this.state.gameHash[newGame.id];
-        if (index) {
-          let game = this.state.games[index];
-          if (game) {
-            newGame.active = true;
+  queue(id) {
+    this.setState((state) => {
+      let queue = state.queue.slice(0);
+      queue.push(id);
+      return {queue: queue};
+    });
+  }
+  dequeue() {
+    let queue = this.state.queue.slice(0);
+    if (!queue.length) {
+      return null;
+    }
+    let result = queue.shift();
+    this.setState((state) => ({
+      queue: state.queue.slice(1)
+    }));
+    return result;
+  }
+  processQueue() {
+    let id = this.dequeue();
+    if (id != null) {
+      let i = this.state.gameHash[id];
+      let games = this.state.games;
+      games[i].isVisible = !games[i].isVisible;
+      this.setState({
+        games: games
+      });
+      setTimeout(this.processQueue.bind(this), 100);
+    }
+  }
+  getGame(id) {
+    let game = null;
+    if (this.hasGame(id)) {
+      game = this.state.games[gameHash[id]];
+    }
+    return game;
+  }
+  update(data) {
+    let games = [];
+    let gameHash = {};
+    let queue = this.state.queue.slice(0);
+    let hasTarget = false;
+    data.push({
+      name: null,
+      id: 'new',
+      type: null,
+    })
+    for (let i=0; i < data.length; i++) {
+      let newGame = {
+        name: data[i].name,
+        id: data[i].id,
+        type: data[i].type,
+        isVisible: false
+      };
+      let game = this.getGame(i);
+      if (newGame.id == this.props.params.game) {
+        hasTarget = true;
+      }
+      if (game) {
+        newGame.isVisible = game.isVisible;
+      }
+      else {
+        if (this.props.params.game) {
+          if (newGame.id == this.props.params.game) {
+            queue.push(newGame.id);
           }
         }
-        games.push(newGame);
-        gameHash[newGame.id] = i;
-      }
-      let activeGames = 0;
-      if (!this.state.entering && !this.state.leaving && this.state.loaded) {
-        activeGames = games.length + 1;
-      }
-      let target = this.state.target;
-      let animation = this.state.animation;
-      if (this.props.params.game == 'new' || this.props.params.game in gameHash) {
-        target = this.props.params.game;
-        if (!this.state.loaded) {
-          animation = 2;
+        else {
+          queue.push(newGame.id);
         }
       }
-      else
-      {
-        browserHistory.push('/games');
-      }
-      this.setState({
-        games: games,
-        gameHash: gameHash,
-        activeGames: activeGames,
-        loaded: true,
-        target: target,
-        animation: animation
-      })
+      games.push(newGame);
+      gameHash[newGame.id] = i;
     }
+    if (this.props.params.game && !hasTarget) {
+      browserHistory.push('/games');
+    }
+    this.setState({
+      games: games,
+      gameHash: gameHash,
+      queue: queue,
+      loaded: true
+    })
+  }
+  load() {
+    let gameHash = {}
     let reject = (code, message) => {
-      let error = 'ereror + code';
+      let error = 'error' + code;
       if (message) {
         error += ': ' + message
       }
-      console.error(error);
       if (code == 401) {
         this.props.auth.signOut();
       }
+      console.error(error);
     }
-    GameApi.index(resolve, reject);
-  }
-  componentDidMount() {
-    if (this.props.auth.online) {
-      this.getGames();
-    }
+    GameApi.index(this.update.bind(this), reject);
   }
   componentWillUnmount() {
     clearInterval(this.refreshInterval);
   }
-  animateInGames(callback) {
-    let activeGames = this.state.activeGames;
-    if (this.state.loaded) {
-      activeGames = this.state.activeGames + 1;
-      this.setState({
-        activeGames: activeGames,
-        entering: true
-      });
-    }
-    if (activeGames < this.state.games.length + 1) {
-      setTimeout(() => {this.animateInGames(callback)}, 200);
-    }
-    else {
-      callback();
-    }
-  }
-  animateOutGames() {
-    this.setState({
-      leaving: true
-    });
-    if (!this.state.entering) {
-      this.setState({
-        activeGames: this.state.activeGames - 1,
-      });
-      if (this.state.activeGames > 0) {
-        setTimeout(() => {this.animateOutGames()}, 100);
-      }
-    }
-  }
-  onGameDoneEntering() {
-    this.gamesDoneEntering++;
-    if (this.gamesDoneEntering == this.gamesEnteringCount) {
-      this.setState({
-        entering: false
-      })
-      if (this.state.leaving) {
-        this.animateOutGames();
-      }
-    }
-  }
   onGameDoneLeaving() {
     this.gamesDoneLeaving++;
-    if (this.gamesDoneLeaving == this.state.games.length + 1) {
-      setTimeout(() => {if (this.callback) {this.callback()}});
+    let finalValue = this.hasTarget() ? 1 : this.state.games.length
+    if (this.state.leaving && this.gamesDoneLeaving == finalValue) {
+      setTimeout(() => {if (this.leaveCallback) {this.leaveCallback()}}, 0);
     }
-  }
-  componentWillEnter(callback) {
-    this.gamesEnteringCount = this.state.games.length + 1;
-    this.animateInGames(callback);
   }
   componentWillLeave(callback) {
     clearInterval(this.refreshInterval);
-    this.callback = callback;
-    this.animateOutGames();
+    this.leaveCallback = callback;
+    this.gamesDoneLeaving = 0;
+    for (let i=this.state.games.length - 1; i >= 0; i--) {
+      if (this.state.games[i].isVisible) {
+        this.queue(this.state.games[i].id);
+      }
+    }
+    this.setState({leaving: true});
   }
   componentDidLeave() {
     this.props.doneAnimating();
   }
-  hasTarget(target) {
+  hasGame(id) {
     return (
-      target == 'new' || (
-        target != undefined &&
-        target in this.state.gameHash
+      id == 'new' || (
+        id != undefined &&
+        id in this.state.gameHash
       )
     );
   }
-  componentWillMount() {
-    if (this.hasTarget(this.props.params.game)) {
-      this.setState({
-        animation: 2,
-        target: this.props.params.game
-      });
+  hasTarget() {
+    let target = this.props.params.game;
+    return this.hasGame(target);
+  }
+  componentDidMount() {
+    if (this.props.auth.online) {
+      this.load();
     }
   }
   componentWillReceiveProps(newProps) {
-    let hasTarget = this.hasTarget(newProps.params.game);
-    let hadTarget = this.hasTarget(this.props.params.game);
+    let hasTarget = this.hasGame(newProps.params.game);
+    let hadTarget = this.hasTarget();
     if (hasTarget != hadTarget) {
-      let target = null;
-      let animation = 1;
+      let games = this.state.games;
       if (hasTarget) {
-        target = newProps.params.game;
+        let target = newProps.params.game;
+        for (let i=games.length - 1; i >= 0; i--) {
+          let game = games[i];
+          if (game.id != target) {
+            this.queue(game.id);
+          }
+        }
       }
       else {
-        target = this.props.params.game;
+        let target = this.props.params.game;
+        for (let i=0; i < games.length; i++) {
+          let game = games[i];
+          if (game.id != target) {
+            this.queue(game.id);
+          }
+        }
       }
-      this.setState({
-        animation: 1,
-        target: target,
-      });
     }
     if (this.props.auth.online != newProps.auth.online) {
       if (newProps.auth.online) {
-        this.getGames();
+        this.load();
       }
       else {
-        this.setState({ games: null });
+        this.gamesDoneLeaving = 0;
+        for (let i=this.state.games.length - 1; i >= 0; i--) {
+          if (this.state.games[i].id != this.props.params.game) {
+            this.queue(this.state.games[i].id);
+          }
+        }
       }
     }
   }
@@ -536,7 +549,21 @@ class Games extends React.Component {
         }
       }
     }
-
+    if (this.state.queue.length && !prevState.queue.length) {
+      this.processQueue();
+    }
+  }
+  game(i) {
+    let game = this.state.games[i];
+    return (
+      <Game name={game.name}
+            key={game.id}
+            gameId={game.id}
+            newGame={game.id == 'new'}
+            doneLeaving={this.onGameDoneLeaving.bind(this)}
+            isTarget={this.props.params.game == game.id}>
+      </Game>
+    )
   }
   render() {
     let games = [];
@@ -544,35 +571,13 @@ class Games extends React.Component {
     if (this.state.animation == 2) {
       alternate = 2;
     }
-    let length = Math.min(this.state.activeGames, this.state.games.length);
-    for (let i=0; i < length; i++) {
+    let hadTarget = this.hasTarget(this.state.target);
+    let hasTarget = this.hasTarget(this.props.params.game);
+    let target = hasTarget ? (this.props.params.game) : null;
+    for (let i=0; i < this.state.games.length; i++) {
       let game = this.state.games[i];
-      let isTarget = this.props.params.game == game.id;
-      let wasTarget = this.state.target == game.id;
-      if (wasTarget || !this.hasTarget(this.props.params.game)) {
-        games.push(
-          <Game name={game.name}
-                key={game.id}
-                gameId={game.id}
-                doneEntering={this.onGameDoneEntering.bind(this)}
-                doneLeaving={this.onGameDoneLeaving.bind(this)}
-                isTarget={isTarget}>
-          </Game>
-        );
-      }
-    }
-    if (this.state.activeGames == this.state.games.length + 1) {
-      let swipe = 0;
-      let wasTarget = this.state.target == 'new';
-      let isTarget = this.props.params.game == 'new';
-      if (wasTarget || !this.hasTarget(this.props.params.game)) {
-        games.push(
-          <Game newGame
-                key='new'
-                doneEntering={this.onGameDoneEntering.bind(this)}
-                doneLeaving={this.onGameDoneLeaving.bind(this)}
-                isTarget={isTarget}/>
-        );
+      if (game.isVisible) {
+        games.push(this.game(i));
       }
     }
     let backClass = cx(
@@ -580,18 +585,23 @@ class Games extends React.Component {
       'home-button',
       {
         off: !this.hasTarget(this.props.params.game) ||
-              this.state.entering ||
-              this.state.leaving ||
-              this.state.activeGames == 0
+              this.state.loading ||
+              this.state.leaving
       }
     )
     let children = this.props.children;
-    if (!this.props.auth.online) {
+    if (
+      this.state.loading ||
+      !this.props.auth.online ||
+      this.state.leaving ||
+      !this.hasTarget()
+    ) {
       children = null;
     }
-    else if (children) {
+    if (children) {
       children = React.cloneElement(children, {
-        key: this.props.location.pathname
+        key: this.props.location.pathname,
+        auth: this.props.auth
       });
     }
     return (

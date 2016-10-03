@@ -49,4 +49,29 @@ export default class Game {
       reject(code, message);
     }
   }
+  static show(id, resolve, reject) {
+    setTimeout(() => {
+      let game = {
+        type: 0,
+        maxPlayers: 5,
+        admin: false,
+        players: [
+          {
+            name: 'cerisa',
+            admin: true,
+            me: true
+          },
+          {
+            name: 'dimosar',
+            admin: false,
+            me: false
+          }
+        ]
+      };
+      resolve(game);
+      let code = 401;
+      let message = "not logged in"
+      // reject(code, message);
+    }, 3000);
+  }
 }

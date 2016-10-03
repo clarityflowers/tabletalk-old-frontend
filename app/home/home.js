@@ -13,7 +13,7 @@ class Home extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    if (!this.props.loading && newProps.auth.online != this.props.auth.online) {
+    if (newProps.auth.online != this.props.auth.online) {
       this.setState({animating: true});
     }
   }
@@ -25,21 +25,19 @@ class Home extends React.Component {
     let games = null;
     let children = this.props.children;
     if (children) {
-      children = React.cloneElement(children, {
-        doneAnimating: this.doneAnimating.bind(this)
-      })
+      children = React.Children.map(this.props.children,
+        (child) => React.cloneElement(child, {
+          auth:  this.props.auth,
+          doneAnimating: this.doneAnimating.bind(this)
+        })
+      )
     }
-    if (this.props.loading || this.state.animating) {
-      children = null;
-    }
-    else if (!this.props.auth.online) {
+    if (!this.state.animating && !this.props.loading && !this.props.auth.online) {
       login = (
         <Login signIn={this.props.auth.signIn}
                key='login'
                doneAnimating={this.doneAnimating.bind(this)}/>
       )
-    }
-    else {
     }
     return (
       <ReactTransitionGroup className='content' component='div' id='home'>

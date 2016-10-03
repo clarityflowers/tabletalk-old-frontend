@@ -124,11 +124,6 @@ class App extends React.Component {
     }
     let loading = !(this.state.googleAuth.loaded && this.state.apiAuth.loaded);
     let children = this.props.children;
-    if (children) {
-      children = React.cloneElement(children, {
-        auth: auth
-      })
-    }
     return (
       <div id='app'>
         <OptionsMenu on={this.state.options} auth={auth}/>

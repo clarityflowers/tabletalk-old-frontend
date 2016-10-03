@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { GameTypes } from 'utils/enums.js';
+import Game from 'api/game.js'
 import './game-details.scss';
 
 class GameDetails extends React.Component {
@@ -9,22 +10,13 @@ class GameDetails extends React.Component {
     this.state = {
       off: true,
       loading: true,
+      show: false,
+      height: 100,
       game: {
-        type: 0,
-        maxPlayers: 5,
+        type: null,
+        maxPlayers: 0,
         admin: false,
-        players: [
-          {
-            name: 'cerisa',
-            admin: true,
-            me: true
-          },
-          {
-            name: 'dimosar',
-            admin: false,
-            me: false
-          }
-        ]
+        players: []
       }
     };
     this.timeout = null;
@@ -50,20 +42,47 @@ class GameDetails extends React.Component {
     }, 700);
   }
   componentWillAppear(callback) {
-    console.log('component will appear');
     this.setTimeout(() => {
       this.enter(callback);
     }, 1500);
   }
   componentWillEnter(callback) {
-    console.log('component will enter');
     this.setTimeout(() => {
       this.enter(callback);
     }, 1500);
   }
   componentWillLeave(callback) {
-    console.log('component will leave');
     this.leave(callback);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.loading && !this.state.loading) {
+      let {scrollHeight} = this.refs.content;
+      if (scrollHeight != this.state.height) {
+        this.setState({height: scrollHeight});
+        setTimeout(() => {
+          this.setState({show: true});
+        }, 700);
+      }
+    }
+  }
+  update(game) {
+    this.setState({
+      game: game,
+      loading: false
+    });
+  }
+  load() {
+    let gameId = this.props.params.game;
+    let resolve = this.update.bind(this);
+    let reject = (code, message) => {
+      if (code == 401) {
+        this.props.auth.signOut();
+      }
+    };
+    Game.show(gameId, resolve, reject);
+  }
+  componentWillMount() {
+    this.load();
   }
   render() {
     let game = this.state.game;
@@ -105,22 +124,33 @@ class GameDetails extends React.Component {
     let className = cx(
       'game-details',
       {
-        loading: this.state.loading,
         off: this.state.off
       }
     );
+    let loadingClassName = cx(
+      'loading',
+      {
+        off: this.state.show
+      }
+    )
+    let style = {
+      height: this.state.height
+    }
     return (
-      <div className={className}>
-        <div className='header'>
-          <span className='enter'>Enter</span>
-        </div>
-        <div className='details'>
-          <div className='type'>
-            {GameTypes[game.type]}
+      <div className={className} style={style}>
+        <div className={loadingClassName}>Loading...</div>
+        <div className='content' ref='content'>
+          <div className='header'>
+            <span className='enter'>Enter</span>
           </div>
-          <div className='players'>
-            <h1>{playerCount}</h1>
-            <ul>{players}</ul>
+          <div className='details'>
+            <div className='type'>
+              {GameTypes[game.type]}
+            </div>
+            <div className='players'>
+              <h1>{playerCount}</h1>
+              <ul>{players}</ul>
+            </div>
           </div>
         </div>
       </div>

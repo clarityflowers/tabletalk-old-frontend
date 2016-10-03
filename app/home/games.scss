@@ -15,7 +15,9 @@
   cursor: default;
   position: relative;
   font-size: 10px;
+  pointer-events: none;
   .back {
+    pointer-events: auto;
     position: absolute;
     top: 2em;
     left: 4em;
@@ -25,9 +27,11 @@
     }
   }
   .children {
+    pointer-events: auto;
     width: 100%;
   }
   .game {
+    pointer-events: auto;
     position: relative;
     padding: 3em 1em 3em 7em;
     margin: 0 0 -1em 0;
@@ -52,6 +56,7 @@
       }
     }
     .icon {
+      pointer-events: auto;
       position: absolute;
       left: 0em;
       top: 1.5em;
@@ -110,6 +115,7 @@
       }
     }
     .box-container {
+      pointer-events: auto;
       text-align: left;
       .box {
         flex: 1;
@@ -132,6 +138,7 @@
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
     }
     .plus {
+      pointer-events: auto;
       position: absolute;
       left: 4em;
       top: 5.6em;

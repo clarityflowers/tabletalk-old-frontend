@@ -10,58 +10,81 @@
   font-family: 'League Spartan';
   font-size: 20px;
   position: relative;
-  padding: 1em;
   overflow: hidden;
   top: 0;
-  transition: top .5s cubic-bezier(0.7,-0.3,0.3,1.1);
+  transition-property: top, height;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0.7,-0.3,0.3,1.1);
   &.off {
     top: 100vh;
   }
-  div.header {
-    span.enter {
-      background-color: $hearts;
-      box-shadow: $box-shadow;
-      color: $hearts-light;
-      padding: .5em .5em .2em .5em;
-    }
-    padding: 1em;
+  div.loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: $color;
+    color: $background;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0%;
+    transition: top .5s cubic-bezier(0.7,0.3,0.3,0.7);
+    &.off {
+      top: -100%;
+    }
   }
-  div.details {
-    width: auto;
-    max-width: 300px;
-    div.players {
-      h1 {
-        font-size: 1em;
-        border-bottom: .25em solid $color;
-        margin-bottom: .5em;
+  div.content {
+    padding: 1em;
+    height: auto;
+    z-index: 1;
+    div.header {
+      span.enter {
+        background-color: $hearts;
+        box-shadow: $box-shadow;
+        color: $hearts-light;
+        padding: .5em .5em .2em .5em;
       }
-      ul {
-        margin: 0;
-        list-style: none;
-        list-style-type: none;
-        padding-left: 1em;
-        li.player {
-          // position: absolute;
-          // right: 0;
-          // top: 0;
-          color: $color;
-          // margin: .9em .9em 0 0;
-          white-space: nowrap;
-          .icon {
-            position: relative;
-            top: .1em;
-            border-radius: 1em;
-            width: 1em;
-            height: 1em;
-            display: inline-block;
-            text-align: center;
-            padding: .25em .25em .25em .25em;
-            margin-right: .25em;
-            font-family: 'Icomoon';
-            &.me {
-              background-color: $color;
-              color: $background;
+      padding: 1em;
+      text-align: center;
+    }
+    div.details {
+      width: auto;
+      max-width: 300px;
+      div.players {
+        h1 {
+          font-size: 1em;
+          border-bottom: .25em solid $color;
+          margin-bottom: .5em;
+        }
+        ul {
+          margin: 0;
+          list-style: none;
+          list-style-type: none;
+          padding-left: 1em;
+          li.player {
+            // position: absolute;
+            // right: 0;
+            // top: 0;
+            color: $color;
+            // margin: .9em .9em 0 0;
+            white-space: nowrap;
+            .icon {
+              position: relative;
+              top: .1em;
+              border-radius: 1em;
+              width: 1em;
+              height: 1em;
+              display: inline-block;
+              text-align: center;
+              padding: .25em .25em .25em .25em;
+              margin-right: .25em;
+              font-family: 'Icomoon';
+              &.me {
+                background-color: $color;
+                color: $background;
+              }
             }
           }
         }
