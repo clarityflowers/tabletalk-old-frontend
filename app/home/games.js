@@ -545,6 +545,14 @@ class Games extends React.Component {
             this.queue(game.id);
           }
         }
+        this.setState((state) => {
+          let games = state.games.slice(0);
+          let game = games[state.gameHash['new']];
+          game.name = null;
+          game.type = null;
+          games[state.gameHash['new']] = game;
+          return ({games: games});
+        })
       }
     }
     if (this.props.auth.online != newProps.auth.online) {
