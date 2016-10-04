@@ -364,7 +364,6 @@ class Games extends React.Component {
     this.refreshInterval = null;
   }
   queue(id) {
-    console.log(`queue ${id}`);
     this.setState((state) => {
       let queue = state.queue.slice(0);
       queue.push(id);
@@ -422,7 +421,6 @@ class Games extends React.Component {
         type: data[i].type,
         isVisible: false
       };
-      console.log(`data[${i}]=${newGame.id}`);
       if (newGame.id == this.props.params.game) {
         hasTarget = true;
       }
@@ -453,7 +451,6 @@ class Games extends React.Component {
     }
     if (this.props.params.game && !hasTarget) {
       browserHistory.push('/games');
-      console.log('redirect');
       for (let i=0; i < games.length; i++) {
         this.queue(games[i].id);
       }
@@ -487,7 +484,6 @@ class Games extends React.Component {
     clearInterval(this.refreshInterval);
     this.leaveCallback = callback;
     this.gamesDoneLeaving = 0;
-    console.log('component will leave')
     for (let i=this.state.games.length - 1; i >= 0; i--) {
       if (this.state.games[i].isVisible) {
         this.queue(this.state.games[i].id);
@@ -528,7 +524,6 @@ class Games extends React.Component {
       let games = this.state.games;
       if (hasTarget) {
         let target = newProps.params.game;
-        console.log(`target=${target}`)
         for (let i=games.length - 1; i >= 0; i--) {
           let game = games[i];
           if (game.id != target) {
@@ -538,7 +533,6 @@ class Games extends React.Component {
       }
       else {
         let target = this.props.params.game;
-        console.log(`untarget=${target}`)
         for (let i=0; i < games.length; i++) {
           let game = games[i];
           if (!game.isVisible) {
@@ -563,7 +557,6 @@ class Games extends React.Component {
       else {
         this.stopPolling();
         this.gamesDoneLeaving = 0;
-        console.log('go offline')
         for (let i=this.state.games.length - 1; i >= 0; i--) {
           if (this.state.games[i].id != this.props.params.game) {
             this.queue(this.state.games[i].id);
