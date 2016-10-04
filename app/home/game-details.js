@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { GameTypes } from 'utils/enums.js';
 import Game from 'api/game.js'
 import './game-details.scss';
+import { HoverBuzz } from 'utils/hover-animate.js';
 
 class GameDetails extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class GameDetails extends React.Component {
     this.state = {
       off: true,
       loading: true,
-      show: false,
+      show: this.props.params.game == 'new',
       height: 100,
       game: {
         type: null,
@@ -84,42 +85,100 @@ class GameDetails extends React.Component {
   componentWillMount() {
     this.load();
   }
+  handleGameTypeClick(index) {
+    this.props.onNewGameType(index);
+  }
   render() {
     let game = this.state.game;
-    let players = [];
-    for (let i=0; i < game.players.length; i++) {
-      let player = game.players[i];
-      let icon = 'u';
-      if (player.admin) {
-        icon = '*';
+    let style = {};
+    let content = null;
+    if (this.props.params.game == 'new') {
+      let gameTypes = [];
+      for (let i=0; i < GameTypes.length; i++) {
+        gameTypes.push(
+          <HoverBuzz key={i}>
+            <button className={`game-type ${GameTypes[i].className}`}
+                    onClick={this.handleGameTypeClick.bind(this, i)}>
+              {GameTypes[i].name}
+            </button>
+          </HoverBuzz>
+        )
       }
-      let iconClass = cx(
-        'icon',
-        {
-          me: player.me
-        }
+      content = (
+        <div className='content' ref='content'>
+          <div className='header'>
+            Choose a game
+          </div>
+          <div className='game-type-list'>
+            {gameTypes}
+          </div>
+        </div>
       )
-      players.push(
-        <li className='player' key={player.name}>
-          <span className={iconClass}>{icon}</span>
-          <span className='name'>
-            {player.name}
-          </span>
-        </li>
-      )
-    }
-    let playerCount = game.players.length + ' ';
-    if (game.maxPlayers) {
-      playerCount += 'of ' + game.maxPlayers + ' player';
-      if (game.maxPlayers > 1) {
-        playerCount += 's';
-      }
     }
     else {
-      playerCount += 'player';
-      if (game.players.length > 1) {
-        playerCount + 's';
+      let players = [];
+      for (let i=0; i < game.players.length; i++) {
+        let player = game.players[i];
+        let icon = 'u';
+        if (player.admin) {
+          icon = '*';
+        }
+        let iconClass = cx(
+          'icon',
+          {
+            me: player.me
+          }
+        )
+        players.push(
+          <li className='player' key={player.name}>
+            <span className={iconClass}>{icon}</span>
+            <span className='name'>
+              {player.name}
+            </span>
+          </li>
+        )
       }
+      let playerCount = game.players.length + ' ';
+      if (game.maxPlayers) {
+        playerCount += 'of ' + game.maxPlayers + ' player';
+        if (game.maxPlayers > 1) {
+          playerCount += 's';
+        }
+      }
+      else {
+        playerCount += 'player';
+        if (game.players.length > 1) {
+          playerCount + 's';
+        }
+      }
+      style = {
+        height: this.state.height
+      }
+      let loadingClassName = cx(
+        'loading',
+        {
+          off: this.state.show
+        }
+      )
+      content = (
+        <div>
+          <div className={loadingClassName}>Loading...</div>
+          <div className='content' ref='content'>
+            <div className='header'>
+              <span className='enter'>Enter</span>
+            </div>
+            <div className='details'>
+              <div className='type'>
+                {game.type ? GameTypes[game.type].name : ''}
+              </div>
+              <div className='players'>
+                <h1>{playerCount}</h1>
+                <ul>{players}</ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     }
     let className = cx(
       'game-details',
@@ -127,34 +186,11 @@ class GameDetails extends React.Component {
         off: this.state.off
       }
     );
-    let loadingClassName = cx(
-      'loading',
-      {
-        off: this.state.show
-      }
-    )
-    let style = {
-      height: this.state.height
-    }
     return (
       <div className={className} style={style}>
-        <div className={loadingClassName}>Loading...</div>
-        <div className='content' ref='content'>
-          <div className='header'>
-            <span className='enter'>Enter</span>
-          </div>
-          <div className='details'>
-            <div className='type'>
-              {GameTypes[game.type]}
-            </div>
-            <div className='players'>
-              <h1>{playerCount}</h1>
-              <ul>{players}</ul>
-            </div>
-          </div>
-        </div>
+        {content}
       </div>
-    )
+    );
   }
 }
 

@@ -1,0 +1,36 @@
+// from http://www.colourlovers.com/palette/3352142
+$fireworth: hsl(21, 88%, 52%);
+$cold-breath: hsl(203, 57%, 97%);
+$rained-flowers-today: hsl(201, 98%, 44%);
+$deep: hsl(201, 98%, 23%);
+$necessita: hsl(201, 100%, 11%);
+// $width: 20px;
+// $opacity-0: .8;
+// $desaturate-0: 20%;
+// $stripes-0: desaturate(fade-out($fireworth,            $opacity), $desaturate-0) 0px,
+//             desaturate(fade-out($fireworth,            $opacity), $desaturate-0) ($width),
+//             desaturate(fade-out($necessita,            $opacity), $desaturate-0) ($width),
+//             desaturate(fade-out($necessita,            $opacity), $desaturate-0) ($width * 2),
+//             desaturate(fade-out($rained-flowers-today, $opacity), $desaturate-0) ($width * 2),
+//             desaturate(fade-out($rained-flowers-today, $opacity), $desaturate-0) ($width * 3),
+//             desaturate(fade-out($deep,                 $opacity), $desaturate-0) ($width * 3),
+//             desaturate(fade-out($deep,                 $opacity), $desaturate-0) ($width * 4);
+// $background-image: repeating-linear-gradient(45deg, $stripes-0), repeating-linear-gradient(135deg, $stripes-0);
+
+@function stripes($fade, $desaturate, $width) {
+  @return desaturate(fade-out($fireworth,            $fade), $desaturate) 0px,
+          desaturate(fade-out($fireworth,            $fade), $desaturate) ($width),
+          desaturate(fade-out($necessita,            $fade), $desaturate) ($width),
+          desaturate(fade-out($necessita,            $fade), $desaturate) ($width * 2),
+          desaturate(fade-out($rained-flowers-today, $fade), $desaturate) ($width * 2),
+          desaturate(fade-out($rained-flowers-today, $fade), $desaturate) ($width * 3),
+          desaturate(fade-out($deep,                 $fade), $desaturate) ($width * 3),
+          desaturate(fade-out($deep,                 $fade), $desaturate) ($width * 4);
+}
+
+@mixin stripes-background($fade-front, $fade-back, $desaturate, $width) {
+  background-color: $cold-breath;
+  background-image:
+    repeating-linear-gradient(45deg, stripes($fade-front, $desaturate, $width)),
+    repeating-linear-gradient(135deg, stripes($fade-back, $desaturate, $width));
+}

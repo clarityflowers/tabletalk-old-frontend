@@ -1,4 +1,5 @@
 @import 'utils/colors';
+@import 'games/world-of-adventure/colors';
 
 #app #home #games div.game-details {
   max-width: 100%;
@@ -49,6 +50,33 @@
       padding: 1em;
       text-align: center;
     }
+    div.game-type-list {
+      button.game-type {
+        display: block;
+        width: 100%;
+        margin-bottom: 1em;
+        height: 2em;
+        font-size: 2em;
+        &.world-of-adventure {
+          color: $cold-breath;
+          font-family: 'League Spartan';
+          text-shadow: -2px 2px 2px fade-out(black, .5);
+          @include stripes-background(.5, .5, 0%, 20px);
+          border: none;
+          outline: none;
+          box-shadow: -2px 2px 2px 1px fade-out(black, .5);
+          &:hover {
+            // @include stripes-background(.8, .8, 10%, 20px);
+          }
+          &:focus {
+            @include stripes-background(.6, .6,   10%, 20px);
+          }
+          &:active {
+            @include stripes-background(.7, .7, 20%, 20px);
+          }
+        }
+      }
+    }
     div.details {
       width: auto;
       max-width: 300px;
@@ -64,11 +92,7 @@
           list-style-type: none;
           padding-left: 1em;
           li.player {
-            // position: absolute;
-            // right: 0;
-            // top: 0;
             color: $color;
-            // margin: .9em .9em 0 0;
             white-space: nowrap;
             .icon {
               position: relative;

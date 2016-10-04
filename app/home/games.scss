@@ -1,4 +1,5 @@
 @import 'utils/colors';
+@import 'games/world-of-adventure/colors';
 
 #app #home #games {
   width: 100%;
@@ -68,25 +69,9 @@
       display: inline-block;
       flex: none;
       z-index: 2;
-      // from http://www.colourlovers.com/palette/3352142
-      $fireworth: hsl(21, 88%, 52%);
-      $cold-breath: hsl(203, 57%, 97%);
-      $rained-flowers-today: hsl(201, 98%, 44%);
-      $deep: hsl(201, 98%, 23%);
-      $necessita: hsl(201, 100%, 11%);
-      $width: 20px;
-      $opacity: .8;
-      $desaturate: 20%;
-      $stripes: desaturate(fade-out($fireworth, $opacity), $desaturate) 0px,
-                desaturate(fade-out($fireworth, $opacity), $desaturate) ($width),
-                desaturate(fade-out($necessita, $opacity), $desaturate) ($width),
-                desaturate(fade-out($necessita, $opacity), $desaturate) ($width * 2),
-                desaturate(fade-out($rained-flowers-today, $opacity), $desaturate) ($width * 2),
-                desaturate(fade-out($rained-flowers-today, $opacity), $desaturate) ($width * 3),
-                desaturate(fade-out($deep, $opacity), $desaturate) ($width * 3),
-                desaturate(fade-out($deep, $opacity), $desaturate) ($width * 4);
-      background-color: $cold-breath;
-      background-image: repeating-linear-gradient(45deg, $stripes), repeating-linear-gradient(135deg, $stripes);
+      @include stripes-background(.8, .8, 20%, 20px);
+      // background-color: $cold-breath;
+      // background-image: $background-image;
       transition-property: left, width, height, top, margin, border-width;
       transition-duration: .7s;
       transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);

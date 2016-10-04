@@ -1,5 +1,8 @@
 'use strict'
 
-export let GameTypes = {
-  0: 'World of Adventure'
-}
+export let GameTypes = [
+  {
+    name: 'World of Adventure',
+    className: 'world-of-adventure'
+  }
+];

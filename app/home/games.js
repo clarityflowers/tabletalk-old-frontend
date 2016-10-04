@@ -7,17 +7,19 @@ import { Link } from 'react-router';
 import cx from 'classnames';
 import GameApi from 'api/game.js'
 import { HoverWiggle } from 'utils/hover-animate.js';
+import { GameTypes } from 'utils/enums.js';
 import './games.scss';
 
 let GameIcon = (props) => {
   let className = cx(
     'icon',
+    props.gameClass,
     {
       off: props.position == 0,
       dot: props.position == 1,
       entering: props.entering,
       leaving: props.leaving,
-      closed: props.closed
+      closed: props.gameClass == null
     }
   )
   let content = (
@@ -196,14 +198,14 @@ class NewGame extends React.Component {
         if (this.state.newGameStatus >= 3) {
           iconPosition = 2;
         }
-        if (this.state.newGameStatus >= 4) {
+        if (this.state.newGameStatus >= 4 && this.props.position >= 4) {
           boxPosition = 1;
         }
         let gameTypeSelector = null;
       }
       content = (
         <div>
-          <GameIcon position={iconPosition} closed/>
+          <GameIcon position={iconPosition} gameClass={this.props.gameClass}/>
           <GameBox gameId='new' position={boxPosition} name='New Game'/>
         </div>
       )
@@ -224,7 +226,8 @@ let OldGame = (props) => {
       <GameIcon position={iconPosition}
                 entering={props.entering}
                 leaving={props.leaving}
-                gameId={props.gameId}/>
+                gameId={props.gameId}
+                gameClass={props.gameClass}/>
       <GameBox name={props.name}
                position={boxPosition}
                gameId={props.gameId}/>
@@ -311,12 +314,18 @@ class Game extends React.Component {
   }
   render() {
     let content = null;
-    if (this.props.newGame) {
+    let gameClass = null;
+    if (this.props.type != null) {
+      gameClass = GameTypes[this.props.type]
+    }
+    if (this.props.name == null) {
+      let position = this.props.type == null ? this.state.position : 3;
       content = (
-        <NewGame position={this.state.position}
+        <NewGame position={position}
                  entering={this.state.entering}
                  leaving={this.state.leaving}
-                 isTarget={this.props.isTarget}/>
+                 isTarget={this.props.isTarget}
+                 gameClass={gameClass}/>
       )
     }
     else {
@@ -326,7 +335,8 @@ class Game extends React.Component {
                  entering={this.state.entering}
                  leaving={this.state.leaving}
                  gameId={this.props.gameId}
-                 isTarget={this.props.isTarget}/>
+                 isTarget={this.props.isTarget}
+                 gameClass={gameClass}/>
       )
     }
     return content;
@@ -354,6 +364,7 @@ class Games extends React.Component {
     this.refreshInterval = null;
   }
   queue(id) {
+    console.log(`queue ${id}`);
     this.setState((state) => {
       let queue = state.queue.slice(0);
       queue.push(id);
@@ -386,7 +397,7 @@ class Games extends React.Component {
   getGame(id) {
     let game = null;
     if (this.hasGame(id)) {
-      game = this.state.games[gameHash[id]];
+      game = this.state.games[this.state.gameHash[id]];
     }
     return game;
   }
@@ -395,10 +406,14 @@ class Games extends React.Component {
     let gameHash = {};
     let queue = this.state.queue.slice(0);
     let hasTarget = false;
+    let oldNew = null;
+    if (this.hasGame('new')) {
+      oldNew = this.state.games[this.state.games.length - 1];
+    }
     data.push({
-      name: null,
+      name: oldNew ? oldNew.name : null,
       id: 'new',
-      type: null,
+      type: oldNew ? oldNew.type : null,
     })
     for (let i=0; i < data.length; i++) {
       let newGame = {
@@ -407,10 +422,11 @@ class Games extends React.Component {
         type: data[i].type,
         isVisible: false
       };
-      let game = this.getGame(i);
+      console.log(`data[${i}]=${newGame.id}`);
       if (newGame.id == this.props.params.game) {
         hasTarget = true;
       }
+      let game = this.getGame(newGame.id);
       if (game) {
         newGame.isVisible = game.isVisible;
       }
@@ -424,18 +440,24 @@ class Games extends React.Component {
           queue.push(newGame.id);
         }
       }
-      games.push(newGame);
       gameHash[newGame.id] = i;
-    }
-    if (this.props.params.game && !hasTarget) {
-      browserHistory.push('/games');
+      games.push(newGame);
     }
     this.setState({
       games: games,
       gameHash: gameHash,
-      queue: queue,
       loaded: true
-    })
+    });
+    while (queue.length) {
+      this.queue(queue.shift());
+    }
+    if (this.props.params.game && !hasTarget) {
+      browserHistory.push('/games');
+      console.log('redirect');
+      for (let i=0; i < games.length; i++) {
+        this.queue(games[i].id);
+      }
+    }
   }
   load() {
     let gameHash = {}
@@ -452,7 +474,7 @@ class Games extends React.Component {
     GameApi.index(this.update.bind(this), reject);
   }
   componentWillUnmount() {
-    clearInterval(this.refreshInterval);
+    this.stopPolling();
   }
   onGameDoneLeaving() {
     this.gamesDoneLeaving++;
@@ -465,6 +487,7 @@ class Games extends React.Component {
     clearInterval(this.refreshInterval);
     this.leaveCallback = callback;
     this.gamesDoneLeaving = 0;
+    console.log('component will leave')
     for (let i=this.state.games.length - 1; i >= 0; i--) {
       if (this.state.games[i].isVisible) {
         this.queue(this.state.games[i].id);
@@ -477,19 +500,25 @@ class Games extends React.Component {
   }
   hasGame(id) {
     return (
-      id == 'new' || (
-        id != undefined &&
-        id in this.state.gameHash
-      )
+      id != undefined &&
+      id in this.state.gameHash
     );
   }
   hasTarget() {
     let target = this.props.params.game;
     return this.hasGame(target);
   }
+  startPolling() {
+    clearInterval(this.refreshInterval);
+    this.refreshInterval = setInterval(this.load.bind(this), 20000);
+  }
+  stopPolling() {
+    clearInterval(this.refreshInterval);
+  }
   componentDidMount() {
     if (this.props.auth.online) {
       this.load();
+      this.startPolling();
     }
   }
   componentWillReceiveProps(newProps) {
@@ -499,6 +528,7 @@ class Games extends React.Component {
       let games = this.state.games;
       if (hasTarget) {
         let target = newProps.params.game;
+        console.log(`target=${target}`)
         for (let i=games.length - 1; i >= 0; i--) {
           let game = games[i];
           if (game.id != target) {
@@ -508,9 +538,10 @@ class Games extends React.Component {
       }
       else {
         let target = this.props.params.game;
+        console.log(`untarget=${target}`)
         for (let i=0; i < games.length; i++) {
           let game = games[i];
-          if (game.id != target) {
+          if (!game.isVisible) {
             this.queue(game.id);
           }
         }
@@ -519,9 +550,12 @@ class Games extends React.Component {
     if (this.props.auth.online != newProps.auth.online) {
       if (newProps.auth.online) {
         this.load();
+        this.startPolling();
       }
       else {
+        this.stopPolling();
         this.gamesDoneLeaving = 0;
+        console.log('go offline')
         for (let i=this.state.games.length - 1; i >= 0; i--) {
           if (this.state.games[i].id != this.props.params.game) {
             this.queue(this.state.games[i].id);
@@ -559,11 +593,20 @@ class Games extends React.Component {
       <Game name={game.name}
             key={game.id}
             gameId={game.id}
-            newGame={game.id == 'new'}
             doneLeaving={this.onGameDoneLeaving.bind(this)}
-            isTarget={this.props.params.game == game.id}>
+            isTarget={this.props.params.game == game.id}
+            type={game.type}>
       </Game>
     )
+  }
+  handleNewGameType(type) {
+    this.setState((state) => {
+      let games = state.games.slice(0);
+      let game = Object.assign({}, games[state.gameHash['new']]);
+      game.type = type;
+      games[state.gameHash['new']] = game;
+      return ({games: games});
+    })
   }
   render() {
     let games = [];
@@ -601,7 +644,8 @@ class Games extends React.Component {
     if (children) {
       children = React.cloneElement(children, {
         key: this.props.location.pathname,
-        auth: this.props.auth
+        auth: this.props.auth,
+        onNewGameType: this.handleNewGameType.bind(this)
       });
     }
     return (
