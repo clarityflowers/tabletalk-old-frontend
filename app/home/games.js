@@ -44,11 +44,14 @@ class GameBox extends React.Component {
   }
   updateWidth() {
     let {scrollWidth, innerText} = this.refs.box;
+    if (this.props.gameId == 'new' || this.props.gameId == '200') {
+    }
     if (scrollWidth != this.state.width) {
       this.setState({width: scrollWidth});
     }
   }
   componentDidMount() {
+    this.updateWidth();
     window.addEventListener('resize', this.updateWidth.bind(this));
   }
   componentWillUnmount() {
@@ -70,6 +73,9 @@ class GameBox extends React.Component {
         off: this.props.position == 0
       }
     )
+    if (!this.props.transition) {
+      style.transition = 'none';
+    }
     let content = (
       <div className={className}
            ref='box'>
@@ -82,6 +88,11 @@ class GameBox extends React.Component {
           {content}
         </Link>
       );
+    }
+    else {
+      content = (
+        <span>{content}</span>
+      )
     }
     return (
       <div className='box-container' style={style}>
@@ -206,7 +217,7 @@ class NewGame extends React.Component {
       content = (
         <div>
           <GameIcon position={iconPosition} gameClass={this.props.gameClass}/>
-          <GameBox gameId='new' position={boxPosition} name='New Game'/>
+          <GameBox gameId='new' position={boxPosition} name='New Game' transition={true}/>
         </div>
       )
     }
@@ -230,7 +241,8 @@ let OldGame = (props) => {
                 gameClass={props.gameClass}/>
       <GameBox name={props.name}
                position={boxPosition}
-               gameId={props.gameId}/>
+               gameId={props.gameId}
+               transition={props.transition}/>
     </div>
   );
 }
@@ -245,7 +257,7 @@ class Game extends React.Component {
     this.state = {
       entering: false,
       leaving: false,
-      position: 0
+      position: this.props.transition ? 0 : 4
     }
     this.timeout = null;
     this.enterCallback = null;
@@ -298,7 +310,13 @@ class Game extends React.Component {
   }
   componentWillEnter(callback) {
     this.enterCallback = callback;
-    this.setTimeout(this.gameEnter.bind(this), 100);
+    if (this.props.transition) {
+      this.setTimeout(this.gameEnter.bind(this), 100);
+    }
+    else {
+      this.setState({position: 4});
+      callback();
+    }
   }
   componentDidEnter() {
     this.setState({
@@ -307,7 +325,12 @@ class Game extends React.Component {
   }
   componentWillLeave(callback) {
     this.leaveCallback = callback;
-    this.gameExit();
+    if (this.props.transition) {
+      this.gameExit();
+    }
+    else {
+      callback();
+    }
   }
   componentDidLeave() {
     this.props.doneLeaving();
@@ -336,7 +359,8 @@ class Game extends React.Component {
                  leaving={this.state.leaving}
                  gameId={this.props.gameId}
                  isTarget={this.props.isTarget}
-                 gameClass={gameClass}/>
+                 gameClass={gameClass}
+                 transition={this.props.transition}/>
       )
     }
     return content;
@@ -354,7 +378,8 @@ class Games extends React.Component {
       animation: 0,
       games: [],
       gameHash: {},
-      queue: []
+      queue: [],
+      creatingNewGame: false,
     };
     this.gamesDoneEntering = 0;
     this.gamesDoneLeaving = 0;
@@ -413,12 +438,18 @@ class Games extends React.Component {
       name: oldNew ? oldNew.name : null,
       id: 'new',
       type: oldNew ? oldNew.type : null,
+      maxPlayers: null,
+      me: 0,
+      players: oldNew ? oldNew.players : []
     })
     for (let i=0; i < data.length; i++) {
       let newGame = {
         name: data[i].name,
         id: data[i].id,
         type: data[i].type,
+        maxPlayers: data[i].maxPlayers,
+        players: data[i].players,
+        me: data[i].me,
         isVisible: false
       };
       if (newGame.id == this.props.params.game) {
@@ -506,7 +537,7 @@ class Games extends React.Component {
   }
   startPolling() {
     clearInterval(this.refreshInterval);
-    this.refreshInterval = setInterval(this.load.bind(this), 20000);
+    // this.refreshInterval = setInterval(this.load.bind(this), 20000);
   }
   stopPolling() {
     clearInterval(this.refreshInterval);
@@ -518,8 +549,8 @@ class Games extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    let hasTarget = this.hasGame(newProps.params.game);
-    let hadTarget = this.hasTarget();
+    let hasTarget = newProps.params.game == 'new' || this.hasGame(newProps.params.game);
+    let hadTarget = this.props.params.game == 'new' || this.hasTarget();
     if (hasTarget != hadTarget) {
       let games = this.state.games;
       if (hasTarget) {
@@ -587,6 +618,17 @@ class Games extends React.Component {
     if (this.state.queue.length && !prevState.queue.length) {
       this.processQueue();
     }
+    let prevNewGame = prevState.games[prevState.games.length -1];
+    let newGame = this.state.games[this.state.games.length -1]
+    if (
+      prevNewGame && newGame &&
+      prevNewGame.id == 'new' && newGame.id != 'new'
+    ) {
+      browserHistory.replace(`/games/${newGame.id}`);
+      setTimeout(() => {
+        this.setState({creatingNewGame: false})
+      }, 1000);
+    }
   }
   game(i) {
     let game = this.state.games[i];
@@ -596,17 +638,69 @@ class Games extends React.Component {
             gameId={game.id}
             doneLeaving={this.onGameDoneLeaving.bind(this)}
             isTarget={this.props.params.game == game.id}
-            type={game.type}>
+            type={game.type}
+            transition={!this.state.creatingNewGame}>
       </Game>
     )
   }
-  handleNewGameType(type) {
+  createGame(player) {
+    let x = this.state.games[this.state.gameHash['new']];
+    let game = {
+      type: x.type,
+      name: x.name,
+      player: player
+    }
+    setTimeout(() => {
+      let data = {
+        name: x.name,
+        type: x.type,
+        id: 200,
+        maxPlayers: null,
+        me: 0,
+        players: [
+          {
+            name: player,
+            admin: true
+          }
+        ],
+        isVisible: true
+      }
+      let games = this.state.games.slice(0);
+      let gameHash = Object.assign({}, this.state.gameHash);
+      games[gameHash['new']] = data;
+      gameHash[data.id] = gameHash['new'];
+      this.setState({
+        games: games,
+        gameHash: gameHash
+      })
+    }, 4000);
+  }
+  handleUpdateNewGame({type = null, name = null, player = null}) {
     this.setState((state) => {
       let games = state.games.slice(0);
-      let game = Object.assign({}, games[state.gameHash['new']]);
-      game.type = type;
-      games[state.gameHash['new']] = game;
-      return ({games: games});
+      let gameHash = Object.assign({}, state.gameHash);
+      let game = Object.assign({}, games[gameHash['new']]);
+      let creatingNewGame = false;
+      if (type != null) {
+        game.type = type;
+      }
+      else if (name != null) {
+        game.name = name;
+      }
+      else if (player != null) {
+        game.players = [{
+          name: player,
+          admin: true
+        }]
+        game.me = 0;
+        this.createGame(player);
+        creatingNewGame = true;
+      }
+      games[state.games.length - 1] = game;
+      return ({
+        games: games,
+        creatingNewGame: creatingNewGame
+      });
     })
   }
   render() {
@@ -637,16 +731,27 @@ class Games extends React.Component {
     if (
       this.state.loading ||
       !this.props.auth.online ||
-      this.state.leaving ||
-      !this.hasTarget()
+      this.state.leaving || (
+        this.props.params.game != 'new' &&
+        !this.hasTarget()
+      )
     ) {
       children = null;
     }
     if (children) {
+      let game = this.state.games[this.state.gameHash[this.props.params.game]];
       children = React.cloneElement(children, {
-        key: this.props.location.pathname,
+        key: 'game',
         auth: this.props.auth,
-        onNewGameType: this.handleNewGameType.bind(this)
+        updateGame: this.handleUpdateNewGame.bind(this),
+        game: {
+          id: game.id,
+          name: game.name,
+          type: game.type,
+          maxPlayers: game.maxPlayers,
+          players: game.players,
+          me: game.me
+        }
       });
     }
     return (

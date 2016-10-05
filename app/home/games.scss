@@ -113,6 +113,7 @@
         white-space: nowrap;
         float: right;
         overflow: visible;
+        text-decoration: none;
         &:not(.off) {
           cursor: pointer;
         }
