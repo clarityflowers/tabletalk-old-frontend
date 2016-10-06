@@ -24,6 +24,7 @@ let requestCount = 0;
 
 export default class Game {
   static index(resolve, reject) {
+    requestCount++;
     let games = [];
     let length = Math.random() * 5;
     let j=0;
@@ -51,7 +52,7 @@ export default class Game {
         j++;
       }
     }
-    if (requestCount < 3) {
+    if (requestCount % 3 != 0) {
       resolve(games);
     }
     else {

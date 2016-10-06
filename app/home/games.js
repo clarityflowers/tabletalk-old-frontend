@@ -538,7 +538,7 @@ class Games extends React.Component {
   }
   startPolling() {
     clearInterval(this.refreshInterval);
-    // this.refreshInterval = setInterval(this.load.bind(this), 20000);
+    this.refreshInterval = setInterval(this.load.bind(this), 20000);
   }
   stopPolling() {
     clearInterval(this.refreshInterval);
