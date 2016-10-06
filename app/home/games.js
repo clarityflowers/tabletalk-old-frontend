@@ -597,14 +597,9 @@ class Games extends React.Component {
       else {
         this.stopPolling();
         if (newProps.params.game) {
-          if (this.state.creatingNewGame) {
-            setTimeout(() => {
-              this.props.doneAnimating();
-            }, 700);
-          }
-          else {
-            // TODO ?
-          }
+          setTimeout(() => {
+            this.props.doneAnimating();
+          }, 700);
         }
         else {
           this.gamesDoneLeaving = 0;
