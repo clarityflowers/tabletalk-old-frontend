@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import cx from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import { GameTypes } from 'utils/enums.js';
@@ -16,7 +17,7 @@ class GameDetails extends React.Component {
       height: 100,
       formValue: '',
       showInput: false,
-      formMode: false
+      formMode: (this.props.params.game == 'new' && this.props.game.type != null)
     };
     this.timeout = null;
   }
@@ -98,6 +99,7 @@ class GameDetails extends React.Component {
     this.setState({formMode: true});
     setTimeout(() => {
       this.setState({showInput: true});
+      ReactDOM.findDOMNode(this.refs.input).focus();
     }, 700);
   }
   handleFormChange(event) {
@@ -263,7 +265,8 @@ class GameDetails extends React.Component {
             <div className={cx({off: !this.state.showInput})}>
               <input type='text'
                      value={this.state.formValue}
-                     onChange={this.handleFormChange.bind(this)}/>
+                     onChange={this.handleFormChange.bind(this)}
+                     ref='input'/>
               <div className={coverClassName}/>
               <input type='submit' value='>' className={cx({off: !this.state.showInput})}/>
             </div>

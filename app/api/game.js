@@ -24,7 +24,6 @@ let requestCount = 0;
 
 export default class Game {
   static index(resolve, reject) {
-    // requestCount++;
     let games = [];
     let length = Math.random() * 5;
     let j=0;
@@ -57,8 +56,25 @@ export default class Game {
     }
     else {
       let code = 401
-      let message = "not logged in"
+      let message = "Not logged in"
       reject(code, message);
     }
+  }
+
+  static create({name, type, player}, resolve, reject) {
+    let result = {
+      name: name,
+      type: type,
+      id: 200,
+      maxPlayers: null,
+      me: 0,
+      players: [
+        {
+          name: player,
+          admin: true
+        }
+      ]
+    }
+    setTimeout(() => {reject(401, "Not logged in")}, 4000);
   }
 }

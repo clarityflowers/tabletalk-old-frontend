@@ -76,22 +76,23 @@ class GameBox extends React.Component {
     if (!this.props.transition) {
       style.transition = 'none';
     }
-    let content = (
+    let box = (
       <div className={className}
            ref='box'>
         {this.props.name}
       </div>
     );
+    let content = null;
     if (this.props.gameId != 'new') {
       content = (
         <Link to={`/games/${this.props.gameId}`}>
-          {content}
+          {box}
         </Link>
       );
     }
     else {
       content = (
-        <span>{content}</span>
+        <span>{box}</span>
       )
     }
     return (
@@ -584,13 +585,36 @@ class Games extends React.Component {
       if (newProps.auth.online) {
         this.load();
         this.startPolling();
+        if (this.state.creatingNewGame) {
+          let game = this.state.games[this.state.gameHash['new']];
+          this.createGame({
+            name: game.name,
+            type: game.type,
+            player: game.players[0].name
+          })
+        }
       }
       else {
         this.stopPolling();
-        this.gamesDoneLeaving = 0;
-        for (let i=this.state.games.length - 1; i >= 0; i--) {
-          if (this.state.games[i].id != this.props.params.game) {
-            this.queue(this.state.games[i].id);
+        if (newProps.params.game) {
+          if (this.state.creatingNewGame) {
+            setTimeout(() => {
+              this.props.doneAnimating();
+            }, 700);
+          }
+          else {
+            // TODO ?
+          }
+        }
+        else {
+          this.gamesDoneLeaving = 0;
+          for (let i=this.state.games.length - 1; i >= 0; i--) {
+            if (
+              this.state.games[i].id != this.props.params.game &&
+              this.state.games[i].isVisible
+            ) {
+              this.queue(this.state.games[i].id);
+            }
           }
         }
       }
@@ -643,37 +667,30 @@ class Games extends React.Component {
       </Game>
     )
   }
-  createGame(player) {
-    let x = this.state.games[this.state.gameHash['new']];
+  createGame({name, type, player}) {
     let game = {
-      type: x.type,
-      name: x.name,
+      type: type,
+      name: name,
       player: player
-    }
-    setTimeout(() => {
-      let data = {
-        name: x.name,
-        type: x.type,
-        id: 200,
-        maxPlayers: null,
-        me: 0,
-        players: [
-          {
-            name: player,
-            admin: true
-          }
-        ],
-        isVisible: true
-      }
+    };
+    let resolve = (data) => {
+      let game = data;
+      game.isVisible = true;
       let games = this.state.games.slice(0);
       let gameHash = Object.assign({}, this.state.gameHash);
-      games[gameHash['new']] = data;
+      games[gameHash['new']] = game;
       gameHash[data.id] = gameHash['new'];
       this.setState({
         games: games,
         gameHash: gameHash
       })
-    }, 4000);
+    };
+    let reject = (code, message) => {
+      if (code == 401) {
+        this.props.auth.signOut();
+      }
+    }
+    GameApi.create(game, resolve, reject);
   }
   handleUpdateNewGame({type = null, name = null, player = null}) {
     this.setState((state) => {
@@ -693,7 +710,11 @@ class Games extends React.Component {
           admin: true
         }]
         game.me = 0;
-        this.createGame(player);
+        this.createGame({
+          name: game.name,
+          type: game.type,
+          player: player
+        });
         creatingNewGame = true;
       }
       games[state.games.length - 1] = game;
