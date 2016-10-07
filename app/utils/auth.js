@@ -4,14 +4,14 @@ import User from 'api/user.js'
 
 class Auth {
   static login(token, cb) {
-    if (localStorage.auth && localStorage.auth.token) {
+    if (localStorage.token && localStorage.user_id && localStorage.user_name) {
       if (cb) {
         cb({
           loaded: true,
           isLoggedIn: true,
           user: {
-            id: localStorage.auth.id,
-            name: localStorage.auth.name
+            id: localStorage.user_id,
+            name: localStorage.user_name
           }
         });
       }
@@ -27,11 +27,10 @@ class Auth {
           }
         }
         if (res.authenticated) {
-          localStorage.auth = {
-            token: res.token,
-            id: res.user,
-            name: res.name
-          }
+          localStorage.token = res.token
+          localStorage.user_id = res.user,
+          localStorage.user_name = res.name,
+          localStorage.googleToken = token
           result = {
             loaded: true,
             isLoggedIn: true,
@@ -46,13 +45,25 @@ class Auth {
     }
   }
 
-  static getToken() {
-    if (localStorage.auth) {
-      return localStorage.auth.token;
+  static reAuth(resolve, reject) {
+    if (!localStorage.auth.googleToken) {
+      reject({code: 401, message: "Not logged in"});
     }
     else {
-      return null;
+      cb = (response) => {
+        if (response.authenticated) {
+          resolve();
+        }
+        else {
+          reject({code: 401, message: "Not logged in"});
+        }
+      }
+      login(localStorage.auth.googleToken, cb);
     }
+  }
+
+  static getToken() {
+    return localStorage.token;
   }
 
   static logout() {

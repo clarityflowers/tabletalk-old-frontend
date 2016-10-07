@@ -17,12 +17,12 @@ class App extends React.Component {
         isLoggedIn: false
       },
       apiAuth: {
+        isLoggedIn: false,
         loaded: true,
         user: {
           id: null,
           name: null
-        },
-        isLoggedIn: false
+        }
       }
     }
   }
@@ -38,8 +38,12 @@ class App extends React.Component {
   onSignInChange(isSignedIn) {
     let googleAuth = this.state.googleAuth;
     let apiAuth = this.state.apiAuth;
-    if (!googleAuth.loaded) {
-      apiAuth = update(apiAuth, {loaded: {$set: false}});
+    if (!googleAuth.loaded && !apiAuth.isLoggedIn) {
+      this.setState((state) => {
+        let auth = Object.assign({}, state.apiAuth);
+        auth.loaded = false;
+        return ({apiAuth: auth});
+      });
     }
     googleAuth = update(googleAuth, {loaded: {$set: true}});
     if (isSignedIn) {
@@ -50,10 +54,7 @@ class App extends React.Component {
       }
     }
     googleAuth = update(googleAuth, {isLoggedIn: {$set: isSignedIn}});
-    this.setState({
-      googleAuth: googleAuth,
-      apiAuth: apiAuth
-    });
+    this.setState({googleAuth: googleAuth});
   }
   onAuthLoaded() {
     GoogleApiLoader.getAuth2().isSignedIn.listen(this.onSignInChange.bind(this));

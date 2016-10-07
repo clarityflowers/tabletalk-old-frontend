@@ -432,8 +432,9 @@ class Games extends React.Component {
     let queue = this.state.queue.slice(0);
     let hasTarget = false;
     let oldNew = null;
+    console.log(this.getGame('new'));
     if (this.hasGame('new')) {
-      oldNew = this.state.games[this.state.games.length - 1];
+      oldNew = this.getGame('new');
     }
     data.push({
       name: oldNew ? oldNew.name : null,
@@ -453,11 +454,12 @@ class Games extends React.Component {
         me: data[i].me,
         isVisible: false
       };
+      console.log(newGame.players);
       if (newGame.id == this.props.params.game) {
         hasTarget = true;
       }
       let game = this.getGame(newGame.id);
-      if (game) {
+      if (game && game.id == newGame.id) {
         newGame.isVisible = game.isVisible;
       }
       else {
@@ -550,6 +552,13 @@ class Games extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
+    if (
+      this.props.params.game == 'new' &&
+      newProps.params.game &&
+      newProps.params.game != 'new'
+    ) {
+      this.load();
+    }
     let hasTarget = newProps.params.game == 'new' || this.hasGame(newProps.params.game);
     let hadTarget = this.props.params.game == 'new' || this.hasTarget();
     if (hasTarget != hadTarget) {
@@ -670,11 +679,14 @@ class Games extends React.Component {
     };
     let resolve = (data) => {
       let game = data;
+      console.log(game);
       game.isVisible = true;
       let games = this.state.games.slice(0);
       let gameHash = Object.assign({}, this.state.gameHash);
       games[gameHash['new']] = game;
+      console.log(games);
       gameHash[data.id] = gameHash['new'];
+      console.log(gameHash);
       this.setState({
         games: games,
         gameHash: gameHash
@@ -692,6 +704,10 @@ class Games extends React.Component {
       let games = state.games.slice(0);
       let gameHash = Object.assign({}, state.gameHash);
       let game = Object.assign({}, games[gameHash['new']]);
+      console.log(gameHash);
+      console.log(games);
+      console.log(game);
+      console.log(`type=${type} name=${name} player=${player}`);
       let creatingNewGame = false;
       if (type != null) {
         game.type = type;
@@ -756,6 +772,16 @@ class Games extends React.Component {
     }
     if (children) {
       let game = this.state.games[this.state.gameHash[this.props.params.game]];
+      if (game == null) {
+        game = {
+          id: 'new',
+          name: null,
+          type: null,
+          maxPlayers: null,
+          players: [],
+          me: null
+        }
+      }
       children = React.cloneElement(children, {
         key: 'game',
         auth: this.props.auth,
