@@ -62,7 +62,7 @@ export default class Game {
     me: 1,
     maxPlayer: null
   }
-  // setTimeout(() => {resolve(result);}, 4000);
-  setTimeout(() => {reject({code: 401, error: 'Authentication failure'});}, 4000);
+  setTimeout(() => {resolve(result);}, 4000);
+  // setTimeout(() => {reject({code: 401, error: 'Authentication failure'});}, 4000);
   }
 }

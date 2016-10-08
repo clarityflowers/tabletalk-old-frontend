@@ -51,7 +51,7 @@ class Games extends React.Component {
     let hasTarget = newProps.params.game == 'new' || this.hasGame(newProps.params.game);
     let hadTarget = this.props.params.game == 'new' || this.hasTarget();
     if (!this.props.params.game && newProps.params.game && !hasTarget) {
-      this.preview();
+      this.preview(newProps.params.game);
     }
     if (hasTarget != hadTarget) {
       let games = this.state.games;
@@ -159,7 +159,7 @@ class Games extends React.Component {
     let prevNewGame = prevState.games[prevState.games.length -1];
     let newGame = this.state.games[this.state.games.length -1]
     if (
-      prevProps.params.game == 'new' && this.props.params.game == 'new' &&  
+      prevProps.params.game == 'new' && this.props.params.game == 'new' &&
       prevNewGame && newGame &&
       prevNewGame.id == 'new' && newGame.id != 'new'
     ) {
@@ -220,22 +220,43 @@ class Games extends React.Component {
   /* ---------- preview ------------------------------------------------------*/
   updateFromPreview(data) {
     let game = data;
-    if (this.state.games[0] && this.state.games[0].id == game.id) {
-      game.isVisible = this.state.games[0].isVisible;
+    let index = this.state.gameHash['preview'];
+    console.log('UPDATE FROM PREVIEW');
+    console.log(index);
+    console.log(this.state.games[index]);
+    console.log(game.id);
+    if (
+      index != undefined &&
+      this.state.games[index] &&
+      this.state.games[index].id == game.id
+    ) {
+      console.log(this.state.games[index].id)
+      console.log('preview already present');
+      game.isVisible = this.state.games[index].isVisible;
+    }
+    else {
+      game.isVisible = false;
     }
     let games = [game];
     let gameHash = {
-      [games[0].id]: 0
+      [games[0].id]: 0,
+      preview: 0
     }
-    this.setState({
-      games: games,
-      gameHash: gameHash
-    })
+    this.setState({games: games, gameHash: gameHash});
     if (!game.isVisible) {
       this.queue(games[0].id);
     }
   }
   preview(id) {
+    if (!('preview' in this.state.gameHash)) {
+      console.log('clearing games');
+      this.setState({
+        games: [],
+        gameHash: {}
+      })
+    }
+    console.log('PREVIEW ' + id);
+    this.stopPolling();
     GameApi.show({game: id}, this.updateFromPreview.bind(this), null);
   }
 
