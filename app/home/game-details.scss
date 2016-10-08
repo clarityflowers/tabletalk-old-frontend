@@ -77,10 +77,11 @@
         height: 1.6em;
         position: relative;
         input[type='text'] {
+          -webkit-appearance: none;
           border: none;
           font-family: 'Junction';
           color: $color;
-
+          border-radius: 0;
           background-color: $middleground;
           font-weight: bold;
           padding: .3em .3em 0em .3em;
@@ -118,6 +119,7 @@
           }
         }
         input[type='submit'] {
+          -webkit-appearance: none;
           display: inline-block;
           border: none;
           padding: .3em;
@@ -238,10 +240,13 @@
 
 @media only screen
   and (max-device-width: 800px) {
-  #app #home #games .game-details {
+  #app #home #games div.game-details {
     font-size: 15px;
     .header {
       text-align: left;
+    }
+    div.content div.game-type-list button.game-type {
+      // font-size: 1.5em;
     }
   }
 }
