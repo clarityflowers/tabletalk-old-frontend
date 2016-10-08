@@ -6,6 +6,7 @@ function httpRequest(url, method, body, onResponse) {
   var request = new XMLHttpRequest();
   request.open(method, process.env.API_URL + '/' + url, true);
   request.setRequestHeader('Content-Type', 'application/json');
+  request.setRequestHeader('Accept', 'application/json');
   request.setRequestHeader('token', Auth.getToken());
   request.onreadystatechange = () => {
     if (request.readyState == XMLHttpRequest.DONE) {
