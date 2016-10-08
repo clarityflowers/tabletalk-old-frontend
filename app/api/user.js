@@ -4,7 +4,9 @@ function post(url, token, data, onload, onerror) {
   var request = new XMLHttpRequest();
   request.open('POST', process.env.API_URL + '/' + url, true);
   request.setRequestHeader('Content-Type', 'application/json');
+  request.setRequestHeader('Accept', 'application/json');
   request.setRequestHeader('token', token);
+  console.log('');
   request.onload = onload;
   request.onerror = onerror;
   request.send(data);
