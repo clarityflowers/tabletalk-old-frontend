@@ -6,7 +6,6 @@ function post(url, token, data, onload, onerror) {
   request.setRequestHeader('Content-Type', 'application/json');
   request.setRequestHeader('Accept', 'application/json');
   request.setRequestHeader('token', token);
-  console.log('');
   request.onload = onload;
   request.onerror = onerror;
   request.send(data);

@@ -47,25 +47,18 @@ class GameDetails extends React.Component {
     }, 1500);
   }
   componentWillEnter(callback) {
-    console.log('entering')
     this.setTimeout(() => {
       this.enter(callback);
     }, 1500);
   }
   componentWillLeave(callback) {
-    console.log('leaving');
     this.leave(callback);
   }
   updateHeight(resolve) {
     let height = 300;
-    console.log('hmm')
-    console.log(!this.state.formMode);
-    console.log(!!this.props.game.players.length);
-    console.log(!!this.refs.content);
     if ((!this.state.formMode || this.props.game.players.length) && this.refs.content) {
       let {scrollHeight} = this.refs.content;
       height = scrollHeight;
-      console.log('set height to ' + height);
     }
     if (height != this.state.height) {
       this.setState({height: height});
