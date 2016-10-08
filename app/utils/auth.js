@@ -67,7 +67,10 @@ class Auth {
   }
 
   static logout() {
-    delete localStorage.auth
+    delete localStorage.token;
+    delete localStorage.user_id;
+    delete localStorage.user_name;
+    delete localStorage.googleAuth;
   }
 
   static loggedIn() {
