@@ -166,11 +166,21 @@
     height: auto;
     z-index: 1;
     div.header {
-      span.enter {
-        background-color: $hearts;
-        box-shadow: $box-shadow;
-        color: $hearts-light;
-        padding: .5em .5em .2em .5em;
+      div.anim {
+        display: inline-block;
+        width: auto;
+        button {
+          background-color: $hearts;
+          box-shadow: $box-shadow;
+          color: $hearts-light;
+          padding: .5em .5em .2em .5em;
+          border: none;
+          font-family: 'League Spartan';
+          font-size: 1em;
+          &:focus {
+            outline: none;
+          }
+        }
       }
       padding: 1em;
       text-align: center;

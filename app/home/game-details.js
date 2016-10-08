@@ -5,7 +5,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import { GameTypes } from 'utils/enums.js';
 import Game from 'api/game.js'
 import './game-details.scss';
-import { HoverBuzz } from 'utils/hover-animate.js';
+import { HoverBuzz, HoverWiggle } from 'utils/hover-animate.js';
 
 class GameDetails extends React.Component {
   constructor(props) {
@@ -17,7 +17,8 @@ class GameDetails extends React.Component {
       height: 100,
       formValue: '',
       showInput: false,
-      formMode: (this.props.params.game == 'new' && this.props.game.type != null)
+      formMode: (this.props.params.game == 'new' && this.props.game.type != null),
+      joining: false
     };
     this.timeout = null;
   }
@@ -77,30 +78,46 @@ class GameDetails extends React.Component {
     if (prevProps.game.type == null && this.props.game.type != null) {
       setTimeout(this.updateHeight.bind(this), 700);
     }
-    if (prevProps.game.id == 'new' && this.props.game.id != 'new') {
-      this.setState({formMode: false});
+    if (
+      (prevProps.game.id == 'new' && this.props.game.id != 'new') ||
+      (prevProps.game.me == null && this.props.game.me != null)
+    ) {
+      this.setState({
+        formMode: false,
+        joining: false
+      });
     }
-    if (!prevProps.game.players.length && this.props.game.players.length) {
+    if (prevProps.game.players.length != this.props.game.players.length) {
       this.updateHeight();
     }
+
   }
   componentDidMount() {
     this.updateHeight();
   }
-  handleGameTypeClick(index) {
-    this.props.updateGame({type: index});
+  activateForm() {
     this.setState({formMode: true});
     setTimeout(() => {
       this.setState({showInput: true});
       ReactDOM.findDOMNode(this.refs.input).focus();
     }, 700);
   }
+  handleGameTypeClick(index) {
+    this.props.updateGame({type: index});
+    this.activateForm();
+  }
+  handleJoin() {
+    this.activateForm();
+  }
   handleFormChange(event) {
     this.setState({formValue: event.target.value.substr(0, 25)});
   }
   handleFormSubmit(key, event) {
     event.preventDefault();
-    this.props.updateGame({[key]: this.state.formValue});
+    this.props.updateGame({
+      [key]: this.state.formValue,
+      id: this.props.game.id
+    });
     this.setState({showInput: false});
     if (key == 'name') {
       this.setTimeout(() => {
@@ -109,6 +126,9 @@ class GameDetails extends React.Component {
           showInput: true
         });
       }, 1100);
+    }
+    if (key == 'join') {
+      this.setState({joining: true});
     }
   }
   render() {
@@ -164,10 +184,22 @@ class GameDetails extends React.Component {
           playerCount + 's';
         }
       }
+      let button = (
+        <button className='enter'>Enter</button>
+      );
+      if (game.me == null) {
+        button = (
+          <button className='join'  onClick={this.handleJoin.bind(this)}>
+            Join
+          </button>
+        );
+      }
       content = (
         <div>
           <div className='header'>
-            <span className='enter'>Enter</span>
+            <HoverWiggle>
+              {button}
+            </HoverWiggle>
           </div>
           <div className='details'>
             <div className='type'>
@@ -215,6 +247,9 @@ class GameDetails extends React.Component {
     else if (game.players.length == 0) {
       key = 'player';
     }
+    else if (game.me == null && !this.state.joining) {
+      key = 'join';
+    }
     let coverClassName = cx(
       'cover',
       {
@@ -225,7 +260,7 @@ class GameDetails extends React.Component {
     if (key == 'name') {
       text = 'Enter a name for the game';
     }
-    else if (key == 'player') {
+    else if (key == 'player' || key == 'join') {
       text = "What's your name?"
     }
     else if (key == 'loading'){
