@@ -398,7 +398,7 @@ class Games extends React.Component {
         }, 1000)
       }
     }
-    GameApi.join({player: player}, resolve, reject);
+    GameApi.join({player: player, game: this.props.params.game}, resolve, reject);
   }
   /* ---------- utilities ----------------------------------------------------*/
   getGame(id) {

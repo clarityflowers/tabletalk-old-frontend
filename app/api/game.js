@@ -27,42 +27,10 @@ export default class Game {
   }
 
   static show({game}, resolve, reject) {
-    // HTTP.get(`games/${game}`, resolve, reject);
-    let result = {
-      id: game,
-      name: "Worlb of Avdetnure",
-      type: 0,
-      isVisible: false,
-      players: [{
-        name: 'Cerisa',
-        admin: true
-      }],
-      me: null,
-      maxPlayer: null
-    }
-    setTimeout(() => {resolve(result);}, 4000);
+    HTTP.get(`games/${game}`, resolve, reject);
   }
 
-  static join({player}, resolve, reject) {
-  let result = {
-    id: '967a2eae-acf9-4d5f-adcd-edf53f73b2dd',
-    name: "Worlb of Avdetnure",
-    type: 0,
-    isVisible: false,
-    players: [
-      {
-        name: 'Cerisa',
-        admin: true
-      },
-      {
-        name: 'Amy',
-        admin: false
-      }
-    ],
-    me: 1,
-    maxPlayer: null
-  }
-  setTimeout(() => {resolve(result);}, 4000);
-  // setTimeout(() => {reject({code: 401, error: 'Authentication failure'});}, 4000);
+  static join({game, player}, resolve, reject) {
+    HTTP.post(`games/${game}/join`, {player: player}, resolve, reject);
   }
 }
