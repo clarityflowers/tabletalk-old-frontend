@@ -31,162 +31,7 @@ class Games extends React.Component {
     this.timeout = null;
     this.refreshInterval = null;
   }
-  queue(id) {
-    this.setState((state) => {
-      let queue = state.queue.slice(0);
-      queue.push(id);
-      return {queue: queue};
-    });
-  }
-  dequeue() {
-    let queue = this.state.queue.slice(0);
-    if (!queue.length) {
-      return null;
-    }
-    let result = queue.shift();
-    this.setState((state) => ({
-      queue: state.queue.slice(1)
-    }));
-    return result;
-  }
-  processQueue() {
-    let id = this.dequeue();
-    if (id != null) {
-      let i = this.state.gameHash[id];
-      let games = this.state.games;
-      games[i].isVisible = !games[i].isVisible;
-      this.setState({
-        games: games
-      });
-      setTimeout(this.processQueue.bind(this), 100);
-    }
-  }
-  getGame(id) {
-    let game = null;
-    if (this.hasGame(id)) {
-      game = this.state.games[this.state.gameHash[id]];
-    }
-    return game;
-  }
-  update(data) {
-    let games = [];
-    let gameHash = {};
-    let queue = this.state.queue.slice(0);
-    let hasTarget = false;
-    let oldNew = null;
-    console.log(this.getGame('new'));
-    if (this.hasGame('new')) {
-      oldNew = this.getGame('new');
-    }
-    data.push({
-      name: oldNew ? oldNew.name : null,
-      id: 'new',
-      type: oldNew ? oldNew.type : null,
-      maxPlayers: null,
-      me: 0,
-      players: oldNew ? oldNew.players : []
-    })
-    for (let i=0; i < data.length; i++) {
-      let newGame = {
-        name: data[i].name,
-        id: data[i].id,
-        type: data[i].type,
-        maxPlayers: data[i].maxPlayers,
-        players: data[i].players,
-        me: data[i].me,
-        isVisible: false
-      };
-      console.log(newGame.players);
-      if (newGame.id == this.props.params.game) {
-        hasTarget = true;
-      }
-      let game = this.getGame(newGame.id);
-      if (game && game.id == newGame.id) {
-        newGame.isVisible = game.isVisible;
-      }
-      else {
-        if (this.props.params.game) {
-          if (newGame.id == this.props.params.game) {
-            queue.push(newGame.id);
-          }
-        }
-        else {
-          queue.push(newGame.id);
-        }
-      }
-      gameHash[newGame.id] = i;
-      games.push(newGame);
-    }
-    this.setState({
-      games: games,
-      gameHash: gameHash,
-      loaded: true
-    });
-    while (queue.length) {
-      this.queue(queue.shift());
-    }
-    if (this.props.params.game && !hasTarget) {
-      browserHistory.push('/games');
-      for (let i=0; i < games.length; i++) {
-        this.queue(games[i].id);
-      }
-    }
-  }
-  load() {
-    let gameHash = {}
-    let reject = (code, message) => {
-      let error = 'error' + code;
-      if (message) {
-        error += ': ' + message
-      }
-      if (code == 401) {
-        this.props.auth.signOut();
-      }
-      console.error(error);
-    }
-    GameApi.index(this.update.bind(this), reject);
-  }
-  componentWillUnmount() {
-    this.stopPolling();
-  }
-  onGameDoneLeaving() {
-    this.gamesDoneLeaving++;
-    let finalValue = this.hasTarget() ? 1 : this.state.games.length
-    if (this.state.leaving && this.gamesDoneLeaving == finalValue) {
-      setTimeout(() => {if (this.leaveCallback) {this.leaveCallback()}}, 0);
-    }
-  }
-  componentWillLeave(callback) {
-    clearInterval(this.refreshInterval);
-    this.leaveCallback = callback;
-    this.gamesDoneLeaving = 0;
-    for (let i=this.state.games.length - 1; i >= 0; i--) {
-      if (this.state.games[i].isVisible) {
-        this.queue(this.state.games[i].id);
-      }
-    }
-    this.setState({leaving: true});
-  }
-  componentDidLeave() {
-    this.props.doneAnimating();
-  }
-  hasGame(id) {
-    return (
-      id != undefined &&
-      id in this.state.gameHash
-    );
-  }
-  hasTarget() {
-    let target = this.props.params.game;
-    return this.hasGame(target);
-  }
-  startPolling() {
-    clearInterval(this.refreshInterval);
-    this.refreshInterval = setInterval(this.load.bind(this), 20000);
-  }
-  stopPolling() {
-    clearInterval(this.refreshInterval);
-  }
+  /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
     if (this.props.auth.online) {
       this.load();
@@ -300,18 +145,146 @@ class Games extends React.Component {
       }, 1000);
     }
   }
-  game(i) {
-    let game = this.state.games[i];
-    return (
-      <Game name={game.name}
-            key={game.id}
-            gameId={game.id}
-            doneLeaving={this.onGameDoneLeaving.bind(this)}
-            isTarget={this.props.params.game == game.id}
-            type={game.type}
-            transition={!this.state.creatingNewGame}>
-      </Game>
-    )
+  componentWillLeave(callback) {
+    clearInterval(this.refreshInterval);
+    this.leaveCallback = callback;
+    this.gamesDoneLeaving = 0;
+    for (let i=this.state.games.length - 1; i >= 0; i--) {
+      if (this.state.games[i].isVisible) {
+        this.queue(this.state.games[i].id);
+      }
+    }
+    this.setState({leaving: true});
+  }
+  componentDidLeave() {
+    this.props.doneAnimating();
+  }
+  componentWillUnmount() {
+    this.stopPolling();
+  }
+  /* ---------- queue --------------------------------------------------------*/
+  queue(id) {
+    this.setState((state) => {
+      let queue = state.queue.slice(0);
+      queue.push(id);
+      return {queue: queue};
+    });
+  }
+  dequeue() {
+    let queue = this.state.queue.slice(0);
+    if (!queue.length) {
+      return null;
+    }
+    let result = queue.shift();
+    this.setState((state) => ({
+      queue: state.queue.slice(1)
+    }));
+    return result;
+  }
+  processQueue() {
+    let id = this.dequeue();
+    if (id != null) {
+      let i = this.state.gameHash[id];
+      let games = this.state.games;
+      games[i].isVisible = !games[i].isVisible;
+      this.setState({
+        games: games
+      });
+      setTimeout(this.processQueue.bind(this), 100);
+    }
+  }
+  /* ---------- loading ------------------------------------------------------*/
+  getGame(id) {
+    let game = null;
+    if (this.hasGame(id)) {
+      game = this.state.games[this.state.gameHash[id]];
+    }
+    return game;
+  }
+  update(data) {
+    let games = [];
+    let gameHash = {};
+    let queue = this.state.queue.slice(0);
+    let hasTarget = false;
+    let oldNew = null;
+    console.log(this.getGame('new'));
+    if (this.hasGame('new')) {
+      oldNew = this.getGame('new');
+    }
+    data.push({
+      name: oldNew ? oldNew.name : null,
+      id: 'new',
+      type: oldNew ? oldNew.type : null,
+      maxPlayers: null,
+      me: 0,
+      players: oldNew ? oldNew.players : []
+    })
+    for (let i=0; i < data.length; i++) {
+      let newGame = {
+        name: data[i].name,
+        id: data[i].id,
+        type: data[i].type,
+        maxPlayers: data[i].maxPlayers,
+        players: data[i].players,
+        me: data[i].me,
+        isVisible: false
+      };
+      console.log(newGame.players);
+      if (newGame.id == this.props.params.game) {
+        hasTarget = true;
+      }
+      let game = this.getGame(newGame.id);
+      if (game && game.id == newGame.id) {
+        newGame.isVisible = game.isVisible;
+      }
+      else {
+        if (this.props.params.game) {
+          if (newGame.id == this.props.params.game) {
+            queue.push(newGame.id);
+          }
+        }
+        else {
+          queue.push(newGame.id);
+        }
+      }
+      gameHash[newGame.id] = i;
+      games.push(newGame);
+    }
+    this.setState({
+      games: games,
+      gameHash: gameHash,
+      loaded: true
+    });
+    while (queue.length) {
+      this.queue(queue.shift());
+    }
+    if (this.props.params.game && !hasTarget) {
+      browserHistory.push('/games');
+      for (let i=0; i < games.length; i++) {
+        this.queue(games[i].id);
+      }
+    }
+  }
+  load() {
+    let gameHash = {}
+    let reject = (code, message) => {
+      let error = 'error' + code;
+      if (message) {
+        error += ': ' + message
+      }
+      if (code == 401) {
+        this.props.auth.signOut();
+      }
+      console.error(error);
+    }
+    GameApi.index(this.update.bind(this), reject);
+  }
+  startPolling() {
+    clearInterval(this.refreshInterval);
+    this.refreshInterval = setInterval(this.load.bind(this), 20000);
+  }
+  stopPolling() {
+    clearInterval(this.refreshInterval);
   }
   createGame({name, type, player}) {
     let game = {
@@ -340,6 +313,38 @@ class Games extends React.Component {
       }
     }
     GameApi.create(game, resolve, reject);
+  }
+  /* ---------- utilities ----------------------------------------------------*/
+  hasGame(id) {
+    return (
+      id != undefined &&
+      id in this.state.gameHash
+    );
+  }
+  hasTarget() {
+    let target = this.props.params.game;
+    return this.hasGame(target);
+  }
+  game(i) {
+    let game = this.state.games[i];
+    return (
+      <Game name={game.name}
+            key={game.id}
+            gameId={game.id}
+            doneLeaving={this.onGameDoneLeaving.bind(this)}
+            isTarget={this.props.params.game == game.id}
+            type={game.type}
+            transition={!this.state.creatingNewGame}>
+      </Game>
+    )
+  }
+  /* ---------- handlers -----------------------------------------------------*/
+  onGameDoneLeaving() {
+    this.gamesDoneLeaving++;
+    let finalValue = this.hasTarget() ? 1 : this.state.games.length
+    if (this.state.leaving && this.gamesDoneLeaving == finalValue) {
+      setTimeout(() => {if (this.leaveCallback) {this.leaveCallback()}}, 0);
+    }
   }
   handleUpdateNewGame({type = null, name = null, player = null}) {
     this.setState((state) => {
@@ -377,6 +382,7 @@ class Games extends React.Component {
       });
     })
   }
+  /* ---------- render -------------------------------------------------------*/
   render() {
     let games = [];
     let alternate = 1;
