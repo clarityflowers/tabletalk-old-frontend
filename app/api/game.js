@@ -25,4 +25,12 @@ export default class Game {
     }
     HTTP.post('games', body, resolve, reject);
   }
+
+  static show({game}, resolve, reject) {
+    HTTP.get(`games/${game}`, resolve, reject);
+  }
+
+  static join({game, player}, resolve, reject) {
+    HTTP.post(`games/${game}/join`, {player: player}, resolve, reject);
+  }
 }

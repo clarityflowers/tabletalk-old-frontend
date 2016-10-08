@@ -50,7 +50,7 @@ class Login extends React.Component {
     setTimeout(() => {
       this.setState({animating: true});
       setTimeout(callback, 1000);
-    }, 1);
+    }, 20);
   }
   componentDidEnter() {
     this.setState({
@@ -63,7 +63,7 @@ class Login extends React.Component {
     setTimeout(() => {
       this.setState({animating: true});
       setTimeout(callback, 1000);
-    }, 1);
+    }, 20);
   }
   componentDidLeave() {
     this.props.doneAnimating();

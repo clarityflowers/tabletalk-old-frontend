@@ -20,23 +20,24 @@
   &.off {
     top: 100vh;
   }
-  div.loading, div.form {
+  div.form {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 150%;
     color: $background;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 0%;
+    top: -25%;
     left: 0%;
   }
   div.form {
     background-color: $color;
-    transition: top .5s cubic-bezier(0.7,0.3,0.3,0.7);
+    transition: top .5s cubic-bezier(0.7,0.3,0.3,1.3);
     &.off {
-      top: -100%;
+      transition: top .5s cubic-bezier(0.7,-0.3,0.3,0.7);
+      top: -150%;
     }
     z-index: 2;
     flex-direction: column;
@@ -166,11 +167,21 @@
     height: auto;
     z-index: 1;
     div.header {
-      span.enter {
-        background-color: $hearts;
-        box-shadow: $box-shadow;
-        color: $hearts-light;
-        padding: .5em .5em .2em .5em;
+      div.anim {
+        display: inline-block;
+        width: auto;
+        button {
+          background-color: $hearts;
+          box-shadow: $box-shadow;
+          color: $hearts-light;
+          padding: .5em .5em .2em .5em;
+          border: none;
+          font-family: 'League Spartan';
+          font-size: 1em;
+          &:focus {
+            outline: none;
+          }
+        }
       }
       padding: 1em;
       text-align: center;

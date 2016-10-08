@@ -24,6 +24,7 @@ else {
   var server =  new WebpackDevServer(webpack(config), {
       publicPath: config.output.publicPath,
       historyApiFallback: true,
+      hot: true
   })
   server.use(express.static('public'));
   server.listen(port, ip, function (err) {

@@ -74,7 +74,11 @@ class Auth {
   }
 
   static loggedIn() {
-    return !!localStorage.auth
+    return (
+      !!localStorage.token &&
+      !!localStorage.user_id &&
+      !!localStorage.user_name
+    );
   }
 }
 
