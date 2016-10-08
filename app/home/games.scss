@@ -17,11 +17,12 @@
   position: relative;
   font-size: 10px;
   pointer-events: none;
-  .back {
-    pointer-events: auto;
+  .back.anim {
+    font-size: 2.5em;
     position: absolute;
     top: 2em;
-    left: 4em;
+    left: 4.1em;
+    pointer-events: auto;
     transition: top .7s cubic-bezier(0.7,-0.7,0.4,1.8);
     &.off {
       top: -2em;
@@ -260,7 +261,7 @@
   #app #home #games {
     font-size: 7px;
     padding: 7em 2em 0 2em;
-    .back {
+    div.anim.back {
       left: 1.7em;
       top: 1.5em;
     }

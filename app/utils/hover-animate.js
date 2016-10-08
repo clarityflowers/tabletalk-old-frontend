@@ -1,8 +1,6 @@
-// libraries
 import React from 'react';
-// style
 import './hover-animate.scss'
-
+import cx from 'classnames';
 
 
 class HoverAnimate extends React.Component {
@@ -41,10 +39,13 @@ class HoverAnimate extends React.Component {
     }
   }
   render() {
-    let className = 'anim';
-    if (this.state.animate) {
-      className += '-' + this.props.animationName;
-    }
+    let className = cx (
+      this.props.className,
+      'anim',
+      {
+        [`anim-${this.props.animationName}`]: this.state.animate && !this.props.off
+      }
+    );
     return (
       <div  className={className}
             onMouseEnter={this.hover.bind(this)}
@@ -57,13 +58,21 @@ class HoverAnimate extends React.Component {
 
 export const HoverBuzz = (props) => {
   return (
-    <HoverAnimate animationName='buzz' off={props.off}>{props.children}</HoverAnimate>
+    <HoverAnimate animationName='buzz'
+                  off={props.off}
+                  className={props.className}>
+      {props.children}
+    </HoverAnimate>
   );
 }
 
 export const HoverWiggle = (props) => {
   return (
-    <HoverAnimate animationName='wiggle' off={props.off}>{props.children}</HoverAnimate>
+    <HoverAnimate animationName='wiggle'
+                  off={props.off}
+                  className={props.className}>
+      {props.children}
+    </HoverAnimate>
   );
 }
 
