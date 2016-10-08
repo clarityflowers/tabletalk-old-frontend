@@ -43,34 +43,38 @@
     vertical-align: middle;
     form {
       position: relative;
-      div.label {
-        width: 100%;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        transition-property: left, right;
-        transition-duration: .7s;
-        transition-delay: .4s;
-        transition-timing-function: cubic-bezier(0.7,-0.3,0.3,1.3);
-        &.anim-enter {
-          left: -100vw;
-          &.anim-enter-active {
-            left: 0;
-          }
-        }
-        &.anim-leave {
+      div.transition {
+        position: relative;
+        top: -1.1em;
+        height: 1em;
+        div.label {
           right: 0;
-          &.anim-leave-active {
-            right: -100vw;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          text-align: center;
+          transition-property: left, right;
+          transition-duration: .7s;
+          transition-delay: .4s;
+          transition-timing-function: cubic-bezier(0.7,-0.3,0.3,1.3);
+          &.anim-enter {
+            left: -100vw;
+            &.anim-enter-active {
+              left: 0;
+            }
           }
-        }
-        label {
-          display: inline-block;
+          &.anim-leave {
+            right: 0;
+            &.anim-leave-active {
+              right: -100vw;
+            }
+          }
+          label {
+            display: inline-block;
+          }
         }
       }
-      div {
+      div.input {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -246,7 +250,7 @@
       text-align: left;
     }
     div.content div.game-type-list button.game-type {
-      // font-size: 1.5em;
+      font-size: 1.5em;
     }
   }
 }

@@ -259,10 +259,11 @@ class GameDetails extends React.Component {
             <CSSTransitionGroup transitionName="anim"
                                 transitionEnterTimeout={1100}
                                 transitionLeaveTimeout={1100}
-                                component='div'>
+                                component='div'
+                                className='transition'>
               {label}
             </CSSTransitionGroup>
-            <div className={cx({off: !this.state.showInput})}>
+            <div className={cx('input', {off: !this.state.showInput})}>
               <input type='text'
                      value={this.state.formValue}
                      onChange={this.handleFormChange.bind(this)}
