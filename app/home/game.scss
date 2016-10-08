@@ -1,0 +1,225 @@
+@import 'utils/colors.scss';
+@import 'games/world-of-adventure/colors.scss';
+
+#app #home #games div.game {
+  pointer-events: auto;
+  position: relative;
+  padding: 3em 1em 3em 7em;
+  margin: 0 0 -1em 0;
+  height: 7em;
+  transition-property: left, height, padding, margin;
+  transition-duration: .7s;
+  max-width: 850px;
+  left: 0vw;
+  transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+  &.off {
+    height: 1em;
+    padding: 0 1em 0 7em;
+  }
+  .cancel {
+    position: absolute;
+    z-index: 1;
+    transition: left 0.7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    left: -2em;
+    top: 1.5em;
+    &.off {
+      left: 1em;
+    }
+  }
+  .icon {
+    pointer-events: auto;
+    position: absolute;
+    left: 0em;
+    top: 1.5em;
+    width: 6em;
+    height: 6em;
+    border: 1em solid $hearts;
+    border-radius: 1500vh;
+    box-shadow: $box-shadow, $border-shadow;
+    display: inline-block;
+    flex: none;
+    z-index: 2;
+    @include stripes-background(.8, .8, 20%, 20px);
+    // background-color: $cold-breath;
+    // background-image: $background-image;
+    transition-property: left, width, height, top, margin, border-width;
+    transition-duration: .7s;
+    transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    &.off, &.dot {
+      margin: 3em;
+      width: 0;
+      height: 0;
+      // top: 4.1em;
+      // left: 2.8em;
+    }
+    &.closed:not(.dot) {
+      width: 0;
+      height: 0;
+      border-width: 4em;
+    }
+    &.off {
+      left: -50vw;
+    }
+    &.off, &.dot.entering {
+      box-shadow: $box-shadow;
+      background-color: $hearts;
+      background-image: none;
+    }
+    &:not(.dot):not(.off):not(.closed) {
+      cursor: pointer;
+    }
+  }
+  .box-container {
+    pointer-events: auto;
+    text-align: left;
+    .box {
+      flex: 1;
+      font-size: 3em;
+      color: $hearts-light;
+      text-shadow: $text-shadow;
+      padding: .3em 0px .1em .6em;
+      font-family: 'League Spartan';
+      display: inline-block;
+      white-space: nowrap;
+      float: right;
+      overflow: visible;
+      text-decoration: none;
+      &:not(.off) {
+        cursor: pointer;
+      }
+    }
+    overflow: hidden;
+    transition-property: width;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+  }
+  .plus {
+    pointer-events: auto;
+    position: absolute;
+    left: 4em;
+    top: 5.6em;
+    width: 0;
+    height: 0;
+    display: inline-block;
+    flex: none;
+    .vertical, .horizontal, .shadow-fix, .dot-front, .dot-shadow {
+      position: absolute;
+      transition-duration: .7s;
+      transition-timing-function: cubic-bezier(0.730, -1, 0.375, 2);
+    }
+    .vertical, .horizontal {
+      box-shadow: 0px 0px 2px 1px $hearts-shadow;
+      background-color: $hearts-shadow;
+      &:before {
+        content: '';
+        position: absolute;
+        background-color: $hearts;
+        transition-duration: .7s;
+        transform: translate(2px, -2px);
+        transition-timing-function: cubic-bezier(0.730, -1, 0.375, 2);
+      }
+    }
+    .vertical, .shadow-fix {
+      width: 1.6em;
+      height: 4.8em;
+      top: -2.4em;
+      left: -0.8em;
+    }
+    .vertical {
+      transform: translate(-2px, 2px);
+      z-index: 2;
+      &:before {
+        width: 1.6em;
+        height: 4.8em;
+      }
+      transition-property: height, top, box-shadow;
+    }
+    .horizontal {
+      left: -2.4em;
+      top: -0.8em;
+      width: 4.8em;
+      height: 1.6em;
+      z-index: 3;
+      transform: translate(-2px, 2px);
+      &:before {
+        width: 4.8em;
+        height: 1.6em;
+      }
+      transition-property: width, left, box-shadow;
+    }
+    .shadow-fix {
+      transition-property: height, top, box-shadow;
+      z-index: 4;
+    }
+    .shadow-fix, .dot-front {
+      background-color: $hearts;
+    }
+    .dot-front {
+      height: 0;
+      width: 0;
+      top: 0;
+      left: 0;
+      border-radius: 3.0em;
+      z-index: 5;
+      transition-property: height, top, width, left;
+    }
+    .dot-shadow {
+      border-radius: 3.0em;
+      z-index: 1;
+      height: 0;
+      width: 0;
+      top: 0;
+      left: 0;
+      transform: translate(-2px, 2px);
+      box-shadow: none;
+      background-color: $hearts-shadow;
+      transition-property: height, top, width, left, box-shadow;
+    }
+    transition-property: left;
+    transition-duration: .7s;
+    transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    &.off, &.dot {
+      .vertical {
+        height: 0;
+        top: 0;
+        box-shadow: none;
+        &:before {
+          height: 0;
+        }
+      }
+      .horizontal {
+        width: 0;
+        left: 0;
+        box-shadow: none;
+        &:before {
+          width: 0;
+        }
+      }
+      .shadow-fix {
+        height: 0;
+        top: 0;
+      }
+      .dot-front {
+        width: 2em;
+        height: 2em;
+        top: -1em;
+        left: -1em;
+      }
+      .dot-shadow {
+        width: 2em;
+        height: 2em;
+        top: -1em;
+        left: -1em;
+        box-shadow: 0px 0px 2px 1px $hearts-shadow;
+      }
+    }
+    &.off {
+      left: -50vw;
+    }
+    &:not(.dot):not(.off) {
+      .horizontal, .shadow-fix {
+        cursor: pointer;
+      }
+    }
+  }
+}

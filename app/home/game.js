@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import cx from 'classnames';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import { GameTypes } from 'utils/enums.js';
-
+import './game.scss';
 
 let GameIcon = (props) => {
   let className = cx(
