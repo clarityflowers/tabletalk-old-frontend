@@ -325,15 +325,15 @@ class Games extends React.Component {
   }
   load() {
     let gameHash = {}
-    let reject = (code, message) => {
-      let error = 'error' + code;
-      if (message) {
-        error += ': ' + message
+    let reject = ({code, error}) => {
+      let message = 'ERROR ' + code;
+      if (error) {
+        message += ': ' + error
       }
       if (code == 401) {
         this.props.auth.signOut();
       }
-      console.error(error);
+      console.error(message);
     }
     GameApi.index(this.update.bind(this), reject);
   }
@@ -370,7 +370,7 @@ class Games extends React.Component {
       game.isVisible = true;
       this.setGame(game, 'new');
     };
-    let reject = ({code, message}) => {
+    let reject = ({code, error}) => {
       if (code == 401) {
         this.props.auth.signOut();
       }
@@ -383,7 +383,7 @@ class Games extends React.Component {
       game.isVisible = true;
       this.setGame(game);
     }
-    let reject = ({code, message}) => {
+    let reject = ({code, error}) => {
       if (code == 401) {
         this.props.auth.signOut();
         setTimeout(() => {

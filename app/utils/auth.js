@@ -46,8 +46,8 @@ class Auth {
   }
 
   static reAuth(resolve, reject) {
-    if (!localStorage.auth.googleToken) {
-      reject({code: 401, message: "Not logged in"});
+    if (!localStorage.googleAuth) {
+      reject({code: 401, error: "Not logged in"});
     }
     else {
       cb = (response) => {
@@ -55,10 +55,10 @@ class Auth {
           resolve();
         }
         else {
-          reject({code: 401, message: "Not logged in"});
+          reject({code: 401, error: "Not logged in"});
         }
       }
-      login(localStorage.auth.googleToken, cb);
+      login(localStorage.googleAuth, cb);
     }
   }
 

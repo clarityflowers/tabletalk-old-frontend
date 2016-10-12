@@ -32,13 +32,17 @@ function request(url, method, body, resolve, reject) {
     if (status >= 200 && status < 400) {
       resolve(data)
     }
-    else if (status == 401 && attempts == 0) {
+    else if (status == 401 && attempts == 1) {
       Auth.reAuth(() => {
         httpRequest(url, method, body, handleResponse);
-      })
+      }, reject);
     }
     else if (status >= 400) {
-      reject({code: status, message: data && data.error});
+      let message = null;
+      if (data) {
+        message = data.error;
+      }
+      reject({code: status, error: !!data && data.error});
     }
   }
   httpRequest(url, method, body, handleResponse);
