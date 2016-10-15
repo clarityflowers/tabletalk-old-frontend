@@ -16,11 +16,14 @@ let GameIcon = (props) => {
       dot: props.position == 1,
       entering: props.entering,
       leaving: props.leaving,
-      closed: props.gameClass == null
+      closed: props.gameClass == null,
+      go: props.go
     }
   )
   let content = (
-    <div className={className}/>
+    <div className={className}>
+      {props.children}
+    </div>
   )
   if (!props.closed && !props.off && !props.dot) {
     content = (
@@ -236,7 +239,8 @@ let OldGame = (props) => {
                 entering={props.entering}
                 leaving={props.leaving}
                 gameId={props.gameId}
-                gameClass={props.gameClass}/>
+                gameClass={props.gameClass}
+                go={false}/>
       <GameBox name={props.name}
                position={boxPosition}
                gameId={props.gameId}

@@ -1,7 +1,7 @@
 @import 'utils/colors.scss';
 @import 'games/world-of-adventure/colors.scss';
 
-#app #home #games div.game {
+#app #home #games .list-container .list div.game {
   pointer-events: auto;
   position: relative;
   padding: 3em 1em 3em 7em;

@@ -33,8 +33,8 @@ class Games extends React.Component {
   }
   /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
-    if (this.props.params.game) {
-      this.preview('967a2eae-acf9-4d5f-adcd-edf53f73b2dd');
+    if (this.props.params.game && this.props.params.game != 'new') {
+      this.preview(this.props.params.game);
     }
     else if (this.props.auth.online) {
       this.startPolling();
@@ -98,7 +98,7 @@ class Games extends React.Component {
     }
     if (this.props.auth.online != newProps.auth.online) {
       if (newProps.auth.online) {
-        if (newProps.params.game) {
+        if (newProps.params.game && newProps.params.game != 'new') {
           this.preview(newProps.params.game);
         }
         else {
@@ -221,17 +221,11 @@ class Games extends React.Component {
   updateFromPreview(data) {
     let game = data;
     let index = this.state.gameHash['preview'];
-    console.log('UPDATE FROM PREVIEW');
-    console.log(index);
-    console.log(this.state.games[index]);
-    console.log(game.id);
     if (
       index != undefined &&
       this.state.games[index] &&
       this.state.games[index].id == game.id
     ) {
-      console.log(this.state.games[index].id)
-      console.log('preview already present');
       game.isVisible = this.state.games[index].isVisible;
     }
     else {
@@ -242,22 +236,32 @@ class Games extends React.Component {
       [games[0].id]: 0,
       preview: 0
     }
-    this.setState({games: games, gameHash: gameHash});
+    this.setState({
+      games: games,
+      gameHash: gameHash,
+      loaded: true
+    });
     if (!game.isVisible) {
       this.queue(games[0].id);
     }
   }
   preview(id) {
     if (!('preview' in this.state.gameHash)) {
-      console.log('clearing games');
       this.setState({
         games: [],
         gameHash: {}
       })
     }
-    console.log('PREVIEW ' + id);
     this.stopPolling();
-    GameApi.show({game: id}, this.updateFromPreview.bind(this), null);
+    let reject = ({code, error}) => {
+      if (code == 401) {
+        this.props.auth.signOut();
+      }
+      else {
+        browserHistory.push('/games');
+      }
+    }
+    GameApi.show({game: id}, this.updateFromPreview.bind(this), reject);
   }
 
   /* ---------- loading ------------------------------------------------------*/
@@ -449,7 +453,7 @@ class Games extends React.Component {
   ) {
     this.setState((state) => {
       if (id == null) {
-        id = 'new;'
+        id = 'new'
       }
       let games = state.games.slice(0);
       let gameHash = Object.assign({}, state.gameHash);
@@ -554,17 +558,29 @@ class Games extends React.Component {
         }
       });
     }
+    let path = this.props.location.pathname.substring(1).split('/')
+    let listContainerClassName = cx(
+      'list-container',
+      {
+        off: path.length >= 3 && path[2] == 'go' && this.state.loaded
+      }
+    )
     return (
       <div id='games'>
-        <HoverWiggle className={backClass}>
-          <Link to='/games' className='home-button'>&lt;</Link>
-        </HoverWiggle>
-        <ReactTransitionGroup component='div'>
-          {games}
-        </ReactTransitionGroup>
-        <ReactTransitionGroup component='div' className='children'>
-          {children}
-        </ReactTransitionGroup>
+        <div className={listContainerClassName}>
+          <div className='list'>
+            <HoverWiggle className={backClass}>
+              <Link to='/games' className='home-button'>&lt;</Link>
+            </HoverWiggle>
+            <ReactTransitionGroup component='div'>
+              {games}
+            </ReactTransitionGroup>
+            <ReactTransitionGroup component='div' className='children'>
+              {children}
+            </ReactTransitionGroup>
+          </div>
+        </div>
+        <div className='game'></div>
       </div>
     );
   }

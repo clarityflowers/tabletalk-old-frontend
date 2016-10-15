@@ -2,9 +2,7 @@
 
 #app #home #games {
   width: 100%;
-  max-width: 850px;
   min-height: 100vh;
-  padding: 8em 8em 0 8em;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -13,34 +11,72 @@
   -ms-user-select: none;      /* IE 10+ */
   user-select: none;          /* Likely future */
   cursor: default;
-  position: relative;
+  position: absolute;
   font-size: 10px;
   pointer-events: none;
-  .back.anim {
-    font-size: 2.5em;
+  z-index: 1;
+  // top: -50vh;
+  & > .list-container {
+    z-index: 7;
+    background-color: $balloons;
     position: absolute;
-    top: 2em;
-    left: 4.1em;
-    pointer-events: auto;
-    transition: top .7s cubic-bezier(0.7,-0.7,0.4,1.8);
+    overflow-y: scroll;
+    width: 100%;
+    min-height: 120vh;
+    display: flex;
+    justify-content: center;
+    flex: none;
+    top: -10vh;
+    box-shadow: $box-shadow;
+    transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
     &.off {
-      top: -2em;
+      top: -120vh;
+    }
+    & > .list {
+      width: 100%;
+      padding: 8em 8em 0 8em;
+      padding-top: calc(8em + 10vh);
+      max-width: 850px;
+
+
+      .back.anim {
+        font-size: 2.5em;
+        position: relative;
+        // top: 2em;
+        // left: 4.1em;
+        left: .9em;
+        top: 0;
+        width: 1.2em;
+        height: 1.2em;
+        pointer-events: auto;
+        transition: top .7s cubic-bezier(0.7,-0.7,0.4,1.8);
+        &.off {
+          top: -6em;
+        }
+      }
+      .children {
+        pointer-events: auto;
+        width: 100%;
+      }
     }
   }
-  .children {
-    pointer-events: auto;
+  & > .game {
+    background-color: red;
     width: 100%;
+    min-height: 100vh;
+    position: absolute;
+    z-index: 0;
   }
 }
 
 @media only screen
   and (max-device-width: 600px) {
-  #app #home #games {
+  #app #home #games > .list-container > .list {
     font-size: 7px;
     padding: 7em 2em 0 2em;
     div.anim.back {
-      left: 1.7em;
-      top: 1.5em;
+      // left: 1.7em;
+      // top: 1.5em;
     }
   }
 }
