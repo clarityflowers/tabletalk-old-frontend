@@ -17,6 +17,7 @@
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
     pointer-events: none;
+    z-index: 20;
     button {
       pointer-events: auto;
       &::-moz-focus-inner {
