@@ -171,6 +171,7 @@ class Games extends React.Component {
     }
   }
   componentWillLeave(callback) {
+    this.setState({leaving: true});
     clearInterval(this.refreshInterval);
     this.leaveCallback = callback;
     this.gamesDoneLeaving = 0;
@@ -179,7 +180,6 @@ class Games extends React.Component {
         this.queue(this.state.games[i].id);
       }
     }
-    this.setState({leaving: true});
   }
   componentDidLeave() {
     this.props.doneAnimating();
@@ -439,9 +439,24 @@ class Games extends React.Component {
   /* ---------- handlers -----------------------------------------------------*/
   onGameDoneLeaving() {
     this.gamesDoneLeaving++;
-    let finalValue = this.hasTarget() ? 1 : this.state.games.length
-    if (this.state.leaving && this.gamesDoneLeaving == finalValue) {
-      setTimeout(() => {if (this.leaveCallback) {this.leaveCallback()}}, 0);
+    let finalValue = this.state.games.length;
+    console.log('LEAVING ' + this.gamesDoneLeaving + ' ' + this.state.games.length);
+    console.log(this.state.leaving);
+    if (
+      (
+        this.state.leaving ||
+        !this.props.online
+      ) &&
+      this.gamesDoneLeaving >= finalValue
+    ) {
+      setTimeout(() => {
+        if (this.leaveCallback) {
+          this.leaveCallback()
+        }
+        else {
+          this.props.doneAnimating();
+        }
+      }, 0);
     }
   }
   handleUpdateGameDetails({
