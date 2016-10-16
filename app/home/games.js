@@ -5,6 +5,7 @@ import ReactTransitionGroup from 'react-addons-transition-group';
 import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
 import cx from 'classnames';
+import GameWindow from 'games/game-window.js';
 import GameApi from 'api/game.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import Game from './game.js';
@@ -532,37 +533,47 @@ class Games extends React.Component {
     ) {
       children = null;
     }
-    if (children) {
-      let game = this.state.games[this.state.gameHash[this.props.params.game]];
-      if (game == null) {
-        game = {
-          id: 'new',
-          name: null,
-          type: null,
-          maxPlayers: null,
-          players: [],
-          me: null
-        }
+    let game = null;
+    let gameData = this.state.games[this.state.gameHash[this.props.params.game]];
+    if (gameData == null) {
+      game = {
+        id: 'new',
+        name: null,
+        type: null,
+        maxPlayers: null,
+        players: [],
+        me: null
       }
+    }
+    else {
+      game = {
+        id: gameData.id,
+        name: gameData.name,
+        type: gameData.type,
+        maxPlayers: gameData.maxPlayers,
+        players: gameData.players,
+        me: gameData.me
+      }
+    }
+    if (children) {
       children = React.cloneElement(children, {
         key: 'game',
         auth: this.props.auth,
         updateGame: this.handleUpdateGameDetails.bind(this),
-        game: {
-          id: game.id,
-          name: game.name,
-          type: game.type,
-          maxPlayers: game.maxPlayers,
-          players: game.players,
-          me: game.me
-        }
+        game: game
       });
     }
     let path = this.props.location.pathname.substring(1).split('/')
     let listContainerClassName = cx(
       'list-container',
       {
-        off: path.length >= 3 && path[2] == 'go' && this.state.loaded
+        off: (
+          path.length >= 3 && path[2] == 'go' &&
+          this.props.auth.online &&
+          this.state.loaded &&
+          !this.state.entering &&
+          !this.state.leaving
+        )
       }
     )
     return (
@@ -580,7 +591,7 @@ class Games extends React.Component {
             </ReactTransitionGroup>
           </div>
         </div>
-        <div className='game'></div>
+        <GameWindow game={game}/>
       </div>
     );
   }

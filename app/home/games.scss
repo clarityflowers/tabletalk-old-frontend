@@ -30,7 +30,7 @@
     box-shadow: $box-shadow;
     transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
     &.off {
-      top: -120vh;
+      top: -125vh;
     }
     & > .list {
       width: 100%;
@@ -59,13 +59,6 @@
         width: 100%;
       }
     }
-  }
-  & > .game {
-    background-color: red;
-    width: 100%;
-    min-height: 100vh;
-    position: absolute;
-    z-index: 0;
   }
 }
 
