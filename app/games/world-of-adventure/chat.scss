@@ -16,6 +16,9 @@
   box-shadow: -2px 0px 2px 1px fade-out($necessita, .5);
   z-index: 30;
   box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   button#toggle {
     display: none;
   }
@@ -25,13 +28,14 @@
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
     div#conversation {
       box-sizing: border-box;
       width: 100%;
       flex: 1 1 auto;
       overflow-y: auto;
-      height: 1em;
+      height: 0;
       padding: 1em;
       display: block;
       vertical-align: bottom;
@@ -106,6 +110,7 @@
       border: none;
       resize: none;
       padding: 1em;
+      min-height: 1em;
       box-sizing: border-box;
       background-color: $cold-breath;
       &:focus {
@@ -126,6 +131,9 @@
     transition: height 0.5s cubic-bezier(1, -0.3, 0, 1.3);
     &.off {
       height: 2em;
+      div#body {
+        height: 0;
+      }
     }
     button#toggle {
       transition-property: color, background-color;

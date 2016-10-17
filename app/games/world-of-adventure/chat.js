@@ -97,6 +97,7 @@ class Input extends React.Component {
   render() {
     return (
       <Textarea id='input'
+                placeholder='Say something'
                 onKeyDown={this.handleKeyDown.bind(this)}
                 onChange={this.handleChange.bind(this)}
                 value={this.state.value}/>
@@ -128,7 +129,10 @@ class Chat extends React.Component {
     this.atBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.atBottom) {
+    if (prevState.off && !this.state.off) {
+      setTimeout(this.scrollToBottom.bind(this), 700);
+    }
+    else if (this.atBottom) {
       this.scrollToBottom();
     }
   }
