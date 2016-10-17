@@ -1,5 +1,5 @@
 import React from 'react';
-import WorldOfAdventure from './world-of-adventure/app.js';
+import WorldOfAdventure from 'games/world-of-adventure/app.js';
 import { GameTypes } from 'utils/enums.js';
 import './game-window.scss';
 
