@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Login from './login.js';
-import Games from './games.js'
+import Games from './games.js';
 import Auth from 'utils/auth.js';
 import './home.scss';
 
@@ -28,6 +28,7 @@ class Home extends React.Component {
       children = React.Children.map(this.props.children,
         (child) => React.cloneElement(child, {
           auth:  this.props.auth,
+          options: this.props.options,
           doneAnimating: this.doneAnimating.bind(this)
         })
       )
@@ -40,10 +41,12 @@ class Home extends React.Component {
       )
     }
     return (
-      <ReactTransitionGroup className='content' component='div' id='home'>
-        {children}
-        {login}
-      </ReactTransitionGroup>
+      <div>
+        <ReactTransitionGroup className='content' component='div' id='home'>
+          {children}
+          {login}
+        </ReactTransitionGroup>
+      </div>
     )
   }
 }

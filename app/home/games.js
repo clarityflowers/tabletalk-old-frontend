@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import { Link } from 'react-router';
 import cx from 'classnames';
 import GameWindow from 'games/game-window.js';
+import OptionsMenu from 'options/options-menu.js';
 import GameApi from 'api/game.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import Game from './game.js';
@@ -594,6 +595,7 @@ class Games extends React.Component {
     return (
       <div id='games'>
         <div className={listContainerClassName}>
+          <OptionsMenu on={this.props.options} auth={this.props.auth}/>
           <div className='list'>
             <HoverWiggle className={backClass}>
               <Link to='/games' className='home-button'>&lt;</Link>
@@ -606,7 +608,9 @@ class Games extends React.Component {
             </ReactTransitionGroup>
           </div>
         </div>
-        <GameWindow game={game}/>
+        <GameWindow game={game}
+                    options={this.props.options}
+                    auth={this.props.auth}/>
       </div>
     );
   }

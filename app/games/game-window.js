@@ -7,7 +7,11 @@ let GameWindow = (props) => {
   let result = null;
   let gameType = GameTypes[props.game.type];
   if (gameType && gameType.name == 'World of Adventure') {
-    result = <WorldOfAdventure/>
+    result = (
+      <WorldOfAdventure options={props.options}
+                        auth={props.auth}
+                        game={props.game}/>
+    )
   }
   return (
     <div className='game-window'>

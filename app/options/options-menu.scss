@@ -17,8 +17,8 @@
   color: red;
   top: 0;
   right: $right;
-  position: fixed;
-  z-index: 100;
+  position: absolute;
+  z-index: 20;
   font-size: 20px;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -125,7 +125,7 @@
         white-space: nowrap;
         text-shadow: $text-shadow;
         cursor: pointer;
-        padding: .8em (1.8em - $right) .5em 1em;
+        padding: .8em (0.8em) .5em 1em;
         margin: -.5em;
         left: 0;
         display: inline-block;

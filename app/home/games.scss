@@ -13,7 +13,6 @@
   cursor: default;
   position: absolute;
   font-size: 10px;
-  pointer-events: none;
   z-index: 1;
   // top: -50vh;
   & > .list-container {
@@ -22,20 +21,24 @@
     position: absolute;
     overflow-y: scroll;
     width: 100%;
-    min-height: 120vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     flex: none;
     top: -10vh;
+    padding: 10vh 0 10vh 0;
     box-shadow: $box-shadow;
     transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    #optionsMenu {
+      margin-top: 10vh;
+    }
     &.off {
       top: -125vh;
     }
     & > .list {
       width: 100%;
       padding: 8em 8em 0 8em;
-      padding-top: calc(8em + 10vh);
+      padding-top: 8em;
       max-width: 850px;
 
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import update from 'react-addons-update';
 import { browserHistory } from 'react-router';
-import OptionsMenu from './options/options-menu.js';
 import Home from './home/home.js';
 import GoogleApiLoader from 'utils/google-api-loader.js';
 import Auth from 'utils/auth.js';
@@ -127,9 +126,9 @@ class App extends React.Component {
     let children = this.props.children;
     return (
       <div id='app'>
-        <OptionsMenu on={this.state.options} auth={auth}/>
         <Home loading={loading}
-              auth={auth}>
+              auth={auth}
+              options={this.state.options}>
           {children}
         </Home>
       </div>
