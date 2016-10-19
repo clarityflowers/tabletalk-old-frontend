@@ -159,7 +159,7 @@ class GameDetails extends React.Component {
         let iconClass = cx(
           'icon',
           {
-            me: game.me == i
+            me: game.me == player.id
           }
         )
         players.push(

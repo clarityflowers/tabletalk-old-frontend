@@ -579,19 +579,21 @@ class Games extends React.Component {
         game: game
       });
     }
-    let path = this.props.location.pathname.substring(1).split('/')
+    let path = this.props.location.pathname.substring(1).split('/');
+    let go = (
+      path.length >= 3 && path[2] == 'go' &&
+      this.props.auth.online &&
+      this.state.loaded &&
+      !this.state.entering &&
+      !this.state.leaving &&
+      game.me != null
+    ) ;
     let listContainerClassName = cx(
       'list-container',
       {
-        off: (
-          path.length >= 3 && path[2] == 'go' &&
-          this.props.auth.online &&
-          this.state.loaded &&
-          !this.state.entering &&
-          !this.state.leaving
-        )
+        off: go
       }
-    )
+    );
     return (
       <div id='games'>
         <div className={listContainerClassName}>
@@ -610,7 +612,8 @@ class Games extends React.Component {
         </div>
         <GameWindow game={game}
                     options={this.props.options}
-                    auth={this.props.auth}/>
+                    auth={this.props.auth}
+                    go={go}/>
       </div>
     );
   }

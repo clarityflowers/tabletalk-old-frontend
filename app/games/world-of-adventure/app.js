@@ -1,7 +1,13 @@
 import React from 'react';
-import Chat from './chat.js';
+import Cable from 'api/cable.js';
+import Chatbox from './chat.js';
 import Window from './window.js';
 import './app.scss';
+
+const ACTIONS = {
+  TALK: 0,
+  ROLL: 1
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -11,91 +17,41 @@ class App extends React.Component {
       playerHash: {},
       events: []
     };
+    this.cable = null;
   }
   componentDidMount() {
-    let players = [
-      {
-        name: 'Cerisa',
-        id: 6,
-        me: true
-      },
-      {
-        name: 'Dimosaur',
-        id: 7,
-        me: false
-      }
-    ];
-    let events = [
-      {
-        id: 0,
-        chat: {
-          player: players[0],
-          message: "Hello!"
-        }
-      },
-      {
-        id: 1,
-        chat: {
-          player: players[1],
-          message: 'Hey'
-        }
-      },
-      {
-        id: 4,
-        chat: {
-          player: players[0],
-          roll: {
-            bonus: 2,
-            result: [3, 6]
-          }
-        }
-      },
-      {
-        id: 5,
-        chat: {
-          player: players[1],
-          roll: {
-            bonus: -1,
-            result: [1, 5]
-          }
-        }
-      },
-      {
-        id: 2,
-        chat: {
-          player: players[0],
-          message: "What's up"
-        }
-      },
-      {
-        id: 7,
-        chat: {
-          player: players[0],
-          roll: {
-            bonus: 1,
-            result: [4, 2]
-          }
-        }
-      },
-      {
-        id: 8,
-        chat: {
-          player: players[0],
-          roll: {
-            bonus: 1,
-            result: [0, 0]
-          }
-        }
-      }
-    ];
-    this.setState({
-      players: players,
-      events: events
+    this.setState({players: this.props.game.players});
+    this.cable = new Cable(this.props.game.type, this.props.game.id, {
+      connected: this.handleConnect,
+      rejected: this.handleReject.bind(this),
+      received: this.handleReceive.bind(this)
     })
   }
   componentDidUpdate (prevProps, prevState) {
     if (prevState.players.length != this.state.players.length) {
       this.updatePlayerHash();
+    }
+  }
+  handleConnect() {
+    console.log('Connected to cable!');
+  }
+  handleReject() {
+    console.error('Cable rejected!');
+    this.props.auth.signOut();
+  }
+  handleReceive(data) {
+    console.log('received data...');
+    console.log(data);
+    if (data.action == ACTIONS.TALK) {
+      console.log(this.state.playerHash)
+      event = {
+        id: data.id,
+        chat: {
+          player: this.state.playerHash[data.player],
+          message: data.message
+        }
+      }
+      this.logEvent(event)
     }
   }
   updatePlayerHash() {
@@ -116,6 +72,9 @@ class App extends React.Component {
       events.push(event);
       return {events: events};
     })
+  }
+  talk(message) {
+    this.cable.channel.perform("talk", {message: message, request: 0});
   }
   handleChat(message) {
     message = message.trim();
@@ -143,22 +102,23 @@ class App extends React.Component {
           return this.logEvent(event);
         }
       }
-      let event = {
-        chat: {
-          player: this.state.playerHash.me,
-          message: message
-        }
-      }
-      this.logEvent(event);
+      this.talk(message);
+      // let event = {
+      //   chat: {
+      //     player: this.state.playerHash.me,
+      //     message: message
+      //   }
+      // }
+      // this.logEvent(event);
     }
   }
   render() {
     return (
       <div id='world-of-adventure'>
-        <Window onChat={this.handleChat.bind(this)}
+        <Window onChatbox={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 options={true}/>
-        <Chat events={this.state.events}
+        <Chatbox events={this.state.events}
               playerHash={this.state.playerHash}
               onChat={this.handleChat.bind(this)}/>
       </div>
