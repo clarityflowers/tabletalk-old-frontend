@@ -164,7 +164,7 @@ class Chat extends React.Component {
         <button id='toggle'
                 onClick={this.handleToggle.bind(this)}
                 className={toggleClassName}>
-          {this.state.off ? '^' : '%'}
+          {this.state.off ? '%' : '^'}
         </button>
         <div id='body'>
           <div id='conversation' ref='conversation'>
