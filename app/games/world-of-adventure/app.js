@@ -53,6 +53,19 @@ class App extends React.Component {
       }
       this.logEvent(event)
     }
+    else if (data.action == ACTIONS.ROLL) {
+      event = {
+        id: data.id,
+        chat: {
+          player: this.state.playerHash[data.player],
+          roll: {
+            bonus: data.bonus,
+            result: data.result
+          }
+        }
+      }
+      this.logEvent(event);
+    }
   }
   updatePlayerHash() {
     let playerHash = {}
@@ -76,6 +89,9 @@ class App extends React.Component {
   talk(message) {
     this.cable.channel.perform("talk", {message: message, request: 0});
   }
+  roll(bonus) {
+    this.cable.channel.perform("roll", {bonus: bonus, request: 0});
+  }
   handleChat(message) {
     message = message.trim();
     if (message) {
@@ -90,32 +106,16 @@ class App extends React.Component {
               bonus *= -1;
             }
           }
-          let event = {
-            chat: {
-              player: this.state.playerHash.me,
-              roll: {
-                bonus: bonus,
-                result: [0, 0]
-              }
-            }
-          }
-          return this.logEvent(event);
+          return this.roll(bonus);
         }
       }
       this.talk(message);
-      // let event = {
-      //   chat: {
-      //     player: this.state.playerHash.me,
-      //     message: message
-      //   }
-      // }
-      // this.logEvent(event);
     }
   }
   render() {
     return (
       <div id='world-of-adventure'>
-        <Window onChatbox={this.handleChat.bind(this)}
+        <Window onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 options={true}/>
         <Chatbox events={this.state.events}
