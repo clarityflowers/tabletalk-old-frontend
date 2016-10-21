@@ -20,7 +20,6 @@ function httpRequest(url, method, params, body, onResponse) {
       }
     }
   }
-  console.log(urlWithParams);
   request.open(method, process.env.API_URL + '/' + urlWithParams, true);
   request.setRequestHeader('Content-Type', 'application/json');
   request.setRequestHeader('Accept', 'application/json');
@@ -70,7 +69,7 @@ export default class HTTP {
     request({url, method: 'GET', params, resolve, reject});
   }
 
-  static post(url, params, body, resolve, reject) {
+  static post({url, params, body, resolve, reject}) {
     request({url, method: 'POST', params, body, resolve, reject});
   }
 }
