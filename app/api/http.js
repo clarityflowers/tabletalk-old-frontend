@@ -2,9 +2,26 @@
 
 import Auth from 'utils/auth.js';
 
-function httpRequest(url, method, body, onResponse) {
+function httpRequest(url, method, params, body, onResponse) {
   var request = new XMLHttpRequest();
-  request.open(method, process.env.API_URL + '/' + url, true);
+  let paramCount = 0;
+  let urlWithParams = url;
+  if (params) {
+    for (var key in params) {
+      if (params.hasOwnProperty(key)) {
+        if (paramCount == 0) {
+          urlWithParams += '?';
+        }
+        else {
+          urlWithParams += '&';
+        }
+        urlWithParams += `${key}=${params[key]}`;
+        paramCount++;
+      }
+    }
+  }
+  console.log(urlWithParams);
+  request.open(method, process.env.API_URL + '/' + urlWithParams, true);
   request.setRequestHeader('Content-Type', 'application/json');
   request.setRequestHeader('Accept', 'application/json');
   request.setRequestHeader('token', Auth.getToken());
@@ -25,7 +42,7 @@ function httpRequest(url, method, body, onResponse) {
   }
 }
 
-function request(url, method, body, resolve, reject) {
+function request({url, method, params, body, resolve, reject}) {
   let attempts = 0;
   let handleResponse = (status, data) => {
     attempts++;
@@ -34,7 +51,7 @@ function request(url, method, body, resolve, reject) {
     }
     else if (status == 401 && attempts == 1) {
       Auth.reAuth(() => {
-        httpRequest(url, method, body, handleResponse);
+        httpRequest(url, method, params, body, handleResponse);
       }, reject);
     }
     else if (status >= 400) {
@@ -45,15 +62,15 @@ function request(url, method, body, resolve, reject) {
       reject({code: status, error: !!data && data.error});
     }
   }
-  httpRequest(url, method, body, handleResponse);
+  httpRequest(url, method, params, body, handleResponse);
 }
 
 export default class HTTP {
-  static get(url, resolve, reject) {
-    request(url, 'GET', null, resolve, reject);
+  static get({url, params, resolve, reject}) {
+    request({url, method: 'GET', params, resolve, reject});
   }
 
-  static post(url, body, resolve, reject) {
-    request(url, 'POST', body, resolve, reject);
+  static post(url, params, body, resolve, reject) {
+    request({url, method: 'POST', params, body, resolve, reject});
   }
 }

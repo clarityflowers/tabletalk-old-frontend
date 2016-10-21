@@ -1,13 +1,10 @@
 import React from 'react';
 import Cable from 'api/cable.js';
-import Chatbox from './chat.js';
+import Chatbox from './chatbox.js';
 import Window from './window.js';
+import { ACTIONS } from 'games/world-of-adventure/enums.js';
+import Game from 'api/game.js';
 import './app.scss';
-
-const ACTIONS = {
-  TALK: 0,
-  ROLL: 1
-}
 
 class App extends React.Component {
   constructor(props) {
@@ -15,14 +12,15 @@ class App extends React.Component {
     this.state = {
       players: [],
       playerHash: {},
-      events: []
+      chats: []
     };
     this.cable = null;
+    this.chatHash = {};
   }
   componentDidMount() {
     this.setState({players: this.props.game.players});
     this.cable = new Cable(this.props.game.type, this.props.game.id, {
-      connected: this.handleConnect,
+      connected: this.handleConnect.bind(this),
       rejected: this.handleReject.bind(this),
       received: this.handleReceive.bind(this)
     })
@@ -32,40 +30,56 @@ class App extends React.Component {
       this.updatePlayerHash();
     }
   }
+  load(data) {
+    console.log(data);
+    let chats = data.chats
+    if (chats) {
+      for (let i=0; i < chats.length; i++) {
+        this.processChat(chats[i]);
+      }
+    }
+  }
+  processChat(data) {
+    if (data.action == ACTIONS.TALK) {
+      let chat = {
+        id: data.id,
+        action: ACTIONS.TALK,
+        player: this.state.playerHash[data.player],
+        message: data.message,
+        date: new Date(data.timestamp)
+      }
+      this.chat(chat)
+    }
+    else if (data.action == ACTIONS.ROLL) {
+      console.log('ROLL');
+      console.log(data.result);
+      let chat = {
+        id: data.id,
+        action: ACTIONS.ROLL,
+        player: this.state.playerHash[data.player],
+        bonus: data.bonus,
+        result: data.result,
+        date: new Date(data.timestamp)
+      }
+      this.chat(chat);
+    }
+  }
   handleConnect() {
     console.log('Connected to cable!');
+    let reject = ({code, error}) => {
+      if (code == 401) {
+        this.props.auth.signOut();
+      }
+      console.error(`ERROR ${code}: ${error}`);
+    }
+    Game.load({game: this.props.game.id}, this.load.bind(this), reject);
   }
   handleReject() {
     console.error('Cable rejected!');
     this.props.auth.signOut();
   }
   handleReceive(data) {
-    console.log('received data...');
-    console.log(data);
-    if (data.action == ACTIONS.TALK) {
-      console.log(this.state.playerHash)
-      event = {
-        id: data.id,
-        chat: {
-          player: this.state.playerHash[data.player],
-          message: data.message
-        }
-      }
-      this.logEvent(event)
-    }
-    else if (data.action == ACTIONS.ROLL) {
-      event = {
-        id: data.id,
-        chat: {
-          player: this.state.playerHash[data.player],
-          roll: {
-            bonus: data.bonus,
-            result: data.result
-          }
-        }
-      }
-      this.logEvent(event);
-    }
+    this.processChat(data);
   }
   updatePlayerHash() {
     let playerHash = {}
@@ -78,13 +92,34 @@ class App extends React.Component {
     }
     this.setState({playerHash: playerHash});
   }
-  logEvent(event) {
-    event.id = Math.floor(Math.random() * 10000000);
-    this.setState((state) => {
-      let events = state.events.slice(0);
-      events.push(event);
-      return {events: events};
-    })
+  chat(chat) {
+    let index = null;
+    if (chat.id in this.chatHash) {
+      index = this.chatHash[chat.id];
+    }
+    if (index) {
+      this.setState((state) => {
+        let chats = state.chats.slice(0);
+        chats[index] = chat;
+        return {chats: chats};
+      })
+    }
+    else {
+      this.setState((state) => {
+        let chats = state.chats.slice(0);
+        if (chats.length && chat.date >= chats[chats.length -1].date) {
+          chats.push(chat);
+        }
+        else {
+          let i = chats.length - 1;
+          while(i > 0 && chat.date < chats[i-1].date) {
+            i--;
+          }
+          chats.splice(i, 0, chat);
+        }
+        return {chats: chats};
+      })
+    }
   }
   talk(message) {
     this.cable.channel.perform("talk", {message: message, request: 0});
@@ -118,7 +153,7 @@ class App extends React.Component {
         <Window onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 options={true}/>
-        <Chatbox events={this.state.events}
+        <Chatbox chats={this.state.chats}
               playerHash={this.state.playerHash}
               onChat={this.handleChat.bind(this)}/>
       </div>

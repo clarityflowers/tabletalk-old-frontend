@@ -2,6 +2,7 @@ import React from 'react';
 import Textarea from 'react-textarea-autosize';
 import cx from 'classnames';
 import { bonusString } from 'games/world-of-adventure/utils.js';
+import { ACTIONS } from 'games/world-of-adventure/enums.js';
 import './chat.scss';
 
 let Talk = (props) => {
@@ -56,17 +57,17 @@ let Message = (props) => {
       </h1>
     )
   }
-  if ('message' in props.chat) {
+  if (props.chat.action == ACTIONS.TALK) {
     content = (
       <Talk player={props.chat.player}
             message={props.chat.message}/>
     )
   }
-  else if ('roll' in props.chat) {
+  else if (props.chat.action == ACTIONS.ROLL) {
     content = (
       <Roll name={props.chat.player.name}
-            bonus={props.chat.roll.bonus}
-            result={props.chat.roll.result}/>
+            bonus={props.chat.bonus}
+            result={props.chat.result}/>
     )
   }
   return (
@@ -105,7 +106,7 @@ class Input extends React.Component {
   }
 }
 
-class Chat extends React.Component {
+class Chatbox extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -149,15 +150,12 @@ class Chat extends React.Component {
     })
     let messages = [];
     let prevPlayer = null;
-    for (let i=0; i < this.props.events.length; i++) {
-      let event = this.props.events[i];
-      if ('chat' in event) {
-        let chat = event.chat;
-        messages.push(
-          <Message key={event.id} chat={chat} prevPlayer={prevPlayer}/>
-        )
-        prevPlayer = chat.player;
-      }
+    for (let i=0; i < this.props.chats.length; i++) {
+      let chat = this.props.chats[i];
+      messages.push(
+        <Message key={chat.id} chat={chat} prevPlayer={prevPlayer}/>
+      )
+      prevPlayer = chat.player;
     }
     return (
       <div id='chat' className={className}>
@@ -178,4 +176,4 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat;
+export default Chatbox;
