@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import cx from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import { GameTypes } from 'utils/enums.js';
-import Game from 'api/game.js'
 import './game-details.scss';
 import { HoverBuzz, HoverWiggle } from 'utils/hover-animate.js';
 
