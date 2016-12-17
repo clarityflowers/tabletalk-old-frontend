@@ -338,6 +338,10 @@ class Games extends React.Component {
       }
       if (code == 401) {
         this.props.auth.signOut();
+        if (!this.state.loaded) {
+          this.props.doneAnimating();
+        }
+
       }
       console.error(message);
     }
