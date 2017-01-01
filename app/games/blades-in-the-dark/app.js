@@ -35,11 +35,11 @@ class App extends React.Component {
     let chats = data.chats
     if (chats) {
       for (let i=0; i < chats.length; i++) {
-        this.processChat(chats[i]);
+        this.processEvent(chats[i]);
       }
     }
   }
-  processChat(data) {
+  processEvent(data) {
     if (data.action == ACTIONS.TALK) {
       let chat = {
         id: data.id,
@@ -51,8 +51,6 @@ class App extends React.Component {
       this.chat(chat)
     }
     else if (data.action == ACTIONS.ROLL) {
-      console.log('ROLL');
-      console.log(data.result);
       let chat = {
         id: data.id,
         action: ACTIONS.ROLL,
@@ -63,6 +61,15 @@ class App extends React.Component {
       }
       console.log(chat);
       this.chat(chat);
+    }
+    else if (data.action == ACTIONS.JOIN) {
+      let players = this.state.players.slice(0);
+      players.push({
+        id: data.id,
+        name: data.name,
+        admin: data.admin
+      });
+      this.setState({players: players});
     }
   }
   handleConnect() {
@@ -80,7 +87,7 @@ class App extends React.Component {
     this.props.auth.signOut();
   }
   handleReceive(data) {
-    this.processChat(data);
+    this.processEvent(data);
   }
   updatePlayerHash() {
     let playerHash = {}
