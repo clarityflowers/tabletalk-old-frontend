@@ -1,5 +1,5 @@
 import React from 'react';
-import GameApp from 'games/game-app.js';
+import GameApp from 'games/common/app.js';
 import Chatbox from './chatbox.js';
 import Window from './window.js';
 import { ACTIONS } from 'games/blades-in-the-dark/enums.js';
@@ -51,7 +51,7 @@ class App extends React.Component {
         <Window onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 options={true}/>
-        <Chatbox chats={this.props.events}
+        <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}
                  onChat={this.handleChat.bind(this)}/>
       </div>

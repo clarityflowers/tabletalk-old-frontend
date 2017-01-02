@@ -1,6 +1,6 @@
 'use strict'
 
-import { ACTIONS } from 'games/enums.js';
+import { ACTIONS } from 'games/common/enums.js';
 
 ACTIONS.ROLL = 1;
 

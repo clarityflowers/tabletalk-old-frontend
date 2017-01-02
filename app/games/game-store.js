@@ -2,7 +2,7 @@ import React from 'react';
 import WorldOfAdventure from './world-of-adventure/app.js';
 import BladesInTheDark from './blades-in-the-dark/app.js';
 import { GameTypes } from 'utils/enums.js';
-import { ACTIONS } from './enums.js';
+import { ACTIONS } from 'games/common/enums.js';
 
 class GameStore extends React.Component {
   constructor(props) {

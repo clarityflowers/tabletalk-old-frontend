@@ -2,7 +2,7 @@ import React from 'react';
 import CableApi from 'api/cable.js';
 import Game from 'api/game.js';
 
-class GameApp extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -57,4 +57,4 @@ class GameApp extends React.Component {
   }
 }
 
-export default GameApp;
+export default App;
