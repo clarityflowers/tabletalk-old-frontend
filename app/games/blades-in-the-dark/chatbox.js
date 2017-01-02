@@ -45,9 +45,9 @@ let Roll = (props) => {
     <div className='roll'>
       <div className='header'>
         {props.name} rolled
-        <span className={diceClassName}>
-          {props.result}
-        </span>
+      </div>
+      <div className={diceClassName}>
+        {props.result}
       </div>
       <div className={numberClassName}>
         {result}
