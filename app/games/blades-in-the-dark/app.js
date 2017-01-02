@@ -2,7 +2,7 @@ import React from 'react';
 import GameApp from 'games/common/app.js';
 import Chatbox from './chatbox.js';
 import Window from './window.js';
-import { ACTIONS } from 'games/blades-in-the-dark/enums.js';
+import { ACTIONS, TAB_TYPES } from 'games/blades-in-the-dark/enums.js';
 import './app.scss';
 
 class App extends React.Component {
@@ -46,10 +46,31 @@ class App extends React.Component {
     }
   }
   render() {
+    let tabs = [
+      {
+        type: TAB_TYPES.CHARACTER,
+        character: {
+          name: 'Qarin',
+          id: 13,
+          playerbook: 'Spider'
+        }
+      },
+      {
+        type: TAB_TYPES.CREW,
+        crew: {
+          name: 'The Quicksilver Crew',
+          id: 13,
+          playbook: 'Shadows'
+        }
+      }
+    ];
     let window = (
       <div id='blades-in-the-dark'>
-        <Window onChat={this.handleChat.bind(this)}
+        <Window tabs={tabs}
+                activeTab={0}
+                onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
+                game={this.props.game}
                 options={true}/>
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}

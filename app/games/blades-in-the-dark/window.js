@@ -1,8 +1,10 @@
 'use strict'
 
 import React from 'react';
+import { Link } from 'react-router';
 import OptionsMenu from 'options/options-menu.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
+import { TAB_TYPES } from './enums.js';
 import './window.scss';
 
 class RollButton extends React.Component {
@@ -24,26 +26,87 @@ class RollButton extends React.Component {
   }
 }
 
-class Window extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+const Tab = (props) => {
+  return (
+    <Link to={`${props.baseUrl}/${props.index}`} className='tab'>
+      {props.name}
+    </Link>
+  )
+}
+
+const Portal = (props) => {
+  return (
+    <div className='portal'>
+      <RollButton level={0} onChat={props.onChat}/>
+      <RollButton level={1} onChat={props.onChat}/>
+      <RollButton level={2} onChat={props.onChat}/>
+      <RollButton level={3} onChat={props.onChat}/>
+      <RollButton level={4} onChat={props.onChat}/>
+      <RollButton level={5} onChat={props.onChat}/>
+      <RollButton level={6} onChat={props.onChat}/>
+      <RollButton level={7} onChat={props.onChat}/>
+    </div>
+  );
+}
+
+const Character = (props) => {
+  return (
+    <Portal onChat={props.onChat}/>
+  )
+};
+
+const Crew = (props) => {
+  return (
+    <div>hello</div>
+  )
+};
+
+const Window = (props) => {
+  let portal = null;
+  let tabs = [];
+  let baseUrl = `/games/${props.game.id}/go`;
+  for (let i=0; i < props.tabs.length; i++) {
+    let data = props.tabs[i];
+    if (data.type == TAB_TYPES.CHARACTER) {
+      let character = data.character;
+      tabs.push(
+        <Tab name={character.name}
+             key={`${data.type}_${character.id}`}
+             baseUrl={baseUrl}
+             index={i}/>
+      );
+      if (i == props.activeTab) {
+        portal = (
+          <Character character={character}
+                       onChat={props.onChat}/>
+        )
+      }
+    }
+    else if (data.type == TAB_TYPES.CREW) {
+      let crew = data.crew;
+      tabs.push(
+        <Tab name={crew.name}
+             key={`${data.type}_${crew.id}`}
+             baseUrl={baseUrl}
+             index={i}/>
+      )
+      if (i == props.activeTab) {
+        portal = (
+          <Crew crew={crew}
+                onChat={props.onChat}/>
+        )
+      }
+    }
   }
-  render() {
-    return (
-      <div id='window'>
-        <OptionsMenu on={this.props.options} auth={this.props.auth}/>
-        <RollButton level={0} onChat={this.props.onChat}/>
-        <RollButton level={1} onChat={this.props.onChat}/>
-        <RollButton level={2} onChat={this.props.onChat}/>
-        <RollButton level={3} onChat={this.props.onChat}/>
-        <RollButton level={4} onChat={this.props.onChat}/>
-        <RollButton level={5} onChat={this.props.onChat}/>
-        <RollButton level={6} onChat={this.props.onChat}/>
-        <RollButton level={7} onChat={this.props.onChat}/>
+  return (
+    <div id='window'>
+      <OptionsMenu on={props.options} auth={props.auth}/>
+      {portal}
+      <div id='tabs'>
+        {tabs}
       </div>
-    )
-  }
+    </div>
+  );
 }
 
 export default Window;

@@ -30,4 +30,19 @@
       background-color: $sky;
     }
   }
+  #tabs {
+    font-family: 'League Spartan';
+    position: absolute;
+    bottom: 0;
+    height: 2em;
+    width: 100%;
+    display: flex;
+    font-size: .5em;
+    flex-direction: row;
+    .tab {
+      color: $sun;
+      text-decoration: none;
+      margin: 0 1em;
+    }
+  }
 }
