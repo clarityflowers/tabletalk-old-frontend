@@ -26,20 +26,20 @@ class App extends React.Component {
       this.props.processEvent(data);
     }
   }
-  roll(level) {
-    this.props.perform("roll", {level: level, request: 0});
+  roll(bonus) {
+    this.props.perform("roll", {bonus: bonus, request: 0});
   }
   handleChat(message) {
     message = message.trim();
     if (message) {
       if (message[0] == '/') {
-        let re = /\/roll(\s*?(\+|-|−)\s*?(\d+))?/g;
+        let re = /\/r(oll)?(\s*?(\+|-|−)\s*?(\d+))?/g;
         let result = re.exec(message);
         if (result) {
           let bonus = 0;
-          if (result.length == 4) {
-            bonus = parseInt(result[3]);
-            if (result[2] != '+') {
+          if (result.length == 5) {
+            bonus = parseInt(result[4]);
+            if (result[3] != '+') {
               bonus *= -1;
             }
           }
