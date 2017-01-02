@@ -27,10 +27,10 @@ class Label extends React.Component {
     window.removeEventListener('resize', this.updateWidth.bind(this));
   }
   mouseEnter() {
-    this.props.mouseEnter(this.props.name);
+    this.props.onMouseEnter(this.props.index);
   }
   mouseLeave() {
-    this.props.mouseLeave(this.props.name);
+    this.props.onMouseLeave(this.props.index);
   }
   click() {
     this.mouseLeave();
@@ -41,7 +41,7 @@ class Label extends React.Component {
       width: 0,
       left: 0
     }
-    if (!this.props.hidden) {
+    if (this.props.on) {
       style.width = this.state.width;
       if (this.props.isToggling) {
         style.left = 10;
@@ -51,10 +51,9 @@ class Label extends React.Component {
       }
     }
     return (
-      <div className='label-container' style={style} id={this.props.id}>
+      <div className='label-container' style={style}>
         <div  className='label'
               ref='label'
-              id={this.props.id}
               onClick={this.click.bind(this)}
               onMouseEnter={this.mouseEnter.bind(this)}
               onMouseLeave={this.mouseLeave.bind(this)}
@@ -66,39 +65,12 @@ class Label extends React.Component {
   }
 }
 
-const Labels = (props) => {
-  let nameHover = props.open ? props.isHovering.name : props.isHovering.toggle;
-  let nameName = props.open ? 'name' : 'toggle';
-  let nameOnClick = props.open ? props.goToUserSettings : props.toggle;
-  return (
-    <div className='labels'>
-      <Label  hidden={!props.loggedIn || !props.name}
-              text={props.name}
-              id='name'
-              name={nameName}
-              onClick={nameOnClick}
-              isHovering={nameHover}
-              mouseEnter={props.mouseEnter}
-              mouseLeave={props.mouseLeave}
-              isToggling={props.isToggling}/>
-      <Label  hidden={!props.open}
-              text='Sign off'
-              id='signout'
-              name='signout'
-              onClick={props.signout}
-              isHovering={props.isHovering.signout}
-              mouseEnter={props.mouseEnter}
-              mouseLeave={props.mouseLeave}/>
-    </div>
-  )
-}
-
 const OptionsButton = (props) => {
   let mouseEnter = () => {
-    props.mouseEnter(props.name);
+    props.onMouseEnter(props.index);
   }
   let mouseLeave = () => {
-    props.mouseLeave(props.name);
+    props.onMouseLeave(props.index);
   }
   let click = () => {
     mouseLeave();
@@ -113,7 +85,7 @@ const OptionsButton = (props) => {
             className={className}
             onMouseEnter={mouseEnter}
             onMouseLeave={mouseLeave}>
-      {props.children}
+      {props.glyph}
     </button>
   )
 }
@@ -124,89 +96,31 @@ const Divider = () => {
   )
 }
 
-const Banner = (props) => {
-  return (
-    <div className='banner'>
-      <OptionsButton  onClick={props.toggle}
-                      name="toggle"
-                      isHovering={props.isHovering.toggle}
-                      mouseEnter={props.mouseEnter}
-                      mouseLeave={props.mouseLeave}>
-        g
-      </OptionsButton>
-      <Divider>g</Divider>
-      <OptionsButton  onClick={props.signout}
-                      name="signout"
-                      isHovering={props.isHovering.signout}
-                      mouseEnter={props.mouseEnter}
-                      mouseLeave={props.mouseLeave}>
-        p
-      </OptionsButton>
-      <OptionsButton  onClick={props.goToUserSettings}
-                      name="name"
-                      isHovering={props.isHovering.name}
-                      mouseEnter={props.mouseEnter}
-                      mouseLeave={props.mouseLeave}>
-        u
-      </OptionsButton>
-    </div>
-  )
-}
+const ANIM_TIMES = [200, 600];
 
 class OptionsMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      isToggling: false,
-      name: {
-        isHovering: false,
-        animationStep: 0
-      },
-      signout: {
-        isHovering: false,
-        animationStep: 0
-      },
-      toggle: {
-        isHovering: false,
-        animationStep: 0
-      }
-    }
-    this.timeouts = {
-      name: null,
-      signout: null,
-      toggle: null,
-      toggling: null
-    }
+      hovering: null,
+      hoverAnim: [0, 0, 0, 0]
+    };
+    this.timeouts = [];
   }
-  endToggle() {
-    this.setState({
-      isToggling: false
-    })
+  componentWillUnmount() {
   }
   toggle() {
-    this.setState({
-      open: !this.state.open,
-      isToggling: true
-    });
-    this.safeTimeout('toggling',150,this.endToggle.bind(this));
+    this.setState({open: !this.state.open});
   }
-  hoverAnimationStepThree(key) {
-    this.setState({[key]: update(this.state[key], {
-      animationStep: {$set: 0},
-    })});
+  signout() {
+    this.setState({open: false});
+    this.props.auth.signOut();
+    browserHistory.push('/');
   }
-  hoverAnimationStepTwo(key) {
-    this.safeTimeout(key, 600, this.hoverAnimationStepThree.bind(this));
-    this.setState({[key]: update(this.state[key], {
-      animationStep: {$set: 2},
-    })});
-  }
-  hoverAnimationStepOne(key) {
-    this.safeTimeout(key, 200, this.hoverAnimationStepTwo.bind(this));
-    this.setState({[key]: update(this.state[key], {
-      animationStep: {$set: 1},
-    })});
+  goHome() {
+    this.setState({open: false});
+    browserHistory.push('/games');
   }
   safeTimeout(key, time, cb) {
     clearTimeout(this.timeouts[key]);
@@ -214,64 +128,34 @@ class OptionsMenu extends React.Component {
       cb(key);
     }, time);
   }
-  mouseEnter(key) {
-    let option = this.state[key];
-    if (option.animationStep > 0) {
-      option = update(option, {
-        animationStep: {$set: -1}
-      })
-      this.safeTimeout(key, 70, this.hoverAnimationStepOne.bind(this));
+  animate(key) {
+    let step = this.state.hoverAnim[key];
+    if (step < ANIM_TIMES.length) {
+      this.safeTimeout(key, ANIM_TIMES[step], this.animate.bind(this));
+    }
+    let hoverAnim = update(this.state.hoverAnim, {
+      [key]: {$set: step + 1}
+    });
+    this.setState({hoverAnim: hoverAnim});
+  }
+  handleMouseEnter(key) {
+    if (this.state.hoverAnim[key] > 0) {
+      let hoverAnim = update(this.state.hoverAnim, {
+        [key]: {$set: -1}
+      });
+      this.setState({hoverAnim: hoverAnim});
+      this.safeTimeout(key, 70, this.animate.bind(this));
     }
     else {
-      this.safeTimeout(key, 0, this.hoverAnimationStepOne.bind(this));
+      this.animate(key);
     }
-    option = update(option, {
-      isHovering: {$set: true}
-    });
-    this.setState({[key]: option});
+    this.setState({hovering: key});
+
   }
-  mouseLeave(key) {
-    let option = update(this.state[key], {
-      isHovering: {$set: false}
-    });
-    this.setState({[key]: option});
-  }
-  signout() {
-    this.setState({open: false});
-    this.props.auth.signOut();
-    browserHistory.push('/');
-  }
-  goToUserSettings() {
-    this.toggle();
-  }
-  calcLabelHover(key) {
-    let result = false
-    if (this.state[key].animationStep != -1) {
-      if (this.state[key].isHovering) {
-        result = true;
-      }
-      else if (this.state[key].animationStep == 1) {
-        result = true;
-      }
+  handleMouseLeave(key) {
+    if (this.state.hovering == key) {
+      this.setState({hovering: null});
     }
-    return result;
-  }
-  calcButtonHover(key) {
-    let result = false
-    if (this.state[key].animationStep != -1) {
-      if (this.state[key].isHovering) {
-        result = true;
-      }
-      else if (this.state[key].animationStep > 0) {
-        result = true;
-      }
-    }
-    return result;
-  }
-  componentWillUnmount() {
-    clearTimeout(this.timeouts.name);
-    clearTimeout(this.timeouts.toggle);
-    clearTimeout(this.timeouts.signout);
   }
   render() {
     let className = 'hidden';
@@ -283,36 +167,90 @@ class OptionsMenu extends React.Component {
         className = 'closed';
       }
     }
+    let options = [
+      {
+        text: this.props.auth.name,
+        glyph: 'u',
+        onClick: this.toggle.bind(this),
+        on: this.props.auth.online && this.props.on
+      },
+      {
+        text: 'Signout',
+        glyph: 'p',
+        onClick: this.signout.bind(this),
+        on: this.state.open
+      },
+      {
+        text: 'Home',
+        glyph: 'h',
+        onClick: this.goHome.bind(this),
+        on: this.state.open
+      },
+    ];
+    let labels = [];
+    let buttons = [];
+    for (let i=0; i < options.length; i++) {
+      let option = options[i];
+      let index = i;
+      if (i == 0 && !this.state.open) {
+        index = options.length
+      }
+      let labelIsHovering = (
+        (this.state.hoverAnim[index] >= 0 && this.state.hovering == index) ||
+        (this.state.hoverAnim[index] == 1)
+      );
+      let buttonIsHovering = (
+        (this.state.hoverAnim[i] >= 0 && this.state.hovering == i) ||
+        (this.state.hoverAnim[i] >= 1)
+      );
+      labels.push(
+        <Label key={i}
+               index={index}
+               text={option.text}
+               on={option.on}
+               isToggling={false}
+               isHovering={labelIsHovering}
+               onMouseEnter={this.handleMouseEnter.bind(this)}
+               onMouseLeave={this.handleMouseLeave.bind(this)}
+               onClick={option.onClick}/>
+      );
+      buttons.push(
+        <OptionsButton onClick={option.onClick}
+                       key={i}
+                       index={i}
+                       isHovering={buttonIsHovering}
+                       onMouseEnter={this.handleMouseEnter.bind(this)}
+                       onMouseLeave={this.handleMouseLeave.bind(this)}
+                       glyph={option.glyph}/>
+      );
+    }
+    buttons.push(
+      <Divider key='divider'/>
+    );
+    let isHovering = (
+      (
+        this.state.hoverAnim[options.length] >= 0 &&
+        this.state.hovering == options.length
+      ) ||
+      this.state.hoverAnim[options.length] >= 1
+    )
+    buttons.push(
+      <OptionsButton onClick={this.toggle.bind(this)}
+                     key={options.length}
+                     index={options.length}
+                     isHovering={isHovering}
+                     onMouseEnter={this.handleMouseEnter.bind(this)}
+                     onMouseLeave={this.handleMouseLeave.bind(this)}
+                     glyph='g'/>
+    );
     return (
       <div id='optionsMenu' className={className}>
-        <Labels
-          name={this.props.auth.name}
-          loggedIn={this.props.auth.online && this.props.on}
-          open={this.state.open}
-          signout={this.signout.bind(this)}
-          mouseEnter={this.mouseEnter.bind(this)}
-          mouseLeave={this.mouseLeave.bind(this)}
-          toggle={this.toggle.bind(this)}
-          isHovering={{
-            name: this.calcLabelHover('name'),
-            toggle: this.calcLabelHover('toggle'),
-            signout: this.calcLabelHover('signout'),
-          }}
-          isToggling={this.state.isToggling}
-          goToUserSettings={this.goToUserSettings.bind(this)}
-        />
-        <Banner
-          signout={this.signout.bind(this)}
-          toggle={this.toggle.bind(this)}
-          mouseEnter={this.mouseEnter.bind(this)}
-          mouseLeave={this.mouseLeave.bind(this)}
-          isHovering={{
-            name: this.calcButtonHover('name'),
-            toggle: this.calcButtonHover('toggle'),
-            signout: this.calcButtonHover('signout'),
-          }}
-          goToUserSettings={this.goToUserSettings.bind(this)}
-        />
+        <div className='labels'>
+          {labels}
+        </div>
+        <div className='banner'>
+          {buttons}
+        </div>
       </div>
     )
   }

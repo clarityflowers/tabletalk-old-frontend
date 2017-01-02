@@ -1,9 +1,8 @@
 @import 'utils/colors';
 
 #optionsMenu {
-
   $right: 1em;
-  $num: 3;
+  $num: 4;
   $num-dividers: 1;
   $height: 1.8em * $num + .2em * $num-dividers;
   $padding: 1em;
@@ -73,8 +72,8 @@
     width: 1.8em;
     height: $height + $padding;
     display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
     z-index: 2;
     .divider {
@@ -113,6 +112,10 @@
     position: absolute;
     right: 1em;
     top: .2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
     .label-container {
       position: relative;
       overflow: hidden;
@@ -138,7 +141,7 @@
 }
 
 @media only screen
-  and (max-device-width: 400px) {
+  and (max-width: 800px) {
   #app #optionsMenu {
     font-size: 16px;
   }
