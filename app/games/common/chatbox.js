@@ -2,7 +2,7 @@ import React from 'react';
 import Textarea from 'react-textarea-autosize';
 import cx from 'classnames';
 import { ACTIONS } from './enums.js';
-// import './chatbox.scss';
+import './chatbox.scss';
 
 let Talk = (props) => {
   return (

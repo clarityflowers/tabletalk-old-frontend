@@ -1,6 +1,7 @@
 import React from 'react';
 import CableApi from 'api/cable.js';
 import Game from 'api/game.js';
+import './app.scss';
 
 class App extends React.Component {
   constructor(props) {
