@@ -57,7 +57,7 @@ class GameStore extends React.Component {
     if (event.id in this.eventHash) {
       index = this.eventHash[event.id];
     }
-    if (index) {
+    if (index != null) {
       this.setState((state) => {
         let events = state.events.slice(0);
         events[index] = event;
@@ -69,6 +69,7 @@ class GameStore extends React.Component {
         let events = state.events.slice(0);
         if (events.length && event.date >= events[events.length -1].date) {
           events.push(event);
+          this.eventHash[event.id] = events.length -1;
         }
         else {
           let i = events.length - 1;
@@ -76,6 +77,7 @@ class GameStore extends React.Component {
             i--;
           }
           events.splice(i, 0, event);
+          this.updateEventHash(events);
         }
         return {events: events};
       })
@@ -89,15 +91,23 @@ class GameStore extends React.Component {
   }
   /* ---------- players ------------------------------------------------------*/
   updatePlayerHash(players) {
-    let playerHash = {}
+    let playerHash = {};
     for (let i=0; i < players.length; i++) {
-      let player = players[i]
+      let player = players[i];
       playerHash[player.id] = player;
       if (player.me) {
         playerHash.me = player;
       }
     }
     this.playerHash = playerHash;
+  }
+  updateEventHash(events) {
+    let eventHash = {};
+    for (let i=0; i < events.length; i++) {
+      let event = events[i];
+      eventHash[event.id] = i;
+    }
+    this.eventHash = eventHash;
   }
   /* ---------- render -------------------------------------------------------*/
   render() {
