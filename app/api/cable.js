@@ -5,7 +5,6 @@ import { GameTypes } from 'utils/enums.js';
 import Auth from 'utils/auth.js';
 export default class Cable {
   constructor(gameType, gameId, actions) {
-    console.log(ActionCable);
     this.cable = ActionCable.createConsumer(`${process.env.API_URL}/cable?token=${Auth.getToken()}`);
     this.gameType = gameType;
     this.gameId = gameId;
@@ -16,9 +15,6 @@ export default class Cable {
   }
   handleDisconnected() {
     console.error('Disconnected from cable!');
-    setTimeout(() => {
-      // this.subscribe();
-    }, 1000);
     if (this.onDisconnected) {
       this.onDisconnected();
     }

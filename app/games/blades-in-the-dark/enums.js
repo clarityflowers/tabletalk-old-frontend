@@ -1,6 +1,7 @@
 'use strict'
 
-export const ACTIONS = {
-  TALK: 0,
-  ROLL: 1
-};
+import { ACTIONS } from 'games/enums.js';
+
+ACTIONS.ROLL = 1;
+
+export { ACTIONS };
