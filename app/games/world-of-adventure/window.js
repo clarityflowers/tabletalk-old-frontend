@@ -33,7 +33,7 @@ class Window extends React.Component {
   render() {
     return (
       <div id='window'>
-        <OptionsMenu on={this.props.options} auth={this.props.auth}/>
+        <OptionsMenu route={this.props.route} on={this.props.options} auth={this.props.auth}/>
         <RollButton bonus={-1} onChat={this.props.onChat}/>
         <RollButton bonus={0} onChat={this.props.onChat}/>
         <RollButton bonus={1} onChat={this.props.onChat}/>

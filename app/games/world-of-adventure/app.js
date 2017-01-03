@@ -52,6 +52,7 @@ class App extends React.Component {
     let window = (
       <div id='world-of-adventure'>
         <Window onChat={this.handleChat.bind(this)}
+                route={this.props.route}
                 auth={this.props.auth}
                 options={true}/>
         <Chatbox events={this.props.events}

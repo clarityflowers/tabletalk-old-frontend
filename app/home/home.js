@@ -1,4 +1,5 @@
 import React from 'react';
+import { Match } from 'react-router';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Login from './login.js';
 import Games from './games.js';
@@ -12,27 +13,28 @@ class Home extends React.Component {
       animating: false
     }
   }
+  componentDidMount() {
+    this.redirect();
+  }
   componentWillReceiveProps(newProps) {
     if (newProps.auth.online != this.props.auth.online) {
       this.setState({animating: true});
+    }
+  }
+  componentDidUpdate() {
+    this.redirect();
+  }
+  redirect() {
+    if (this.props.route.isExact && this.props.auth.online) {
+      this.props.route.push('games').replace();
     }
   }
   doneAnimating() {
     this.setState({animating: false});
   }
   render() {
+    let content = null;
     let login = null;
-    let games = null;
-    let children = this.props.children;
-    if (children) {
-      children = React.Children.map(this.props.children,
-        (child) => React.cloneElement(child, {
-          auth:  this.props.auth,
-          options: this.props.options,
-          doneAnimating: this.doneAnimating.bind(this)
-        })
-      )
-    }
     if (!this.state.animating && !this.props.loading && !this.props.auth.online) {
       login = (
         <Login signIn={this.props.auth.signIn}
@@ -40,12 +42,24 @@ class Home extends React.Component {
                doneAnimating={this.doneAnimating.bind(this)}/>
       )
     }
+    let route = this.props.route;
+    if (!route.isExact) {
+      route = this.props.route.next();
+      if (route.name == 'games') {
+        content = (
+          <Games route={route}
+                 auth={this.props.auth}
+                 options={this.props.options}
+                 doneAnimating={this.doneAnimating.bind(this)}/>
+        );
+      }
+    }
     return (
       <div>
         <ReactTransitionGroup className='content' component='div' id='home'>
-          {children}
-          {login}
+          {content}
         </ReactTransitionGroup>
+        {login}
       </div>
     )
   }

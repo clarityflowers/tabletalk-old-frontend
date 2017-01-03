@@ -66,7 +66,8 @@ class App extends React.Component {
     ];
     let window = (
       <div id='blades-in-the-dark'>
-        <Window tabs={tabs}
+        <Window route={this.props.route} 
+                tabs={tabs}
                 activeTab={0}
                 onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}

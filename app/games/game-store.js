@@ -116,40 +116,32 @@ class GameStore extends React.Component {
       let gameType = GameTypes[this.props.game.type];
       if (gameType)
       {
+        let props = {
+          options: this.props.options,
+          route: this.props.route,
+          auth: this.props.auth,
+          game: this.props.game,
+          events: this.state.events,
+          players: this.state.players,
+          eventHash: this.eventHash,
+          playerHash: this.playerHash,
+          perform: this.state.perform,
+          logEvent: this.logEvent.bind(this),
+          processEvent: this.processEvent.bind(this),
+          onLoad: this.handleLoad.bind(this),
+          onConnect: this.handleConnect.bind(this),
+          onTalk: this.handleTalk.bind(this)
+        }
         if (gameType.name == 'World of Adventure')
         {
           result = (
-            <WorldOfAdventure options={this.props.options}
-                              auth={this.props.auth}
-                              game={this.props.game}
-                              events={this.state.events}
-                              players={this.state.players}
-                              eventHash={this.eventHash}
-                              playerHash={this.playerHash}
-                              logEvent={this.logEvent.bind(this)}
-                              processEvent={this.processEvent.bind(this)}
-                              onLoad={this.handleLoad.bind(this)}
-                              onConnect={this.handleConnect.bind(this)}
-                              perform={this.state.perform}
-                              onTalk={this.handleTalk.bind(this)}/>
+            <WorldOfAdventure {...props}/>
           )
         }
         else if (gameType.name == 'Blades in the Dark')
         {
           result = (
-            <BladesInTheDark  options={this.props.options}
-                              auth={this.props.auth}
-                              game={this.props.game}
-                              events={this.state.events}
-                              players={this.state.players}
-                              eventHash={this.eventHash}
-                              playerHash={this.playerHash}
-                              logEvent={this.logEvent.bind(this)}
-                              processEvent={this.processEvent.bind(this)}
-                              onLoad={this.handleLoad.bind(this)}
-                              onConnect={this.handleConnect.bind(this)}
-                              perform={this.state.perform}
-                              onTalk={this.handleTalk.bind(this)}/>
+            <BladesInTheDark  {...props}/>
           )
         }
       }

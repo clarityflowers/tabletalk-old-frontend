@@ -100,7 +100,7 @@ const Window = (props) => {
   }
   return (
     <div id='window'>
-      <OptionsMenu on={props.options} auth={props.auth}/>
+      <OptionsMenu route={this.props.route} on={props.options} auth={props.auth}/>
       {portal}
       <div id='tabs'>
         {tabs}
