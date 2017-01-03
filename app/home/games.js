@@ -2,10 +2,10 @@
 
 import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
-import { browserHistory } from 'react-router';
-import { Link } from 'react-router';
+import Link from 'utils/link.js';
 import cx from 'classnames';
 import GameWindow from 'games/game-window.js';
+import GameDetails from './game-details.js';
 import OptionsMenu from 'options/options-menu.js';
 import GameApi from 'api/game.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
@@ -35,8 +35,8 @@ class Games extends React.Component {
   }
   /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
-    if (this.props.params.game && this.props.params.game != 'new') {
-      this.preview(this.props.params.game);
+    if (this.selectedGame() && this.selectedGame() != 'new') {
+      this.preview(this.selectedGame());
     }
     else if (this.props.auth.online) {
       this.startPolling();
@@ -44,21 +44,21 @@ class Games extends React.Component {
   }
   componentWillReceiveProps(newProps) {
     if (
-      this.props.params.game == 'new' &&
-      newProps.params.game &&
-      newProps.params.game != 'new'
+      this.selectedGame() == 'new' &&
+      this.selectedGame(newProps) &&
+      this.selectedGame(newProps) != 'new'
     ) {
       this.load();
     }
-    let hasTarget = newProps.params.game == 'new' || this.hasGame(newProps.params.game);
-    let hadTarget = this.props.params.game == 'new' || this.hasTarget();
-    if (!this.props.params.game && newProps.params.game && !hasTarget) {
-      this.preview(newProps.params.game);
+    let hasTarget = this.selectedGame(newProps) == 'new' || this.hasGame(this.selectedGame(newProps));
+    let hadTarget = this.selectedGame() == 'new' || this.hasTarget();
+    if (!this.selectedGame() && this.selectedGame(newProps) && !hasTarget) {
+      this.preview(this.selectedGame(newProps));
     }
     if (hasTarget != hadTarget) {
       let games = this.state.games;
       if (hasTarget) {
-        let target = newProps.params.game;
+        let target = this.selectedGame(newProps);
         for (let i=games.length - 1; i >= 0; i--) {
           let game = games[i];
           if (game.id != target) {
@@ -71,7 +71,7 @@ class Games extends React.Component {
           if (this.refreshInterval == null) {
             this.startPolling();
           }
-          let target = this.props.params.game;
+          let target = this.selectedGame();
           for (let i=0; i < games.length; i++) {
             let game = games[i];
             if (!game.isVisible) {
@@ -100,8 +100,8 @@ class Games extends React.Component {
     }
     if (this.props.auth.online != newProps.auth.online) {
       if (newProps.auth.online) {
-        if (newProps.params.game && newProps.params.game != 'new') {
-          this.preview(newProps.params.game);
+        if (this.selectedGame(newProps) && this.selectedGame(newProps) != 'new') {
+          this.preview(this.selectedGame(newProps));
         }
         else {
           this.startPolling();
@@ -117,7 +117,7 @@ class Games extends React.Component {
       }
       else {
         this.stopPolling();
-        if (newProps.params.game) {
+        if (this.selectedGame(newProps)) {
           setTimeout(() => {
             this.props.doneAnimating();
           }, 700);
@@ -126,7 +126,7 @@ class Games extends React.Component {
           this.gamesDoneLeaving = 0;
           for (let i=this.state.games.length - 1; i >= 0; i--) {
             if (
-              this.state.games[i].id != this.props.params.game &&
+              this.state.games[i].id != this.selectedGame() &&
               this.state.games[i].isVisible
             ) {
               this.queue(this.state.games[i].id);
@@ -138,9 +138,9 @@ class Games extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.animation != prevState.animation ||
-        this.props.params.game != prevProps.params.game) {
+        this.selectedGame() != this.selectedGame(prevProps)) {
       if (this.state.animation == 1) {
-        if (this.hasTarget(this.props.params.game)) {
+        if (this.hasTarget(this.selectedGame())) {
           clearTimeout(this.timeout);
           this.timeout = setTimeout(() => {
             this.setState({animation: 2});
@@ -148,7 +148,7 @@ class Games extends React.Component {
         }
         else {
           let duration = 500;
-          clearTimeout(this.props.params.game);
+          clearTimeout(this.selectedGame());
           this.timeout = setTimeout(() => {
             this.setState({animation: 0});
           }, duration);
@@ -161,11 +161,11 @@ class Games extends React.Component {
     let prevNewGame = prevState.games[prevState.games.length -1];
     let newGame = this.state.games[this.state.games.length -1]
     if (
-      prevProps.params.game == 'new' && this.props.params.game == 'new' &&
+      this.selectedGame(prevProps) == 'new' && this.selectedGame() == 'new' &&
       prevNewGame && newGame &&
       prevNewGame.id == 'new' && newGame.id != 'new'
     ) {
-      browserHistory.replace(`/games/${newGame.id}`);
+      this.props.route.push(newGame.id).replace();
       setTimeout(() => {
         this.setState({creatingNewGame: false})
       }, 1000);
@@ -260,7 +260,7 @@ class Games extends React.Component {
         this.props.auth.signOut();
       }
       else {
-        browserHistory.push('/games');
+        this.props.route.go();
       }
     }
     GameApi.show({game: id}, this.updateFromPreview.bind(this), reject);
@@ -294,7 +294,7 @@ class Games extends React.Component {
         me: data[i].me,
         isVisible: false
       };
-      if (newGame.id == this.props.params.game) {
+      if (newGame.id == this.selectedGame()) {
         hasTarget = true;
       }
       let game = this.getGame(newGame.id);
@@ -302,8 +302,8 @@ class Games extends React.Component {
         newGame.isVisible = game.isVisible;
       }
       else {
-        if (this.props.params.game) {
-          if (newGame.id == this.props.params.game) {
+        if (this.selectedGame()) {
+          if (newGame.id == this.selectedGame()) {
             queue.push(newGame.id);
           }
         }
@@ -322,8 +322,8 @@ class Games extends React.Component {
     while (queue.length) {
       this.queue(queue.shift());
     }
-    if (this.props.params.game && !hasTarget) {
-      browserHistory.push('/games');
+    if (this.selectedGame() && !hasTarget) {
+      this.props.route.go();
       for (let i=0; i < games.length; i++) {
         this.queue(games[i].id);
       }
@@ -398,7 +398,7 @@ class Games extends React.Component {
         this.props.auth.signOut();
         setTimeout(() => {
           let games = this.state.games.slice(0);
-          let index = this.state.gameHash[this.props.params.game]
+          let index = this.state.gameHash[this.selectedGame()]
           let game = Object.assign({}, games[index]);
           let players = game.players.slice(0);
           players.pop();
@@ -408,9 +408,17 @@ class Games extends React.Component {
         }, 1000)
       }
     }
-    GameApi.join({player: player, game: this.props.params.game}, resolve, reject);
+    GameApi.join({player: player, game: this.selectedGame()}, resolve, reject);
   }
   /* ---------- utilities ----------------------------------------------------*/
+  selectedGame(props) {
+    if (props) {
+      return props.route.nextName();
+    }
+    else {
+      return this.props.route.nextName();
+    }
+  }
   getGame(id) {
     let game = null;
     if (this.hasGame(id)) {
@@ -425,28 +433,37 @@ class Games extends React.Component {
     );
   }
   hasTarget() {
-    let target = this.props.params.game;
+    let target = this.selectedGame();
     return this.hasGame(target);
   }
   game(i) {
     let game = this.state.games[i];
     return (
-      <Game name={game.name}
+      <Game route={this.props.route}
+            name={game.name}
             key={game.id}
             gameId={game.id}
             doneLeaving={this.onGameDoneLeaving.bind(this)}
-            isTarget={this.props.params.game == game.id}
+            isTarget={this.selectedGame() == game.id}
             type={game.type}
             transition={!this.state.creatingNewGame}>
       </Game>
     )
   }
+  isGo() {
+    let route = this.props.route;
+    if (!route.isExact) {
+      route = route.next();
+      if (!route.isExact) {
+        return (route.nextName() == 'go');
+      }
+    }
+    return false;
+  }
   /* ---------- handlers -----------------------------------------------------*/
   onGameDoneLeaving() {
     this.gamesDoneLeaving++;
     let finalValue = this.state.games.length;
-    console.log('LEAVING ' + this.gamesDoneLeaving + ' ' + this.state.games.length);
-    console.log(this.state.leaving);
     if (
       (
         this.state.leaving ||
@@ -517,14 +534,15 @@ class Games extends React.Component {
   }
   /* ---------- render -------------------------------------------------------*/
   render() {
+    let details = null;
     let games = [];
     let alternate = 1;
     if (this.state.animation == 2) {
       alternate = 2;
     }
     let hadTarget = this.hasTarget(this.state.target);
-    let hasTarget = this.hasTarget(this.props.params.game);
-    let target = hasTarget ? (this.props.params.game) : null;
+    let hasTarget = this.hasTarget(this.selectedGame());
+    let target = hasTarget ? (this.selectedGame()) : null;
     for (let i=0; i < this.state.games.length; i++) {
       let game = this.state.games[i];
       if (game.isVisible) {
@@ -535,26 +553,15 @@ class Games extends React.Component {
       'back',
       {
         off: (
-          !this.hasTarget(this.props.params.game) ||
+          !this.hasTarget(this.selectedGame()) ||
           this.state.loading ||
           this.state.leaving ||
           this.state.games.length == 0
         )
       }
     )
-    let children = this.props.children;
-    if (
-      this.state.loading ||
-      !this.props.auth.online ||
-      this.state.leaving || (
-        this.props.params.game != 'new' &&
-        !this.hasTarget()
-      )
-    ) {
-      children = null;
-    }
     let game = null;
-    let gameData = this.state.games[this.state.gameHash[this.props.params.game]];
+    let gameData = this.state.games[this.state.gameHash[this.selectedGame()]];
     if (gameData == null) {
       game = {
         id: 'new',
@@ -575,49 +582,64 @@ class Games extends React.Component {
         me: gameData.me
       }
     }
-    if (children) {
-      children = React.cloneElement(children, {
-        key: 'game',
-        auth: this.props.auth,
-        updateGame: this.handleUpdateGameDetails.bind(this),
-        game: game
-      });
+    if (
+      !this.state.loading &&
+      this.props.auth.online &&
+      !this.state.leaving && (
+        this.selectedGame() == 'new' ||
+        this.hasTarget()
+      )
+    ) {
+      details = (
+        <GameDetails route={this.props.route.next()}
+                     auth={this.props.auth}
+                     updateGame={this.handleUpdateGameDetails.bind(this)}
+                     game={game}/>
+      );
     }
-    let path = this.props.location.pathname.substring(1).split('/');
     let go = (
-      path.length >= 3 && path[2] == 'go' &&
+      this.isGo() &&
       this.props.auth.online &&
       this.state.loaded &&
       !this.state.entering &&
       !this.state.leaving &&
       game.me != null
-    ) ;
+    );
     let listContainerClassName = cx(
       'list-container',
       {
         off: go
       }
     );
+    let gameWindow = null;
+    if (go) {
+      gameWindow = (
+        <GameWindow route={this.props.route.next().next()}
+                    auth={this.props.auth}
+                    game={game}
+                    options={this.props.options}
+                    go={go}/>
+      );
+    }
     return (
       <div id='games'>
         <div className={listContainerClassName}>
-          <OptionsMenu on={this.props.options} auth={this.props.auth}/>
+          <OptionsMenu route={this.props.route}
+                       auth={this.props.auth}
+                       on={this.props.options}/> 
           <div className='list'>
             <HoverWiggle className={backClass}>
-              <Link to='/games' className='home-button'>&lt;</Link>
+              <Link route={this.props.route} className='home-button'>&lt;</Link>
             </HoverWiggle>
             <ReactTransitionGroup component='div'>
               {games}
             </ReactTransitionGroup>
             <ReactTransitionGroup component='div' className='children'>
-              {children}
+              {details}
             </ReactTransitionGroup>
           </div>
         </div>
-        <GameWindow game={game}
-                    options={this.props.options}
-                    auth={this.props.auth}
-                    go={go}/>
+        {gameWindow}
       </div>
     );
   }

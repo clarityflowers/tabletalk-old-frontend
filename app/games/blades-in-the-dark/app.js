@@ -49,6 +49,7 @@ class App extends React.Component {
     let window = (
       <div id='blades-in-the-dark'>
         <Window onChat={this.handleChat.bind(this)}
+                route={this.props.route}
                 auth={this.props.auth}
                 options={true}/>
         <Chatbox events={this.props.events}

@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'react-addons-update';
-import { browserHistory } from 'react-router';
+import {Match, Redirect } from 'react-router';
 import Home from './home/home.js';
 import GoogleApiLoader from 'utils/google-api-loader.js';
 import Auth from 'utils/auth.js';
@@ -30,9 +30,6 @@ class App extends React.Component {
   }
   updateAuth(apiAuth) {
     this.setState({apiAuth: apiAuth});
-    if (apiAuth.isLoggedIn && this.props.location.pathname == "/") {
-      browserHistory.push('/games');
-    }
   }
   onSignInChange(isSignedIn) {
     let googleAuth = this.state.googleAuth;
@@ -115,7 +112,6 @@ class App extends React.Component {
         }
       }
     }
-    let target = this.props.location.query.game;
     let auth = {
       name: this.state.apiAuth.user.name,
       online: this.state.apiAuth.isLoggedIn,
@@ -123,14 +119,12 @@ class App extends React.Component {
       signOut: this.signOut.bind(this)
     }
     let loading = !(this.state.googleAuth.loaded && this.state.apiAuth.loaded);
-    let children = this.props.children;
     return (
       <div id='app'>
-        <Home loading={loading}
+        <Home route={this.props.route}
+              loading={loading}
               auth={auth}
-              options={this.state.options}>
-          {children}
-        </Home>
+              options={this.state.options}/>
       </div>
     )
   }

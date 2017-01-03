@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
+import Link from 'utils/link.js';
 import cx from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import { GameTypes } from 'utils/enums.js';
@@ -13,11 +13,11 @@ class GameDetails extends React.Component {
     this.state = {
       off: true,
       loading: false,
-      show: this.props.params.game == 'new',
+      show: this.props.game.id == 'new',
       height: 100,
       formValue: '',
       showInput: false,
-      formMode: (this.props.params.game == 'new' && this.props.game.type != null),
+      formMode: (this.props.game.id == 'new' && this.props.game.type != null),
       joining: false
     };
     this.timeout = null;
@@ -185,7 +185,7 @@ class GameDetails extends React.Component {
         }
       }
       let button = (
-        <Link to={`/games/${this.props.params.game}/go`} className='enter'>Enter</Link>
+        <Link route={this.props.route.push('go')} className='enter'>Enter</Link>
       );
       if (game.me == null) {
         button = (

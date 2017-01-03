@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Link } from 'react-router';
+import Link from 'utils/link.js';
 import cx from 'classnames';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import { GameTypes } from 'utils/enums.js';
@@ -27,7 +27,7 @@ let GameIcon = (props) => {
   )
   if (!props.closed && !props.off && !props.dot) {
     content = (
-      <Link to={`/games/${props.gameId}`}>
+      <Link route={props.route.push(props.gameId)}>
         {content}
       </Link>
     )
@@ -85,7 +85,7 @@ class GameBox extends React.Component {
     let content = null;
     if (this.props.gameId != 'new') {
       content = (
-        <Link to={`/games/${this.props.gameId}`}>
+        <Link route={this.props.route.push(this.props.gameId)}>
           {box}
         </Link>
       );
@@ -193,10 +193,10 @@ class NewGame extends React.Component {
       }
     }
     let content = (
-      <Link to={"/games/new"}>
-      <Plus position={plusPosition}
-      entering={this.props.entering}
-      leaving={this.props.leaving}/>
+      <Link route={this.props.route.push('new')}>
+        <Plus position={plusPosition}
+              entering={this.props.entering}
+              leaving={this.props.leaving}/>
       </Link>
     )
     if (this.state.newGameStatus >= 2) {
@@ -217,8 +217,14 @@ class NewGame extends React.Component {
       }
       content = (
         <div>
-          <GameIcon position={iconPosition} gameClass={this.props.gameClass}/>
-          <GameBox gameId='new' position={boxPosition} name='New Game' transition={true}/>
+          <GameIcon route={this.props.route}
+                    position={iconPosition}
+                    gameClass={this.props.gameClass}/>
+          <GameBox route={this.props.route}
+                   gameId='new'
+                   position={boxPosition}
+                   name='New Game'
+                   transition={true}/>
         </div>
       )
     }
@@ -235,13 +241,15 @@ let OldGame = (props) => {
   let boxPosition = Math.max(props.position - 3, 0);
   return (
     <div className={getGameClassName(props.position)}>
-      <GameIcon position={iconPosition}
+      <GameIcon route={props.route}
+                position={iconPosition}
                 entering={props.entering}
                 leaving={props.leaving}
                 gameId={props.gameId}
                 gameClass={props.gameClass}
                 go={false}/>
-      <GameBox name={props.name}
+      <GameBox route={props.route}
+               name={props.name}
                position={boxPosition}
                gameId={props.gameId}
                transition={props.transition}/>
@@ -346,7 +354,8 @@ class Game extends React.Component {
     if (this.props.name == null) {
       let position = this.props.type == null ? this.state.position : 3;
       content = (
-        <NewGame position={position}
+        <NewGame route={this.props.route}
+                 position={position}
                  entering={this.state.entering}
                  leaving={this.state.leaving}
                  isTarget={this.props.isTarget}
@@ -355,7 +364,8 @@ class Game extends React.Component {
     }
     else {
       content = (
-        <OldGame name={this.props.name}
+        <OldGame route={this.props.route}
+                 name={this.props.name}
                  position={this.state.position}
                  entering={this.state.entering}
                  leaving={this.state.leaving}
