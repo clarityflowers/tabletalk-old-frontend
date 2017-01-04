@@ -1,96 +1,74 @@
 'use strict'
 
 import React from 'react';
-import { Link } from 'react-router';
+import cx from 'classnames';
+import DiceRoller from './dice-roller.js';
+import Character from './character/character.js';
+import Crew from './crew/crew.js';
+import Link from 'utils/link.js';
 import OptionsMenu from 'options/options-menu.js';
-import { HoverWiggle } from 'utils/hover-animate.js';
 import { TAB_TYPES } from './enums.js';
 import './window.scss';
 
-class RollButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  handleClick() {
-    this.props.onChat(`/roll ${this.props.level}`)
-  }
-  render () {
-    return (
-      <HoverWiggle>
-        <button className='roll' onClick={this.handleClick.bind(this)}>
-          {this.props.level}
-        </button>
-      </HoverWiggle>
-    )
-  }
-}
-
 const Tab = (props) => {
+  let className = cx(
+    'tab',
+    {
+      active: parseInt(props.route.nextName) == props.index
+    }
+  );
   return (
-    <Link to={`${props.baseUrl}/${props.index}`} className='tab'>
+    <Link route={props.route.push(props.index)} className={className}>
       {props.name}
     </Link>
   )
 }
 
-const Portal = (props) => {
-  return (
-    <div className='portal'>
-      <RollButton level={0} onChat={props.onChat}/>
-      <RollButton level={1} onChat={props.onChat}/>
-      <RollButton level={2} onChat={props.onChat}/>
-      <RollButton level={3} onChat={props.onChat}/>
-      <RollButton level={4} onChat={props.onChat}/>
-      <RollButton level={5} onChat={props.onChat}/>
-      <RollButton level={6} onChat={props.onChat}/>
-      <RollButton level={7} onChat={props.onChat}/>
-    </div>
-  );
-}
 
-const Character = (props) => {
-  return (
-    <Portal onChat={props.onChat}/>
-  )
-};
-
-const Crew = (props) => {
-  return (
-    <div>hello</div>
-  )
-};
 
 const Window = (props) => {
   let portal = null;
   let tabs = [];
   let baseUrl = `/games/${props.game.id}/go`;
+  let route = props.route;
+  let activeTab = null;
+  if (route.isExact) {
+    portal = (
+      <h1>Nothing</h1>
+    )
+  }
+  else {
+    route = route.next();
+    activeTab = parseInt(route.name);
+  }
   for (let i=0; i < props.tabs.length; i++) {
     let data = props.tabs[i];
     if (data.type == TAB_TYPES.CHARACTER) {
       let character = data.character;
       tabs.push(
-        <Tab name={character.name}
+        <Tab route={props.route}
+             name={character.names.name}
              key={`${data.type}_${character.id}`}
              baseUrl={baseUrl}
              index={i}/>
       );
-      if (i == props.activeTab) {
+      if (i == activeTab) {
         portal = (
           <Character character={character}
-                       onChat={props.onChat}/>
+                     onChat={props.onChat}/>
         )
       }
     }
     else if (data.type == TAB_TYPES.CREW) {
       let crew = data.crew;
       tabs.push(
-        <Tab name={crew.name}
+        <Tab route={props.route}
+             name={crew.name}
              key={`${data.type}_${crew.id}`}
              baseUrl={baseUrl}
              index={i}/>
       )
-      if (i == props.activeTab) {
+      if (i == activeTab) {
         portal = (
           <Crew crew={crew}
                 onChat={props.onChat}/>
@@ -100,7 +78,8 @@ const Window = (props) => {
   }
   return (
     <div id='window'>
-      <OptionsMenu route={this.props.route} on={props.options} auth={props.auth}/>
+      <OptionsMenu route={props.route} on={props.options} auth={props.auth}/>
+      <DiceRoller onChat={props.onChat}/>
       {portal}
       <div id='tabs'>
         {tabs}

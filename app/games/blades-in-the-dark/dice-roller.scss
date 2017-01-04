@@ -1,0 +1,65 @@
+@import 'games/blades-in-the-dark/colors.scss';
+
+#blades-in-the-dark #window div.dice-roller {
+  z-index: 30;
+  position: absolute;
+  left: .25em;
+  top: .25em;
+  background-color: fade-out($sun, .2);
+  border-radius: 2em;
+  box-shadow: -2px 2px 2px 1px fade-out(darken($stone, 50%), .6);
+  padding: 0 0 0 0;
+  div.dice {
+    display: flex;
+    flex-flow: row wrap;
+    div.container {
+      z-index: 9;
+
+      button {
+        cursor: pointer;
+        margin: .5em;
+        color: $sun;
+        background-color: $fire;
+        border: none;
+        font-family: 'League Spartan';
+        font-size: 1.25em;
+        padding: .2em .3em 0 .3em;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 1.5em;
+        overflow: show;
+        text-align: center;
+        left: 0;
+        z-index: 10;
+        &:hover {
+          background-color: $sand;
+          outline: none;
+        }
+        &:focus {
+          background-color: $mud;
+          outline: none;
+        }
+        &:active {
+          background-color: $sky;
+        }
+      }
+      button.toggle {
+        z-index: 11;
+        font-family: 'icomoon';
+        padding: 0 0 0 .05em;
+      }
+      position: relative;
+      width: 3.1em;
+      transition-property: width;
+      transition-duration: .3s;
+      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+    }
+  }
+  &.off {
+    div.dice {
+      div.container.roll {
+        width: 0;
+      }
+    }
+  }
+}

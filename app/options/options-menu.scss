@@ -116,6 +116,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+    pointer-events: none;
     .label-container {
       position: relative;
       overflow: hidden;
@@ -124,6 +125,7 @@
       float: right;
       padding-left: .5em;
       .label {
+        pointer-events: all;
         position: relative;
         white-space: nowrap;
         text-shadow: $text-shadow;

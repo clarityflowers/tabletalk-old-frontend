@@ -171,7 +171,11 @@ class OptionsMenu extends React.Component {
         text: this.props.auth.name,
         glyph: 'u',
         onClick: this.toggle.bind(this),
-        on: this.props.auth.online && this.props.on
+        on: (
+          this.state.open || (
+            this.props.showName && this.props.auth.online && this.props.on
+          )
+        )
       },
       {
         text: 'Signout',

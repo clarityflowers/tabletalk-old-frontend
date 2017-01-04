@@ -413,10 +413,10 @@ class Games extends React.Component {
   /* ---------- utilities ----------------------------------------------------*/
   selectedGame(props) {
     if (props) {
-      return props.route.nextName();
+      return props.route.nextName;
     }
     else {
-      return this.props.route.nextName();
+      return this.props.route.nextName;
     }
   }
   getGame(id) {
@@ -455,7 +455,7 @@ class Games extends React.Component {
     if (!route.isExact) {
       route = route.next();
       if (!route.isExact) {
-        return (route.nextName() == 'go');
+        return (route.nextName == 'go');
       }
     }
     return false;

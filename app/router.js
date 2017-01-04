@@ -11,6 +11,7 @@ class Router extends React.Component {
       path: []
     }
     this.history = null;
+    'test';
   }
   componentDidMount() {
     this.history = createBrowserHistory();

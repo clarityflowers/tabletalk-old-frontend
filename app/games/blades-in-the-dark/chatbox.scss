@@ -3,6 +3,8 @@
 #game-app #blades-in-the-dark #chat {
   background-color: $sun;
   color: $mud;
+  font-family: 'Raleway';
+  font-weight: 300;
   button#toggle {
     text-shadow: -1px 1px 1px fade-out($stone, .7);
     box-shadow: 0 1px 1px 1px fade-out($stone, .8);
@@ -12,6 +14,11 @@
       background-color: $sky;
       color: $sun;
     }
+  }
+  textarea#input {
+    font-size: 1em;
+    font-family: 'Raleway';
+    font-weight: 300;
   }
   div#body {
     div#conversation {
@@ -37,8 +44,9 @@
             }
           }
           div.number {
-            margin-top: .2em;
-            font-family: 'League Spartan';
+            margin-top: 0em;
+            font-family: 'Rajdhani';
+            font-weight: 700;
             font-size: 3em;
             text-align: center;
             color: $sky;

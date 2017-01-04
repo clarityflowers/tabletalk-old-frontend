@@ -50,9 +50,89 @@ class App extends React.Component {
       {
         type: TAB_TYPES.CHARACTER,
         character: {
-          name: 'Qarin',
           id: 13,
-          playerbook: 'Spider'
+          names: {
+            name: 'Qarin',
+            playbook: 'Spider',
+            alias: '???',
+          },
+          look: 'Pensive, impish',
+          heritage: 'Dusker/Slave',
+          background: 'UNDERWORLD/MILITARY- Stole and cheated way up to Acehood (Diamonds), then joined the Khans army and served as a Strategos, “Stuff Happened,” deserted and have returned home to Amar-Khadim.',
+          vice: 'Gambling',
+          strangeFriends: [
+            {
+              name: 'Neba Blood (Miss Blood)',
+              position: 'Jack of Hearts',
+              description: 'A former friend (former lover). Etoli.',
+              friend: false
+            },
+            {
+              name: 'Zopheea',
+              position: 'cat-burglar',
+              description: 'Narri/Whisper. Notorious. Hiding out in the Tin Quarter.',
+              friend: true
+            }
+          ],
+          stress: 2,
+          trauma: [],
+          healingUnlocked: false,
+          healingClock: 0,
+          harm: [[null, null],[null, null], null],
+          armor: {
+            normal: false,
+            heavy: false,
+            special: []
+          },
+          specialAbilities: [
+            {
+              name: 'Foresight',
+              description: 'Three times per score you can assist another rogue without paying stress. Tell us how you prepared them for the situation',
+            }
+          ],
+          stats: {
+            playbookXP: 0,
+            hunt: 0,
+            study: 1,
+            survey: 2,
+            tinker: 0,
+            finesse: 1,
+            prowl: 2,
+            skirmish: 0,
+            wreck: 0,
+            attune: 0,
+            command: 0,
+            consort: 2,
+            sway: 0,
+            insightXP: 0,
+            prowessXP: 5,
+            resolveXP: 2
+          },
+          coin: 1,
+          stash: 17,
+          load: 3,
+          items: [
+            {
+              name: 'A blade or two',
+              load: 1,
+              used: false
+            },
+            {
+              name: 'Throwing Knives',
+              load: 1,
+              used: true
+            },
+            {
+              name: 'A Large Weapon',
+              load: 2,
+              used: false
+            },
+            {
+              name: 'Fine cover identity',
+              load: 0,
+              used: true
+            }
+          ]
         }
       },
       {
@@ -66,9 +146,8 @@ class App extends React.Component {
     ];
     let window = (
       <div id='blades-in-the-dark'>
-        <Window route={this.props.route} 
+        <Window route={this.props.route}
                 tabs={tabs}
-                activeTab={0}
                 onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 game={this.props.game}

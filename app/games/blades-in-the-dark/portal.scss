@@ -1,0 +1,12 @@
+@import 'games/blades-in-the-dark/colors.scss';
+
+#blades-in-the-dark #window div.portal {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  padding: 1em 1em 3em 1em;
+  &::-webkit-scrollbar-thumb {
+    background: $sun;
+  }
+}

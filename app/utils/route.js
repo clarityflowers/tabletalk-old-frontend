@@ -5,15 +5,13 @@ class Route {
     this.historyPush = historyPush;
     this.historyReplace = historyReplace;
     this.name = path[location];
+    this.nextName = this.path[this.location + 1];
     this.isExact = location == path.length - 1;
   }
   next() {
     let path = this.path.slice(0);
     let location = this.location + 1;
     return new Route(path, location, this.historyPush, this.historyReplace);
-  }
-  nextName() {
-    return this.path[this.location + 1];
   }
   static makePathname(path) {
     let pathname = ''

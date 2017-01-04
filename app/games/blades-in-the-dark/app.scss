@@ -2,4 +2,18 @@
 
 #game-app > #blades-in-the-dark {
   background-color: $stone;
+
+  ::-webkit-scrollbar {
+    width: .25em;
+    padding: 1em;
+  }
+  ::-webkit-scrollbar-track {
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+    background: $stone;
+  }
 }
