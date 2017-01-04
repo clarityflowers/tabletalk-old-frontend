@@ -15,6 +15,7 @@ else {
   const webpack = require('webpack');
   const WebpackDevServer = require('webpack-dev-server');
   var config = require('./webpack.config.js');
+  var compiler = webpack(config);
 
   config.entry.unshift("webpack-dev-server/client?http://localhost:8080/")
   config.output.path = '/' + config.output.path;
@@ -26,6 +27,13 @@ else {
       historyApiFallback: true,
       hot: true
   })
+
+  server.use(require('webpack-dev-middleware')(compiler, {
+    publicPath: config.output.publicPath
+  }));
+
+  server.use(require('webpack-hot-middleware')(compiler));
+
   server.use(express.static('public'));
   server.listen(port, ip, function (err) {
       if(err) {

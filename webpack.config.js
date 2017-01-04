@@ -1,10 +1,15 @@
 const path = require('path');
+var webpack = require('webpack');
 const InlineEnvironmentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 
 module.exports = {
-  entry: ['./app/index.js'],
+  devtool: 'cheap-module-eval-source-map',
+  entry: [
+    'webpack-hot-middleware/client',
+    './app/index.js'
+  ],
   output: {
-    path: 'public',
+    path: '/public',
     filename: 'bundle.js',
     publicPath: '/'
   },
@@ -13,11 +18,11 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader?presets[]=es2015&presets[]=react'
+        loaders: ['react-hot', 'babel-loader?presets[]=es2015&presets[]=react']
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        loaders: ['react-hot', 'style', 'css?sourceMap', 'sass?sourceMap']
       },
       { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
@@ -31,6 +36,7 @@ module.exports = {
     includePaths: [ 'app' ]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new InlineEnvironmentVariablesPlugin([
       'GOOGLE_CLIENT_ID',
       'PORT',
