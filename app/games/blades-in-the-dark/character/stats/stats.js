@@ -89,10 +89,12 @@ Stat.propTypes = {
 
 
 const Stats = (props) => {
+  const { money, update } = props;
+  const updateMoney = (money) => { update({money}); }
   return (
     <div className='stats'>
     <div className='stat'>
-      <Money coin={props.coin} stash={props.stash}/>
+      <Money {...props.money} update={updateMoney.bind(this)}/>
       <Header name='Playbook' value={props.playbookXP} max={8}/>
     </div>
       <Stat name='Insight'
@@ -127,7 +129,9 @@ Stats.propTypes = {
   playbookXP: React.PropTypes.number.isRequired,
   insightXP: React.PropTypes.number.isRequired,
   prowessXP: React.PropTypes.number.isRequired,
-  resolveXP: React.PropTypes.number.isRequired
+  resolveXP: React.PropTypes.number.isRequired,
+  money: React.PropTypes.object.isRequired,
+  update: React.PropTypes.func.isRequired
 }
 
 export default Stats;

@@ -21,7 +21,7 @@
       background: $sky;
     }
     &:focus {
-      outline: 1px solid $fire;
+      outline: 1px solid lighten($fire, 10%);
     }
   }
 }

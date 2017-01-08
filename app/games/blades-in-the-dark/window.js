@@ -24,9 +24,11 @@ const Tab = (props) => {
   )
 }
 
-
-
 const Window = (props) => {
+  const { update } = props;
+  const updateCharacter = (character) => {
+    update({character});
+  }
   let portal = null;
   let tabs = [];
   let baseUrl = `/games/${props.game.id}/go`;
@@ -54,8 +56,9 @@ const Window = (props) => {
       );
       if (i == activeTab) {
         portal = (
-          <Character character={character}
-                     onChat={props.onChat}/>
+          <Character {...character}
+                     onChat={props.onChat}
+                     update={updateCharacter.bind(this)}/>
         )
       }
     }

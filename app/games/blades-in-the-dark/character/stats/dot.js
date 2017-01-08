@@ -23,7 +23,7 @@ Dot.propTypes = {
   checked: React.PropTypes.bool,
   disabled: React.PropTypes.bool,
   className: React.PropTypes.string,
-  onClick: React.PropTypes.func.isRequired
+  onClick: React.PropTypes.func
 }
 
 Dot.defaultProps = {

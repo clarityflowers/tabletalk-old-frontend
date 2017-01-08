@@ -36,24 +36,32 @@ Title.propTypes = {
   alias: React.PropTypes.string,
 }
 
-
-
 const Character = (props) => {
+  const { id, names, stats, health, equipment, onChat, update } = props;
+  const updateStats = (stats) => { update({id, stats}); }
   return (
-    <Portal onChat={props.onChat}>
+    <Portal onChat={onChat}>
       <div className='character'>
-        <Title {...props.character.names}/>
+        <Title {...names}/>
         <div className='row'>
-          <Stats {...props.character.stats}
-                 coin={props.character.coin}
-                 stash={props.character.stash}/>
-          <HealthAndItems {...props.character.health}
-                          load={props.character.load}
-                          items={props.character.items}/>
+          <Stats {...stats}
+                 update={updateStats.bind(this)}/>
+          <HealthAndItems {...health}
+                          equipment={equipment}/>
         </div>
       </div>
     </Portal>
   )
 };
+
+Character.propTypes = {
+  id: React.PropTypes.any.isRequired,
+  names: React.PropTypes.object.isRequired,
+  stats: React.PropTypes.object.isRequired,
+  health: React.PropTypes.object.isRequired,
+  equipment: React.PropTypes.object.isRequired,
+  onChat: React.PropTypes.func.isRequired,
+  update: React.PropTypes.func.isRequired,
+}
 
 export default Character;

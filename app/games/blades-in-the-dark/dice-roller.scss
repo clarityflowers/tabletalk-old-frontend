@@ -40,11 +40,12 @@
         left: 0;
         z-index: 10;
         &:focus {
-          background-color: lighten($fire, 20%      );
+          background-color: lighten($fire, 20%);
           outline: none;
         }
         &:hover {
           background-color: $sand;
+          outline: none;
         }
         &:active {
           background-color: $sky;

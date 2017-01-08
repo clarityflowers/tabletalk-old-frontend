@@ -1,55 +1,19 @@
 import React from 'react';
+import rUpdate from 'react-addons-update';
+
 import GameApp from 'games/common/app.js';
 import Chatbox from './chatbox.js';
 import Window from './window.js';
 import { ACTIONS, TAB_TYPES } from 'games/blades-in-the-dark/enums.js';
+
 import './app.scss';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-  }
-  processEvent(data) {
-    if (data.action == ACTIONS.ROLL) {
-      let event = {
-        id: data.id,
-        action: ACTIONS.ROLL,
-        player: this.props.playerHash[data.player],
-        level: data.bonus,
-        result: data.result,
-        date: new Date(data.timestamp)
-      }
-      this.props.logEvent(event);
-    }
-    else {
-      this.props.processEvent(data);
-    }
-  }
-  roll(level) {
-    this.props.perform("roll", {level: level, request: 0});
-  }
-  handleChat(message) {
-    message = message.trim();
-    if (message) {
-      if (message[0] == '/') {
-        let re = /\/r(oll)?(\s*?(\d+))?/g;
-        let result = re.exec(message);
-        if (result) {
-          let level = 0;
-          if (result.length == 4) {
-            level = parseInt(result[3]);
-          }
-          return this.roll(level);
-        }
-      }
-      this.props.onTalk(message);
-    }
-  }
-  render() {
-    let tabs = [
-      {
-        type: TAB_TYPES.CHARACTER,
-        character: {
+    this.state = {
+      characters: {
+        13: {
           id: 13,
           names: {
             name: 'Qarin',
@@ -77,9 +41,16 @@ class App extends React.Component {
           health: {
             stress: 2,
             trauma: ['Cold', 'Haunted'],
-            healingUnlocked: false,
-            healingClock: 0,
-            harm: [[null, null],[null, null], null],
+            healing: {
+              unlocked: false,
+              clock: 0,
+            },
+            harm: {
+              severe: '',
+              moderate1: '',
+              moderate2: '',
+              moderate3: '',
+            },
             armor: {
               normal: false,
               heavy: false,
@@ -108,34 +79,130 @@ class App extends React.Component {
             sway: 0,
             insightXP: 0,
             prowessXP: 5,
-            resolveXP: 2
+            resolveXP: 2,
+            money: {
+              coin: 1,
+              stash: 17,
+            },
           },
-          coin: 1,
-          stash: 17,
-          load: 3,
-          items: [
-            {
-              name: 'A blade or two',
-              load: 1,
-              used: false
-            },
-            {
-              name: 'Throwing Knives',
-              load: 1,
-              used: true
-            },
-            {
-              name: 'A Large Weapon',
-              load: 2,
-              used: false
-            },
-            {
-              name: 'Fine cover identity',
-              load: 0,
-              used: true
-            }
-          ]
+          equipment: {
+            load: 3,
+            items: [
+              {
+                name: 'A blade or two',
+                load: 1,
+                used: false
+              },
+              {
+                name: 'Throwing Knives',
+                load: 1,
+                used: true
+              },
+              {
+                name: 'A Large Weapon',
+                load: 2,
+                used: false
+              },
+              {
+                name: 'Fine cover identity',
+                load: 0,
+                used: true
+              }
+            ]
+          }
         }
+      }
+    }
+  }
+  processUpdate(data) {
+    const copy = (base, mod) => {
+      let result = mod;
+      console.log(base);
+      if (typeof base == "object") {
+        result = {};
+        const props = Object.keys(base);
+        for (let i=0; i < props.length; i++) {
+          const prop = props[i];
+          const modValue = mod[prop];
+          if (prop in mod) {
+            const value = base[prop];
+            result[prop] = copy(value, modValue);
+          }
+          else {
+            result[prop] = base[prop];
+          }
+        }
+      }
+      return result;
+    }
+    if (data) {
+      const { character } = data;
+      if (character) {
+        const id = character.id;
+        delete character.id;
+        let base = this.state.characters[id];
+        let x = {};
+        let result = copy(base, character);
+        console.log(result);
+        const characters = rUpdate(this.state.characters, {
+          [id]: {$set: result}
+        });
+        this.setState({characters});
+      }
+    }
+  }
+  processEvent(event) {
+    console.log(this.props.playerHash);
+    if (event.action == ACTIONS.ROLL) {
+      let roll = {
+        id: event.id,
+        action: ACTIONS.ROLL,
+        player: this.props.playerHash[event.player],
+        level: event.bonus,
+        result: event.result,
+        date: new Date(event.timestamp)
+      }
+      this.props.logEvent(roll);
+    }
+    if (event.action == ACTIONS.UPDATE) {
+      this.processUpdate(event.data);
+    }
+    else {
+      this.props.processEvent(event);
+    }
+  }
+  roll(level) {
+    this.props.perform("roll", {level: level, request: 0});
+  }
+  handleChat(message) {
+    message = message.trim();
+    if (message) {
+      if (message[0] == '/') {
+        let re = /\/r(oll)?(\s*?(\d+))?/g;
+        let result = re.exec(message);
+        if (result) {
+          let level = 0;
+          if (result.length == 4) {
+            level = parseInt(result[3]);
+          }
+          return this.roll(level);
+        }
+      }
+      this.props.onTalk(message);
+    }
+  }
+  update(data) {
+    const event = {
+      action: ACTIONS.UPDATE,
+      data: data
+    }
+    this.processEvent(event);
+  }
+  render() {
+    let tabs = [
+      {
+        type: TAB_TYPES.CHARACTER,
+        character: this.state.characters[13]
       },
       {
         type: TAB_TYPES.CREW,
@@ -153,7 +220,8 @@ class App extends React.Component {
                 onChat={this.handleChat.bind(this)}
                 auth={this.props.auth}
                 game={this.props.game}
-                options={true}/>
+                options={true}
+                update={this.update.bind(this)}/>
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}
                  onChat={this.handleChat.bind(this)}/>

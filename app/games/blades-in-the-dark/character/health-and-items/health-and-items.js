@@ -18,12 +18,10 @@ const HealthAndItems = (props) => {
 HealthAndItems.propTypes = {
   stress: React.PropTypes.number.isRequired,
   trauma: React.PropTypes.array.isRequired,
-  healingUnlocked: React.PropTypes.bool.isRequired,
-  healingClock: React.PropTypes.number.isRequired,
+  healing: React.PropTypes.object.isRequired,
   harm: React.PropTypes.object.isRequired,
   armor: React.PropTypes.object.isRequired,
-  load: React.PropTypes.number.isRequired,
-  items: React.PropTypes.array.isRequired
+  equipment: React.PropTypes.object.isRequired
 }
 
 export default HealthAndItems;

@@ -110,17 +110,13 @@ div.stress-and-trauma > div.tickbars {
     }
     &.trauma-list {
       padding: .75em 0 0 .4em;
-      font-size: .8em;
       flex: 100 1 0;
-      display: flex;
-      flex-flow: row nowrap;
       justify-content: flex-start;
-      align-items: center;
       z-index: 2;
+      height: auto;
       button.trauma {
         color: $sky;
         text-shadow: $text-shadow;
-        margin: 0 .5em;
         &:not(.disabled) {
           &:focus {
             color: lighten($sky, 20%);
@@ -132,16 +128,6 @@ div.stress-and-trauma > div.tickbars {
             color: lighten($fire, 30%);
           }
         }
-      }
-      button.plus {
-        margin: .2em -.2em .4em .2em;
-        font: $icon;
-        font-size: .75em;
-        color: $sun;
-        background: $sky;
-        border-radius: 2em;
-        padding: .4em;
-        box-shadow: $shadow;
       }
     }
   }
