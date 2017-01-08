@@ -1,9 +1,5 @@
 #blades-in-the-dark button.check {
-  border: none;
-  background: none;
-  margin: 0;
-  padding: 0;
-  &:focus {
-    outline: none;
+  &:not(:disabled) {
+    cursor: pointer;
   }
 }

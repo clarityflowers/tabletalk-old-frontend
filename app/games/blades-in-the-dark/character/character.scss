@@ -1,6 +1,10 @@
 @import 'games/blades-in-the-dark/colors.scss';
 
 #blades-in-the-dark #window div.portal div.character {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
   div.title {
     font-size: 2em;
     font-family: 'Rajdhani';
@@ -22,6 +26,16 @@
     }
     div.alias {
       color: $fire;
+    }
+  }
+  > div.row {
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    @media only screen and (max-width: 950px) {
+      flex-wrap: wrap;
     }
   }
 }

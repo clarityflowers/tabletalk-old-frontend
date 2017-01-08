@@ -1,0 +1,42 @@
+@import 'games/blades-in-the-dark/colors.scss';
+
+#blades-in-the-dark button.tick {
+  font-size: 1em;
+  &.checked svg polygon {
+    fill: $sun;
+  }
+  &:not(:disabled) {
+    &.checked {
+      &:focus svg polygon {
+        fill: lighten($fire, 30%);
+      }
+      &:hover svg polygon {
+        fill: $fire;
+      }
+      &:active svg polygon {
+        fill: lighten($fire, 30%);
+      }
+    }
+    &:focus svg polygon {
+      stroke: lighten($fire, 30%);
+    }
+    &:hover svg polygon {
+      fill: darken($fire, 20%);
+    }
+    &:active svg polygon {
+      fill: lighten($fire, 30%);
+    }
+  }
+  svg {
+    overflow: visible;
+    margin: .07em .06em 0.1em 0.044em;
+    polygon {
+      stroke: $sun;
+      fill: darken($stone, 10%);
+      stroke-width: 10;
+    }
+    -webkit-filter: drop-shadow($text-shadow);
+    filter: drop-shadow($text-shadow);
+    -webkit-svg-shadow: $text-shadow;
+  }
+}

@@ -1,7 +1,9 @@
 @import './colors.scss';
+@import 'games/blades-in-the-dark/fonts.scss';
 
-#game-app > #blades-in-the-dark {
+#blades-in-the-dark {
   background-color: $stone;
+  font: $h1;
 
   ::-webkit-scrollbar {
     width: .25em;
@@ -15,5 +17,15 @@
     -webkit-border-radius: 1em;
     border-radius: 1em;
     background: $stone;
+  }
+  button {
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    font: $h1;
+    &:focus {
+      outline: none;
+    }
   }
 }

@@ -1,0 +1,7 @@
+@import 'games/blades-in-the-dark/colors.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-items
+div.stress-and-trauma {
+  display: flex;
+  flex-flow: column nowrap;
+}

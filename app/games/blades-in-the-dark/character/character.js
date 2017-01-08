@@ -43,12 +43,14 @@ const Character = (props) => {
     <Portal onChat={props.onChat}>
       <div className='character'>
         <Title {...props.character.names}/>
-        <Stats {...props.character.stats}
-               coin={props.character.coin}
-               stash={props.character.stash}/>
-        <HealthAndItems {...props.character.health}
-                        load={props.character.load}
-                        items={props.character.items}/>
+        <div className='row'>
+          <Stats {...props.character.stats}
+                 coin={props.character.coin}
+                 stash={props.character.stash}/>
+          <HealthAndItems {...props.character.health}
+                          load={props.character.load}
+                          items={props.character.items}/>
+        </div>
       </div>
     </Portal>
   )

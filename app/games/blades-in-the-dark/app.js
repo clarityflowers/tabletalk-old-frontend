@@ -76,7 +76,7 @@ class App extends React.Component {
           ],
           health: {
             stress: 2,
-            trauma: [],
+            trauma: ['Cold', 'Haunted'],
             healingUnlocked: false,
             healingClock: 0,
             harm: [[null, null],[null, null], null],
