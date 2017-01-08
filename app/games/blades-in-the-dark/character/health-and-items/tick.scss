@@ -12,6 +12,7 @@
       }
       &:hover svg polygon {
         fill: $fire;
+        stroke: $fire;
       }
       &:active svg polygon {
         fill: lighten($fire, 30%);
