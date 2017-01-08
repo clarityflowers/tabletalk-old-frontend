@@ -12,9 +12,18 @@
   div.dice {
     display: flex;
     flex-flow: row wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: left;
+    // padding-left :.5em;
     div.container {
       z-index: 9;
-
+      position: relative;
+      width: 2.5em;
+      transition-property: width;
+      transition-duration: .3s;
+      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
+      font-size: 1.25em;
       button {
         cursor: pointer;
         margin: .5em;
@@ -22,7 +31,6 @@
         background-color: $fire;
         border: none;
         font-family: 'League Spartan';
-        font-size: 1.25em;
         padding: .2em .3em 0 .3em;
         width: 1.5em;
         height: 1.5em;
@@ -31,28 +39,26 @@
         text-align: center;
         left: 0;
         z-index: 10;
-        &:hover {
-          background-color: $sand;
+        &:focus {
+          background-color: lighten($fire, 20%      );
           outline: none;
         }
-        &:focus {
-          background-color: $mud;
-          outline: none;
+        &:hover {
+          background-color: $sand;
         }
         &:active {
           background-color: $sky;
         }
+        &.toggle {
+          z-index: 11;
+          font-family: 'icomoon';
+          padding: 0 0 0 .05em;
+          width: 2em;
+          height: 2em;
+          margin: .25em;
+        }
+        &.roll {}
       }
-      button.toggle {
-        z-index: 11;
-        font-family: 'icomoon';
-        padding: 0 0 0 .05em;
-      }
-      position: relative;
-      width: 3.1em;
-      transition-property: width;
-      transition-duration: .3s;
-      transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
     }
   }
   &.off {
