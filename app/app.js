@@ -1,6 +1,5 @@
 import React from 'react';
 import update from 'react-addons-update';
-import {Match, Redirect } from 'react-router';
 import Home from './home/home.js';
 import GoogleApiLoader from 'utils/google-api-loader.js';
 import Auth from 'utils/auth.js';

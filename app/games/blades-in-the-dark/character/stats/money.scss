@@ -1,0 +1,54 @@
+@import 'games/blades-in-the-dark/colors.scss';
+
+#blades-in-the-dark #window div.portal div.character div.stats div.stat div.money {
+  margin-bottom: 1em;
+  font-size: .8em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  div.column {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    div.row {
+      height: 1em;
+      display: flex;
+      flex-flow: row nowrap;
+      &.stash {
+        align-self: flex-end;
+        // padding-right: 1em;
+      }
+      &.coin {
+        padding-right: .7em;
+      }
+      div.label {
+        font-size: .8em;
+        text-shadow: $text-shadow;
+        &.stash {
+          align-self: flex-end;
+          padding: 0 .25em 0 0;
+          color: $sky;
+        }
+        &.coin {
+          color: $sand;
+        }
+      }
+    }
+    &.stash {
+      button.check.checkbox:not(.end) {
+        background-color: darken($stone, 5%);
+        &.checked {
+          background-color: $sky;
+        }
+      }
+    }
+    button.check.checkbox {
+      background-color: lighten($stone, 10%);
+      &.checked {
+        background-color: $sand;
+      }
+    }
+    div.checkbox.checked {
+    }
+  }
+}

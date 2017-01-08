@@ -1,5 +1,4 @@
 import React from 'react';
-import { Match } from 'react-router';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Login from './login.js';
 import Games from './games.js';

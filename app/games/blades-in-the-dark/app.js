@@ -74,15 +74,17 @@ class App extends React.Component {
               friend: true
             }
           ],
-          stress: 2,
-          trauma: [],
-          healingUnlocked: false,
-          healingClock: 0,
-          harm: [[null, null],[null, null], null],
-          armor: {
-            normal: false,
-            heavy: false,
-            special: []
+          health: {
+            stress: 2,
+            trauma: [],
+            healingUnlocked: false,
+            healingClock: 0,
+            harm: [[null, null],[null, null], null],
+            armor: {
+              normal: false,
+              heavy: false,
+              special: []
+            },
           },
           specialAbilities: [
             {

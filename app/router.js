@@ -1,6 +1,5 @@
 import React from 'react';
 import { createBrowserHistory } from 'history';
-import { BrowserRouter } from 'react-router';
 import App from './app.js';
 import Route from 'utils/route.js';
 
