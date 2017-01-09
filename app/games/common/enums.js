@@ -1,5 +1,6 @@
 let ACTIONS = {
-  TALK: 0
+  TALK: 'talk',
+  JOIN: 'join'
 };
 
 export { ACTIONS };

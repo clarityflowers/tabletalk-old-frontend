@@ -41,7 +41,6 @@ const CheckArray = (props) => {
     highlight,
     checkedProps, uncheckedProps
   } = props;
-  console.log(uncheckedProps);
   const Node = node;
   let array = [];
   let i=0;

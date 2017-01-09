@@ -112,12 +112,14 @@ class App extends React.Component {
           }
         }
       }
-    }
+    };
+    this.updates = {};
   }
-  processUpdate(data) {
+  processUpdate(data, key) {
+    if (key in this.updates) { return; }
+    this.updates[key] = true;
     const copy = (base, mod) => {
       let result = mod;
-      console.log(base);
       if (typeof base == "object") {
         result = {};
         const props = Object.keys(base);
@@ -143,7 +145,6 @@ class App extends React.Component {
         let base = this.state.characters[id];
         let x = {};
         let result = copy(base, character);
-        console.log(result);
         const characters = rUpdate(this.state.characters, {
           [id]: {$set: result}
         });
@@ -152,12 +153,12 @@ class App extends React.Component {
     }
   }
   processEvent(event) {
-    console.log(this.props.playerHash);
+    console.log(event);
     if (event.action == ACTIONS.ROLL) {
       let roll = {
         id: event.id,
         action: ACTIONS.ROLL,
-        player: this.props.playerHash[event.player],
+        player: this.props.players[event.player],
         level: event.bonus,
         result: event.result,
         date: new Date(event.timestamp)
@@ -165,14 +166,14 @@ class App extends React.Component {
       this.props.logEvent(roll);
     }
     if (event.action == ACTIONS.UPDATE) {
-      this.processUpdate(event.data);
+      this.processUpdate(event.data, event.key);
     }
     else {
       this.props.processEvent(event);
     }
   }
   roll(level) {
-    this.props.perform("roll", {level: level, request: 0});
+    this.props.perform(ACTIONS.ROLL, {level: level, request: 0});
   }
   handleChat(message) {
     message = message.trim();
@@ -192,11 +193,10 @@ class App extends React.Component {
     }
   }
   update(data) {
-    const event = {
-      action: ACTIONS.UPDATE,
-      data: data
-    }
-    this.processEvent(event);
+    console.log('UPDATE', data);
+    const key = this.props.perform(ACTIONS.UPDATE, {data});
+    this.processUpdate(data, key);
+
   }
   render() {
     let tabs = [

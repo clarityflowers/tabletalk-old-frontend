@@ -37,11 +37,10 @@ class App extends React.Component {
   }
   /* ---------- load ---------------------------------------------------------*/
   load(data) {
-    let players = data.players;
+    const { players, me, chats } = data;
     if (players) {
-      this.props.onLoad(players);
+      this.props.onLoad({players, me});
     }
-    let chats = data.chats;
     if (chats) {
       for (let i=0; i < chats.length; i++) {
         this.props.processEvent(chats[i]);

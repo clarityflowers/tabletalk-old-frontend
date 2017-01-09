@@ -97,7 +97,7 @@ class Money extends React.Component {
     this.setState({[key]: value});
   }
   handleMouseOver(key) {
-    return () => { console.log(key); this.setState({hover: key}); };
+    return () => { this.setState({hover: key}); };
   }
   handleMouseLeave(key) {
     return () => {
@@ -111,7 +111,6 @@ class Money extends React.Component {
     let stashRows = [];
     let coinHighlight = 0;
     let stashHighlight = 0;
-    console.log(this.state.hover);
     if (this.state.hover == HOVER.INCREMENT_COIN) {
       coinHighlight += 1;
     }

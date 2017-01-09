@@ -2,8 +2,8 @@
 
 import { ACTIONS } from 'games/common/enums.js';
 
-ACTIONS.ROLL = 1;
-ACTIONS.UPDATE = 2;
+ACTIONS.ROLL = 'roll';
+ACTIONS.UPDATE = 'update';
 
 const TAB_TYPES = {
   CHARACTER: 0,
