@@ -9,30 +9,37 @@ import HealthAndItems from './health-and-items/health-and-items.js';
 import './character.scss';
 
 const Title = (props) => {
-  let alias = null;
-  if (props.alias) {
-    alias = (
+  const { name, playbook, alias } = props;
+  let aliasDiv = null;
+  let playbookDiv = null;
+  if (alias) {
+    aliasDiv = (
       <div className='alias'>
-        "{props.alias}"
+        "{alias}"
       </div>
-    )
+    );
+  }
+  if (playbook) {
+    playbookDiv = (
+      <div className='playbook'>
+        the {props.playbook}
+      </div>
+    );
   }
   return (
     <div className='title'>
       <div className='name'>
-        {props.name}
+        {name}
       </div>
-      <div className='playbook'>
-        the {props.playbook}
-      </div>
-      {alias}
+      {playbookDiv}
+      {aliasDiv}
     </div>
   );
 }
 
 Title.propTypes = {
   name: React.PropTypes.string.isRequired,
-  playbook: React.PropTypes.string.isRequired,
+  playbook: React.PropTypes.string,
   alias: React.PropTypes.string,
 }
 

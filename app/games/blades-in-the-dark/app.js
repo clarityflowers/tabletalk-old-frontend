@@ -12,107 +12,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      characters: {
-        13: {
-          id: 13,
-          names: {
-            name: 'Qarin',
-            playbook: 'Spider',
-            alias: '???',
-          },
-          look: 'Pensive, impish',
-          heritage: 'Dusker/Slave',
-          background: 'UNDERWORLD/MILITARY- Stole and cheated way up to Acehood (Diamonds), then joined the Khans army and served as a Strategos, “Stuff Happened,” deserted and have returned home to Amar-Khadim.',
-          vice: 'Gambling',
-          strangeFriends: [
-            {
-              name: 'Neba Blood (Miss Blood)',
-              position: 'Jack of Hearts',
-              description: 'A former friend (former lover). Etoli.',
-              friend: false
-            },
-            {
-              name: 'Zopheea',
-              position: 'cat-burglar',
-              description: 'Narri/Whisper. Notorious. Hiding out in the Tin Quarter.',
-              friend: true
-            }
-          ],
-          health: {
-            stress: 2,
-            trauma: ['Cold', 'Haunted'],
-            healing: {
-              unlocked: false,
-              clock: 0,
-            },
-            harm: {
-              severe: '',
-              moderate1: '',
-              moderate2: '',
-              moderate3: '',
-            },
-            armor: {
-              normal: false,
-              heavy: false,
-              special: []
-            },
-          },
-          specialAbilities: [
-            {
-              name: 'Foresight',
-              description: 'Three times per score you can assist another rogue without paying stress. Tell us how you prepared them for the situation',
-            }
-          ],
-          stats: {
-            playbookXP: 0,
-            hunt: 0,
-            study: 1,
-            survey: 2,
-            tinker: 0,
-            finesse: 1,
-            prowl: 2,
-            skirmish: 0,
-            wreck: 0,
-            attune: 0,
-            command: 0,
-            consort: 2,
-            sway: 0,
-            insightXP: 0,
-            prowessXP: 5,
-            resolveXP: 2,
-            money: {
-              coin: 1,
-              stash: 17,
-            },
-          },
-          equipment: {
-            load: 3,
-            items: [
-              {
-                name: 'A blade or two',
-                load: 1,
-                used: false
-              },
-              {
-                name: 'Throwing Knives',
-                load: 1,
-                used: true
-              },
-              {
-                name: 'A Large Weapon',
-                load: 2,
-                used: false
-              },
-              {
-                name: 'Fine cover identity',
-                load: 0,
-                used: true
-              }
-            ]
-          }
-        }
-      }
-    };
+      characters: {}
+    }
     this.updates = {};
   }
   processUpdate(data, key) {
@@ -192,18 +93,28 @@ class App extends React.Component {
       this.props.onTalk(message);
     }
   }
+  handleLoad(args) {
+    const { data } = args
+    if (data) {
+      const { characters } = data;
+      if (characters) {
+        const ids = Object.keys(characters);
+        let newCharacters = rUpdate(this.state.characters, {
+          $merge: characters
+        });
+        this.setState({characters: newCharacters});
+      }
+    }
+    this.props.onLoad(args);
+  }
   update(data) {
     console.log('UPDATE', data);
     const key = this.props.perform(ACTIONS.UPDATE, {data});
     this.processUpdate(data, key);
-
   }
+
   render() {
     let tabs = [
-      {
-        type: TAB_TYPES.CHARACTER,
-        character: this.state.characters[13]
-      },
       {
         type: TAB_TYPES.CREW,
         crew: {
@@ -213,6 +124,12 @@ class App extends React.Component {
         }
       }
     ];
+    if (this.state.characters[1]) {
+      tabs.push({
+        type: TAB_TYPES.CHARACTER,
+        character: this.state.characters[1]
+      })
+    }
     let window = (
       <div id='blades-in-the-dark'>
         <Window route={this.props.route}
@@ -232,7 +149,7 @@ class App extends React.Component {
                game={this.props.game}
                window={window}
                onConnect={this.props.onConnect}
-               onLoad={this.props.onLoad}
+               onLoad={this.handleLoad.bind(this)}
                processEvent={this.processEvent.bind(this)}/>
     );
   }

@@ -36,10 +36,10 @@ class App extends React.Component {
     this.props.processEvent(data);
   }
   /* ---------- load ---------------------------------------------------------*/
-  load(data) {
-    const { players, me, chats } = data;
+  load(args) {
+    const { players, me, chats, data } = args;
     if (players) {
-      this.props.onLoad({players, me});
+      this.props.onLoad({players, me, data});
     }
     if (chats) {
       for (let i=0; i < chats.length; i++) {

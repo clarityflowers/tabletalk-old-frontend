@@ -22,6 +22,7 @@ const StashRow = (props) => {
       ) ,
     }
   )
+  const checkboxProps = checked ? checkedProps : uncheckedProps
   return (
     <div className='row'>
       <CheckboxArray value={value}
@@ -34,7 +35,8 @@ const StashRow = (props) => {
                      uncheckedProps={uncheckedProps}/>
       <Checkbox checked={checked}
                 className={className}
-                onClick={checked ? decrement : increment}/>
+                onClick={checked ? decrement : increment}
+                {...checkboxProps}/>
     </div>
   );
 }
