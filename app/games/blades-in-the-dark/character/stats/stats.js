@@ -3,18 +3,24 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { makeDotArray, Dot } from './dot.js';
+import { Dot, DotArray } from './dot.js';
 import Money from './money.js';
 
 import './stats.scss';
 
 const Action = (props) => {
-  let dots = makeDotArray({value: props.value - 1, max: 3, disabled: true});
+  const { name, value, disabled } = props;
+  // let dots = makeDotArray({value: props.value - 1, max: 3, disabled: true});
   return (
     <div className='action'>
-      {dots}
+      <DotArray value={value}
+                offset={1}
+                length={3}
+                disabled={false}
+                onClick={() => {}}
+                onHover={() => {}}/>
       <div className='name'>
-        {props.name}
+        {name[0].toUpperCase() + name.substring(1)}
       </div>
     </div>
   )
@@ -30,56 +36,104 @@ Action.defaultProps = {
   disabled: false
 }
 
-const Header = (props) => {
-  return (
-    <div className='header'>
-      <div className='name'>
-        {props.name.toUpperCase()}
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hover: null
+    }
+  }
+  getChange(who) {
+    const { value } = this.props;
+    let change = 0;
+    if (who != null) {
+      if (who > value) {
+        change = 1;
+      }
+      else {
+        change = -1;
+      }
+    }
+    return change;
+  }
+  handleHover(value) {
+    this.setState({hover: value})
+    console.log('HOVER', value);
+  }
+  handleClick(click) {
+    this.props.update(this.props.value + this.getChange(click));
+    console.log('CLICK', click);
+  }
+  render() {
+    const { name, value, length, disabled, update } = this.props;
+    const { hover } = this.state;
+    const highlight = this.getChange(hover);
+    return (
+      <div className='header'>
+        <div className='name'>
+          {name.toUpperCase()}
+        </div>
+        <DotArray className='dots'
+                  value={value}
+                  length={length}
+                  disabled={disabled}
+                  highlight={highlight}
+                  onHover={this.handleHover.bind(this)}
+                  onClick={this.handleClick.bind(this)}/>
       </div>
-      <div className='dots'>
-        {makeDotArray({value: props.value, max: props.max, disabled: props.disabled})}
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
 Header.propTypes = {
   name: React.PropTypes.string.isRequired,
   value: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
-  active: React.PropTypes.bool.isRequired
+  length: React.PropTypes.number.isRequired,
+  update: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool
 }
 
 Header.defaultProps = {
-  active: false
+  disabled: false
 }
 
 const Stat = (props) => {
-  const { disabled } = props;
-  let actions = [];
+  const { disabled, xp, name, update } = props;
+  const updateXP = (xp) => { update({xp}); };
+  let actions = Object.assign({}, props);
+  delete actions.disabled;
+  delete actions.xp;
+  delete actions.name;
+  delete actions.update;
+  let actionDivs = [];
   let dots = [];
-  for (let i=0; i < props.actions.length; i++) {
-    actions.push(
+  const names = Object.keys(actions);
+  for (let i=0; i < names.length; i++) {
+    const name = names[i];
+    const value = actions[name]
+    const updateAction = (value) => { update({[name]: value}); };
+    actionDivs.push(
       <Action key={i}
               disabled={disabled}
-              name={props.actions[i]}
-              value={props.values[i]}/>
+              name={name}
+              value={value}/>
     );
     dots.push(
       <Dot key={i}
-           checked={props.values[i] > 0}
+           checked={value > 0}
            disabled={true}/>
     )
   }
   return (
     <div className='stat'>
-      <Header name={props.name} disabled={disabled} value={props.xp} max={6}/>
+      <Header name={name} disabled={disabled} value={xp} length={6}
+              update={updateXP}/>
       <div className='actions'>
         <div className='first'>
           {dots}
         </div>
         <div className='rest'>
-          {actions}
+          {actionDivs}
         </div>
       </div>
     </div>
@@ -89,9 +143,8 @@ const Stat = (props) => {
 Stat.propTypes = {
   name: React.PropTypes.string.isRequired,
   xp: React.PropTypes.number.isRequired,
-  actions: React.PropTypes.array.isRequired,
-  values: React.PropTypes.array.isRequired,
-  disabled: React.PropTypes.bool
+  disabled: React.PropTypes.bool,
+  update: React.PropTypes.func
 }
 
 Stat.defaultProps = {
@@ -101,50 +154,40 @@ Stat.defaultProps = {
 
 
 const Stats = (props) => {
-  const { money, update, disabled } = props;
-  const updateMoney = (money) => { update({money}); }
+  const { money, update, disabled, insight, prowess, resolve } = props;
+  const updateInsight = (insight) => { update({insight}); };
+  const updateProwess = (prowess) => { update({prowess}); };
+  const updateResolve = (resolve) => { update({resolve}); };
+  const updateMoney = (money) => { update({money}); };
+  const updateXP = (xp) => { update({xp}); };
   return (
     <div className='stats'>
     <div className='stat'>
-      <Money {...props.money} disabled={disabled} update={updateMoney.bind(this)}/>
-      <Header name='Playbook' disabled={disabled} value={props.playbookXP} max={8}/>
+      <Money {...money} disabled={disabled} update={updateMoney.bind(this)}/>
+      <Header name='Playbook' disabled={disabled} value={props.xp} length={8}
+              update={updateXP}/>
     </div>
       <Stat name='Insight'
             disabled={disabled}
-            xp={props.insightXP}
-            actions={['HUNT', 'STUDY', 'SURVEY', 'TINKER']}
-            values={[props.hunt, props.study, props.survey, props.tinker]}/>
+            update={updateInsight}
+            {...insight}/>
       <Stat name='Prowess'
             disabled={disabled}
-            xp={props.prowessXP}
-            actions={['FINESSE', 'PROWL', 'SKIRMISH', 'WRECK']}
-            values={[props.finesse, props.prowl, props.skirmish, props.wreck]}/>
+            update={updateProwess}
+            {...prowess}/>
       <Stat name='Resolve'
             disabled={disabled}
-            xp={props.resolveXP}
-            actions={['ATTUNE', 'COMMAND', 'CONSORT', 'SWAY']}
-            values={[props.attune, props.command, props.consort, props.sway]}/>
+            update={updateResolve}
+            {...resolve}/>
     </div>
   )
 }
 
 Stats.propTypes = {
-  hunt: React.PropTypes.number.isRequired,
-  study: React.PropTypes.number.isRequired,
-  survey: React.PropTypes.number.isRequired,
-  tinker: React.PropTypes.number.isRequired,
-  finesse: React.PropTypes.number.isRequired,
-  prowl: React.PropTypes.number.isRequired,
-  skirmish: React.PropTypes.number.isRequired,
-  wreck: React.PropTypes.number.isRequired,
-  attune: React.PropTypes.number.isRequired,
-  command: React.PropTypes.number.isRequired,
-  consort: React.PropTypes.number.isRequired,
-  sway: React.PropTypes.number.isRequired,
-  playbookXP: React.PropTypes.number.isRequired,
-  insightXP: React.PropTypes.number.isRequired,
-  prowessXP: React.PropTypes.number.isRequired,
-  resolveXP: React.PropTypes.number.isRequired,
+  xp: React.PropTypes.number.isRequired,
+  insight: React.PropTypes.object.isRequired,
+  prowess: React.PropTypes.object.isRequired,
+  resolve: React.PropTypes.object.isRequired,
   money: React.PropTypes.object.isRequired,
   update: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool

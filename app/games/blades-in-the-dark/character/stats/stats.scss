@@ -41,25 +41,25 @@
           }
           &:not(:disabled) {
             cursor: pointer;
+            &:focus {
+              color: lighten($fire, 30%);
+            }
+            &.highlight {
+              color: darken($fire, 20%);
+            }
+            &:active {
+              color: lighten($fire, 10%);
+            }
             &.checked {
               &:focus {
                 color: fade-out($fire, 0);
               }
-              &:hover {
+              &.highlight {
                 color: $fire;
               }
               &:active {
-                color: lighten($fire, 30%);
+                color: lighten($fire, 10%);
               }
-            }
-            &:focus {
-              color: lighten($fire, 30%);
-            }
-            &:hover {
-              color: darken($fire, 20%);
-            }
-            &:active {
-              color: lighten($fire, 30%);
             }
           }
         }

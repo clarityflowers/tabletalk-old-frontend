@@ -66,14 +66,14 @@
         }
         &:not(:disabled) {
           &.checked {
-            &.hover {
+            &.highlight {
               background: $fire;
             }
             &:active {
               background: lighten($fire, 30%);
             }
           }
-          &.hover {
+          &.highlight {
             background: darken($sky, 20%);
           }
           &:active {
@@ -89,14 +89,14 @@
       }
       &:not(:disabled) {
         &.checked {
-          &.hover {
+          &.highlight {
             background: $fire;
           }
           &:active {
             background: lighten($fire, 30%);
           }
         }
-        &.hover {
+        &.highlight {
           background: darken($sand, 40%);
           // background: darken($fire, 20%);
         }

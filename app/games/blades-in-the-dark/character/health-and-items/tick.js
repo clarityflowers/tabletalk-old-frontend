@@ -42,9 +42,10 @@ Tick.defaultProps = {
 const makeTickArray = ({
   value, max, className, disabled, disableChecked, onClick
 }) => {
-  return makeCheckArray({
-    value, max, className, disabled, disableChecked, onClick, Node: Tick
-  });
+  // return makeCheckArray({
+  //   value, max, className, disabled, disableChecked, onClick, Node: Tick
+  // });
+  return null;
 }
 
 export { Tick, makeTickArray };
