@@ -22,7 +22,12 @@ const Action = (props) => {
 
 Action.propTypes = {
   name: React.PropTypes.string.isRequired,
-  value: React.PropTypes.number.isRequired
+  value: React.PropTypes.number.isRequired,
+  disabled: React.PropTypes.bool
+}
+
+Action.defaultProps = {
+  disabled: false
 }
 
 const Header = (props) => {
@@ -32,7 +37,7 @@ const Header = (props) => {
         {props.name.toUpperCase()}
       </div>
       <div className='dots'>
-        {makeDotArray({value: props.value, max: props.max})}
+        {makeDotArray({value: props.value, max: props.max, disabled: props.disabled})}
       </div>
     </div>
   );
@@ -50,11 +55,13 @@ Header.defaultProps = {
 }
 
 const Stat = (props) => {
+  const { disabled } = props;
   let actions = [];
   let dots = [];
   for (let i=0; i < props.actions.length; i++) {
     actions.push(
       <Action key={i}
+              disabled={disabled}
               name={props.actions[i]}
               value={props.values[i]}/>
     );
@@ -66,7 +73,7 @@ const Stat = (props) => {
   }
   return (
     <div className='stat'>
-      <Header name={props.name} value={props.xp} max={6}/>
+      <Header name={props.name} disabled={disabled} value={props.xp} max={6}/>
       <div className='actions'>
         <div className='first'>
           {dots}
@@ -83,29 +90,37 @@ Stat.propTypes = {
   name: React.PropTypes.string.isRequired,
   xp: React.PropTypes.number.isRequired,
   actions: React.PropTypes.array.isRequired,
-  values: React.PropTypes.array.isRequired
+  values: React.PropTypes.array.isRequired,
+  disabled: React.PropTypes.bool
+}
+
+Stat.defaultProps = {
+  disabled: false
 }
 
 
 
 const Stats = (props) => {
-  const { money, update } = props;
+  const { money, update, disabled } = props;
   const updateMoney = (money) => { update({money}); }
   return (
     <div className='stats'>
     <div className='stat'>
-      <Money {...props.money} update={updateMoney.bind(this)}/>
-      <Header name='Playbook' value={props.playbookXP} max={8}/>
+      <Money {...props.money} disabled={disabled} update={updateMoney.bind(this)}/>
+      <Header name='Playbook' disabled={disabled} value={props.playbookXP} max={8}/>
     </div>
       <Stat name='Insight'
+            disabled={disabled}
             xp={props.insightXP}
             actions={['HUNT', 'STUDY', 'SURVEY', 'TINKER']}
             values={[props.hunt, props.study, props.survey, props.tinker]}/>
       <Stat name='Prowess'
+            disabled={disabled}
             xp={props.prowessXP}
             actions={['FINESSE', 'PROWL', 'SKIRMISH', 'WRECK']}
             values={[props.finesse, props.prowl, props.skirmish, props.wreck]}/>
       <Stat name='Resolve'
+            disabled={disabled}
             xp={props.resolveXP}
             actions={['ATTUNE', 'COMMAND', 'CONSORT', 'SWAY']}
             values={[props.attune, props.command, props.consort, props.sway]}/>
@@ -131,7 +146,12 @@ Stats.propTypes = {
   prowessXP: React.PropTypes.number.isRequired,
   resolveXP: React.PropTypes.number.isRequired,
   money: React.PropTypes.object.isRequired,
-  update: React.PropTypes.func.isRequired
+  update: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool
+}
+
+Stats.defaultProps = {
+  disabled: false
 }
 
 export default Stats;

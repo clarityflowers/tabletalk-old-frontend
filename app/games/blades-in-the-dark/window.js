@@ -25,7 +25,7 @@ const Tab = (props) => {
 }
 
 const Window = (props) => {
-  const { update } = props;
+  const { update, me } = props;
   const updateCharacter = (character) => {
     update({character});
   }
@@ -58,7 +58,8 @@ const Window = (props) => {
         portal = (
           <Character {...character}
                      onChat={props.onChat}
-                     update={updateCharacter.bind(this)}/>
+                     update={updateCharacter.bind(this)}
+                     me={me}/>
         )
       }
     }

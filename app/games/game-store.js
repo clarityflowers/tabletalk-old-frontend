@@ -101,23 +101,10 @@ class GameStore extends React.Component {
   perform(action, data) {
     const key = Math.floor(Math.random() * (1000000000));
     data.key = key;
-    console.log(data.action);
     this.state.perform(action, data);
-    console.log(data.action);
     return key;
   }
-  /* ---------- players ------------------------------------------------------*/
-  // updatePlayerHash(players) {
-  //   let playerHash = {};
-  //   for (let i=0; i < players.length; i++) {
-  //     let player = players[i];
-  //     playerHash[player.id] = player;
-  //     if (player.me) {
-  //       playerHash.me = player;
-  //     }
-  //   }
-  //   this.playerHash = playerHash;
-  // }
+  /* ---------- hash ---------------------------------------------------------*/
   updateEventHash(events) {
     let eventHash = {};
     for (let i=0; i < events.length; i++) {

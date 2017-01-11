@@ -37,7 +37,7 @@ else {
   server.use(express.static('public'));
   server.listen(port, ip, function (err) {
       if(err) {
-          return console.log(err);
+          return console.error(err);
       }
 
       console.log('Listening at ' + ip + ':' + port);

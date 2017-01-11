@@ -33,6 +33,7 @@ class App extends React.Component {
     this.props.auth.signOut();
   }
   handleReceive(data) {
+    console.log("recieving data:", data);
     this.props.processEvent(data);
   }
   /* ---------- load ---------------------------------------------------------*/

@@ -9,7 +9,7 @@
   &.checked {
     color: $sun;
   }
-  &:not(.disabled) {
+  &:not(:disabled) {
     cursor: pointer;
     &.checked {
       &:focus {

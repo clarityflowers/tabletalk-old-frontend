@@ -11,7 +11,8 @@ const StashRow = (props) => {
   const {
     value, increment,
     decrement, highlight,
-    checkedProps, uncheckedProps
+    checkedProps, uncheckedProps,
+    disabled
   } = props;
   const checked = value >= 10;
   const className = cx(
@@ -32,17 +33,24 @@ const StashRow = (props) => {
                      decrement={decrement}
                      highlight={highlight}
                      checkedProps={checkedProps}
-                     uncheckedProps={uncheckedProps}/>
+                     uncheckedProps={uncheckedProps}
+                     disabled={disabled}/>
       <Checkbox checked={checked}
                 className={className}
                 onClick={checked ? decrement : increment}
-                {...checkboxProps}/>
+                {...checkboxProps}
+                disabled={disabled}/>
     </div>
   );
 }
 
 StashRow.propTypes = {
-  value: React.PropTypes.number.isRequired
+  value: React.PropTypes.number.isRequired,
+  disabled: React.PropTypes.bool
+}
+
+StashRow.defaultProps = {
+  disabled: false
 }
 
 const HOVER = {
@@ -109,7 +117,7 @@ class Money extends React.Component {
     }
   }
   render() {
-    const { coin, stash, update } = this.props;
+    const { coin, stash, update, disabled } = this.props;
     let stashRows = [];
     let coinHighlight = 0;
     let stashHighlight = 0;
@@ -146,7 +154,8 @@ class Money extends React.Component {
       uncheckedProps: {
         onMouseOver: this.handleMouseOver(HOVER.INCREMENT_COIN),
         onMouseLeave: this.handleMouseLeave(HOVER.INCREMENT_COIN)
-      }
+      },
+      disabled: disabled
     };
     let stashProps = {
       increment: this.incrementStash.bind(this),
@@ -159,12 +168,14 @@ class Money extends React.Component {
       uncheckedProps: {
         onMouseOver: this.handleMouseOver(HOVER.INCREMENT_STASH),
         onMouseLeave: this.handleMouseLeave(HOVER.INCREMENT_STASH)
-      }
+      },
+      disabled: disabled
     }
     for (let i=0; i < 4; i++) {
       stashRows.push(
         <StashRow key={i}
                   value={stash - (i * 10)}
+                  disabled={disabled}
                   {...stashProps}/>
       );
     }
@@ -173,6 +184,7 @@ class Money extends React.Component {
         <div className='column coin'>
           <div className='row stash'>
             <button className='stash label'
+                    disabled={disabled}
                     onClick={this.exchangeToStash.bind(this)}
                     onMouseOver={this.handleMouseOver(HOVER.EXCHANGE_TO_STASH)}
                     onMouseLeave={this.handleMouseLeave(HOVER.EXCHANGE_TO_STASH)}>
@@ -181,6 +193,7 @@ class Money extends React.Component {
           </div>
           <div className='row coin'>
             <button className='coin label'
+                    disabled={disabled}
                     onClick={this.exchangeToCoin.bind(this)}
                     onMouseOver={this.handleMouseOver(HOVER.EXCHANGE_TO_COIN)}
                     onMouseLeave={this.handleMouseLeave(HOVER.EXCHANGE_TO_COIN)}>
@@ -203,7 +216,12 @@ class Money extends React.Component {
 Money.propTypes = {
   coin: React.PropTypes.number.isRequired,
   stash: React.PropTypes.number.isRequired,
-  update: React.PropTypes.func.isRequired
+  update: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool
+}
+
+Money.defaultProps = {
+  disabled: false
 }
 
 export default Money;

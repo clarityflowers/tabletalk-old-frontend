@@ -39,7 +39,7 @@
           &.checked {
             color: fade-out($stone, .3);
           }
-          &:not(.disabled) {
+          &:not(:disabled) {
             cursor: pointer;
             &.checked {
               &:focus {

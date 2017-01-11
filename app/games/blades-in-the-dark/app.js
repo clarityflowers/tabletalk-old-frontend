@@ -54,7 +54,6 @@ class App extends React.Component {
     }
   }
   processEvent(event) {
-    console.log(event);
     if (event.action == ACTIONS.ROLL) {
       let roll = {
         id: event.id,
@@ -94,7 +93,8 @@ class App extends React.Component {
     }
   }
   handleLoad(args) {
-    const { data } = args
+    this.props.onLoad(args);
+    const { data } = args;
     if (data) {
       const { characters } = data;
       if (characters) {
@@ -105,10 +105,8 @@ class App extends React.Component {
         this.setState({characters: newCharacters});
       }
     }
-    this.props.onLoad(args);
   }
   update(data) {
-    console.log('UPDATE', data);
     const key = this.props.perform(ACTIONS.UPDATE, {data});
     this.processUpdate(data, key);
   }
@@ -130,6 +128,7 @@ class App extends React.Component {
         character: this.state.characters[1]
       })
     }
+    const me = this.props.players ? this.props.players.me : null;
     let window = (
       <div id='blades-in-the-dark'>
         <Window route={this.props.route}
@@ -138,7 +137,8 @@ class App extends React.Component {
                 auth={this.props.auth}
                 game={this.props.game}
                 options={true}
-                update={this.update.bind(this)}/>
+                update={this.update.bind(this)}
+                me={me}/>
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}
                  onChat={this.handleChat.bind(this)}/>

@@ -27,26 +27,30 @@
           align-self: flex-end;
           padding: 0 .25em 0 0;
           color: $sky;
-          &:focus {
-            color: lighten($sky, 15%);
-          }
-          &:hover {
-            color: $fire;
-          }
-          &:active {
-            color: lighten($fire, 30%);
+          &:not(:disabled) {
+            &:focus {
+              color: lighten($sky, 15%);
+            }
+            &:hover {
+              color: $fire;
+            }
+            &:active {
+              color: lighten($fire, 30%);
+            }
           }
         }
         &.coin {
           color: $sand;
-          &:focus {
-            color: lighten($sand, 15%);
-          }
-          &:hover {
-            color: $fire;
-          }
-          &:active {
-            color: lighten($fire, 30%);
+          &:not(:disabled) {
+            &:focus {
+              color: lighten($sand, 15%);
+            }
+            &:hover {
+              color: $fire;
+            }
+            &:active {
+              color: lighten($fire, 30%);
+            }
           }
         }
       }

@@ -44,7 +44,11 @@ Title.propTypes = {
 }
 
 const Character = (props) => {
-  const { id, names, stats, health, equipment, onChat, update } = props;
+  const {
+    id, names, stats, health, equipment, permissions,
+    onChat, update, me
+  } = props;
+  const canEdit = permissions[me.id].edit;
   const updateStats = (stats) => { update({id, stats}); }
   return (
     <Portal onChat={onChat}>
@@ -52,8 +56,10 @@ const Character = (props) => {
         <Title {...names}/>
         <div className='row'>
           <Stats {...stats}
+                 disabled={!canEdit}
                  update={updateStats.bind(this)}/>
           <HealthAndItems {...health}
+                          disabled={!canEdit}
                           equipment={equipment}/>
         </div>
       </div>
@@ -67,8 +73,10 @@ Character.propTypes = {
   stats: React.PropTypes.object.isRequired,
   health: React.PropTypes.object.isRequired,
   equipment: React.PropTypes.object.isRequired,
+  permissions: React.PropTypes.object.isRequired,
   onChat: React.PropTypes.func.isRequired,
   update: React.PropTypes.func.isRequired,
+  me: React.PropTypes.object.isRequired
 }
 
 export default Character;
