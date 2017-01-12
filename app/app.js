@@ -64,8 +64,14 @@ class App extends React.Component {
     }
   }
   signOut() {
-    if (GoogleApiLoader.getAuth2().isSignedIn.get()) {
-      GoogleApiLoader.signOut();
+    if (GoogleApiLoader) {
+      const auth2 = GoogleApiLoader.getAuth2();
+      if (auth2) {
+        const isSignedIn = auth2.isSignedIn.get();
+        if (isSignedIn) {
+          GoogleApiLoader.signOut();
+        }
+      }
     }
     this.setState({
       apiAuth: {

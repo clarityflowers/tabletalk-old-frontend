@@ -63,8 +63,11 @@
         }
         div.talk {
           p {
-            margin: .4em 0 0 0;
+            margin: .4em 0 .4em 0;
           }
+        }
+        div.log {
+          font-size: .8em;
         }
       }
     }

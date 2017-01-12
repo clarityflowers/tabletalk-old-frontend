@@ -17,13 +17,8 @@ class GameStore extends React.Component {
   }
   /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
-    // this.setState({players: this.props.game.players});
-
   }
   componentWillUpdate (nextProps, nextState) {
-    if (this.state.players.length != nextState.players.length) {
-      // this.updatePlayerHash(nextState.players);
-    }
   }
   /* ---------- handlers -----------------------------------------------------*/
   handleTalk(message) {
@@ -40,9 +35,19 @@ class GameStore extends React.Component {
         message: data.message,
         date: new Date(data.timestamp)
       }
-      this.logEvent(chat)
+      return chat;
     }
-    if (data.action == ACTIONS.JOIN) {
+    else if (data.action == ACTIONS.LOG) {
+      let log = {
+        id: data.id,
+        action: ACTIONS.LOG,
+        player: this.state.players[data.player],
+        message: data.message,
+        date: new Date(data.timestamp)
+      }
+      return log;
+    }
+    else if (data.action == ACTIONS.JOIN) {
       let players = Object.assign({}, this.state.players);
       players[data.id] = {
         id: data.id,
@@ -50,38 +55,39 @@ class GameStore extends React.Component {
         admin: data.admin
       }
       this.setState({players: players});
+      return null;
     }
   }
-  logEvent(event) {
-    let index = null;
-    if (event.id in this.eventHash) {
-      index = this.eventHash[event.id];
+  logEvents(data) {
+    if (!Array.isArray(data)) {
+      data = [data];
     }
-    if (index != null) {
-      this.setState((state) => {
-        let events = state.events.slice(0);
+    let events = this.state.events.slice(0);
+    for (let i=0; i<data.length; i++) {
+      const event = data[i];
+      let index = null;
+      if (event.id in this.eventHash) {
+        index = this.eventHash[event.id];
+      }
+      if (index != null) {
         events[index] = event;
-        return {events: events};
-      })
-    }
-    else {
-      this.setState((state) => {
-        let events = state.events.slice(0);
+      }
+      else {
         if (events.length && event.date >= events[events.length -1].date) {
           events.push(event);
           this.eventHash[event.id] = events.length -1;
         }
         else {
-          let i = events.length - 1;
-          while(i > 0 && event.date < events[i-1].date) {
-            i--;
+          let j = events.length - 1;
+          while(j > 0 && event.date < events[j-1].date) {
+            j--;
           }
-          events.splice(i, 0, event);
+          events.splice(j, 0, event);
           this.updateEventHash(events);
         }
-        return {events: events};
-      })
+      }
     }
+    this.setState({events: events});
   }
   handleLoad({players, me}) {
     const ids = Object.keys(players);
@@ -129,7 +135,7 @@ class GameStore extends React.Component {
           players: this.state.players,
           eventHash: this.eventHash,
           perform: this.perform.bind(this),
-          logEvent: this.logEvent.bind(this),
+          logEvents: this.logEvents.bind(this),
           processEvent: this.processEvent.bind(this),
           onLoad: this.handleLoad.bind(this),
           onConnect: this.handleConnect.bind(this),

@@ -34,7 +34,8 @@ class App extends React.Component {
   }
   handleReceive(data) {
     console.log("recieving data:", data);
-    this.props.processEvent(data);
+    const result = this.props.processEvent(data);
+    this.props.logEvents(result);
   }
   /* ---------- load ---------------------------------------------------------*/
   load(args) {
@@ -43,9 +44,15 @@ class App extends React.Component {
       this.props.onLoad({players, me, data});
     }
     if (chats) {
+      let result = [];
       for (let i=0; i < chats.length; i++) {
-        this.props.processEvent(chats[i]);
+        const processResult = this.props.processEvent(chats[i]);
+        if (processResult != undefined) {
+          result.push(processResult);
+        }
       }
+      result = result.reduce( ( acc, cur ) => acc.concat(cur), [] ); //flatten
+      this.props.logEvents(result);
     }
   }
   /* ---------- render ---------------------------------------------------------*/

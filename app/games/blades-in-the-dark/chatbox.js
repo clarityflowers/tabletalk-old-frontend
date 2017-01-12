@@ -4,8 +4,20 @@ import CommonChatbox from 'games/common/chatbox.js';
 import { ACTIONS } from 'games/blades-in-the-dark/enums.js';
 import './chatbox.scss';
 
+let Log = (props) => {
+  const { name, message } = props;
+  const text = message.replace("{player}", name);
+  return (
+    <div className='log'>
+      {text}
+    </div>
+  ) ;
+}
+
 let Roll = (props) => {
+  let { newest } = props;
   let result = 0;
+  let crit = false;
   if (props.level == 0) {
     if (props.result[0] < props.result[1]) {
       result = props.result[0];
@@ -16,39 +28,49 @@ let Roll = (props) => {
   }
   else {
     for (let i = 0; i < props.result.length; i++) {
-      if (props.result[i] > result) {
+      if (result == 6 && props.result[i] == 6) {
+        crit = true;
+      }
+      else if (props.result[i] > result) {
         result = props.result[i];
       }
     }
   }
-  let numberClassName = cx(
-    'number',
+  let dice = [];
+  for (let i=0; i < props.result.length; i++) {
+    const className = cx('die', {
+      highlight: props.result[i] == result
+    });
+    dice.push(
+      <div key={i} className={className}>{props.result[i]}</div>
+    )
+  }
+  let rollClassName = cx(
+    'roll',
     {
-      hit: result == 6,
-      miss: result <= 3
+      crit: newest && crit,
+      strong: newest && !crit && result == 6,
+      weak: newest && (result == 4 || result == 5),
+      miss: newest && result <= 3
     }
-  )
-  let diceClassName = cx(
-    'dice',
-    {
-      zero: props.level == 0
-    }
-
   )
   if (result == 0) {
     result = (
       <div className='loading'>l</div>
     )
   }
+  if (crit) {
+    result = 'CRIT';
+  }
   return (
-    <div className='roll'>
+    <div className={rollClassName}>
       <div className='header'>
-        {props.name} rolled
+        {props.name} rolled {props.level}
       </div>
-      <div className={diceClassName}>
-        {props.result}
+      <div className='dice'>
+        {dice}
       </div>
-      <div className={numberClassName}>
+      <div className='number'>
         {result}
       </div>
     </div>
@@ -57,14 +79,21 @@ let Roll = (props) => {
 
 class Chatbox extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.newest = null;
   }
   renderEvent(event) {
     if (event.action == ACTIONS.ROLL) {
       return (
         <Roll name={event.player.name}
               level={event.level}
-              result={event.result}/>
+              result={event.result}
+              newest={event.id == this.newest}/>
+      );
+    }
+    else if (event.action == ACTIONS.LOG) {
+      return (
+        <Log name={event.player.name} message={event.message}/>
       );
     }
     else {
@@ -72,6 +101,14 @@ class Chatbox extends React.Component {
     }
   }
   render() {
+    const { events } = this.props;
+    for (let i = events.length - 1; i >= 0; i--) {
+      const event = events[i];
+      if (event.action == ACTIONS.ROLL) {
+        this.newest = event.id;
+        break;
+      }
+    }
     return (
       <CommonChatbox events={this.props.events}
                      playerHash={this.props.playerHash}

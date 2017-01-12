@@ -1,4 +1,5 @@
 @import 'games/blades-in-the-dark/colors';
+@import 'games/blades-in-the-dark/fonts';
 
 #game-app #blades-in-the-dark #chat {
   background-color: $sun;
@@ -26,21 +27,34 @@
         h1 {
           border-bottom: 1px solid $stone;
         }
+        div.log {
+          color: fade-out($stone, .6);
+          font: $h1;
+          font-weight: 300;
+          line-height: 1.1;
+          margin: .2em 0;
+          // color: $sky;
+        }
         div.roll {
+          color: fade-out($stone, .6);
           text-align: center;
           div.header {
-            color: $sky;
+            font: $h1;
+            font-weight: 300;
             margin-top: .4em;
           }
           div.dice {
-            color: $sky;
             margin: 0 .2em;
             position: relative;
             font-family: 'Icomoon';
             font-size: 1.5em;
             bottom: -0.15em;
-            &.zero {
-              color: $fire;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            div.die.highlight {
+              transition: color 60s;
+              color: fade-out($stone, .3);
             }
           }
           div.number {
@@ -49,11 +63,26 @@
             font-weight: 700;
             font-size: 3em;
             text-align: center;
-            color: $sky;
-            &.hit {
+            transition: color 60s;
+            color: fade-out($stone, .3);
+          }
+          &.crit {
+            div.number, div.dice div.die.highlight {
               color: $fire;
             }
-            &.miss {
+          }
+          &.strong {
+            div.number, div.dice div.die.highlight {
+              color: $fire;
+            }
+          }
+          &.weak {
+            div.number, div.dice div.die.highlight {
+              color: $sky;
+            }
+          }
+          &.miss {
+            div.number, div.dice div.die.highlight {
               color: $stone;
             }
           }

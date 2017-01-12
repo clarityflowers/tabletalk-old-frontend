@@ -63,13 +63,21 @@ class App extends React.Component {
         result: event.result,
         date: new Date(event.timestamp)
       }
-      this.props.logEvent(roll);
+      return roll;
     }
-    if (event.action == ACTIONS.UPDATE) {
+    else if (event.action == ACTIONS.UPDATE) {
       this.processUpdate(event.data, event.key);
+      const logs = event.logs;
+      if (logs) {
+        let result = [];
+        for (let i=0; i < logs.length; i++) {
+          result.push(this.processEvent(logs[i]));
+        }
+        return result;
+      }
     }
     else {
-      this.props.processEvent(event);
+      return this.props.processEvent(event);
     }
   }
   roll(level) {
@@ -150,7 +158,8 @@ class App extends React.Component {
                window={window}
                onConnect={this.props.onConnect}
                onLoad={this.handleLoad.bind(this)}
-               processEvent={this.processEvent.bind(this)}/>
+               processEvent={this.processEvent.bind(this)}
+               logEvents={this.props.logEvents}/>
     );
   }
 }

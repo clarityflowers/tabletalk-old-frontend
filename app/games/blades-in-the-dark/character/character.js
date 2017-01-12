@@ -48,7 +48,7 @@ const Character = (props) => {
     id, names, stats, health, equipment, permissions,
     onChat, update, me
   } = props;
-  const canEdit = permissions[me.id].edit;
+  const canEdit = permissions.edit.includes(me.id);
   const updateStats = (stats) => { update({id, stats}); }
   return (
     <Portal onChat={onChat}>
