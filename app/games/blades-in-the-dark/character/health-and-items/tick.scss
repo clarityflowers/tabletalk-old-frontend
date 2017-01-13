@@ -37,7 +37,6 @@
     polygon {
       stroke: $sun;
       fill: darken($stone, 10%);
-      stroke-width: 10;
     }
     -webkit-filter: drop-shadow($text-shadow);
     filter: drop-shadow($text-shadow);

@@ -14,7 +14,7 @@ const svg = (
        width=".5em"
        height="1.2em"
        viewBox="0 0 60 110">
-     <polygon points="5,5 55,5 55,80 5,105"/>
+     <polygon points="5,5 55,5 55,80 5,105" strokeWidth="10"/>
   </svg>
 );
 
