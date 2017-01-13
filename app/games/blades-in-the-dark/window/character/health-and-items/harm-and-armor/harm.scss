@@ -1,0 +1,111 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+@import 'games/blades-in-the-dark/common/fonts.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-items
+div.harm-and-armor div.harm {
+  display: flex;
+  flex-flow: column nowrap;
+  flex-align: stretch;
+  div.header {
+    color: $stone;
+    background: $sun;
+    padding: 0 .2em;
+    box-shadow: $shadow;
+  }
+  div.body {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-align: stretch;
+    box-shadow: $shadow;
+    $dark: darken($stone, 10%);
+    $dark-text: lighten($stone, 20%);
+    $highlight: darken($fire, 20%);
+    $highlight-text: $sun;
+    div.row {
+      display: flex;
+      flex-flow: row nowrap;
+      flex-align: stretch;
+      &.highlight {
+        div.level, div.penalty {
+          background: $highlight;
+          color: $highlight-text;
+        }
+      }
+      div.level, div.penalty, div.values {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        vertical-align: middle;
+      }
+      div.level, div.penalty {
+        flex: 0 0 auto;
+        background: $dark;
+        color: $dark-text;
+        transition-property: background-color, color;
+        transition-duration: 1s;
+      }
+      div.penalty {
+        width: 4em;
+        font-size: .6em;
+      }
+      div.level {
+        width: 2em;
+      }
+      div.values {
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: stretch;
+        div.value {
+          flex: 1 1 auto;
+          height: auto;
+          display: flex;
+          flex-flow: column;
+          align-items: stretch;
+          width: 3em;
+          textarea {
+            flex: 1 1 auto;
+            align-self: stretch;
+            font: $h1;
+            background: darken($dark, 5%);
+            color: darken($dark-text, 25%);
+            transition-property: background-color, color;
+            transition-duration: 1s;
+            border: none;
+            resize: none;
+            width: 100%;
+            min-height: 2.5em;
+            text-align: center;
+            padding: .6em;
+            box-sizing: border-box;
+            margin: none;
+            &#harm-value-3-1 {
+              width: 100%;
+            }
+            &::selection {
+              background: $highlight;
+            }
+            &.highlight {
+              background: $highlight;
+              color: $sun;
+              &:not(:disabled) {
+                &:focus {
+                  background: lighten($highlight, 10%);
+                  outline: none;
+                }
+              }
+            }
+            &:not(:disabled) {
+              &:focus {
+                outline: none;
+                background: lighten($dark, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

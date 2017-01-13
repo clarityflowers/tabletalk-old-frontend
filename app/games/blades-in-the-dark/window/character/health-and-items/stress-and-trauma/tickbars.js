@@ -3,7 +3,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { TickArray } from './tick.js';
+import { TickArray } from 'games/blades-in-the-dark/window/common/tick.js';
 
 import './tickbars.scss';
 
@@ -33,6 +33,9 @@ class Stress extends React.Component {
   handleClick(value) {
     const change = this.getChange(value);
     if (change) {
+      if (this.state.hover == 10 && this.props.stress >= 8) {
+        this.setState({hover: null});
+      }
       this.props.update(this.props.stress + change);
     }
   }
@@ -45,8 +48,8 @@ class Stress extends React.Component {
     return (
       <div className='stress bar'>
         <button className={className}
-                onClick={() => {this.handleClick(9);}}
-                onMouseOver={() => {this.handleHover(9);}}
+                onClick={() => {this.handleClick(10);}}
+                onMouseOver={() => {this.handleHover(10);}}
                 onMouseLeave={() => {this.handleHover(0);}}
                 disabled={disabled || stress == 9}>
           STRESS

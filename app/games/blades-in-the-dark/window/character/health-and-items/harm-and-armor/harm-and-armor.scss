@@ -1,0 +1,7 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-items
+div.harm-and-armor {
+  background-color: $stone;
+  position: relative;
+}
