@@ -8,28 +8,74 @@ import Money from './money.js';
 
 import './stats.scss';
 
-const Action = (props) => {
-  const { name, value, disabled } = props;
-  // let dots = makeDotArray({value: props.value - 1, max: 3, disabled: true});
-  return (
-    <div className='action'>
-      <DotArray value={value}
-                offset={1}
-                length={3}
-                disabled={false}
-                onClick={() => {}}
-                onHover={() => {}}/>
-      <div className='name'>
-        {name[0].toUpperCase() + name.substring(1)}
-      </div>
-    </div>
-  )
+class Action extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hover: false
+    }
+  }
+  handleMouseOver() {
+    this.setState({hover: true});
+  }
+  handleMouseLeave() {
+    this.setState({hover: false});
+  }
+  handleClick() {
+    this.props.increment(this.props.value + 1);
+  }
+  render() {
+    const { name, value, disabled, unlocked, update } = this.props;
+    let dots = [];
+    for (let i=1; i <= 4; i++) {
+      const active = !disabled && unlocked && i == value + 1
+      const className = cx('dot', {
+        first: i == 1,
+        active: active,
+        checked: value >= i,
+        highlight: active && this.state.hover
+      });
+      dots.push(
+        <div key={i}
+             className={className}>
+          @
+        </div>
+      )
+      if (i == 1) {
+        dots.push(
+          <div key={'divider'} className='divider'/>
+        );
+      }
+    }
+    const active = !disabled && unlocked
+    const className = cx('action', {
+      highlight: active && this.state.hover
+    });
+    let handlers = {}
+    if (active) {
+      handlers = {
+        onMouseOver: this.handleMouseOver.bind(this),
+        onMouseLeave: this.handleMouseLeave.bind(this),
+        onClick: this.handleClick.bind(this)
+      }
+    }
+    return (
+      <button className={className} {...handlers} disabled={!active}>
+        {dots}
+        <div className='name'>
+          {name[0].toUpperCase() + name.substring(1)}
+        </div>
+      </button>
+    );
+  }
 }
 
 Action.propTypes = {
   name: React.PropTypes.string.isRequired,
   value: React.PropTypes.number.isRequired,
-  disabled: React.PropTypes.bool
+  disabled: React.PropTypes.bool,
+  unlocked: React.PropTypes.bool.isRequired,
+  increment: React.PropTypes.func.isRequired
 }
 
 Action.defaultProps = {
@@ -68,8 +114,11 @@ class Header extends React.Component {
     const { name, value, length, disabled, update } = this.props;
     const { hover } = this.state;
     const highlight = this.getChange(hover);
+    const className = cx('header', {
+      highlight: value == length
+    })
     return (
-      <div className='header'>
+      <div className={className}>
         <div className='name'>
           {name.toUpperCase()}
         </div>
@@ -111,30 +160,27 @@ const Stat = (props) => {
   for (let i=0; i < names.length; i++) {
     const name = names[i];
     const value = actions[name]
-    const updateAction = (value) => { update({[name]: value}); };
+    const increment = (value) => {
+      update({
+        [name]: value,
+        xp: 0
+      });
+    };
     actionDivs.push(
       <Action key={i}
               disabled={disabled}
               name={name}
-              value={value}/>
+              value={value}
+              unlocked={xp >= 6}
+              increment={increment}/>
     );
-    dots.push(
-      <Dot key={i}
-           checked={value > 0}
-           disabled={true}/>
-    )
   }
   return (
     <div className='stat'>
       <Header name={name} disabled={disabled} value={xp} length={6}
               update={updateXP}/>
       <div className='actions'>
-        <div className='first'>
-          {dots}
-        </div>
-        <div className='rest'>
-          {actionDivs}
-        </div>
+        {actionDivs}
       </div>
     </div>
   );
