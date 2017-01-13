@@ -2,6 +2,9 @@
 
 #blades-in-the-dark button.tick {
   font-size: 1em;
+  width: auto;
+  width: .5em;
+  height: 1.2em;
   &.checked svg polygon {
     fill: $sun;
   }
@@ -10,7 +13,7 @@
       &:focus svg polygon {
         fill: lighten($fire, 30%);
       }
-      &:hover svg polygon {
+      &.highlight svg polygon {
         fill: $fire;
         stroke: $fire;
       }
@@ -21,7 +24,7 @@
     &:focus svg polygon {
       stroke: lighten($fire, 30%);
     }
-    &:hover svg polygon {
+    &.highlight svg polygon {
       fill: darken($fire, 20%);
     }
     &:active svg polygon {
@@ -30,7 +33,7 @@
   }
   svg {
     overflow: visible;
-    margin: .07em .06em 0.1em 0.044em;
+    // margin: .07em .06em 0.1em 0.044em;
     polygon {
       stroke: $sun;
       fill: darken($stone, 10%);

@@ -8,7 +8,12 @@ import Tickbars from './tickbars';
 import './stress-and-trauma.scss';
 
 const TraumaList = (props) => {
-  const { trauma, off, onTraumaClick } = props;
+  const { trauma, off, addTrauma } = props;
+  const click = (name) => {
+    return () => {
+      addTrauma(name);
+    };
+  }
   let traumaList = [
     'Cold', 'Haunted', 'Obsessed',
     'Paranoid', 'Reckless', 'Soft',
@@ -24,7 +29,8 @@ const TraumaList = (props) => {
     }
     if (show) {
       traumas.push(
-        <button key={i} className='trauma' disabled={off} onClick={onTraumaClick}>
+        <button key={i} className='trauma' disabled={off}
+                onClick={click(traumaList[i].toUpperCase())}>
           {traumaList[i].toUpperCase()}
         </button>
       );
@@ -40,7 +46,7 @@ const TraumaList = (props) => {
 
 TraumaList.propTypes = {
   trauma: React.PropTypes.array.isRequired,
-  onTraumaClick: React.PropTypes.func.isRequired,
+  addTrauma: React.PropTypes.func.isRequired,
   off: React.PropTypes.bool.isRequired
 }
 
@@ -48,33 +54,36 @@ TraumaList.defaultProps = {
   off: false
 }
 
-class StressAndTrauma extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showTraumaSelector: false
-    }
+const StressAndTrauma = (props) => {
+  const { stress, trauma, update, disabled } = props;
+  const showTraumaSelector = stress == 9;
+  const addTrauma = (trauma) => {
+    update({
+      trauma: {
+        add: trauma
+      },
+      stress: 0
+    });
   }
-  handleToggleTraumaSelector() {
-    this.setState({showTraumaSelector: !this.state.showTraumaSelector});
-  }
-  render() {
-    return(
-      <div className='stress-and-trauma'>
-        <Tickbars stress={this.props.stress}
-                  trauma={this.props.trauma}
-                  onButtonClick={this.handleToggleTraumaSelector.bind(this)}/>
-        <TraumaList trauma={this.props.trauma}
-                    off={!this.state.showTraumaSelector}
-                    onTraumaClick={this.handleToggleTraumaSelector.bind(this)}/>
-      </div>
-    );
-  }
+  const updateStress = (stress) => { update({stress}); }
+  return(
+    <div className='stress-and-trauma'>
+      <Tickbars stress={stress}
+                trauma={trauma}
+                update={updateStress.bind(this)}
+                disabled={disabled}/>
+      <TraumaList trauma={trauma}
+                  off={disabled || !showTraumaSelector}
+                  addTrauma={addTrauma.bind(this)}/>
+    </div>
+  );
 }
 
 StressAndTrauma.propTypes = {
   stress: React.PropTypes.number.isRequired,
-  trauma: React.PropTypes.array.isRequired
+  trauma: React.PropTypes.array.isRequired,
+  update: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool
 }
 
 export default StressAndTrauma;

@@ -57,6 +57,21 @@ div.stress-and-trauma > div.tickbars {
           }
         }
       }
+      button.label {
+        box-shadow: $shadow;
+        &:not(:disabled) {
+          cursor: pointer;
+          &:focus {
+            color: darken($fire, 20%);
+          }
+          &.highlight {
+            color: $fire;
+          }
+          &:active {
+            color: lighten($fire, 30%);
+          }
+        }
+      }
     }
     &.trauma {
       &:after {
@@ -64,22 +79,12 @@ div.stress-and-trauma > div.tickbars {
       }
       margin-left: -.5em;
       flex: 0 0 auto;
-      button.label {
-        cursor: pointer;
+      div.label {
         text-align: center;
         width: calc(100% - .5em);
         box-sizing: border-box;
         position: absolute;
         left: .5em;
-        &:focus {
-          color: darken($fire, 20%);
-        }
-        &:hover {
-          color: $fire;
-        }
-        &:active {
-          color: lighten($fire, 30%);
-        }
       }
       div.ticks {
         button.tick {
@@ -88,21 +93,9 @@ div.stress-and-trauma > div.tickbars {
             stroke: darken($stone, 10%);
           }
           &.checked svg {
-            margin-left: .038em;
             polygon {
               stroke: $sun;
               fill: $sun;
-            }
-          }
-          &:not(:disabled) {
-            &:focus svg polygon {
-              stroke: darken($fire, 20%);
-            }
-            &:hover svg polygon {
-              stroke: darken($fire, 20%);
-            }
-            &:active svg polygon {
-              stroke: lighten($fire, 30%);
             }
           }
         }
@@ -114,20 +107,9 @@ div.stress-and-trauma > div.tickbars {
       justify-content: flex-start;
       z-index: 2;
       height: auto;
-      button.trauma {
+      div.trauma {
         color: $sky;
         text-shadow: $text-shadow;
-        &:not(.disabled) {
-          &:focus {
-            color: lighten($sky, 20%);
-          }
-          &:hover {
-            color: $fire;
-          }
-          &:active {
-            color: lighten($fire, 30%);
-          }
-        }
       }
     }
   }

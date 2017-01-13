@@ -17,11 +17,14 @@ div.stress-and-trauma {
     transition-property: height, margin;
     transition-duration: .3s;
     transition-timing-function: ease-in-out;
+    .trauma {
+      margin: 0 .5em;
+    }
     button.trauma {
       color: $fire;
       text-shadow: $text-shadow;
-      margin: 0 .5em;
       &:not(:disabled) {
+        cursor: pointer;
         &:focus {
           color: lighten($fire, 20%);
         }

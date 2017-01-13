@@ -105,6 +105,7 @@ class GameStore extends React.Component {
     this.setState({perform: perform});
   }
   perform(action, data) {
+    console.log('PERFORM', action, data);
     const key = Math.floor(Math.random() * (1000000000));
     data.key = key;
     this.state.perform(action, data);

@@ -50,6 +50,8 @@ const Character = (props) => {
   } = props;
   const canEdit = permissions.edit.includes(me.id);
   const updateStats = (stats) => { update({id, stats}); }
+  const updateHealth = (health) => { update({id, health}); }
+  const updateEquipment = (equipment) => { update({id, equipment}); }
   return (
     <Portal onChat={onChat}>
       <div className='character'>
@@ -60,7 +62,9 @@ const Character = (props) => {
                  update={updateStats.bind(this)}/>
           <HealthAndItems {...health}
                           disabled={!canEdit}
-                          equipment={equipment}/>
+                          equipment={equipment}
+                          update={updateHealth.bind(this)}
+                          updateEquipment={updateEquipment.bind(this)}/>
         </div>
       </div>
     </Portal>

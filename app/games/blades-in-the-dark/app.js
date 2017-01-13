@@ -20,21 +20,38 @@ class App extends React.Component {
     if (key in this.updates) { return; }
     this.updates[key] = true;
     const copy = (base, mod) => {
-      let result = mod;
-      if (typeof base == "object") {
+      let result = null;
+      if (Array.isArray(base)) {
+        result = base.slice(0);
+        if (mod) {
+          if (mod.add) {
+            result.push(mod.add);
+          }
+          else if (mod.remove) {
+            i = result.indexOf(mod.remove);
+            if (i >= 0) {
+              result.splice(i,1);
+            }
+          }
+        }
+      }
+      else if (typeof base == "object") {
         result = {};
         const props = Object.keys(base);
         for (let i=0; i < props.length; i++) {
           const prop = props[i];
           const modValue = mod[prop];
+          const value = base[prop];
           if (prop in mod) {
-            const value = base[prop];
             result[prop] = copy(value, modValue);
           }
           else {
-            result[prop] = base[prop];
+            result[prop] = value;
           }
         }
+      }
+      else {
+        result = mod;
       }
       return result;
     }
