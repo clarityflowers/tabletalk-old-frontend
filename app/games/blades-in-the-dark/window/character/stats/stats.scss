@@ -73,7 +73,7 @@
       margin: 0 .5em;
       display: flex;
       flex-flow: column nowrap;
-      button.action {
+      div.action {
         color: $sun;
         display: flex;
         flex-flow: row nowrap;
@@ -87,9 +87,10 @@
           font-family: 'icomoon';
           font-size: .8em;
           margin: 0.1em;
+          width: .9em;
           color: darken($stone, 5%);
           transition: color .5s;
-          &:not(:disabled).checked {
+          &.checked {
             color: $sun;
             &.highlight {
               color: $fire;
@@ -102,16 +103,17 @@
           width: 1px;
           align-self: stretch;
         }
-        &:not(:disabled) {
+        &:not(.disabled) {
           cursor: pointer;
           color: $sand;
           div.dot.active {
             color: $sand;
           }
           &:focus {
-            color: lighten($sand, 10%);
-            button.dot.active {
-              color: lighten($sand, 10%);
+            outline: none;
+            color: lighten($sand, 20%);
+            div.dot.active {
+              color: lighten($sand, 20%);
             }
           }
           &.highlight {

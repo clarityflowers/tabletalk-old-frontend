@@ -12,7 +12,8 @@ class Action extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hover: false
+      hover: false,
+      focus: false
     }
   }
   handleMouseOver() {
@@ -21,11 +22,23 @@ class Action extends React.Component {
   handleMouseLeave() {
     this.setState({hover: false});
   }
+  handleFocus() {
+    this.setState({focus: true});
+  }
+  handleBlur() {
+    this.setState({focus: false})
+  }
   handleClick() {
     this.props.increment(this.props.value + 1);
   }
+  handleKeyDown(e) {
+    if (e.which == 13 || e.which == 32) {
+      this.handleClick();
+    }
+  }
   render() {
     const { name, value, disabled, unlocked, update } = this.props;
+    const { focus, hover } = this.state;
     let dots = [];
     for (let i=1; i <= 4; i++) {
       const active = !disabled && unlocked && i == value + 1
@@ -33,7 +46,7 @@ class Action extends React.Component {
         first: i == 1,
         active: active,
         checked: value >= i,
-        highlight: active && this.state.hover
+        highlight: active && hover
       });
       dots.push(
         <div key={i}
@@ -49,23 +62,29 @@ class Action extends React.Component {
     }
     const active = !disabled && unlocked
     const className = cx('action', {
-      highlight: active && this.state.hover
+      highlight: active && hover,
+      disabled: !active,
+      focus: focus
     });
     let handlers = {}
     if (active) {
       handlers = {
         onMouseOver: this.handleMouseOver.bind(this),
         onMouseLeave: this.handleMouseLeave.bind(this),
-        onClick: this.handleClick.bind(this)
+        onFocus: this.handleFocus.bind(this),
+        onBlur: this.handleBlur.bind(this),
+        onClick: this.handleClick.bind(this),
+        onKeyDown: this.handleKeyDown.bind(this),
+        tabIndex: 0
       }
     }
     return (
-      <button className={className} {...handlers} disabled={!active}>
+      <div className={className} {...handlers}>
         {dots}
         <div className='name'>
           {name[0].toUpperCase() + name.substring(1)}
         </div>
-      </button>
+      </div>
     );
   }
 }

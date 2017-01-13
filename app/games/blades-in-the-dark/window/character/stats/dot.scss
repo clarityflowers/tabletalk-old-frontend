@@ -5,6 +5,8 @@
   font-family: 'icomoon';
   position: relative;
   margin: 0.1em;
+  width: .9em;
+  padding: 0;
   color: darken($stone, 5%);
   &.checked {
     color: $sun;
