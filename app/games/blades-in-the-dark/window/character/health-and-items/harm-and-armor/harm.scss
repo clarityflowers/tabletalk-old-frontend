@@ -6,6 +6,7 @@ div.harm-and-armor div.harm {
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
+  max-width: 40em;
   div.header {
     color: $stone;
     background: $sun;
@@ -64,7 +65,7 @@ div.harm-and-armor div.harm {
           display: flex;
           flex-flow: column;
           align-items: stretch;
-          width: 3em;
+          width: 10em;
           textarea {
             flex: 1 1 auto;
             align-self: stretch;
