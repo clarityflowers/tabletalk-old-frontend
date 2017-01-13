@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import Portal from 'games/blades-in-the-dark/portal.js';
+import Portal from '../common/portal.js';
 
 const Crew = (props) => {
   return (

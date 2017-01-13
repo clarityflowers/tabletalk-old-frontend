@@ -127,8 +127,8 @@ CheckArray.propTypes = {
   disabled: React.PropTypes.bool,
   checkedProps: React.PropTypes.object,
   uncheckedProps: React.PropTypes.object,
-  onClick: React.PropTypes.func.isRequired,
-  onHover: React.PropTypes.func.isRequired
+  onClick: React.PropTypes.func,
+  onHover: React.PropTypes.func
 }
 
 CheckArray.defaultProps = {

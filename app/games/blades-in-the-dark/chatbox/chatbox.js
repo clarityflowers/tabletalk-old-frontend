@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import CommonChatbox from 'games/common/chatbox.js';
-import { ACTIONS } from 'games/blades-in-the-dark/enums.js';
+import { ACTIONS } from 'games/blades-in-the-dark/common/enums.js';
 import './chatbox.scss';
 
 let Log = (props) => {

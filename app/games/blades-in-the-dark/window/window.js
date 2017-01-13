@@ -7,7 +7,7 @@ import Character from './character/character.js';
 import Crew from './crew/crew.js';
 import Link from 'utils/link.js';
 import OptionsMenu from 'options/options-menu.js';
-import { TAB_TYPES } from './enums.js';
+import { TAB_TYPES } from 'games/blades-in-the-dark/common/enums.js';
 import './window.scss';
 
 const Tab = (props) => {

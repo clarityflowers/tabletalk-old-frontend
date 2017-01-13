@@ -3,7 +3,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { extendCheck } from 'games/blades-in-the-dark/character/check.js';
+import { extendCheck } from 'games/blades-in-the-dark/window/common/check.js';
 
 import './dot.scss';
 

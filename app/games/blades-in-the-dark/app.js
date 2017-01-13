@@ -2,9 +2,9 @@ import React from 'react';
 import rUpdate from 'react-addons-update';
 
 import GameApp from 'games/common/app.js';
-import Chatbox from './chatbox.js';
-import Window from './window.js';
-import { ACTIONS, TAB_TYPES } from 'games/blades-in-the-dark/enums.js';
+import Chatbox from './chatbox/chatbox.js';
+import Window from './window/window.js';
+import { ACTIONS, TAB_TYPES } from 'games/blades-in-the-dark/common/enums.js';
 
 import './app.scss';
 

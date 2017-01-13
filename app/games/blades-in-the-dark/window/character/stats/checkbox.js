@@ -1,6 +1,6 @@
 'use strict'
 
-import { extendCheck } from 'games/blades-in-the-dark/character/check.js';
+import { extendCheck } from 'games/blades-in-the-dark/window/common/check.js';
 
 import './checkbox.scss';
 

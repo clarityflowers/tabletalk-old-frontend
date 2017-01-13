@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import Portal from 'games/blades-in-the-dark/portal.js';
+import Portal from '../common/portal.js';
 import Stats from './stats/stats.js';
 import HealthAndItems from './health-and-items/health-and-items.js';
 

@@ -4,7 +4,7 @@ import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Link from 'utils/link.js';
 import cx from 'classnames';
-import GameWindow from 'games/game-window.js';
+import GameWindow from 'games/common/game-window.js';
 import GameDetails from './game-details.js';
 import OptionsMenu from 'options/options-menu.js';
 import GameApi from 'api/game.js';
@@ -626,7 +626,7 @@ class Games extends React.Component {
         <div className={listContainerClassName}>
           <OptionsMenu route={this.props.route}
                        auth={this.props.auth}
-                       on={this.props.options}/> 
+                       on={this.props.options}/>
           <div className='list'>
             <HoverWiggle className={backClass}>
               <Link route={this.props.route} className='home-button'>&lt;</Link>
