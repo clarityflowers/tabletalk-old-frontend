@@ -14,17 +14,24 @@ class HarmValue extends React.Component {
       focused: false
     }
   }
+  update(value) {
+    let hurt = false;
+    if (!this.props.value && value) {
+      hurt = true;
+    }
+    this.props.update(value, hurt);
+  }
   handleChange(e) {
     const result = e.target.value.toUpperCase().substring(0, 30);
     if (!result && this.props.value) {
-      this.props.update("");
+      this.update("");
     }
     this.setState({value: result});
   }
   handleBlur(e) {
     const result = e.target.value.toUpperCase().trim().substring(0, 30);
     if (result != this.props.value) {
-      this.props.update(result);
+      this.update(result);
     }
     this.setState({
       value: result,
@@ -108,11 +115,11 @@ const Harm = (props) => {
     lesser1, lesser2, moderate1, moderate2, severe,
     update, disabled
   } = props;
-  const updateLesser1 = (value) => { update({lesser1: value}); }
-  const updateLesser2 = (value) => { update({lesser2: value}); }
-  const updateModerate1 = (value) => { update({moderate1: value}); }
-  const updateModerate2 = (value) => { update({moderate2: value}); }
-  const updateSevere = (value) => { update({severe: value}); }
+  const updateLesser1 = (value, hurt) => { update({lesser1: value}, hurt); }
+  const updateLesser2 = (value, hurt) => { update({lesser2: value}, hurt); }
+  const updateModerate1 = (value, hurt) => { update({moderate1: value}, hurt); }
+  const updateModerate2 = (value, hurt) => { update({moderate2: value}, hurt); }
+  const updateSevere = (value, hurt) => { update({severe: value}, hurt); }
   return (
     <div className='harm'>
       <div className='header'>HARM</div>

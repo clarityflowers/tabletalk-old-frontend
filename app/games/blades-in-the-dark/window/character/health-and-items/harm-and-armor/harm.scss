@@ -3,21 +3,25 @@
 
 #blades-in-the-dark #window div.portal div.character div.health-and-items
 div.harm-and-armor div.harm {
+  flex: 100 1 auto;
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
   max-width: 40em;
+  margin-bottom: 1em;
   div.header {
     color: $stone;
     background: $sun;
     padding: 0 .2em;
     box-shadow: $shadow;
+    z-index: 10;
   }
   div.body {
     display: flex;
     flex-flow: column nowrap;
     flex-align: stretch;
     box-shadow: $shadow;
+    z-index: 9;
     $dark: darken($stone, 10%);
     $dark-text: lighten($stone, 20%);
     $highlight: darken($fire, 20%);

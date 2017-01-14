@@ -16,7 +16,14 @@ const HealthAndItems = (props) => {
     if (trauma != undefined) { result.trauma = trauma; }
     update(result);
   }
-  const updateHarm = (harm) => { update({harm}); }
+  const updateHarm = (harm, hurt) => {
+    if (hurt) {
+      update({harm, healing: {unlocked: false}});
+    }
+    else {
+      update({harm});
+    }
+  }
   const updateHealing = (healing) => { update({healing}); }
   const updateArmor = (armor) => { update({armor}); }
   return (

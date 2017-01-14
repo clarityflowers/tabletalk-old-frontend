@@ -6,7 +6,12 @@ import cx from 'classnames';
 import './check.scss';
 
 const Check = (props) => {
-  const { className, checked, onClick, onHover, value, highlight, disabled } = props;
+  const {
+    className, checked,
+    onClick, onHover,
+    value, highlight, disabled,
+    isButton
+  } = props;
   const handleClick = () => {
     if (onClick && !disabled) {
       onClick(value);
@@ -35,15 +40,25 @@ const Check = (props) => {
   delete properties.onClick;
   delete properties.onHover;
   delete properties.value;
-  return (
-    <button className={buttonClassName}
-            onClick={handleClick.bind(this)}
-            onMouseOver={handleMouseOver.bind(this)}
-            onMouseLeave={handleMouseLeave.bind(this)}
-            {...properties}>
-      {props.children}
-    </button>
-  )
+  delete properties.isButton;
+  let result = null;
+  if (isButton) {
+    result = (
+      <button className={buttonClassName}
+              onClick={handleClick.bind(this)}
+              onMouseOver={handleMouseOver.bind(this)}
+              onMouseLeave={handleMouseLeave.bind(this)}
+              {...properties}>
+        {props.children}
+      </button>
+    );
+  }
+  else {
+    result = (
+      <div className={buttonClassName} {...properties}/>
+    );
+  }
+  return result;
 }
 
 Check.propTypes = {
@@ -52,7 +67,8 @@ Check.propTypes = {
   onClick: React.PropTypes.func,
   onHover: React.PropTypes.func,
   value: React.PropTypes.number,
-  highlight: React.PropTypes.bool
+  highlight: React.PropTypes.bool,
+  isButton: React.PropTypes.bool
 }
 
 Check.defaultProps = {
@@ -61,7 +77,8 @@ Check.defaultProps = {
   onClick: null,
   onHover: null,
   value: null,
-  highlight: null
+  highlight: null,
+  isButton: true
 }
 
 const CheckArray = (props) => {
