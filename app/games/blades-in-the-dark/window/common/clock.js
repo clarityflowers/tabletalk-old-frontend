@@ -33,7 +33,6 @@ const Mark = (props) => {
     onClick, onMouseOver, onMouseLeave
   } = props;
   let pointsString = "";
-  console.log(points);
   for (let i=0; i<points.length; i++) {
     const coords = points[i];
     pointsString += `${coords[0]},${coords[1]} `;
