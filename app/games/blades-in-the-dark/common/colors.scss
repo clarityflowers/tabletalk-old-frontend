@@ -6,5 +6,5 @@ $sun: lighten($sand, 20%);
 $sky: hsl(172, 20%, 54%);
 $fire: hsl(3, 56%, 54%);
 
-$shadow: -2px 2px 2px 1px fade-out(darken($stone, 50%), .6);
+$shadow: -3px 2px 2px 1px fade-out(darken($stone, 50%), .6);
 $text-shadow: -2px 2px 1px fade-out(darken($stone, 50%), .6);

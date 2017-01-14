@@ -11,6 +11,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  cursor: text;
   button#toggle {
     display: none;
     transition-property: color, background-color;

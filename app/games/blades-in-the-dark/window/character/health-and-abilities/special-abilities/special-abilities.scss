@@ -1,0 +1,50 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+@import 'games/blades-in-the-dark/common/fonts.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-abilities
+div.special-abilities {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-content: flex-start;;
+  flex: 10 1 auto;
+  width: 15em;
+  margin: 0 1em;
+  p.ability {
+    width: 100%;
+    max-width: 38em;
+    margin: .5em 0;
+    &:first-child {
+      margin-top: 0;
+    }
+    font: $body;
+    font-size: .8em;
+    cursor: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    &::selection {
+      background: $sun; /* WebKit/Blink Browsers */
+      color: $stone;
+    }
+    &::-moz-selection {
+      background: $sun; /* Gecko Browsers */
+      color: $stone;
+    }
+    span.name {
+      font: $h1;
+      font-size: 1.25em;
+      margin-right: .5em;
+      color: $sand;
+      line-height: .8em;
+    }
+    em {
+      // color: lighten($sky, 10%);
+    }
+    strong {
+      font-weight: 500;
+      // color: lighten($fire, 10%);
+    }
+  }
+}

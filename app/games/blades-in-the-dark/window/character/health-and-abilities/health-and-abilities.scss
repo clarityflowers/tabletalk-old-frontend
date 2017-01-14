@@ -1,0 +1,14 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-abilities {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1 1 auto;
+  > div.column {
+    margin-top: .3em;
+    flex: 1 1 auto;
+    max-width: 40em;
+    display: flex;
+    flex-flow: column;
+  }
+}

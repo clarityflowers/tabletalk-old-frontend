@@ -4,7 +4,7 @@ import React from 'react';
 
 import Portal from '../common/portal.js';
 import Stats from './stats/stats.js';
-import HealthAndItems from './health-and-items/health-and-items.js';
+import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
 
 import './character.scss';
 
@@ -45,7 +45,7 @@ Title.propTypes = {
 
 const Character = (props) => {
   const {
-    id, names, stats, health, equipment, permissions,
+    id, names, stats, health, equipment, specialAbilities, permissions,
     onChat, update, me
   } = props;
   const canEdit = permissions.edit.includes(me.id);
@@ -60,11 +60,11 @@ const Character = (props) => {
           <Stats {...stats}
                  disabled={!canEdit}
                  update={updateStats.bind(this)}/>
-          <HealthAndItems {...health}
+          <HealthAndAbilities {...health}
                           disabled={!canEdit}
-                          equipment={equipment}
+                          specialAbilities={specialAbilities}
                           update={updateHealth.bind(this)}
-                          updateEquipment={updateEquipment.bind(this)}/>
+                          playbook={names.playbook}/>
         </div>
       </div>
     </Portal>
