@@ -10,5 +10,8 @@
     max-width: 40em;
     display: flex;
     flex-flow: column;
+    &.stress {
+      flex: 100 1 auto;
+    }
   }
 }

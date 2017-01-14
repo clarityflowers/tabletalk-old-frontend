@@ -34,14 +34,14 @@ const HealthAndItems = (props) => {
   const updateArmor = (armor) => { update({armor}); }
   return (
     <div className='health-and-abilities'>
-      <div className='column'>
+      <div className='column stress'>
 
         <StressAndTrauma stress={stress} trauma={trauma}
                          update={updateStressAndTrauma.bind(this)}
                          disabled={disabled}/>
         <Harm {...harm} update={updateHarm.bind(this)} disabled={disabled}/>
       </div>
-      <div className='column'>
+      <div className='column armor'>
         <ArmorAndHealing armor={armor} healing={healing} disabled={disabled}
                          updateArmor={updateArmor} updateHealing={updateHealing}/>
       </div>
