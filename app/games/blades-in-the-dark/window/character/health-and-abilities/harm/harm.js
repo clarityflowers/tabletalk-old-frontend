@@ -16,7 +16,7 @@ class HarmValue extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.value != nextProps.value) {
-      this.setState({value: nextProps.value});
+      this.setState({value: nextProps.value.toUpperCase()});
     }
   }
   update(value) {
