@@ -3,7 +3,7 @@
 #blades-in-the-dark #window div.portal div.character div.health-and-abilities {
   display: flex;
   flex-flow: row wrap;
-  flex: 100 1 0;
+  flex: 100 1 auto;
   margin: 0 1em;
   > div.column {
     margin-top: .3em;
@@ -13,6 +13,9 @@
     flex-flow: column;
     &.stress {
       flex: 100 1 auto;
+    }
+    &.armor {
+      padding-bottom: 1em;
     }
   }
 }

@@ -2,7 +2,7 @@
 
 #blades-in-the-dark #window div.portal div.character div.health-and-abilities
 div.armor-and-healing {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
@@ -10,17 +10,20 @@ div.armor-and-healing {
   width: 100%;
   position: relative;
   padding-left: .5em;
-  height: calc(100% - 1em);
   box-sizing: border-box;
   z-index: 1;
   align-self: center;
-  margin-bottom: 1em;
+  padding-bottom: 1em;
+  @media only screen and (max-width: 900px) {
+    font-size: 1.5em;
+  }
   &:after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
+    box-sizing: border-box;
     width: .5em;
     background: $sun;
     z-index: 11;

@@ -8,7 +8,8 @@
   align-items: stretch;
   align-content: stretch;
   position: relative;
-  flex: 1 1 0;
+  flex: 1 1 15em;
+  margin-bottom: 2em;
   div.load {
     margin: 0 .5em;
     display: flex;
@@ -116,14 +117,15 @@
           flex-flow: column nowrap;
           justify-content: flex-end;
           overflow: visible;
+          height: 0;
           &.light {
-            flex: 50 0 0;
+            flex: 3 0 0;
           }
           &.normal {
-            flex: 33 0 0;
+            flex: 2 0 0;
           }
           &.heavy {
-            flex: 16 0 0;
+            flex: 1 0 0;
           }
           button.diamond {
             div.container {
@@ -252,30 +254,41 @@
       &:not(:disabled) {
         cursor: pointer;
         $hover: lighten($fire, 10%);
-        &:focus {
-          text-decoration: underline;
-          outline: none;
-        }
-        &:hover {
-          color: mix($normal-used, $hover, 40%);
-        }
         &:active {
           color: lighten(mix($normal-used, $hover, 20%), 20%);
         }
         &.heavy {
-          &:hover {
-            color: mix($heavy-used, $hover, 50%);
-          }
           &:active {
             color: lighten(mix($heavy-used, $hover, 20%), 20%);
           }
         }
         &.light {
-          &:hover {
-            color: mix($light-used, $hover, 50%);
-          }
           &:active {
             color: lighten(mix($light-used, $hover, 20%), 20%);
+          }
+        }
+        @media only screen and (max-width: 900px) {
+          &:hover, &:focus {
+            text-decoration: underline;
+          }
+        }
+        @media only screen and (min-width: 901px) {
+          &:focus {
+            text-decoration: underline;
+            outline: none;
+          }
+          &:hover {
+            color: mix($normal-used, $hover, 40%);
+          }
+          &.heavy {
+            &:hover {
+              color: mix($heavy-used, $hover, 50%);
+            }
+          }
+        }
+        &.light {
+          &:hover {
+            color: mix($light-used, $hover, 50%);
           }
         }
       }

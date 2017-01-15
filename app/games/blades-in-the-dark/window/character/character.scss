@@ -5,6 +5,9 @@
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: stretch;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
   div.title {
     font-size: 2em;
     font-family: 'Rajdhani';
@@ -38,12 +41,13 @@
       flex-wrap: wrap;
     }
     > div.column {
+      flex: 1 1 auto;
       display: flex;
       flex-flow: row nowrap;
       justify-content: flex-start;
       align-items: flex-start;
       @media only screen and (max-width: 1300px) {
-        flex-wrap: wrap;
+        flex-flow: row wrap;
       }
     }
   }

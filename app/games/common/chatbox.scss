@@ -50,10 +50,11 @@
     flex: 1 1 auto;
     overflow: hidden;
     div#conversation {
+      -webkit-overflow-scrolling: touch;
       box-sizing: border-box;
       width: 100%;
       flex: 1 1 auto;
-      overflow-y: auto;
+      overflow-y: scroll;
       height: 0;
       padding: 1em;
       display: block;

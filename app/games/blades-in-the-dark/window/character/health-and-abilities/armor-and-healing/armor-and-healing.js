@@ -57,7 +57,7 @@ const Healing = (props) => {
   }
   const className = cx('clock', {unlocked});
   return (
-    <div className='healing'>
+    <div className='healing' ref='REF'>
       <div className={className}>
         <Clock value={clock} size={8} disabled={!unlocked || disabled}
           increment={increment.bind(this)}
