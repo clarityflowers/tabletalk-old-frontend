@@ -35,9 +35,7 @@ const Window = (props) => {
   let route = props.route;
   let activeTab = null;
   if (route.isExact) {
-    portal = (
-      <h1>Nothing</h1>
-    )
+    portal = null;
   }
   else {
     route = route.next();
