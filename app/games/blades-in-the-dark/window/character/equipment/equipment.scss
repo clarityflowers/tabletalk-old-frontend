@@ -254,6 +254,7 @@
         $hover: lighten($fire, 10%);
         &:focus {
           text-decoration: underline;
+          outline: none;
         }
         &:hover {
           color: mix($normal-used, $hover, 40%);

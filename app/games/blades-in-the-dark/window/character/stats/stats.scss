@@ -73,12 +73,15 @@
       margin: 0 .5em;
       display: flex;
       flex-flow: column nowrap;
+      align-items: flex-start;
       button.action {
         color: $sun;
         div.container {
           display: flex;
           flex-flow: row nowrap;
           align-items: center;
+          box-sizing: border-box;
+          // height: 110%;
         }
         div.name {
           transition: color .5s;
