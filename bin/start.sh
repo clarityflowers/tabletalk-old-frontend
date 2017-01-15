@@ -2,7 +2,7 @@ echo Initializing $NODE_ENV server
 if [ "$NODE_ENV" = "production" ]
 then
   webpack
-  nodejs server.js
+  node server.js
 else
-  nodejs server.js
+  node server.js
 fi
