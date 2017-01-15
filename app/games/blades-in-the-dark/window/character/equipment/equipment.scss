@@ -1,0 +1,283 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+@import 'games/blades-in-the-dark/common/fonts.scss';
+
+#blades-in-the-dark #window div.portal div.character div.equipment {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+  position: relative;
+  flex: 1 1 0;
+  div.load {
+    margin: 0 .5em;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-self: stretch;
+    align-items: center;
+    > div.container {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      flex-flow: column nowrap;
+      align-items: center;
+      justify-content: center;
+      > button.label {
+        transform: rotate(90deg);
+        position: relative;
+        background: $sun;
+        padding: 0 .2em;
+        box-sizing: border-box;
+        color: $stone;
+        margin: .6em 0;
+        box-shadow: 3px 2px 2px 1px $shadow-color;
+      }
+      div.dash {
+        position: relative;
+        width: 1.3em;
+        background: none;
+        min-height: 7em;
+        // width: 12em;
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        &:before {
+          z-index: 1;
+          box-shadow: $shadow;
+        }
+        &:after {
+          z-index: 3;
+        }
+        &:before, &:after {
+          content: "";
+          position: absolute;
+          left: .4em;
+          top: 0;
+          width: .5em;
+          height: 0em;
+          background: $sun;
+          transition: height 1s ease-in-out;
+          pointer-events: none;
+        }
+        &.dash-1 {
+          &:before, &:after {
+            height: 16.66%;
+          }
+        }
+        &.dash-2 {
+          &:before, &:after {
+            height: 33.33%;
+          }
+        }
+        &.dash-3 {
+          &:before, &:after {
+            height: 50%;
+          }
+        }
+        &.dash-4 {
+          &:before, &:after {
+            height: 66.66%;
+          }
+        }
+        &.dash-5 {
+          &:before, &:after {
+            height: 83.33%;
+          }
+        }
+        &.dash-6 {
+          &:before, &:after {
+            height: 100%;
+          }
+        }
+        &.dash-7 {
+          &:before, &:after {
+            height: 116.66%;
+          }
+        }
+        &.dash-8 {
+          &:before, &:after {
+            height: 133.33%;
+          }
+        }
+        &.dash-9 {
+          &:before, &:after {
+            height: 150%;
+          }
+        }
+        &.dash-10 {
+          &:before, &:after {
+            height: 166.66%;
+          }
+        }
+        div.gap {
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: flex-end;
+          overflow: visible;
+          &.light {
+            flex: 50 0 0;
+          }
+          &.normal {
+            flex: 33 0 0;
+          }
+          &.heavy {
+            flex: 16 0 0;
+          }
+          button.diamond {
+            div.container {
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            width: 1.2em;
+            height: 1.2em;
+            top: .6em;
+            flex: 0 0 auto;
+            position: relative;
+            z-index: 4;
+            overflow: visible;
+            svg {
+              polygon {
+                fill: darken($stone, 20%);
+                stroke: $sun;
+              }
+              -webkit-filter: drop-shadow($text-shadow);
+              filter: drop-shadow($text-shadow);
+              -webkit-svg-shadow: $text-shadow;
+            }
+            div.label {
+              transform: rotate(90deg);
+              font-size: .5em;
+              color: $sun;
+              position: absolute;
+              margin-left: -2em;
+              text-shadow: 3px 2px 1px $shadow-color;
+              opacity: 0;
+              transition: opacity .3s;
+            }
+            &:hover {
+              div.label {
+                opacity: 1;
+              }
+            }
+            &.checked {
+              z-index: 2;
+              svg polygon {
+                fill: $sun;
+              }
+            }
+            &:not(:disabled) {
+              cursor: pointer;
+              &.checked {
+                &:focus {
+                  z-index: 5;
+                  svg polygon {
+                    fill: lighten($fire, 20%);
+                  }
+                }
+                &:hover {
+                  svg polygon {
+                    fill: $fire;
+                  }
+                }
+                &:active {
+                  svg polygon {
+                    fill: lighten($fire, 30%);
+                  }
+                }
+              }
+              &:focus {
+                svg polygon {
+                  stroke: lighten($fire, 20%);
+                }
+                div.label {
+                  opacity: 1;
+                }
+              }
+              &:hover {
+                svg polygon {
+                  stroke: $fire;
+                }
+              }
+              &:active {
+                svg polygon {
+                  stroke: lighten($fire, 30%);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  div.items {
+    min-width: 12.5em;
+    font-size: .8em;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: flex-start;
+    button.item {
+      $normal: lighten($stone, 30%);
+      $normal-used: lighten($normal, 20%);
+      $light: $sky;
+      $light-used: lighten($light, 10%);
+      $heavy: fade-out($sand, .4);
+      $heavy-used: fade-in($heavy, .3);
+
+      text-align: left;
+      font: $body;
+      color: $normal;
+      margin: 0 1em .2em 0;
+      &.heavy {
+        color: $heavy;
+      }
+      &.light {
+        color: $light;
+      }
+      &.used {
+        font-weight: 700;
+        color: $normal-used;
+        &.heavy {
+          color: $heavy-used;
+        }
+        &.light {
+          color: $light-used;
+        }
+      }
+      &:not(:disabled) {
+        cursor: pointer;
+        $hover: lighten($fire, 10%);
+        &:focus {
+          text-decoration: underline;
+        }
+        &:hover {
+          color: mix($normal-used, $hover, 40%);
+        }
+        &:active {
+          color: lighten(mix($normal-used, $hover, 20%), 20%);
+        }
+        &.heavy {
+          &:hover {
+            color: mix($heavy-used, $hover, 50%);
+          }
+          &:active {
+            color: lighten(mix($heavy-used, $hover, 20%), 20%);
+          }
+        }
+        &.light {
+          &:hover {
+            color: mix($light-used, $hover, 50%);
+          }
+          &:active {
+            color: lighten(mix($light-used, $hover, 20%), 20%);
+          }
+        }
+      }
+    }
+  }
+}

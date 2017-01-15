@@ -87,6 +87,9 @@ div.harm {
             padding: .6em;
             box-sizing: border-box;
             margin: none;
+            &:disabled {
+              cursor: default;
+            }
             &#harm-value-3-1 {
               width: 100%;
             }

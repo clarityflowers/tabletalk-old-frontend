@@ -5,6 +5,7 @@ import React from 'react';
 import Portal from '../common/portal.js';
 import Stats from './stats/stats.js';
 import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
+import Equipment from './equipment/equipment.js';
 
 import './character.scss';
 
@@ -48,7 +49,7 @@ const Character = (props) => {
     id, names, stats, health, equipment, specialAbilities, permissions,
     onChat, update, me
   } = props;
-  const canEdit = permissions.edit.includes(me.id);
+  const disabled = !permissions.edit.includes(me.id);
   const updateStats = (stats) => { update({id, stats}); }
   const updateHealth = (health) => { update({id, health}); }
   const updateEquipment = (equipment) => { update({id, equipment}); }
@@ -58,13 +59,19 @@ const Character = (props) => {
         <Title {...names}/>
         <div className='row'>
           <Stats {...stats}
-                 disabled={!canEdit}
+                 disabled={disabled}
                  update={updateStats.bind(this)}/>
-          <HealthAndAbilities {...health}
-                          disabled={!canEdit}
-                          specialAbilities={specialAbilities}
-                          update={updateHealth.bind(this)}
-                          playbook={names.playbook}/>
+          <div className='column'>
+            <HealthAndAbilities {...health}
+                            disabled={disabled}
+                            specialAbilities={specialAbilities}
+                            update={updateHealth.bind(this)}
+                            playbook={names.playbook}/>
+            <Equipment {...equipment}
+                       update={updateEquipment.bind(this)}
+                       disabled={disabled}
+                       playbook={names.playbook}/>
+          </div>
         </div>
       </div>
     </Portal>

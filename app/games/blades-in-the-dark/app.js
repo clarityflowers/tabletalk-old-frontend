@@ -28,9 +28,15 @@ class App extends React.Component {
             result.push(mod.add);
           }
           else if (mod.remove) {
-            i = result.indexOf(mod.remove);
-            if (i >= 0) {
-              result.splice(i,1);
+            const target = mod.remove;
+            if (target == "all") {
+              result = [];
+            }
+            else {
+              let i = result.indexOf(target);
+              if (i >= 0) {
+                result.splice(i,1);
+              }
             }
           }
         }
@@ -137,20 +143,13 @@ class App extends React.Component {
   }
 
   render() {
-    let tabs = [
-      {
-        type: TAB_TYPES.CREW,
-        crew: {
-          name: 'The Quicksilver Crew',
-          id: 13,
-          playbook: 'Shadows'
-        }
-      }
-    ];
-    if (this.state.characters[1]) {
+    const { characters } = this.state;
+    let ids = Object.keys(characters);
+    let tabs = [];
+    for (let i=0; i < ids.length; i++) {
       tabs.push({
         type: TAB_TYPES.CHARACTER,
-        character: this.state.characters[1]
+        character: this.state.characters[ids[i]]
       })
     }
     const me = this.props.players ? this.props.players.me : null;

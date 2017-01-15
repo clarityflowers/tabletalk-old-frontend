@@ -3,7 +3,8 @@
 #blades-in-the-dark #window div.portal div.character div.health-and-abilities {
   display: flex;
   flex-flow: row wrap;
-  flex: 1 1 auto;
+  flex: 100 1 0;
+  margin: 0 1em;
   > div.column {
     margin-top: .3em;
     flex: 1 1 auto;

@@ -43,7 +43,7 @@ class HarmValue extends React.Component {
     document.getElementById(this.props.id).select();
   }
   render() {
-    const { id, name } = this.props;
+    const { id, name, disabled } = this.props;
     const { value, focused } = this.state;
     const className = cx('value', {
       highlight: !!value
@@ -56,7 +56,8 @@ class HarmValue extends React.Component {
                   onChange={this.handleChange.bind(this)}
                   onBlur={this.handleBlur.bind(this)}
                   onFocus={this.handleFocus.bind(this)}
-                  ref='box'/>
+                  ref='box'
+                  disabled={disabled}/>
       </div>
     )
   }

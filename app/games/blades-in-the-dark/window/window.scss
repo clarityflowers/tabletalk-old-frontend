@@ -22,6 +22,7 @@
     align-items: center;
     background-color: $stone;
     box-shadow: 0 0 1em 1em $stone;
+    z-index: 100;
     .tab {
       color: $sun;
       background-color: $mud;

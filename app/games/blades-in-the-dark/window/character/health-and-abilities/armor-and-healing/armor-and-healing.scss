@@ -89,6 +89,9 @@ div.armor-and-healing {
       }
     }
     button.tickbar {
+      &:disabled div.tick.checked:active svg polygon {
+        fill: $sky;
+      }
       &:focus {
         div.label {
           color: lighten($sky, 20%);
@@ -112,6 +115,19 @@ div.armor-and-healing {
     }
   }
   button.tickbar {
+    &:disabled {
+      div.tick {
+        cursor: default;
+        &:active {
+          svg polygon {
+            fill: darken($stone, 10%);
+          }
+          &.checked svg polygon {
+            fill: $sun;
+          }
+        }
+      }
+    }
     &.armor {
       div.label {
         z-index: 6;
