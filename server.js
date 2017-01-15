@@ -15,9 +15,17 @@ else {
   const webpack = require('webpack');
   const WebpackDevServer = require('webpack-dev-server');
   var config = require('./webpack.config.js');
+
+  config.output.path = '/public';
+  config.devtool = 'cheap-module-eval-source-map';
+  config.entry.unshift('webpack-hot-middleware/client');
+  config.module.loaders[0].loaders.unshift('react-hot');
+  config.module.loaders[1].loaders.unshift('react-hot');
+  config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
+
   var compiler = webpack(config);
 
-  config.entry.unshift("webpack-dev-server/client?http://localhost:8080/")
+  config.entry.unshift("webpack-dev-server/client?http://localhost:8080/");
   config.output.path = '/' + config.output.path;
 
   var port = process.env.PORT;
