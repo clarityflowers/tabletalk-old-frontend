@@ -13,7 +13,6 @@
   .center {
     fill: lighten($stone, 10%);
     stroke: none;
-    pointer-events: none;
   }
   -webkit-filter: drop-shadow($text-shadow);
   filter: drop-shadow($text-shadow);

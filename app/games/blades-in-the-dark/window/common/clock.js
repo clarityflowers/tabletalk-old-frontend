@@ -62,17 +62,22 @@ class Clock extends React.Component {
   }
   mouseOver(value) {
     return () => {
-      console.log('MOUSE OVER', value)
       this.setState({hover: value});
     }
   }
   mouseLeave(value) {
     return () => {
-      console.log('MOUSE LEAVE', value);
       if (this.state.hover == value) {
         this.setState({hover: null});
       }
     }
+  }
+  handleContextMenu(e) {
+    if (this.props.decrement) {
+      this.props.decrement();
+    }
+    e.preventDefault();
+    return false;
   }
   render() {
     const { value, size, disabled, increment, decrement } = this.props;
@@ -89,7 +94,7 @@ class Clock extends React.Component {
       if (!disabled) {
         props.onMouseOver = this.mouseOver(i);
         props.onMouseLeave = this.mouseLeave(i);
-        if (value < i) {
+        if (value <= i) {
           props.onClick = increment;
         }
         else {
@@ -98,7 +103,6 @@ class Clock extends React.Component {
         if (hover != null) {
           if (i == value - 1 && (hover == 'mid' || hover < value)) {
             props.highlight = true;
-            console.log('HIGHLIGHT');
           }
         }
         if (hover != null) {
@@ -125,8 +129,10 @@ class Clock extends React.Component {
    			<line className='stroke' strokeWidth="2" x1="18" y1="36.303" x2="54" y2="36.303"/>
    			<line className='stroke' strokeWidth="2" x1="23.273" y1="23.576" x2="48.728" y2="49.031"/>
    			<line className='stroke' strokeWidth="2" x1="48.728" y1="23.576" x2="23.272" y2="49.031"/>
-   			<polygon className='center' points="42.89,29.415 36.001,26.561 29.113,29.415 26.259,36.304 29.113,43.192 36.001,46.046
-   				42.89,43.192 45.744,36.304 			"/>
+   			<polygon className='center'
+                 points="42.89,29.415 36.001,26.561 29.113,29.415 26.259,36.304 29.113,43.192 36.001,46.046	42.89,43.192 45.744,36.304"
+                 onClick={increment}
+                 onContextMenu={this.handleContextMenu.bind(this)}/>
    			<polygon className='stroke' strokeWidth="4" points="42.89,29.415 36.001,26.561 29.113,29.415 26.259,36.304
    				29.113,43.192 36.001,46.046 42.89,43.192 45.744,36.304 			"/>
 
