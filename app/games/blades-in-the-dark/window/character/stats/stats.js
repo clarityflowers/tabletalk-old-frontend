@@ -107,11 +107,9 @@ class Header extends React.Component {
   }
   handleHover(value) {
     this.setState({hover: value})
-    console.log('HOVER', value);
   }
   handleClick(click) {
     this.props.update(this.props.value + this.getChange(click));
-    console.log('CLICK', click);
   }
   render() {
     const { name, value, length, disabled, update } = this.props;
