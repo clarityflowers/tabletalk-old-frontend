@@ -1,0 +1,26 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+@import 'games/blades-in-the-dark/common/fonts.scss';
+
+
+
+#blades-in-the-dark #window div.portal div.character
+div.details {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1 1 auto;
+  // justify-content: space-;
+  div.block {
+    flex: 1 1 auto;
+    // min-width: 11em;
+    max-width: 38em;
+    margin: 0 1em 1em 1em;
+    div.header {
+      color: $sand;
+    }
+    div.body {
+      font: $body;
+      font-size: 0.8em;
+      color: $sun;
+    }
+  }
+}

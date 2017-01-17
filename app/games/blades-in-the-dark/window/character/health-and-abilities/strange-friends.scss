@@ -1,23 +1,21 @@
 @import 'games/blades-in-the-dark/common/colors.scss';
 @import 'games/blades-in-the-dark/common/fonts.scss';
 
-#blades-in-the-dark #window div.portal div.character div.health-and-abilities
+#blades-in-the-dark #window div.portal div.character
 div.strange-friends {
   flex: 1 1 auto;
-  margin-left: 2em;
-  margin-right: 1em;
-  > div.header {
-    // font-size: 1.25em;
-    color: $sand;
-  }
+  // min-width: 15em;
   div.friend {
     max-width: 40em;
     width: 100%;
     margin-bottom: 1em;
     div.header {
+      font: $h1;
+      font-size: 1.25em;
       display: flex;
-      flex-flow: row nowrap;
+      flex-flow: row wrap;
       margin-left: -2em;
+      white-space: nowrap;
       div.icon {
         width: 1em;
         margin: 0 .5em;
@@ -34,20 +32,14 @@ div.strange-friends {
           -webkit-svg-shadow: $text-shadow;
         }
       }
-      div.names {
-        span.name {
-          color: lighten($sky, 15%);
-        }
-        span.title {
-          margin-left: .75em;
-          color: $sky;
-        }
+      div.name {
+        margin-right: .75em;
+        color: lighten($sky, 15%);
       }
-    }
-    div.description {
-      color: $sun;
-      font: $body;
-      font-size: .8em;
+      div.title {
+        white-space: nowrap;
+        color: $sky;
+      }
     }
   }
 }

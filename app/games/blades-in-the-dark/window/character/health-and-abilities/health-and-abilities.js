@@ -7,14 +7,14 @@ import StressAndTrauma from './stress-and-trauma/stress-and-trauma.js';
 import Harm from './harm/harm.js';
 import ArmorAndHealing from './armor-and-healing/armor-and-healing.js';
 import SpecialAbilities from './special-abilities/special-abilities.js'
-import StrangeFriends from './strange-friends.js';
+import Details from './details.js';
 
 import './health-and-abilities.scss';
 
 const HealthAndItems = (props) => {
   const {
     stress, trauma, harm, healing, armor, specialAbilities, playbook,
-    strangeFriends,
+    strangeFriends, details,
     update, updateSpecialAbilities, disabled
   } = props;
   const updateStressAndTrauma = ({stress, trauma}) => {
@@ -48,7 +48,7 @@ const HealthAndItems = (props) => {
                          updateArmor={updateArmor} updateHealing={updateHealing}/>
       </div>
       <SpecialAbilities specialAbilities={specialAbilities} playbook={playbook}/>
-      <StrangeFriends strangeFriends={strangeFriends}/>
+      <Details strangeFriends={strangeFriends} {...details}/>
     </div>
   )
 }
@@ -61,6 +61,7 @@ HealthAndItems.propTypes = {
   armor: React.PropTypes.object.isRequired,
   specialAbilities: React.PropTypes.array.isRequired,
   strangeFriends: React.PropTypes.object.isRequired,
+  details: React.PropTypes.object.isRequired,
   playbook: React.PropTypes.string,
   update: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired

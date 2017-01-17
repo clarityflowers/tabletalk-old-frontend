@@ -55,10 +55,8 @@ const StrangeFriend = (props) => {
     <div className={className}>
       <div className='header'>
         <Icon isFriend={isFriend}/>
-        <div className='names'>
-          <span className='name'>{name}</span>
-          <span className='title'>{title}</span>
-        </div>
+        <div className='name'>{name}</div>
+        <div className='title'>{title}</div>
       </div>
       <div className='description'>{description}</div>
     </div>
@@ -85,7 +83,6 @@ const StrangeFriends = (props) => {
   }
   return (
     <div className='strange-friends'>
-      <div className='header'>STRANGE FRIENDS</div>
       {friends}
     </div>
   )
