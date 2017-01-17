@@ -1,0 +1,53 @@
+@import 'games/blades-in-the-dark/common/colors.scss';
+@import 'games/blades-in-the-dark/common/fonts.scss';
+
+#blades-in-the-dark #window div.portal div.character div.health-and-abilities
+div.strange-friends {
+  flex: 1 1 auto;
+  margin-left: 2em;
+  margin-right: 1em;
+  > div.header {
+    font-size: 1.25em;
+    color: $sand;
+  }
+  div.friend {
+    max-width: 40em;
+    width: 100%;
+    margin-bottom: 1em;
+    div.header {
+      display: flex;
+      flex-flow: row nowrap;
+      margin-left: -2em;
+      div.icon {
+        width: 1em;
+        margin: 0 .5em;
+        svg {
+          fill: darken($stone, 15%);
+          &.enemy {
+            stroke: $fire;
+          }
+          &.friend {
+            stroke: $sky;
+          }
+          -webkit-filter: drop-shadow($text-shadow);
+          filter: drop-shadow($text-shadow);
+          -webkit-svg-shadow: $text-shadow;
+        }
+      }
+      div.names {
+        span.name {
+          color: lighten($sky, 15%);
+        }
+        span.title {
+          margin-left: .75em;
+          color: $sky;
+        }
+      }
+    }
+    div.description {
+      color: $sun;
+      font: $body;
+      font-size: .8em;
+    }
+  }
+}

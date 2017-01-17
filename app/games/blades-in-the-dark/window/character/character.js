@@ -46,7 +46,8 @@ Title.propTypes = {
 
 const Character = (props) => {
   const {
-    id, names, stats, health, equipment, specialAbilities, permissions,
+    id, names, stats, health, equipment, specialAbilities, strangeFriends,
+    permissions,
     onChat, update, me
   } = props;
   const disabled = !permissions.edit.includes(me.id);
@@ -66,7 +67,8 @@ const Character = (props) => {
                             disabled={disabled}
                             specialAbilities={specialAbilities}
                             update={updateHealth.bind(this)}
-                            playbook={names.playbook}/>
+                            playbook={names.playbook}
+                            strangeFriends={strangeFriends}/>
             <Equipment {...equipment}
                        update={updateEquipment.bind(this)}
                        disabled={disabled}
@@ -84,6 +86,7 @@ Character.propTypes = {
   stats: React.PropTypes.object.isRequired,
   health: React.PropTypes.object.isRequired,
   equipment: React.PropTypes.object.isRequired,
+  strangeFriends: React.PropTypes.object.isRequired,
   permissions: React.PropTypes.object.isRequired,
   onChat: React.PropTypes.func.isRequired,
   update: React.PropTypes.func.isRequired,
