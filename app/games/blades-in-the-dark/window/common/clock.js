@@ -101,14 +101,14 @@ class Clock extends React.Component {
           props.onClick = decrement;
         }
         if (hover != null) {
-          if (i == value - 1 && (hover == 'mid' || hover < value)) {
+          if (i == value - 1 && hover < value) {
+            props.highlight = true;
+          }
+          if (i == value && (hover >= value || hover == 'mid')) {
             props.highlight = true;
           }
         }
         if (hover != null) {
-          if (i == value && hover >= value) {
-            props.highlight = true;
-          }
         }
       }
       marks.push(
@@ -131,6 +131,8 @@ class Clock extends React.Component {
    			<line className='stroke' strokeWidth="2" x1="48.728" y1="23.576" x2="23.272" y2="49.031"/>
    			<polygon className='center'
                  points="42.89,29.415 36.001,26.561 29.113,29.415 26.259,36.304 29.113,43.192 36.001,46.046	42.89,43.192 45.744,36.304"
+                 onMouseOver={this.mouseOver('mid')}
+                 onMouseLeave={this.mouseLeave('mid')}
                  onClick={increment}
                  onContextMenu={this.handleContextMenu.bind(this)}/>
    			<polygon className='stroke' strokeWidth="4" points="42.89,29.415 36.001,26.561 29.113,29.415 26.259,36.304
