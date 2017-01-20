@@ -8,16 +8,28 @@ div.details {
   display: flex;
   flex-flow: row wrap;
   flex: 1 1 auto;
-  // justify-content: space-;
   div.block {
     flex: 1 1 auto;
-    // min-width: 11em;
     max-width: 38em;
     margin: 0 1em 1em 1em;
+    * {
+      &::selection {
+        background: $sun; /* WebKit/Blink Browsers */
+        color: $stone;
+      }
+      &::-moz-selection {
+        background: $sun; /* Gecko Browsers */
+        color: $stone;
+      }
+    }
     div.header {
       color: $sand;
     }
     div.body {
+      cursor: auto;
+      -moz-user-select: text;
+      -webkit-user-select: text;
+      -ms-user-select: text;
       font: $body;
       font-size: 0.8em;
       color: $sun;

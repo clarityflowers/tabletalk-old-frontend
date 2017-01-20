@@ -11,6 +11,17 @@ div.special-abilities {
   width: 15em;
   color: $sun;
   margin: 0 1em 1em 1em;
+  cursor: auto;
+  * {
+    &::selection {
+      background: $sun; /* WebKit/Blink Browsers */
+      color: $stone;
+    }
+    &::-moz-selection {
+      background: $sun; /* Gecko Browsers */
+      color: $stone;
+    }
+  }
   p.ability {
     width: 100%;
     max-width: 38em;
@@ -20,19 +31,7 @@ div.special-abilities {
     }
     font: $body;
     font-size: .8em;
-    cursor: text;
-    -moz-user-select: text;
-    -webkit-user-select: text;
-    -ms-user-select: text;
     user-select: text;
-    &::selection {
-      background: $sun; /* WebKit/Blink Browsers */
-      color: $stone;
-    }
-    &::-moz-selection {
-      background: $sun; /* Gecko Browsers */
-      color: $stone;
-    }
     span.name {
       font: $h1;
       font-size: 1.25em;
