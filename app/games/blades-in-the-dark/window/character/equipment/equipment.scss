@@ -24,7 +24,18 @@
       flex-flow: column nowrap;
       align-items: center;
       justify-content: center;
-      > button.label {
+
+      & > button.label:not(:disabled) {
+        &:focus {
+          text-decoration: underline;
+        }
+        &:hover {
+          color: $fire;
+        }
+        &:active {
+          color: lighten($fire, 30%);
+        }
+        cursor: pointer;
         transform: rotate(90deg);
         position: relative;
         background: $sun;
