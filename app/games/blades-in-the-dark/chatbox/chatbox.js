@@ -64,9 +64,6 @@ let Roll = (props) => {
   }
   return (
     <div className={rollClassName}>
-      <div className='header'>
-        {props.name} rolled {props.level}
-      </div>
       <div className='dice'>
         {dice}
       </div>

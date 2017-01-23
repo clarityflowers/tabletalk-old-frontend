@@ -8,10 +8,10 @@ import Tickbars from './tickbars';
 import './stress-and-trauma.scss';
 
 const TraumaList = (props) => {
-  const { trauma, off, addTrauma } = props;
+  const { trauma, off, add } = props;
   const click = (name) => {
     return () => {
-      addTrauma(name);
+      add(name);
     };
   }
   let traumaList = [
@@ -46,7 +46,7 @@ const TraumaList = (props) => {
 
 TraumaList.propTypes = {
   trauma: React.PropTypes.array.isRequired,
-  addTrauma: React.PropTypes.func.isRequired,
+  add: React.PropTypes.func.isRequired,
   off: React.PropTypes.bool.isRequired
 }
 
@@ -55,26 +55,21 @@ TraumaList.defaultProps = {
 }
 
 const StressAndTrauma = (props) => {
-  const { stress, trauma, update, disabled } = props;
+  const { stress, trauma, disabled, increment, decrement, add } = props;
   const showTraumaSelector = stress == 9;
   const addTrauma = (trauma) => {
-    update({
-      trauma: {
-        add: trauma
-      },
-      stress: 0
-    });
+    return null;
   }
-  const updateStress = (stress) => { update({stress}); }
   return(
     <div className='stress-and-trauma'>
       <Tickbars stress={stress}
                 trauma={trauma}
-                update={updateStress.bind(this)}
+                increment={increment}
+                decrement={decrement}
                 disabled={disabled}/>
       <TraumaList trauma={trauma}
                   off={disabled || !showTraumaSelector}
-                  addTrauma={addTrauma.bind(this)}/>
+                  add={add.bind(this)}/>
     </div>
   );
 }
@@ -82,8 +77,9 @@ const StressAndTrauma = (props) => {
 StressAndTrauma.propTypes = {
   stress: React.PropTypes.number.isRequired,
   trauma: React.PropTypes.array.isRequired,
-  update: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool
+  disabled: React.PropTypes.bool,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired
 }
 
 export default StressAndTrauma;

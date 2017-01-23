@@ -17,6 +17,7 @@ div.stress-and-trauma > div.tickbars {
   }
   >div.bar {
     // margin: 1em 0 -1em 0;
+    margin-bottom: .2em;
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
@@ -34,7 +35,7 @@ div.stress-and-trauma > div.tickbars {
     }
     div.ticks {
       font-size: 1.5em;
-      button.tick {
+      div.tick {
         position: relative;
         svg {
         }
@@ -44,7 +45,7 @@ div.stress-and-trauma > div.tickbars {
       flex: 1 0 auto;
       div.ticks {
         z-index: 3;
-        button.tick {
+        div.tick {
           margin-right: .33em;
           &:after {
             content: "";
@@ -62,10 +63,15 @@ div.stress-and-trauma > div.tickbars {
         &:not(:disabled) {
           cursor: pointer;
           &:focus {
-            color: darken($fire, 20%);
+            text-decoration: underline;
           }
-          &.highlight {
+          &:hover {
             color: $fire;
+            & + div.check-array.ticks {
+              button div.tick:not(.checked):first-child svg polygon {
+                fill: $fire;
+              }
+            }
           }
           &:active {
             color: lighten($fire, 30%);
@@ -87,7 +93,7 @@ div.stress-and-trauma > div.tickbars {
         left: .5em;
       }
       div.ticks {
-        button.tick {
+        div.tick {
           margin-left: .33em;
           svg polygon {
             stroke: darken($stone, 10%);

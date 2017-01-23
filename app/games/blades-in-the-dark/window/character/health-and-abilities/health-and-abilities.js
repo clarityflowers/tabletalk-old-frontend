@@ -11,11 +11,11 @@ import Details from './details.js';
 
 import './health-and-abilities.scss';
 
-const HealthAndItems = (props) => {
+const HealthAndAbilities = (props) => {
   const {
-    stress, trauma, harm, healing, armor, specialAbilities, playbook,
+    stress, harm, healing, armor, specialAbilities, playbook,
     strangeFriends, details,
-    update, updateSpecialAbilities, disabled
+    disabled
   } = props;
   const updateStressAndTrauma = ({stress, trauma}) => {
     let result = {};
@@ -37,15 +37,11 @@ const HealthAndItems = (props) => {
   return (
     <div className='health-and-abilities'>
       <div className='column stress'>
-
-        <StressAndTrauma stress={stress} trauma={trauma}
-                         update={updateStressAndTrauma.bind(this)}
-                         disabled={disabled}/>
-        <Harm {...harm} update={updateHarm.bind(this)} disabled={disabled}/>
+        <StressAndTrauma {...stress} disabled={disabled}/>
+        <Harm {...harm} disabled={disabled}/>
       </div>
       <div className='column armor'>
-        <ArmorAndHealing armor={armor} healing={healing} disabled={disabled}
-                         updateArmor={updateArmor} updateHealing={updateHealing}/>
+        <ArmorAndHealing armor={armor} healing={healing} disabled={disabled}/>
       </div>
       <SpecialAbilities specialAbilities={specialAbilities} playbook={playbook}/>
       <Details strangeFriends={strangeFriends} {...details}/>
@@ -53,18 +49,16 @@ const HealthAndItems = (props) => {
   )
 }
 
-HealthAndItems.propTypes = {
-  stress: React.PropTypes.number.isRequired,
-  trauma: React.PropTypes.array.isRequired,
+HealthAndAbilities.propTypes = {
+  stress: React.PropTypes.object.isRequired,
   healing: React.PropTypes.object.isRequired,
   harm: React.PropTypes.object.isRequired,
   armor: React.PropTypes.object.isRequired,
   specialAbilities: React.PropTypes.array.isRequired,
-  strangeFriends: React.PropTypes.object.isRequired,
+  strangeFriends: React.PropTypes.array.isRequired,
   details: React.PropTypes.object.isRequired,
   playbook: React.PropTypes.string,
-  update: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired
 }
 
-export default HealthAndItems;
+export default HealthAndAbilities;

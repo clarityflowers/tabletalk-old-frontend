@@ -95,11 +95,6 @@ div.armor-and-healing {
       &:disabled div.tick.checked:active svg polygon {
         fill: $sky;
       }
-      &:focus {
-        div.label {
-          color: lighten($sky, 20%);
-        }
-      }
       div.label {
         color: $sky;
         &:after {
@@ -159,7 +154,9 @@ div.armor-and-healing {
       position: relative;
       flex: 1 1 auto;
       text-align: right;
+      transition: color .25s;
       &:after {
+        transition: background .25s;
         content: "";
         position: absolute;
         top: 0;
@@ -173,14 +170,16 @@ div.armor-and-healing {
     }
     div.tick {
       font-size: 1.5em;
-      &.checked svg polygon {
+      svg polygon {
+        transition-property: stroke, fill;
+        transition-duration: .25s;
       }
     }
     &:not(:disabled) {
       cursor: pointer;
       &:focus {
         div.label {
-          color: lighten($fire, 30%);
+          text-decoration: underline;
         }
       }
       &:hover {
@@ -213,6 +212,22 @@ div.armor-and-healing {
           &.checked svg polygon {
             fill: lighten($fire, 30%);
           }
+        }
+      }
+    }
+    &:not(.available) {
+      div.label {
+        color: lighten($stone, 20%);
+        &:after {
+          background: lighten($stone, 20%);
+        }
+      }
+      div.tick {
+        svg polygon {
+          stroke: lighten($stone, 20%);
+        }
+        &.checked svg polygon {
+          fill: lighten($stone, 20%);
         }
       }
     }

@@ -25,9 +25,12 @@ const Tab = (props) => {
 }
 
 const Window = (props) => {
-  const { update, me } = props;
+  const { update, send, me } = props;
   const updateCharacter = (character) => {
     update({character});
+  }
+  const sendCharacter = (data) => {
+    send({what: "character", data: data});
   }
   let portal = null;
   let tabs = [];
@@ -47,7 +50,7 @@ const Window = (props) => {
       let character = data.character;
       tabs.push(
         <Tab route={props.route}
-             name={character.names.name}
+             name={character.name}
              key={`${data.type}_${character.id}`}
              baseUrl={baseUrl}
              index={i}/>
@@ -57,6 +60,7 @@ const Window = (props) => {
           <Character {...character}
                      onChat={props.onChat}
                      update={updateCharacter.bind(this)}
+                     send={sendCharacter}
                      me={me}/>
         )
       }

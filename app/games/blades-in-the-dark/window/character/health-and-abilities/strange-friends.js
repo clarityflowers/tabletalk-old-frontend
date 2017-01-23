@@ -73,12 +73,10 @@ StrangeFriend.propTypes = {
 const StrangeFriends = (props) => {
   const { strangeFriends } = props;
   let friends = [];
-  let ids = Object.keys(strangeFriends);
-  for (let i=0; i < ids.length; i++) {
-    const id = ids[i];
-    const friend = strangeFriends[id];
+  for (let i=0; i < strangeFriends.length; i++) {
+    const friend = strangeFriends[i];
     friends.push(
-      <StrangeFriend key={id} {...friend}/>
+      <StrangeFriend key={i} {...friend}/>
     )
   }
   return (
@@ -89,7 +87,7 @@ const StrangeFriends = (props) => {
 };
 
 StrangeFriends.propTypes = {
-  strangeFriends: React.PropTypes.object.isRequired
+  strangeFriends: React.PropTypes.array.isRequired
 }
 
 export default StrangeFriends;

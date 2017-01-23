@@ -14,6 +14,7 @@ class Action extends React.Component {
     this.state = {
       hover: false,
     }
+    this.clicked = false;
   }
   handleMouseOver() {
     this.setState({hover: true});
@@ -22,24 +23,26 @@ class Action extends React.Component {
     this.setState({hover: false});
   }
   handleClick() {
-    this.props.increment(this.props.value + 1);
+    if (!this.clicked) {
+      this.clicked = true;
+      this.props.advance();
+    }
+    setTimeout(() => {console.log('BLUH'); this.clicked = false}, 2000);
   }
   render() {
-    const { name, value, disabled, unlocked, update } = this.props;
+    const { name, value, disabled, unlocked, advance } = this.props;
     const { hover } = this.state;
     let dots = [];
     for (let i=1; i <= 4; i++) {
       const active = !disabled && unlocked && i == value + 1
-      const className = cx('dot', {
+      const className = cx('check', 'dot', {
         first: i == 1,
         checked: value >= i,
         active: active
       });
       dots.push(
         <div key={i}
-             className={className}>
-          @
-        </div>
+             className={className}/>
       )
       if (i == 1) {
         dots.push(
@@ -47,7 +50,7 @@ class Action extends React.Component {
         );
       }
     }
-    const active = !disabled && unlocked
+    const active = !disabled && unlocked && value < 4
     const className = cx('action', {
       highlight: active && hover
     });
@@ -78,7 +81,7 @@ Action.propTypes = {
   value: React.PropTypes.number.isRequired,
   disabled: React.PropTypes.bool,
   unlocked: React.PropTypes.bool.isRequired,
-  increment: React.PropTypes.func.isRequired
+  advance: React.PropTypes.func.isRequired
 }
 
 Action.defaultProps = {
@@ -105,15 +108,20 @@ class Header extends React.Component {
     }
     return change;
   }
-  handleHover(value) {
-    this.setState({hover: value})
-  }
-  handleClick(click) {
-    this.props.update(this.props.value + this.getChange(click));
+  hover(value) {
+    return () => {
+      this.setState({hover: value})
+    }
   }
   render() {
-    const { name, value, length, disabled, update } = this.props;
+    const { name, value, length, disabled, increment, decrement } = this.props;
     const { hover } = this.state;
+    const checkedProps = {
+      onClick: decrement
+    }
+    const uncheckedProps = {
+      onClick: increment
+    }
     const highlight = this.getChange(hover);
     const className = cx('header', {
       highlight: value == length
@@ -127,9 +135,8 @@ class Header extends React.Component {
                   value={value}
                   length={length}
                   disabled={disabled}
-                  highlight={highlight}
-                  onHover={this.handleHover.bind(this)}
-                  onClick={this.handleClick.bind(this)}/>
+                  checkedProps={checkedProps}
+                  uncheckedProps={uncheckedProps}/>
       </div>
     );
   }
@@ -139,7 +146,8 @@ Header.propTypes = {
   name: React.PropTypes.string.isRequired,
   value: React.PropTypes.number.isRequired,
   length: React.PropTypes.number.isRequired,
-  update: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool
 }
 
@@ -148,38 +156,37 @@ Header.defaultProps = {
 }
 
 const Stat = (props) => {
-  const { disabled, xp, name, update } = props;
-  const updateXP = (xp) => { update({xp}); };
+  const {
+    disabled, xp, name,
+    increment, decrement, advanceAction
+  } = props;
   let actions = Object.assign({}, props);
   delete actions.disabled;
   delete actions.xp;
   delete actions.name;
-  delete actions.update;
+  delete actions.increment;
+  delete actions.decrement;
+  delete actions.advanceAction;
   let actionDivs = [];
   let dots = [];
   const names = Object.keys(actions);
   for (let i=0; i < names.length; i++) {
     const name = names[i];
     const value = actions[name]
-    const increment = (value) => {
-      update({
-        [name]: value,
-        xp: 0
-      });
-    };
+    const advance = () => { advanceAction(name); }
     actionDivs.push(
       <Action key={i}
               disabled={disabled}
               name={name}
               value={value}
               unlocked={xp >= 6}
-              increment={increment}/>
+              advance={advance}/>
     );
   }
   return (
     <div className='stat'>
       <Header name={name} disabled={disabled} value={xp} length={6}
-              update={updateXP}/>
+              increment={increment} decrement={decrement}/>
       <div className='actions'>
         {actionDivs}
       </div>
@@ -191,7 +198,9 @@ Stat.propTypes = {
   name: React.PropTypes.string.isRequired,
   xp: React.PropTypes.number.isRequired,
   disabled: React.PropTypes.bool,
-  update: React.PropTypes.func
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
+  advanceAction: React.PropTypes.func.isRequired
 }
 
 Stat.defaultProps = {
@@ -201,30 +210,29 @@ Stat.defaultProps = {
 
 
 const Stats = (props) => {
-  const { money, update, disabled, insight, prowess, resolve } = props;
-  const updateInsight = (insight) => { update({insight}); };
-  const updateProwess = (prowess) => { update({prowess}); };
-  const updateResolve = (resolve) => { update({resolve}); };
-  const updateMoney = (money) => { update({money}); };
-  const updateXP = (xp) => { update({xp}); };
+  const {
+    disabled, money, insight, prowess, resolve, xp,
+    advanceAction, increment, decrement
+  } = props;
   return (
     <div className='stats'>
     <div className='stat'>
-      <Money {...money} disabled={disabled} update={updateMoney.bind(this)}/>
-      <Header name='Playbook' disabled={disabled} value={props.xp} length={8}
-              update={updateXP}/>
+      <Money {...money} disabled={disabled}/>
+      <Header name='Playbook' disabled={disabled} value={xp} length={8}
+              increment={increment}
+              decrement={decrement}/>
     </div>
       <Stat name='Insight'
             disabled={disabled}
-            update={updateInsight}
+            advanceAction={advanceAction}
             {...insight}/>
       <Stat name='Prowess'
             disabled={disabled}
-            update={updateProwess}
+            advanceAction={advanceAction}
             {...prowess}/>
       <Stat name='Resolve'
             disabled={disabled}
-            update={updateResolve}
+            advanceAction={advanceAction}
             {...resolve}/>
     </div>
   )
@@ -236,7 +244,9 @@ Stats.propTypes = {
   prowess: React.PropTypes.object.isRequired,
   resolve: React.PropTypes.object.isRequired,
   money: React.PropTypes.object.isRequired,
-  update: React.PropTypes.func.isRequired,
+  advanceAction: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool
 }
 

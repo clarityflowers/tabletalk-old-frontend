@@ -28,7 +28,7 @@ div.stress-and-trauma {
       &:not(:disabled) {
         cursor: pointer;
         &:focus {
-          color: lighten($fire, 20%);
+          text-decoration: underline; 
         }
         &:hover {
           color: $sky;

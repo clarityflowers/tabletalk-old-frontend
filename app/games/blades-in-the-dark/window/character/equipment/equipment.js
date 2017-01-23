@@ -32,15 +32,15 @@ Item.propTypes = {
 }
 
 const Items = (props) => {
-  const { items, update, disabled } = props;
+  const { items, use, clear, disabled } = props;
   const add = (name) => {
     return () => {
-      update({add: name});
+      use(name);
     }
   }
   const remove = (name) => {
     return () => {
-      update({remove: name});
+      clear(name);
     }
   }
   let itemDoms = [];
@@ -69,7 +69,8 @@ const Items = (props) => {
 Items.propTypes = {
   items: React.PropTypes.array.isRequired,
   disabled: React.PropTypes.bool.isRequired,
-  update: React.PropTypes.func.isRequired
+  use: React.PropTypes.func.isRequired,
+  clear: React.PropTypes.func.isRequired
 }
 
 const Diamond = (props) => {
@@ -110,20 +111,20 @@ const Dash = (props) => {
 }
 
 const Load = (props) => {
-  const { load, carrying, disabled, update, clear } = props;
+  const { load, carrying, disabled, set, clear } = props;
   const heavy = () => {
     if (load != 6) {
-      update(6);
+      set(6);
     }
   };
   const normal = () => {
     if (load != 5) {
-      update(5);
+      set(5);
     }
   };
   const light = () => {
     if (load != 3) {
-      update(3);
+      set(3);
     }
   };
   let dashes = [];
@@ -155,7 +156,7 @@ Load.propTypes = {
   load: React.PropTypes.number.isRequired,
   carrying: React.PropTypes.number.isRequired,
   disabled: React.PropTypes.bool.isRequired,
-  update: React.PropTypes.func.isRequired,
+  set: React.PropTypes.func.isRequired,
   clear: React.PropTypes.func.isRequired
 }
 
@@ -184,11 +185,12 @@ const getItemsFromList = (list, items) => {
 }
 
 const Equipment = (props) => {
-  const { load, items, playbook, update, disabled } = props;
+  const {
+    load, items, playbook,
+    use, clear, clearAll, setLoad,
+    disabled
+  } = props;
   const updateLoad = (load) => { update({load}); };
-  const clear = () => {
-    update({load: 0, items: {remove: "all"}})
-  }
   const updateItems = (items) => { update({items}); };
   let itemList = [];
   let carrying = 0;
@@ -207,8 +209,8 @@ const Equipment = (props) => {
   return (
     <div className='equipment'>
       <Load load={load} carrying={carrying} disabled={disabled}
-            update={updateLoad} clear={clear}/>
-      <Items items={itemList} disabled={disabled} update={updateItems}/>
+            set={setLoad} clear={clearAll}/>
+      <Items items={itemList} disabled={disabled} use={use} clear={clear}/>
     </div>
   );
 }
@@ -217,7 +219,10 @@ Equipment.propTypes = {
   load: React.PropTypes.number.isRequired,
   items: React.PropTypes.array.isRequired,
   playbook: React.PropTypes.string,
-  update: React.PropTypes.func.isRequired,
+  use: React.PropTypes.func.isRequired,
+  clear: React.PropTypes.func.isRequired,
+  clearAll: React.PropTypes.func.isRequired,
+  setLoad: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired
 }
 

@@ -9,11 +9,11 @@ import { Tick } from 'games/blades-in-the-dark/window/common/tick.js';
 import './armor-and-healing.scss';
 
 const Tickbar = (props) => {
-  const { name, checked, update, disabled, children } = props;
-  const handleClick = () => { update(!checked); }
-  const className = cx('tickbar', name);
+  const { name, className, checked, use, disabled, children } = props;
+  const handleClick = () => { use(!checked); }
+  const buttonClassName = cx('tickbar', name, className);
   return (
-    <button className={className} onClick={handleClick.bind(this)}
+    <button className={buttonClassName} onClick={handleClick.bind(this)}
             disabled={disabled}>
       <div className='container'>
         <div className='label'>
@@ -28,43 +28,49 @@ const Tickbar = (props) => {
 Tickbar.propTypes = {
   name: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
-  update: React.PropTypes.func.isRequired,
+  use: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired
 }
 
 const ArmorTickBar = (props) => {
-  const { name } = props;
+  const { name, used, available, disabled } = props;
+  let properties = Object.assign({
+    checked: used,
+  }, props);
+  delete properties.used;
+  delete properties.available;
+  properties.disabled = disabled || !available
+  properties.className = cx({available});
   return (
-    <Tickbar {...props}>
+    <Tickbar {...properties}>
       {name.toUpperCase()}
     </Tickbar>
   );
 }
 
+ArmorTickBar.propTypes = {
+  used: React.PropTypes.bool.isRequired,
+  available: React.PropTypes.bool
+}
+
+ArmorTickBar.defaultProps = {
+  available: true
+}
+
 
 const Healing = (props) => {
-  const { clock, unlocked, disabled, update } = props;
+  const { clock, unlocked, disabled, unlock, increment, decrement } = props;
   const updateUnlocked = (unlocked) => { update({unlocked}); }
-  const increment = () => {
-    if (clock < 8) {
-      update({clock: clock + 1})
-    }
-  }
-  const decrement = () => {
-    if (clock > 0) {
-      update({clock: clock - 1});
-    }
-  }
   const className = cx('clock', {unlocked});
   return (
     <div className='healing'>
       <div className={className}>
         <Clock value={clock} size={8} disabled={!unlocked || disabled}
-          increment={increment.bind(this)}
-          decrement={decrement.bind(this)}/>
+          increment={increment}
+          decrement={decrement}/>
       </div>
       <Tickbar name='healing-tickbar' checked={unlocked} disabled={disabled}
-               update={updateUnlocked.bind(this)}>
+               use={unlock}>
         HEALING
       </Tickbar>
     </div>
@@ -75,35 +81,35 @@ Healing.propTypes = {
   clock: React.PropTypes.number.isRequired,
   unlocked: React.PropTypes.bool.isRequired,
   disabled: React.PropTypes.bool.isRequired,
-  update: React.PropTypes.func.isRequired
+  unlock: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired
 }
 
 const Armor = (props) => {
-  const { normal, heavy, special, update, disabled } = props;
-  const updateNormal = (used) => { update({normal: used}); };
-  const updateHeavy = (used) => { update({heavy: used}); };
+  const { armor, heavy, special, use, disabled } = props;
   let specialArmors = [];
-  const keys = Object.keys(special);
-  for (let i=0; i < keys.length; i++) {
-    const key = keys[i];
-    const specialArmor = special[key];
-    const updateSpecial = (used) => {
-      update({special: {[key]: {used: used}}});
+  const makeUse = (name) => {
+    return (used) => {
+      use({name, used});
     };
+  };
+  for (let i=0; i < special.length; i++) {
+    const specialArmor = special[i];
     specialArmors.push(
-      <div className='row' key={key}>
-        <ArmorTickBar name={specialArmor.name} checked={specialArmor.used} disabled={disabled}
-                      update={updateSpecial.bind(this)}/>
+      <div className='row' key={i}>
+        <ArmorTickBar {...specialArmor} disabled={disabled}
+                      use={makeUse(specialArmor.name)}/>
       </div>
     )
   }
   return (
     <div className='armor'>
       <div className='row'>
-        <ArmorTickBar name='armor' checked={normal} disabled={disabled}
-                      update={updateNormal.bind(this)}/>
-        <ArmorTickBar name='heavy' checked={heavy} disabled={disabled}
-                      update={updateHeavy.bind(this)}/>
+        <ArmorTickBar name='armor' {...armor} disabled={disabled}
+                      use={makeUse('armor')}/>
+        <ArmorTickBar name='heavy' {...heavy} disabled={disabled}
+                      use={makeUse('heavy')}/>
       </div>
       {specialArmors}
     </div>
@@ -111,10 +117,10 @@ const Armor = (props) => {
 }
 
 Armor.PropTypes = {
-  normal: React.PropTypes.bool.isRequired,
-  heavy: React.PropTypes.bool.isRequired,
+  armor: React.PropTypes.object.isRequired,
+  heavy: React.PropTypes.object.isRequired,
   special: React.PropTypes.object.isRequired,
-  update: React.PropTypes.func.isRequired,
+  use: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired
 }
 

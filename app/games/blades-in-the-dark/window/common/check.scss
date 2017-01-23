@@ -1,5 +1,22 @@
-#blades-in-the-dark .check {
-  &:not(:disabled) {
-    cursor: pointer;
+#blades-in-the-dark {
+  button.check {
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+  .check-array {
+    display: flex;
+    flex-flow: row nowrap;
+    div.container {
+      display: flex;
+      flex-flow: row nowrap;
+      button {
+        display: flex;
+        flex-flow: row nowrap;
+        &:not(:disabled) {
+          cursor: pointer;
+        }
+      }
+    }
   }
 }

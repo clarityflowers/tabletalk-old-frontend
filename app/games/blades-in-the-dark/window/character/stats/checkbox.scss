@@ -1,7 +1,7 @@
 @import 'games/blades-in-the-dark/common/colors.scss';
 
 #blades-in-the-dark {
-  button.check.checkbox {
+  .check.checkbox {
     $outset: -2px 2px 1px 0px fade-out(darken($stone, 50%), .7);
     $inset: -1px 1px 1px 1px fade-out(darken($stone, 50%), .5) inset;
     font-size: .5em;
@@ -13,15 +13,6 @@
     &.checked {
       box-shadow: $outset;
       background: $sun;
-    }
-    &:hover {
-      background: $fire;
-    }
-    &:active {
-      background: $sky;
-    }
-    &:focus {
-      outline: 1px solid lighten($fire, 10%);
     }
   }
 }

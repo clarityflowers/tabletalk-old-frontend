@@ -94,7 +94,6 @@ DetailBlock.propTypes = {
 
 const Details = (props) => {
   const { strangeFriends, look, heritage, background, vice } = props;
-  console.log(props);
   const blocks = [];
   if (strangeFriends) {
     blocks.push(
@@ -131,7 +130,7 @@ const Details = (props) => {
 };
 
 Details.propTypes = {
-  strangeFriends: React.PropTypes.object,
+  strangeFriends: React.PropTypes.array,
   look: React.PropTypes.string,
   heritage: React.PropTypes.string,
   background: React.PropTypes.string,

@@ -47,7 +47,10 @@ const parse = (array, ending) => {
 const SpecialAbility = (props) => {
   const { name } = props;
   const ability = SPECIAL_ABILITIES[name];
-  let description = ability.description.split("").reverse();
+  let description = null;
+  if (ability && ability.description) {
+    description = ability.description.split("").reverse();
+  }
   const result = parse(description);
   return (
     <p className='ability'>

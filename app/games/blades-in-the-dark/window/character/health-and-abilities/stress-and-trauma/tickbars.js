@@ -7,64 +7,33 @@ import { TickArray } from 'games/blades-in-the-dark/window/common/tick.js';
 
 import './tickbars.scss';
 
-class Stress extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hover: null
-    }
+const Stress = (props) => {
+  const { disabled, stress, increment, decrement } = props;
+  const checkedProps = {
+    onClick: decrement
   }
-  handleHover(value) {
-    this.setState({hover: value});
+  const uncheckedProps = {
+    onClick: increment
   }
-  getChange(value) {
-    const { stress } = this.props;
-    let result = 0;
-    if (value != null) {
-      if (value > stress && stress < 9) {
-        result = 1;
-      }
-      else if (stress > 0){
-        result = -1;
-      }
-    }
-    return result;
-  }
-  handleClick(value) {
-    const change = this.getChange(value);
-    if (change) {
-      if (this.state.hover == 10 && this.props.stress >= 8) {
-        this.setState({hover: null});
-      }
-      this.props.update(this.props.stress + change);
-    }
-  }
-  render() {
-    const { disabled, stress } = this.props;
-    const highlight = this.getChange(this.state.hover);
-    const className = cx('label', {
-      highlight: highlight > 0
-    })
-    return (
-      <div className='stress bar'>
-        <button className={className}
-                onClick={() => {this.handleClick(10);}}
-                onMouseOver={() => {this.handleHover(10);}}
-                onMouseLeave={() => {this.handleHover(0);}}
-                disabled={disabled || stress == 9}>
-          STRESS
-        </button>
-        <TickArray value={stress} className='ticks' length={9}
-                   disabled={disabled} onClick={this.handleClick.bind(this)}
-                   onHover={this.handleHover.bind(this)} highlight={highlight}/>
-      </div>
-    );
-  }
+  return (
+    <div className='stress bar'>
+      <button className='label'
+              onClick={increment}
+              disabled={disabled || stress == 9}>
+        STRESS
+      </button>
+      <TickArray value={stress} className='ticks' length={9}
+                 disabled={disabled}
+                 increment={increment} decrement={decrement}/>
+    </div>
+  );
 }
+
 
 Stress.propTypes = {
   stress: React.PropTypes.number.isRequired,
-  update: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool
 }
 
@@ -75,7 +44,7 @@ const Trauma = (props) => {
       <div className='label'>
         TRAUMA
       </div>
-      <TickArray value={count} className='ticks' length={4} disabled={true}/>
+      <TickArray isButton={false} value={count} className='ticks' length={4}/>
     </div>
   );
 }
@@ -106,10 +75,11 @@ TraumaList.propTypes = {
 }
 
 const Tickbars = (props) => {
-  const { trauma, stress, disabled, update } = props;
+  const { trauma, stress, disabled, increment, decrement } = props;
   return(
     <div className='tickbars'>
-      <Stress stress={stress} update={update} disabled={disabled}/>
+      <Stress stress={stress} increment={increment} decrement={decrement}
+              disabled={disabled}/>
       <Trauma count={trauma.length}/>
       <TraumaList trauma={trauma}/>
     </div>
@@ -119,7 +89,8 @@ const Tickbars = (props) => {
 Tickbars.propTypes = {
   stress: React.PropTypes.number.isRequired,
   trauma: React.PropTypes.array.isRequired,
-  update: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool
 }
 

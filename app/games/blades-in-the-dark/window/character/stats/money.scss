@@ -23,21 +23,13 @@
       button.label {
         font-size: .8em;
         text-shadow: $text-shadow;
+        &:not(:disabled) {
+          cursor: pointer;
+        }
         &.stash {
           align-self: flex-end;
           padding: 0 .25em 0 0;
           color: $sky;
-          &:not(:disabled) {
-            &:focus {
-              color: lighten($sky, 15%);
-            }
-            &:hover {
-              color: $fire;
-            }
-            &:active {
-              color: lighten($fire, 30%);
-            }
-          }
         }
         &.coin {
           color: $sand;
@@ -59,48 +51,44 @@
       display: flex;
       flex-flow: row nowrap;
       align-items: flex-start;
-      button.check.checkbox {
+      div.check.checkbox {
         background-color: darken($stone, 5%);
         &.checked {
           background-color: $sky;
         }
-        &:not(:disabled) {
-          &.checked {
-            &.highlight {
-              background: $fire;
-            }
-            &:active {
-              background: lighten($fire, 30%);
-            }
-          }
-          &.highlight {
-            background: darken($sky, 20%);
-          }
-          &:active {
-            background: lighten($fire, 30%);
-          }
-        }
-      }
-    }
-    button.check.checkbox {
-      background-color: lighten($stone, 10%);
-      &.checked {
-        background-color: $sand;
-      }
-      &:not(:disabled) {
         &.checked {
           &.highlight {
             background: $fire;
           }
-          &:active {
-            background: lighten($fire, 30%);
-          }
         }
         &.highlight {
-          background: darken($sand, 40%);
-          // background: darken($fire, 20%);
+          background: darken($sky, 20%);
         }
-        &:active {
+      }
+    }
+    div.check.checkbox {
+      background-color: lighten($stone, 10%);
+      &.checked {
+        background-color: $sand;
+      }
+      &.checked {
+        &.highlight {
+          background: $fire;
+        }
+      }
+      &.highlight {
+        background: darken($sand, 40%);
+      }
+    }
+    div.check-array button:not(:disabled) {
+      cursor: pointer;
+      &:focus {
+        div.check.checkbox {
+          outline: 1px solid $fire;
+        }
+      }
+      &:active {
+        div.check.checkbox.highlight {
           background: lighten($fire, 30%);
         }
       }

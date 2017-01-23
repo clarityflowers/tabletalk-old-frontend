@@ -30,38 +30,53 @@
       box-shadow: -2px 2px 2px 1px fade-out(darken($stone, 50%), .6);
       &.highlight {
         background: $sand;
+        div.dots div.dot {
+          border-color: $sand;
+        }
       }
       div.dots {
         display: flex;
         flex-flow: row nowrap;
         font-size: .8em;
-        button.dot {
-          color: fade-out($stone, .8);
-          &.checked {
-            color: fade-out($stone, .3);
+        button:not(:disabled) {
+          &:focus div.dot {
+            &.checked:last-child {
+              // background: lighten($fire, 20%);
+              border: 2px solid $fire;
+              z-index: 2;
+              // margin: 0;
+            }
+            &:not(.checked):first-child {
+              border: 2px solid $fire;
+              z-index: 2;
+              // margin: 0;
+            }
           }
-          &:not(:disabled) {
-            cursor: pointer;
-            &:focus {
-              color: lighten($fire, 30%);
+          &:hover div.dot {
+            &.checked:last-child {
+              background: $fire;
             }
-            &.highlight {
-              color: darken($fire, 20%);
+            &:not(.checked):first-child {
+              background: darken($fire, 20%);
             }
-            &:active {
-              color: lighten($fire, 10%);
+          }
+          &:active div.dot {
+            &.checked:last-child {
+              background: lighten($fire, 30%);
             }
-            &.checked {
-              &:focus {
-                color: fade-out($fire, 0);
-              }
-              &.highlight {
-                color: $fire;
-              }
-              &:active {
-                color: lighten($fire, 10%);
-              }
+            &:not(.checked):first-child {
+              background: lighten($fire, 30%);
             }
+          }
+        }
+        div.dot {
+          transition: border-color .5s;
+          position: relative;
+          margin: -1px;
+          border: 2px solid $sun;
+          background: mix($sun, $stone, 80%);
+          &.checked {
+            background: mix($sun, $stone, 30%);
           }
         }
       }
@@ -93,12 +108,12 @@
           font-size: .8em;
           margin: 0.1em;
           width: .9em;
-          color: darken($stone, 5%);
+          background: darken($stone, 5%);
           transition: color .5s;
           &.checked {
-            color: $sun;
+            background: $sun;
             &.highlight {
-              color: $fire;
+              background: $fire;
             }
           }
         }
@@ -112,25 +127,25 @@
           cursor: pointer;
           color: $sand;
           div.dot.active {
-            color: $sand;
+            background: $sand;
           }
           &:focus {
             outline: none;
             color: lighten($sand, 20%);
             div.dot.active {
-              color: lighten($sand, 20%);
+              background: lighten($sand, 20%);
             }
           }
           &.highlight {
             color: $fire;
             div.dot.highlight {
-              color: $fire;
+              background: $fire;
             }
           }
           &:active {
             color: lighten($fire, 30%);
             div.dot.active {
-              color: lighten($fire, 30%);
+              background: lighten($fire, 30%);
             }
           }
         }

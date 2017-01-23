@@ -5,6 +5,7 @@ import { ACTIONS } from 'games/common/enums.js';
 ACTIONS.ROLL = 'roll';
 ACTIONS.UPDATE = 'update';
 ACTIONS.LOG = 'log';
+ACTIONS.DO = 'do';
 
 const TAB_TYPES = {
   CHARACTER: 0,

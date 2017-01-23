@@ -10,8 +10,7 @@ import './money.scss';
 const StashRow = (props) => {
   const {
     value, offset, highlight,
-    checkedProps, uncheckedProps,
-    disabled
+    checkedProps, uncheckedProps
   } = props;
   const checked = value >= 10 + offset;
   let checkboxProps = checked ? checkedProps : uncheckedProps;
@@ -35,11 +34,13 @@ const StashRow = (props) => {
                      highlight={highlight}
                      checkedProps={checkedProps}
                      uncheckedProps={uncheckedProps}
+                     isButton={false}
                      {...properties}/>
       <Checkbox value={10 + offset}
                 checked={checked}
                 className={'end'}
                 highlight={checkboxHighlight}
+                isButton={false}
                 {...properties}
                 {...checkboxProps}/>
     </div>
@@ -48,8 +49,7 @@ const StashRow = (props) => {
 
 StashRow.propTypes = {
   value: React.PropTypes.number.isRequired,
-  offset: React.PropTypes.number.isRequired,
-  disabled: React.PropTypes.bool
+  offset: React.PropTypes.number.isRequired
 }
 
 StashRow.defaultProps = {
@@ -72,84 +72,24 @@ class Money extends React.Component {
       hover: null
     };
   }
-  incrementCoin() {
-    const { coin, update } = this.props;
-    update({coin: coin + 1});
-  }
-  decrementCoin() {
-    const { coin, update } = this.props;
-    update({coin: coin - 1});
-  }
-  incrementStash() {
-    const { stash, update } = this.props;
-    update({stash: this.props.stash + 1});
-  }
-  decrementStash() {
-    const { stash, update } = this.props;
-    update({stash: stash - 1});
-  }
-  exchangeToStash() {
-    const { coin, stash, update } = this.props;
-    if (stash < 40 && coin >= 1) {
-      update({
-        coin: coin - 1,
-        stash: stash + 1
-      });
-    }
-  }
-  exchangeToCoin() {
-    const { coin, stash, update } = this.props;
-    if (stash >= 2 && coin < 4) {
-      update({
-        coin: coin + 1,
-        stash: stash - 2
-      });
-    }
-  }
-  toAction(who, value) {
-    let action = null;
-    if (value == null) {
-      action = null;
-    }
-    else if (who == 'stash' || who == 'coin') {
-      let direction = null;
-      if (this.props[who] >= value) {
-        direction = 'decrement';
-      }
-      else {
-        direction = 'increment';
-      }
-      action = `${direction}_${who}`;
-    }
-    else {
-      action = who;
-    }
-    return action;
-  };
-  click(click) {
-    return (value) => {
-      const actionName = this.toAction(click, value);
-      const action = ACTIONS[actionName];
-      if (action) {
-        const upd8 = {};
-        if (action.coin != 0) {
-          upd8.coin = this.props.coin + action.coin
-        }
-        if (action.stash != 0 ) {
-          upd8.stash = this.props.stash + action.stash
-        }
-        this.props.update(upd8);
+  mouseOver(hover) {
+    return () => {
+      if (!this.props.disabled) {
+        this.setState({hover: hover});
       }
     }
   }
-  hover(hover) {
-    return (value) => {
-      const action = this.toAction(hover, value);
-      this.setState({hover: action});
+  handleMouseLeave(hover) {
+    if (!this.props.disabled) {
+      this.setState({hover: null});
     }
   }
   render() {
-    const { coin, stash, update, disabled } = this.props;
+    const {
+      coin, stash,
+      increment, decrement, transferToStash, transferToCoin,
+      disabled
+    } = this.props;
     let stashRows = [];
     let coinHighlight = 0;
     let stashHighlight = 0;
@@ -164,23 +104,26 @@ class Money extends React.Component {
       length: 2,
       className: 'row coin',
       highlight: coinHighlight,
-      onHover: this.hover("coin"),
-      onClick: this.click("coin"),
-      disabled: disabled
+      disabled: disabled,
+      checkedProps: {
+        onClick: decrement,
+        onMouseOver: this.mouseOver('decrement_coin'),
+        onMouseLeave: this.handleMouseLeave.bind(this)
+      },
+      uncheckedProps: {
+        onClick: increment,
+        onMouseOver: this.mouseOver('increment_coin'),
+        onMouseLeave: this.handleMouseLeave.bind(this)
+      }
     };
     let stashProps = {
-      highlight: stashHighlight,
-      onHover: this.hover("stash"),
-      onClick: this.click("stash"),
-      disabled: disabled
+      highlight: stashHighlight
     }
     for (let i=0; i < 4; i++) {
       stashRows.push(
         <StashRow key={i}
                   value={stash}
                   offset={i * 10}
-                  onClick={() => {}}
-                  disabled={disabled}
                   {...stashProps}/>
       );
     }
@@ -190,18 +133,18 @@ class Money extends React.Component {
           <div className='row stash'>
             <button className='stash label'
                     disabled={disabled}
-                    onClick={this.click("coin_to_stash")}
-                    onMouseOver={this.hover("coin_to_stash")}
-                    onMouseLeave={this.hover(null)}>
+                    onClick={transferToStash}
+                    onMouseOver={this.mouseOver("coin_to_stash")}
+                    onMouseLeave={this.handleMouseLeave.bind(this)}>
               STASH
             </button>
           </div>
           <div className='row coin'>
             <button className='coin label'
                     disabled={disabled}
-                    onClick={this.click("stash_to_coin")}
-                    onMouseOver={this.hover("stash_to_coin")}
-                    onMouseLeave={this.hover(null)}>
+                    onClick={transferToCoin}
+                    onMouseOver={this.mouseOver("stash_to_coin")}
+                    onMouseLeave={this.handleMouseLeave.bind(this)}>
               COIN
             </button>
           </div>
@@ -221,7 +164,10 @@ class Money extends React.Component {
 Money.propTypes = {
   coin: React.PropTypes.number.isRequired,
   stash: React.PropTypes.number.isRequired,
-  update: React.PropTypes.func.isRequired,
+  increment: React.PropTypes.func.isRequired,
+  decrement: React.PropTypes.func.isRequired,
+  transferToStash: React.PropTypes.func.isRequired,
+  transferToCoin: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool
 }
 

@@ -15,68 +15,213 @@ class App extends React.Component {
       characters: {}
     }
     this.updates = {};
+    this.actionKeys = {};
   }
-  processUpdate(data, key) {
-    if (key in this.updates) { return; }
-    this.updates[key] = true;
-    const copy = (base, mod) => {
-      let result = null;
-      if (Array.isArray(base)) {
-        result = base.slice(0);
-        if (mod) {
-          if (mod.add) {
-            result.push(mod.add);
-          }
-          else if (mod.remove) {
-            const target = mod.remove;
-            if (target == "all") {
-              result = [];
+  processAction({what, data, key}) {
+    console.log('PROCESS ACTION', what, data, key);
+    if (key in this.actionKeys) {
+      console.log('KEY IN ACTIONKEYS');
+      delete this.actionKeys[key];
+      return;
+    }
+    this.actionKeys[key] = true;
+    let update = {};
+    if (what == "character") {
+      const { action, id, value } = data;
+      if (action == "create") {
+      }
+      else if (id in this.state.characters) {
+        update = {$apply: (c) => {
+          let update = {};
+          if (action == "increment_stress") {
+            if (c.stress < 9) {
+              update = {stress: {$set: c.stress + 1}};
             }
-            else {
-              let i = result.indexOf(target);
-              if (i >= 0) {
-                result.splice(i,1);
+          }
+          else if (action == "decrement_stress") {
+            if (c.stress > 0) {
+              update = {stress: {$set: c.stress - 1}};
+            }
+          }
+          else if (action == "add_trauma") {
+            update = {
+              trauma: {$push: [value]},
+              stress: {$set: 0}
+            };
+          }
+          else if (action == "increment_coin") {
+            if (c.coin < 4) {
+              update = {coin: {$set: c.coin + 1}};
+            }
+          }
+          else if (action == "decrement_coin") {
+            if (c.coin > 0) {
+              update = {coin: {$set: c.coin - 1}};
+            }
+          }
+          else if (action == "transfer_to_stash") {
+            if (c.stash < 40 && c.coin > 0) {
+              update = {
+                coin: {$set: c.coin - 1},
+                stash: {$set: c.stash + 1}
               }
             }
           }
-        }
-      }
-      else if (typeof base == "object") {
-        result = {};
-        const props = Object.keys(base);
-        for (let i=0; i < props.length; i++) {
-          const prop = props[i];
-          const modValue = mod[prop];
-          const value = base[prop];
-          if (prop in mod) {
-            result[prop] = copy(value, modValue);
+          else if (action == "transfer_to_coin") {
+            if (c.stash >= 2 && c.coin < 4) {
+              update = {
+                coin: {$set: c.coin + 1},
+                stash: {$set: c.stash - 2}
+              }
+            }
           }
-          else {
-            result[prop] = value;
+          else if (action == "increment_xp") {
+            const stat = value.toLowerCase();
+            if (stat == 'playbook') {
+              if (c.playbookXP < 8) {
+                update = {playbookXP: {$set: c.playbookXP + 1}};
+              }
+            }
+            else {
+              const prop = stat + 'XP';
+              if (c[prop] < 6) {
+                update = {[prop]: {$set: c[prop] + 1}};
+              }
+            }
           }
-        }
+          else if (action == "decrement_xp") {
+            const stat = value.toLowerCase();
+            const prop = stat + 'XP';
+            if (c[prop] > 0) {
+              update = {[prop]: {$set: c[prop] - 1}};
+            }
+          }
+          else if (action == "advance_action") {
+            const stat = value.toLowerCase();
+            if (c[stat] < 4) {
+              let xp = "";
+              if (["hunt", "study", "survey", "tinker"].includes(stat)) {
+                xp = "insightXP";
+              }
+              if (["finesse", "prowl", "skirmish", "wreck"].includes(stat)) {
+                xp = "prowessXP";
+              }
+              if (["attune", "command", "consort", "sway"].includes(stat)) {
+                xp = "resolveXP";
+              }
+              update = {
+                [stat]: {$set: c[stat] + 1},
+                [xp]: {$set: 0}
+              };
+            }
+          }
+          else if (action == "edit_harm") {
+            const { harm, text } = value;
+            const prop = "harm" + harm[0].toUpperCase() + harm.slice(1);
+            if (!c[prop] && text) {
+              update.healingUnlocked = {$set: false};
+            }
+            update[prop] = {$set: text};
+          }
+          else if (action == "use_armor") {
+            const { name, used } = value;
+            if (name == "armor") {
+              update = {armor: {$set: used}};
+              if (!used) {
+                update.heavyArmor = {$set: false};
+              }
+            }
+            else if (name == "heavy") {
+              update = {heavyArmor: {$set: used}};
+            }
+            else {
+              let i = 0;
+              while (
+                i < c.specialArmor.length &&
+                c.specialArmor[i].name != name
+              ) {
+                i++;
+              }
+              if (i in c.specialArmor) {
+                update = {specialArmor: {[i]: {used: {$set: used}}}};
+              }
+            }
+          }
+          else if (action == "unlock_healing") {
+            update = {healingUnlocked: {$set: value}};
+          }
+          else if (action == "increment_healing") {
+            if (c.healingClock < 8) {
+              update = {healingClock: {$set: c.healingClock + 1}};
+            }
+            else {
+              update = {
+                healingClock: {$set: 0},
+                harmSevere: {$set: ""},
+                harmModerate1: {$set: ""},
+                harmModerate2: {$set: ""},
+                harmLesser1: {$set: ""},
+                harmLesser2: {$set: ""},
+                healingUnlocked: {$set: false}
+              };
+            }
+          }
+          else if (action == "decrement_healing") {
+            if (c.healingClock > 0) {
+              update = {healingClock: {$set: c.healingClock - 1}};
+            }
+          }
+          else if (action == "use_item") {
+            if (!c.items.includes(value)) {
+              let array = [value];
+              if (value == "+Heavy" && !c.items.includes("Armor")) {
+                array.push("Armor");
+              }
+              update = {items: {$push: array}};
+            }
+          }
+          else if (action == "clear_item") {
+            const index = c.items.indexOf(value);
+            if (index >= 0) {
+              let items = c.items.slice(0);
+              items.splice(index, 1);
+              if (value == "Armor") {
+                update.armor = {$set: false};
+                const index = c.items.indexOf("+Heavy");
+                if (index >= 0) {
+                  items.splice(index, 1);
+                }
+              }
+              if (value == "+Heavy") {
+                update.heavyArmor = {$set: false};
+              }
+              update.items = {$set: items};
+            }
+          }
+          else if (action == "clear_items") {
+            update = {
+              items: {$set: []},
+              load: {$set: 0},
+              armor: {$set: false},
+              heavyArmor: {$set: false}
+            }
+            update.specialArmor = {};
+            for (let i=0; i < c.specialArmor.length; i++) {
+              update.specialArmor[i] = {used: {$set: false}};
+            }
+          }
+          else if (action == "set_load") {
+            update = {load: {$set: value}};
+          }
+          return rUpdate(c, update);
+        }};
+        update = {[id]: update};
       }
-      else {
-        result = mod;
-      }
-      return result;
-    }
-    if (data) {
-      const { character } = data;
-      if (character) {
-        const id = character.id;
-        delete character.id;
-        let base = this.state.characters[id];
-        let x = {};
-        let result = copy(base, character);
-        const characters = rUpdate(this.state.characters, {
-          [id]: {$set: result}
-        });
-        this.setState({characters});
-      }
+      this.setState({characters: rUpdate(this.state.characters, update)});
     }
   }
   processEvent(event) {
+    console.log('BLADES PROCESS EVENT', event);
     if (event.action == ACTIONS.ROLL) {
       let roll = {
         id: event.id,
@@ -88,16 +233,9 @@ class App extends React.Component {
       }
       return roll;
     }
-    else if (event.action == ACTIONS.UPDATE) {
-      this.processUpdate(event.data, event.key);
-      const logs = event.logs;
-      if (logs) {
-        let result = [];
-        for (let i=0; i < logs.length; i++) {
-          result.push(this.processEvent(logs[i]));
-        }
-        return result;
-      }
+    else if (event.action == ACTIONS.DO) {
+      this.processAction(event);
+      return null;
     }
     else {
       return this.props.processEvent(event);
@@ -137,11 +275,10 @@ class App extends React.Component {
       }
     }
   }
-  update(data) {
-    const key = this.props.perform(ACTIONS.UPDATE, {data});
-    this.processUpdate(data, key);
+  send(data) {
+    const key = this.props.perform(ACTIONS.DO, data);
+    this.processAction({data: data.data, what: data.what, key: key});
   }
-
   render() {
     const { characters } = this.state;
     let ids = Object.keys(characters);
@@ -161,7 +298,7 @@ class App extends React.Component {
                 auth={this.props.auth}
                 game={this.props.game}
                 options={true}
-                update={this.update.bind(this)}
+                send={this.send.bind(this)}
                 me={me}/>
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}

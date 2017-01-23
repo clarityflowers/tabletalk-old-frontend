@@ -84,12 +84,58 @@ Check.defaultProps = {
 const CheckArray = (props) => {
   const {
     value, offset, length, node,
-    className, nodeClassName,
-    highlight, checkedProps, uncheckedProps
+    className, nodeClassName, isButton,
+    highlight, checkedProps, uncheckedProps,
+    increment, decrement
   } = props;
   const Node = node;
-  let array = [];
+  let checkedArray = [];
+  let uncheckedArray = [];
   let i=offset;
+  while (i < value && i < length + offset) {
+    let className = cx(nodeClassName, {
+        highlight: i >= value + highlight,
+    });
+    checkedArray.push(
+      <Node key={i}
+            className={className}
+            value={i+1}
+            checked
+            highlight={i >= value + highlight}
+            isButton={false}/>
+    )
+    i++;
+  }
+  while (i < length + offset) {
+    uncheckedArray.push(
+      <Node key={i}
+            className={nodeClassName}
+            value={i+1}
+            highlight={i < value + highlight}
+            isButton={false}/>
+    );
+    i++;
+  }
+  if (isButton) {
+    if (checkedArray.length > 0) {
+      checkedArray = (
+        <button onClick={decrement} {...checkedProps} {...properties}>
+          <div className='container'>
+            {checkedArray}
+          </div>
+        </button>
+      );
+    }
+    if (uncheckedArray.length > 0) {
+      uncheckedArray = (
+        <button onClick={increment} {...uncheckedProps} {...properties}>
+          <div className='container'>
+            {uncheckedArray}
+          </div>
+        </button>
+      );
+    }
+  }
   let properties = Object.assign({}, props);
   delete properties.value;
   delete properties.offset;
@@ -100,36 +146,14 @@ const CheckArray = (props) => {
   delete properties.highlight;
   delete properties.checkedProps;
   delete properties.uncheckedProps;
+  delete properties.isButton;
+  delete properties.onHover;
   properties.className = nodeClassName;
-  while (i < value && i < length + offset) {
-    let className = cx(
-      nodeClassName, {
-        highlight: i >= value + highlight,
-      }
-    );
-    array.push(
-      <Node key={i}
-            value={i+1}
-            checked
-            highlight={i >= value + highlight}
-            {...properties}
-            {...checkedProps}/>
-    )
-    i++;
-  }
-  while (i < length + offset) {
-    array.push(
-      <Node key={i}
-            value={i+1}
-            highlight={i < value + highlight}
-            {...properties}
-            {...uncheckedProps}/>
-    );
-    i++;
-  }
+  const containerClassName = cx('check-array', className);
   return (
-    <div className={className}>
-      {array}
+    <div className={containerClassName}>
+      {checkedArray}
+      {uncheckedArray}
     </div>
   );
 }
@@ -144,14 +168,16 @@ CheckArray.propTypes = {
   disabled: React.PropTypes.bool,
   checkedProps: React.PropTypes.object,
   uncheckedProps: React.PropTypes.object,
-  onClick: React.PropTypes.func,
-  onHover: React.PropTypes.func
+  isButton: React.PropTypes.bool,
+  increment: React.PropTypes.func,
+  decrement: React.PropTypes.func
 }
 
 CheckArray.defaultProps = {
   disabled: false,
   highlight: 0,
-  offset: 0
+  offset: 0,
+  isButton: true
 }
 
 const extendCheck = ({name, children}) => {
@@ -174,6 +200,7 @@ const extendCheck = ({name, children}) => {
       <CheckArray node={node} {...props}/>
     );
   };
+
   return {node, nodeArray};
 }
 

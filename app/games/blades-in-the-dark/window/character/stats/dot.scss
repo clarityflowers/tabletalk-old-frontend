@@ -1,37 +1,40 @@
 @import 'games/blades-in-the-dark/common/colors.scss';
 
-#blades-in-the-dark button.check.dot {
+#blades-in-the-dark .check.dot {
   font-size: .8em;
   font-family: 'icomoon';
   position: relative;
   margin: 0.1em;
   width: .9em;
+  height: .9em;
+  border-radius: 2em;
+  // box-sizing: border-box;
   padding: 0;
-  color: darken($stone, 5%);
+  background: darken($stone, 5%);
   &.checked {
-    color: $sun;
+    background: $sun;
   }
   &:not(:disabled) {
     cursor: pointer;
     &.checked {
       &:focus {
-        color: lighten($fire, 30%);
+        background: lighten($fire, 30%);
       }
       &:hover {
-        color: $fire;
+        background: $fire;
       }
       &:active {
-        color: lighten($fire, 30%);
+        background: lighten($fire, 30%);
       }
     }
     &:focus {
-      color: lighten($stone, 10%);
+      background: lighten($stone, 10%);
     }
     &:hover {
-      color: darken($fire, 20%);
+      background: darken($fire, 20%);
     }
     &:active {
-      color: lighten($fire, 30%);
+      background: lighten($fire, 30%);
     }
   }
 }
