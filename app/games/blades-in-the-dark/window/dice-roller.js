@@ -1,44 +1,30 @@
 'use strict'
 
 import React from 'react';
-import cx from 'classnames';
-import { HoverWiggle } from 'utils/hover-animate.js';
-import './dice-roller.scss';
+import styled from 'styled-components';
 
-class RollButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  handleClick() {
-    if (!this.props.off) {
-      this.props.onClick(this.props.level);
-    }
-  }
-  render () {
-    let containerClassName = cx(
-      'container',
-      {
-        off: this.props.off,
-        roll: !this.props.toggle
-      }
-    )
-    let buttonClassName = 'roll';
-    let text = this.props.level;
-    if (this.props.toggle) {
-      buttonClassName = 'toggle';
-      text = '6';
-    }
-    return (
-      <div className={containerClassName}>
-        <HoverWiggle off={this.props.off}>
-          <button className={buttonClassName} onClick={this.handleClick.bind(this)}>
-            {text}
-          </button>
-        </HoverWiggle>
-      </div>
-    )
-  }
-}
+import RollButton from './roll-button';
+import Row from 'common/row';
+import Colors from 'games/blades-in-the-dark/common/colors';
+import { fadeout } from 'utils/color-tools';
+
+const background = fadeout(Colors.sun, 0.2);
+const Container = styled.div`
+  z-index: 30;
+  position: absolute;
+  left: .25em;
+  top: .25em;
+  background: ${background};
+  border-radius: 2em;
+  box-shadow: ${Colors.shadow};
+  padding: 0 0 0 0;
+`;
+const Dice = styled(Row)`
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-start;
+`
 
 class DiceRoller extends React.Component {
   constructor(props) {
@@ -55,19 +41,13 @@ class DiceRoller extends React.Component {
     this.setState({on: false});
   }
   render() {
-    let props = {
+    const props = {
       onClick: this.handleClick.bind(this),
       off: !this.state.on
     }
-    let className = cx(
-      'dice-roller',
-      {
-        off: !this.state.on
-      }
-    )
     return (
-      <div className={className}>
-        <div className='dice'>
+      <Container>
+        <Dice>
           <RollButton level={0} {...props}/>
           <RollButton level={1} {...props}/>
           <RollButton level={2} {...props}/>
@@ -77,8 +57,8 @@ class DiceRoller extends React.Component {
           <RollButton level={6} {...props}/>
           <RollButton level={7} {...props}/>
           <RollButton toggle onClick={this.toggle.bind(this)}/>
-        </div>
-      </div>
+        </Dice>
+      </Container>
     )
   }
 }

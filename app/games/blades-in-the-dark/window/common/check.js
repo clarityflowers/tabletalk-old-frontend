@@ -1,17 +1,22 @@
 'use strict'
 
 import React from 'react';
+import styled from 'styled-components';
 import cx from 'classnames';
 
-import './check.scss';
+import Row from 'common/row';
+import Button from 'common/button';
+
+import filter from 'utils/filter';
 
 const Check = (props) => {
   const {
     className, checked,
     onClick, onHover,
-    value, highlight, disabled,
-    isButton
+    value, highlight,
+    isButton, ...buttonProps
   } = props;
+  const { disabled } = buttonProps;
   const handleClick = () => {
     if (onClick && !disabled) {
       onClick(value);
@@ -27,35 +32,24 @@ const Check = (props) => {
       onHover(null);
     }
   };
-  const buttonClassName = cx(
-    className, 'check', {
-      checked: checked,
-      highlight: highlight
-    }
-  );
-  let properties = Object.assign({}, props);
-  delete properties.checked;
-  delete properties.className;
-  delete properties.highlight;
-  delete properties.onClick;
-  delete properties.onHover;
-  delete properties.value;
-  delete properties.isButton;
+  const buttonClassName = cx(className, 'check', {checked, highlight});
   let result = null;
   if (isButton) {
     result = (
-      <button className={buttonClassName}
+      <Button className={buttonClassName}
               onClick={handleClick.bind(this)}
               onMouseOver={handleMouseOver.bind(this)}
               onMouseLeave={handleMouseLeave.bind(this)}
-              {...properties}>
+              {...buttonProps}>
         {props.children}
-      </button>
+      </Button>
     );
   }
   else {
     result = (
-      <div className={buttonClassName} {...properties}/>
+      <div className={buttonClassName} {...buttonProps}>
+        {props.children}
+      </div>
     );
   }
   return result;
@@ -86,7 +80,7 @@ const CheckArray = (props) => {
     value, offset, length, node,
     className, nodeClassName, isButton,
     highlight, checkedProps, uncheckedProps,
-    increment, decrement
+    increment, decrement, ...rest
   } = props;
   const Node = node;
   let checkedArray = [];
@@ -119,42 +113,28 @@ const CheckArray = (props) => {
   if (isButton) {
     if (checkedArray.length > 0) {
       checkedArray = (
-        <button onClick={decrement} {...checkedProps} {...properties}>
-          <div className='container'>
+        <Button onClick={decrement} {...checkedProps} {...rest}>
+          <Row>
             {checkedArray}
-          </div>
-        </button>
+          </Row>
+        </Button>
       );
     }
     if (uncheckedArray.length > 0) {
       uncheckedArray = (
-        <button onClick={increment} {...uncheckedProps} {...properties}>
-          <div className='container'>
+        <Button onClick={increment} {...uncheckedProps} {...rest}>
+          <Row>
             {uncheckedArray}
-          </div>
-        </button>
+          </Row>
+        </Button>
       );
     }
   }
-  let properties = Object.assign({}, props);
-  delete properties.value;
-  delete properties.offset;
-  delete properties.length;
-  delete properties.node;
-  delete properties.className;
-  delete properties.nodeClassName;
-  delete properties.highlight;
-  delete properties.checkedProps;
-  delete properties.uncheckedProps;
-  delete properties.isButton;
-  delete properties.onHover;
-  properties.className = nodeClassName;
-  const containerClassName = cx('check-array', className);
   return (
-    <div className={containerClassName}>
+    <Row className={className}>
       {checkedArray}
       {uncheckedArray}
-    </div>
+    </Row>
   );
 }
 
@@ -194,14 +174,16 @@ const extendCheck = ({name, children}) => {
   node.propTypes = {
     className: React.PropTypes.string
   };
+  return node;
+}
 
+const extendCheckArray = (node) => {
   const nodeArray = (props) => {
     return (
       <CheckArray node={node} {...props}/>
     );
   };
-
-  return {node, nodeArray};
+  return nodeArray;
 }
 
-export { Check, CheckArray, extendCheck };
+export { Check, extendCheck, extendCheckArray };

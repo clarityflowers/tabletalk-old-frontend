@@ -1,12 +1,37 @@
+'use strict';
+
 import React from 'react';
-import rUpdate from 'react-addons-update';
+import styled from 'styled-components';
+import update from 'react-addons-update';
 
 import GameApp from 'games/common/app.js';
 import Chatbox from './chatbox/chatbox.js';
 import Window from './window/window.js';
 import { ACTIONS, TAB_TYPES } from 'games/blades-in-the-dark/common/enums.js';
+import Colors from 'games/blades-in-the-dark/common/colors';
+import Fonts from 'games/blades-in-the-dark/common/fonts';
 
-import './app.scss';
+
+const Blades = styled.div`
+  background-color: ${Colors.stone};
+  font: ${Fonts.h1};
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  ::-webkit-scrollbar {
+    width: .25em;
+    padding: 1em;
+  }
+  ::-webkit-scrollbar-track {
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+    background: $stone;
+  }
+`
 
 class App extends React.Component {
   constructor(props) {
@@ -18,9 +43,7 @@ class App extends React.Component {
     this.actionKeys = {};
   }
   processAction({what, data, key}) {
-    console.log('PROCESS ACTION', what, data, key);
     if (key in this.actionKeys) {
-      console.log('KEY IN ACTIONKEYS');
       delete this.actionKeys[key];
       return;
     }
@@ -213,15 +236,14 @@ class App extends React.Component {
           else if (action == "set_load") {
             update = {load: {$set: value}};
           }
-          return rUpdate(c, update);
+          return update(c, update);
         }};
         update = {[id]: update};
       }
-      this.setState({characters: rUpdate(this.state.characters, update)});
+      this.setState({characters: update(this.state.characters, update)});
     }
   }
   processEvent(event) {
-    console.log('BLADES PROCESS EVENT', event);
     if (event.action == ACTIONS.ROLL) {
       let roll = {
         id: event.id,
@@ -268,7 +290,7 @@ class App extends React.Component {
       const { characters } = data;
       if (characters) {
         const ids = Object.keys(characters);
-        let newCharacters = rUpdate(this.state.characters, {
+        let newCharacters = update(this.state.characters, {
           $merge: characters
         });
         this.setState({characters: newCharacters});
@@ -290,8 +312,9 @@ class App extends React.Component {
       })
     }
     const me = this.props.players ? this.props.players.me : null;
+    const width = document.body.clientWidth;
     let window = (
-      <div id='blades-in-the-dark'>
+      <Blades>
         <Window route={this.props.route}
                 tabs={tabs}
                 onChat={this.handleChat.bind(this)}
@@ -303,7 +326,7 @@ class App extends React.Component {
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}
                  onChat={this.handleChat.bind(this)}/>
-      </div>
+      </Blades>
     );
     return (
       <GameApp auth={this.props.auth}

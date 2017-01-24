@@ -1,48 +1,30 @@
 'use strict'
 
 import React from 'react';
+import styled from 'styled-components';
 
-import Portal from '../common/portal.js';
-import Stats from './stats/stats.js';
-import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
-import Equipment from './equipment/equipment.js';
+import Stats from './stats/stats';
+// import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
+// import Equipment from './equipment/equipment.js';
+import Title from './title';
+import CommonRow from 'common/row';
+import CommonColumn from 'common/column';
 
-import './character.scss';
-
-const Title = (props) => {
-  const { name, playbook, alias } = props;
-  let aliasDiv = null;
-  let playbookDiv = null;
-  if (alias) {
-    aliasDiv = (
-      <div className='alias'>
-        "{alias}"
-      </div>
-    );
-  }
-  if (playbook) {
-    playbookDiv = (
-      <div className='playbook'>
-        the {props.playbook}
-      </div>
-    );
-  }
-  return (
-    <div className='title'>
-      <div className='name'>
-        {name}
-      </div>
-      {playbookDiv}
-      {aliasDiv}
-    </div>
-  );
-}
-
-Title.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  playbook: React.PropTypes.string,
-  alias: React.PropTypes.string,
-}
+const Container = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 3em;
+`
+const Row = styled(CommonRow)`
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 1 auto;
+`
 
 const Character = (props) => {
   const {
@@ -157,18 +139,12 @@ const Character = (props) => {
     setLoad: (value) => { action({action: "set_load", value: value}); }
   }
   return (
-    <Portal onChat={onChat}>
-      <div className='character'>
-        <Title {...names}/>
-        <div className='row'>
-          <Stats {...stats} disabled={disabled}/>
-          <div className='column'>
-            <HealthAndAbilities {...health} disabled={disabled}/>
-            <Equipment {...equipment} disabled={disabled}/>
-          </div>
-        </div>
-      </div>
-    </Portal>
+    <Container>
+      <Title {...names}/>
+      <Row>
+        <Stats {...stats} disabled={disabled}/>
+      </Row>
+    </Container>
   )
 };
 
