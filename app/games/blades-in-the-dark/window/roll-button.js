@@ -10,7 +10,7 @@ import { lighten, darken } from 'utils/color-tools';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import props from 'utils/props';
 
-const Container = styled(props(<div/>, 'off'))`
+const Container = styled(props('div', 'off'))`
   z-index: 9;
   position: relative;
   width: ${props => props.off ? '0' : '2.5em'};

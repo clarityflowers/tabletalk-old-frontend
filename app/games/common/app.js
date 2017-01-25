@@ -1,7 +1,34 @@
 import React from 'react';
-import CableApi from 'api/cable.js';
-import Game from 'api/game.js';
-import './app.scss';
+import styled from 'styled-components';
+
+import CableApi from 'api/cable';
+import Game from 'api/game';
+import { MOBILE_BREAKPOINT } from 'games/blades-in-the-dark/common/constants';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  align-items: stretch;
+  pointer-events: all;
+  overflow: hidden;
+  position: fixed;
+  overflow: none;
+  > div {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+      align-items: stretch;
+      pointer-events: all;
+      box-sizing: border-box;
+      @media only screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding-top: 32px;
+      }
+  }
+`
 
 class App extends React.Component {
   constructor(props) {
@@ -59,11 +86,21 @@ class App extends React.Component {
   /* ---------- render ---------------------------------------------------------*/
   render() {
     return (
-      <div id='game-app'>
+      <Container>
         {this.props.window}
-      </div>
+      </Container>
     );
   }
+}
+
+App.propTypes = {
+  game: React.PropTypes.object.isRequired,
+  auth: React.PropTypes.object.isRequired,
+  onLoad: React.PropTypes.func.isRequired,
+  logEvents: React.PropTypes.func.isRequired,
+  onConnect: React.PropTypes.func.isRequired,
+  processEvent: React.PropTypes.func.isRequired
+
 }
 
 export default App;

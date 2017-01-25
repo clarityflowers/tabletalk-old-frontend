@@ -1,9 +1,15 @@
 import React from 'react';
-import GameApp from 'games/common/app.js';
-import Chatbox from './chatbox.js';
-import Window from './window.js';
-import { ACTIONS } from 'games/world-of-adventure/enums.js';
-import './app.scss';
+import styled from 'styled-components';
+
+import GameApp from 'games/common/app';
+import Chatbox from './chatbox';
+import Window from './window';
+import Colors from 'games/world-of-adventure/colors'
+import { ACTIONS } from 'games/world-of-adventure/enums';
+
+const Container = styled.div`
+  ${Colors.stripesBackground(.5, .5, .2, 20)};
+`
 
 class App extends React.Component {
   constructor(props) {
@@ -13,16 +19,16 @@ class App extends React.Component {
     if (data.action == ACTIONS.ROLL) {
       let event = {
         id: data.id,
-        action: ACTIONS.ROLL,
-        player: this.props.playerHash[data.player],
+        action: 'roll',
+        player: this.props.players[data.player],
         bonus: data.bonus,
         result: data.result,
         date: new Date(data.timestamp)
       }
-      this.props.logEvent(event);
+      return event
     }
     else {
-      this.props.processEvent(data);
+      return this.props.processEvent(data);
     }
   }
   roll(bonus) {
@@ -50,7 +56,7 @@ class App extends React.Component {
   }
   render() {
     let window = (
-      <div id='world-of-adventure'>
+      <Container>
         <Window onChat={this.handleChat.bind(this)}
                 route={this.props.route}
                 auth={this.props.auth}
@@ -58,7 +64,7 @@ class App extends React.Component {
         <Chatbox events={this.props.events}
                  playerHash={this.props.playerHash}
                  onChat={this.handleChat.bind(this)}/>
-      </div>
+      </Container>
     );
     return (
       <GameApp auth={this.props.auth}
@@ -66,7 +72,8 @@ class App extends React.Component {
                window={window}
                onConnect={this.props.onConnect}
                onLoad={this.props.onLoad}
-               processEvent={this.processEvent.bind(this)}/>
+               processEvent={this.processEvent.bind(this)}
+               logEvents={this.props.logEvents}/>
     );
   }
 }

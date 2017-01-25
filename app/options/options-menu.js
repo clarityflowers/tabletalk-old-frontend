@@ -1,99 +1,80 @@
+'use strict'
+
 import React from 'react';
+import styled from 'styled-components';
 import update from 'react-addons-update';
-import { HoverWiggle } from 'utils/hover-animate.js';
-import './options-menu.scss';
 
-class Label extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      width: 0
-    }
-  }
-  componentDidUpdate(prevProps, prevState) {
-    this.updateWidth();
-  }
-  updateWidth() {
-    let {scrollWidth, innerText} = this.refs.label;
-    if (scrollWidth != this.state.width) {
-      this.setState({width: scrollWidth});
-    }
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.updateWidth.bind(this));
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWidth.bind(this));
-  }
-  mouseEnter() {
-    this.props.onMouseEnter(this.props.index);
-  }
-  mouseLeave() {
-    this.props.onMouseLeave(this.props.index);
-  }
-  click() {
-    this.mouseLeave();
-    this.props.onClick();
-  }
-  render() {
-    let style = {
-      width: 0,
-      left: 0
-    }
-    if (this.props.on) {
-      style.width = this.state.width;
-      if (this.props.isToggling) {
-        style.left = 10;
-      }
-      else if (this.props.isHovering) {
-        style.left = -10;
-      }
-    }
-    return (
-      <div className='label-container' style={style}>
-        <div  className='label'
-              ref='label'
-              onClick={this.click.bind(this)}
-              onMouseEnter={this.mouseEnter.bind(this)}
-              onMouseLeave={this.mouseLeave.bind(this)}
-              onTouchMove={this.mouseLeave.bind(this)}>
-          {this.props.text}
-        </div>
-      </div>
-    )
-  }
-}
+import Label from './label';
+import OptionsButton from './options-button';
 
-const OptionsButton = (props) => {
-  let mouseEnter = () => {
-    props.onMouseEnter(props.index);
-  }
-  let mouseLeave = () => {
-    props.onMouseLeave(props.index);
-  }
-  let click = () => {
-    mouseLeave();
-    props.onClick();
-  }
-  let className='';
-  if (props.isHovering) {
-    className='anim-wiggle';
-  }
-  return (
-    <button onClick={click}
-            className={className}
-            onMouseEnter={mouseEnter}
-            onMouseLeave={mouseLeave}>
-      {props.glyph}
-    </button>
-  )
-}
+import Colors from 'common/colors';
+import Fonts from 'common/fonts';
 
-const Divider = () => {
-  return (
-    <div className='divider'></div>
-  )
+const { shadowColor, hearts, boxShadow } = Colors;
+import { HoverWiggle } from 'utils/hover-animate';
+
+const height = (count) => {
+  return 1.8 * count + 0.2;
 }
+const padding = 1;
+const Labels = styled.div`
+  z-index: 1;
+  position: absolute;
+  right: 1em;
+  top: .2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  pointer-events: none;
+`
+const Divider = styled.div`
+  height: 0;
+  width: 80%;
+  display: inline-block;
+  border-width: .05em;
+  border-style: inset;
+  border-color: ${shadowColor};
+  border-radius: .1em;
+  margin-top: .1em;
+`
+const bannerPosition = ({state, count}) => {
+  if (state == 'hidden') {
+    return `${-padding - height(count) - .4}`;
+  }
+  else if (state == 'closed') {
+    return `${-padding - height(count) + 1.8}`;
+  }
+  return `${-padding}`;
+}
+const bannerHeight = ({count}) => {
+  console.log('banner height',height(count) + padding);
+  return (height(count) + padding);
+}
+const Banner = styled.div`
+  transition: top .3s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+  box-shadow: ${boxShadow};
+  background-color: ${hearts};
+  position: absolute;
+  right: 0;
+  top: ${bannerPosition}em;
+  width: 1.8em;
+  height: ${bannerHeight}em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 2;
+`;
+const Container = styled.div`
+  color: red;
+  top: 0;
+  right: 1em;
+  position: absolute;
+  z-index: 20;
+  font-size: 20px;
+  user-select: none;
+`
 
 const ANIM_TIMES = [200, 600];
 
@@ -157,13 +138,13 @@ class OptionsMenu extends React.Component {
     }
   }
   render() {
-    let className = 'hidden';
+    let state = 'hidden';
     if (this.props.auth.online && this.props.on) {
       if (this.state.open) {
-        className = 'open';
+        state = 'open';
       }
       else {
-        className = 'closed';
+        state = 'closed';
       }
     }
     let options = [
@@ -246,15 +227,16 @@ class OptionsMenu extends React.Component {
                      onMouseLeave={this.handleMouseLeave.bind(this)}
                      glyph='g'/>
     );
+    const count = options.length + 1;
     return (
-      <div id='optionsMenu' className={className}>
-        <div className='labels'>
+      <Container>
+        <Labels>
           {labels}
-        </div>
-        <div className='banner'>
+        </Labels>
+        <Banner state={state} count={count}>
           {buttons}
-        </div>
-      </div>
+        </Banner>
+      </Container>
     )
   }
 }

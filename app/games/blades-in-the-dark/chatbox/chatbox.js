@@ -1,78 +1,42 @@
 import React from 'react';
+import styled from 'styled-components';
 import cx from 'classnames';
-import CommonChatbox from 'games/common/chatbox.js';
-import { ACTIONS } from 'games/blades-in-the-dark/common/enums.js';
-import './chatbox.scss';
 
-let Log = (props) => {
-  const { name, message } = props;
-  const text = message.replace("{player}", name);
-  return (
-    <div className='log'>
-      {text}
-    </div>
-  ) ;
-}
+import Roll from './roll';
+import Log from './log';
 
-let Roll = (props) => {
-  let { newest } = props;
-  let result = 0;
-  let crit = false;
-  if (props.level == 0) {
-    if (props.result[0] < props.result[1]) {
-      result = props.result[0];
+import Colors from 'games/blades-in-the-dark/common/colors';
+const { sun, mud, sky, shadow } = Colors;
+import Fonts from 'games/blades-in-the-dark/common/fonts';
+import CommonChatbox from 'games/common/chatbox/chatbox';
+import { ACTIONS } from 'games/blades-in-the-dark/common/enums';
+
+const StyledChatbox = styled(CommonChatbox)`
+  background-color: ${sun};
+  color: ${mud};
+  font: ${Fonts.body};
+  font-size: 16px;
+  box-shadow: ${shadow};
+  button {
+    text-shadow: -1px 1px 1px fade-out($stone, .7);
+    box-shadow: 0 1px 1px 1px fade-out($stone, .8);
+    color: ${sky};
+    background-color: ${sun};
+    &.notify {
+      background-color: ${sky};
+      color: ${sun};
     }
-    else {
-      result = props.result[1];
-    }
   }
-  else {
-    for (let i = 0; i < props.result.length; i++) {
-      if (result == 6 && props.result[i] == 6) {
-        crit = true;
-      }
-      else if (props.result[i] > result) {
-        result = props.result[i];
-      }
-    }
+  textarea {
+    font-size: 1em;
+    font-family: 'Raleway';
+    font-weight: 300;
+    background: ${sun};
   }
-  let dice = [];
-  for (let i=0; i < props.result.length; i++) {
-    const className = cx('die', {
-      highlight: props.result[i] == result
-    });
-    dice.push(
-      <div key={i} className={className}>{props.result[i]}</div>
-    )
+  .divider {
+    border: 1px inset ${mud};
   }
-  let rollClassName = cx(
-    'roll',
-    {
-      crit: newest && crit,
-      strong: newest && !crit && result == 6,
-      weak: newest && (result == 4 || result == 5),
-      miss: newest && result <= 3
-    }
-  )
-  if (result == 0) {
-    result = (
-      <div className='loading'>l</div>
-    )
-  }
-  if (crit) {
-    result = 'CRIT';
-  }
-  return (
-    <div className={rollClassName}>
-      <div className='dice'>
-        {dice}
-      </div>
-      <div className='number'>
-        {result}
-      </div>
-    </div>
-  )
-}
+`
 
 class Chatbox extends React.Component {
   constructor(props) {
@@ -107,10 +71,7 @@ class Chatbox extends React.Component {
       }
     }
     return (
-      <CommonChatbox events={this.props.events}
-                     playerHash={this.props.playerHash}
-                     onChat={this.props.onChat}
-                     renderEvent={this.renderEvent.bind(this)}/>
+      <StyledChatbox {...this.props} renderEvent={this.renderEvent.bind(this)}/>
     )
   }
 }

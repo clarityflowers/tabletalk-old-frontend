@@ -21,7 +21,7 @@ const dotColor = (props) => {
     return (props.checked ? Colors.sun : unchecked);
   }
 }
-const ActionDot = styled(props(<Dot/>, 'active'))`
+const ActionDot = styled(props(Dot, 'active'))`
   border-color: ${dotColor};
   background: ${dotColor};
 `;
@@ -38,7 +38,7 @@ const Name = styled.div`
   margin-left: .3em;
   font-weight: 500;
 `;
-const ActionButton = styled(props(<Button/>,'active'))`
+const ActionButton = styled(props(Button,'active'))`
   color: ${props => props.active ? Colors.sand : Colors.sun};
   &:not(:disabled) {
     &:focus {

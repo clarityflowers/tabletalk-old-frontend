@@ -1,29 +1,20 @@
 'use strict'
 
 import React from 'react';
-import { bonusString } from 'games/world-of-adventure/utils.js';
-import OptionsMenu from 'options/options-menu.js';
-import { HoverWiggle } from 'utils/hover-animate.js';
-import './window.scss';
+import styled from 'styled-components';
 
-class RollButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  handleClick() {
-    this.props.onChat(`/roll ${bonusString(this.props.bonus)}`)
-  }
-  render () {
-    return (
-      <HoverWiggle>
-        <button className='roll' onClick={this.handleClick.bind(this)}>
-          Roll {bonusString(this.props.bonus)}
-        </button>
-      </HoverWiggle>
-    )
-  }
-}
+import RollButton from './roll-button';
+import OptionsMenu from 'options/options-menu';
+
+const Container = styled.div`
+  flex: 1 1 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+`
 
 class Window extends React.Component {
   constructor(props) {
@@ -32,7 +23,7 @@ class Window extends React.Component {
   }
   render() {
     return (
-      <div id='window'>
+      <Container>
         <OptionsMenu route={this.props.route} on={this.props.options} auth={this.props.auth}/>
         <RollButton bonus={-1} onChat={this.props.onChat}/>
         <RollButton bonus={0} onChat={this.props.onChat}/>
@@ -40,7 +31,7 @@ class Window extends React.Component {
         <RollButton bonus={2} onChat={this.props.onChat}/>
         <RollButton bonus={3} onChat={this.props.onChat}/>
         <RollButton bonus={4} onChat={this.props.onChat}/>
-      </div>
+      </Container>
     )
   }
 }

@@ -1,5 +1,0 @@
-@import './colors.scss';
-
-#game-app > #world-of-adventure {
-  @include stripes-background(.5, .5, 20%, 20px);
-}

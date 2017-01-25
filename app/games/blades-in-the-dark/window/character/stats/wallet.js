@@ -16,7 +16,7 @@ const Container = styled.div`
   flex: 0 0 auto;
 `
 const activeBackground = lighten(Colors.fire, 0.3);
-const ZButton = styled(props(<Button/>, 'top'))`
+const ZButton = styled(props(Button, 'top'))`
   position: absolute;
   z-index: ${props => props.top ? 2 : 1};
   &:focus .check:last-child {

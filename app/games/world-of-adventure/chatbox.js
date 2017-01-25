@@ -1,41 +1,47 @@
 import React from 'react';
+import styled from 'styled-components';
 import cx from 'classnames';
-import CommonChatbox from 'games/common/chatbox.js';
-import { bonusString } from 'games/world-of-adventure/utils.js';
-import { ACTIONS } from 'games/world-of-adventure/enums.js';
-import './chatbox.scss';
 
-let Roll = (props) => {
-  let total = props.result[0] + props.result[1] + props.bonus;
-  let bonus = bonusString(props.bonus);
-  let numberClassName = cx(
-    'number',
-    {
-      hit: total >= 10,
-      miss: total <= 6
-    }
-  )
-  if (props.result[0] == 0 && props.result[1] == 0) {
-    total = (
-      <div className='loading'>l</div>
-    )
+import Roll from './roll';
+
+import CommonChatbox from 'games/common/chatbox/chatbox';
+
+import Colors from 'games/world-of-adventure/colors';
+import Fonts from 'games/world-of-adventure/fonts';
+import { ACTIONS } from 'games/world-of-adventure/enums';
+import { fadeout } from 'utils/color-tools';
+
+const { coldBreath, necessita, shadow, rainedFlowersToday, deep } = Colors;
+
+const StyledChatbox = styled(CommonChatbox)`
+  font: ${Fonts.body};
+  font-size: 16px;
+  background: ${coldBreath};
+  color: ${necessita};
+  box-shadow: ${shadow};
+  button {
+      text-shadow: -1px 1px 1px ${fadeout(necessita, .7)};
+      box-shadow: 0 1px 1px 1px ${fadeout(necessita, .8)};
+      color: ${rainedFlowersToday};
+      background: ${coldBreath};
+      &:focus {
+        outline: none;
+      }
+      &.notify {
+        background: ${rainedFlowersToday};
+        color: ${coldBreath};
+      }
   }
-  return (
-    <div className='roll'>
-      <div className='header'>
-        {props.name} rolled
-        <span className='dice'>
-          {props.result[0]}
-          {props.result[1]}
-        </span>
-        {bonus}
-      </div>
-      <div className={numberClassName}>
-        {total}
-      </div>
-    </div>
-  )
-}
+  h1 {
+    border-bottom: 1px solid ${necessita};
+  }
+  .divider {
+    border: 1px inset ${deep};
+  }
+  textarea {
+    background: ${coldBreath};
+  }
+`
 
 class Chatbox extends React.Component {
   constructor(props) {
@@ -55,7 +61,7 @@ class Chatbox extends React.Component {
   }
   render() {
     return (
-      <CommonChatbox events={this.props.events}
+      <StyledChatbox events={this.props.events}
                      playerHash={this.props.playerHash}
                      onChat={this.props.onChat}
                      renderEvent={this.renderEvent.bind(this)}/>

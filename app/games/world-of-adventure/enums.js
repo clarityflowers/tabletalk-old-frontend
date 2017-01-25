@@ -2,6 +2,6 @@
 
 import { ACTIONS } from 'games/common/enums.js';
 
-ACTIONS.ROLL = 1;
+ACTIONS.ROLL = 'roll';
 
 export { ACTIONS };

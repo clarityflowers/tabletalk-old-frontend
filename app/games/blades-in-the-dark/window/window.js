@@ -10,6 +10,7 @@ import Character from './character/character';
 import Crew from './crew/crew';
 import OptionsMenu from 'options/options-menu';
 
+import { MOBILE_BREAKPOINT } from 'games/blades-in-the-dark/common/constants';
 import { TAB_TYPES } from 'games/blades-in-the-dark/common/enums';
 import Colors from 'games/blades-in-the-dark/common/colors';
 
@@ -20,9 +21,8 @@ const Container = styled.div`
   max-height: 100%;
   display: flex;
   flex-flow: column nowrap;
-  @media only screen and (max-width: 800px) {
-    margin-top: 2em;
-    margin-bottom: 10em;
+  @media only screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+    margin-bottom: 20px;
   }
 `
 const Tabs = styled.div`

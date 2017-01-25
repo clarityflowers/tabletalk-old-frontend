@@ -4,10 +4,12 @@ import React from 'react';
 
 import filter from './filter';
 
-const props = (component, ...properties) => {
+const props = (Component, ...properties) => {
   return (props) => {
     const result = filter(props, ...properties, 'children');
-    return React.cloneElement(component, result, props.children);
+    return (
+      <Component {...result}>{props.children}</Component>
+    )
   };
 }
 
