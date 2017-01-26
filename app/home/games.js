@@ -5,7 +5,7 @@ import ReactTransitionGroup from 'react-addons-transition-group';
 import Link from 'utils/link.js';
 import cx from 'classnames';
 import GameWindow from 'games/common/game-window.js';
-import GameDetails from './game-details.js';
+import GameDetails from './game-details/game-details.js';
 import OptionsMenu from 'options/options-menu.js';
 import GameApi from 'api/game.js';
 import { HoverWiggle } from 'utils/hover-animate.js';

@@ -27,12 +27,10 @@
     justify-content: center;
     flex: none;
     top: -10vh;
+    margin-top: 10vh;
     padding: 10vh 0 10vh 0;
     box-shadow: $box-shadow;
     transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
-    #optionsMenu {
-      margin-top: 10vh;
-    }
     &.off {
       top: -200vh;
     }

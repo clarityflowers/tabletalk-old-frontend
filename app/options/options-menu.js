@@ -48,14 +48,19 @@ const bannerPosition = ({state, count}) => {
   return `${-padding}`;
 }
 const bannerHeight = ({count}) => {
-  console.log('banner height',height(count) + padding);
   return (height(count) + padding);
+}
+const delay = ({state}) => {
+  if (state == 'hidden') { return 0.3; }
+  else if (state == 'closed') { return 0.1; }
+  else return 0;
 }
 const Banner = styled.div`
   transition: top .3s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+  transition-delay: ${delay}s;
   box-shadow: ${boxShadow};
   background-color: ${hearts};
-  position: absolute;
+  position: relative;
   right: 0;
   top: ${bannerPosition}em;
   width: 1.8em;
@@ -68,12 +73,16 @@ const Banner = styled.div`
 `;
 const Container = styled.div`
   color: red;
+  right: 2em;
   top: 0;
-  right: 1em;
+  height: 1em;
   position: absolute;
   z-index: 20;
   font-size: 20px;
   user-select: none;
+  @media only screen and (max-width: 800px) {
+    font-size: 16px;
+  }
 `
 
 const ANIM_TIMES = [200, 600];
@@ -196,6 +205,8 @@ class OptionsMenu extends React.Component {
                isHovering={labelIsHovering}
                onMouseEnter={this.handleMouseEnter.bind(this)}
                onMouseLeave={this.handleMouseLeave.bind(this)}
+               menuState={state}
+               isTitle={i == 0}
                onClick={option.onClick}/>
       );
       buttons.push(
