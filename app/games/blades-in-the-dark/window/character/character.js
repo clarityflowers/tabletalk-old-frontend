@@ -1,7 +1,9 @@
+
 'use strict'
 
 import React from 'react';
 import styled from 'styled-components';
+import autobind from 'autobind-decorator';
 
 import Stats from './stats/stats';
 // import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
@@ -26,126 +28,130 @@ const Row = styled(CommonRow)`
   flex: 1 1 auto;
 `
 
-const Character = (props) => {
-  const {
-    id,
-    name, playbook, alias,
-    look, heritage, background, vice,
-    playbookXP,
-    coin, stash,
-    insightXP, hunt, study, survey, tinker,
-    prowessXP, finesse, prowl, skirmish, wreck,
-    resolveXP, attune, command, consort, sway,
-    stress, trauma,
-    healingUnlocked, healingClock,
-    harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
-    armor, heavyArmor, specialArmor,
-    load, items,
-    editPermission, viewPermission,
-    specialAbilities, strangeFriends,
-    onChat, me, send
-  } = props;
-  const action = (data) => {
-    data.id = id;
-    send(data);
+class Character extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.update = this.update.bind(this);
   }
-  const incrementXP = (stat) => {
-    return () => {
-      action({action: "increment_xp", value: stat});
+  getChildContext() {
+    return { dispatch: this.update };
+  }
+  update (action, value) {
+    const data = {
+      id: this.props.id,
+      action: action
+    };
+    if (value != undefined) {
+      data.value = value;
     }
+    this.props.send(data);
   }
-  const decrementXP = (stat) => {
-    return () => {
-      action({action: "decrement_xp", value: stat});
-    }
-  }
-  const disabled = !editPermission.includes(me.id);
-  const names = {name, playbook, alias}
-  const stats = {
-    money: {
-      coin, stash,
-      increment: () => { action({action: "increment_coin"}); },
-      decrement: () => { action({action: "decrement_coin"}); },
-      transferToStash: () => { action({action: "transfer_to_stash"}); },
-      transferToCoin: () => { action({action: "transfer_to_coin"}); }
-    },
-    xp: playbookXP,
-    increment: incrementXP('playbook'),
-    decrement: decrementXP('playbook'),
-    insight: {
-      hunt, study, survey, tinker,
-      xp: insightXP,
-      increment: incrementXP('insight'),
-      decrement: decrementXP('insight')
-    },
-    prowess: {
-      finesse, prowl, skirmish, wreck,
-      xp: prowessXP,
-      increment: incrementXP('prowess'),
-      decrement: decrementXP('prowess')
-    },
-    resolve: {
-      attune, command, consort, sway,
-      xp: resolveXP,
-      increment: incrementXP('resolve'),
-      decrement: decrementXP('resolve')
-    },
-    advanceAction: (value) => { action({action: "advance_action", value: value}); }
-  }
-  const health = {
-    specialAbilities, strangeFriends, playbook,
-    stress: {
-      stress, trauma,
-      increment: () => { action({action: "increment_stress"}); },
-      decrement: () => { action({action: "decrement_stress"}); },
-      add: (trauma) => { action({action: "add_trauma", value: trauma}); }
-    },
-    harm: {
-      severe: harmSevere,
-      moderate1: harmModerate1,
-      moderate2: harmModerate2,
-      lesser1: harmLesser1,
-      lesser2: harmLesser2,
-      edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
-    },
-    healing: {
-      unlocked: healingUnlocked,
-      clock: healingClock,
-      unlock: (value) => { action({action: "unlock_healing", value: value}); },
-      increment: () => { action({action: "increment_healing"}); },
-      decrement: () => { action({action: "decrement_healing"}); }
-    },
-    armor: {
-      armor: {
-        used: armor,
-        available: items.includes("Armor")
-      },
-      heavy: {
-        used: heavyArmor,
-        available: armor && items.includes("+Heavy")
-      },
-      special: specialArmor,
-      use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
-    },
-    details: {
+  render() {
+    const {
+      id,
+      name, playbook, alias,
       look, heritage, background, vice,
+      playbookXP,
+      coin, stash,
+      insightXP, hunt, study, survey, tinker,
+      prowessXP, finesse, prowl, skirmish, wreck,
+      resolveXP, attune, command, consort, sway,
+      stress, trauma,
+      healingUnlocked, healingClock,
+      harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
+      armor, heavyArmor, specialArmor,
+      load, items,
+      editPermission, viewPermission,
+      specialAbilities, strangeFriends,
+      onChat, me, send
+    } = this.props;
+    const action = (data) => {
+      data.id = id;
+      send(data);
     }
+    const incrementXP = (stat) => {
+      return () => {
+        action({action: "increment_xp", value: stat});
+      }
+    }
+    const decrementXP = (stat) => {
+      return () => {
+        action({action: "decrement_xp", value: stat});
+      }
+    }
+    const disabled = !editPermission.includes(me.id);
+    const names = {name, playbook, alias}
+    const stats = {
+      money: {coin, stash},
+      xp: playbookXP,
+      insight: {
+        hunt, study, survey, tinker,
+        xp: insightXP,
+      },
+      prowess: {
+        finesse, prowl, skirmish, wreck,
+        xp: prowessXP,
+      },
+      resolve: {
+        attune, command, consort, sway,
+        xp: resolveXP,
+      },
+    }
+    const health = {
+      specialAbilities, strangeFriends, playbook,
+      stress: {
+        stress, trauma,
+        increment: () => { action({action: "increment_stress"}); },
+        decrement: () => { action({action: "decrement_stress"}); },
+        add: (trauma) => { action({action: "add_trauma", value: trauma}); }
+      },
+      harm: {
+        severe: harmSevere,
+        moderate1: harmModerate1,
+        moderate2: harmModerate2,
+        lesser1: harmLesser1,
+        lesser2: harmLesser2,
+        edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
+      },
+      healing: {
+        unlocked: healingUnlocked,
+        clock: healingClock,
+        unlock: (value) => { action({action: "unlock_healing", value: value}); },
+        increment: () => { action({action: "increment_healing"}); },
+        decrement: () => { action({action: "decrement_healing"}); }
+      },
+      armor: {
+        armor: {
+          used: armor,
+          available: items.includes("Armor")
+        },
+        heavy: {
+          used: heavyArmor,
+          available: armor && items.includes("+Heavy")
+        },
+        special: specialArmor,
+        use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
+      },
+      details: {
+        look, heritage, background, vice,
+      }
+    }
+    const equipment = {
+      load, items, playbook,
+      use: (name) => { action({action: "use_item", value: name}); },
+      clear: (name) => { action({action: "clear_item", value: name}); },
+      clearAll: () => { action({action: "clear_items"}); },
+      setLoad: (value) => { action({action: "set_load", value: value}); }
+    }
+    return (
+      <Container>
+        <Title {...names}/>
+        <Row>
+          <Stats {...stats} disabled={disabled}/>
+        </Row>
+      </Container>
+    )
   }
-  const equipment = {
-    load, items, playbook,
-    use: (name) => { action({action: "use_item", value: name}); },
-    clear: (name) => { action({action: "clear_item", value: name}); },
-    clearAll: () => { action({action: "clear_items"}); },
-    setLoad: (value) => { action({action: "set_load", value: value}); }
-  }
-  return (
-    <Container>
-      <Title {...names}/>
-      <Row>
-        <Stats {...stats} disabled={disabled}/>
-      </Row>
-    </Container>
-  )
 };
 
 Character.propTypes = {
@@ -196,6 +202,10 @@ Character.propTypes = {
   onChat: React.PropTypes.func.isRequired,
   me: React.PropTypes.object.isRequired,
   send: React.PropTypes.func.isRequired
+}
+
+Character.childContextTypes = {
+  dispatch: React.PropTypes.func
 }
 
 export default Character;

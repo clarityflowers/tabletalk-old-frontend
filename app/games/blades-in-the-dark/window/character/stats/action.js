@@ -12,18 +12,17 @@ import props from 'utils/props';
 
 
 const unchecked = darken(Colors.stone, 0.05);
-const dotColor = (props) => {
-  const { checked, active } = props;
-  if (active) {
-    return Colors.sand;
-  }
-  else {
-    return (props.checked ? Colors.sun : unchecked);
-  }
-}
 const ActionDot = styled(props(Dot, 'active'))`
-  border-color: ${dotColor};
-  background: ${dotColor};
+  border-color: ${unchecked};
+  background: ${unchecked};
+  &.checked {
+    border-color: ${Colors.sun};
+    background: ${Colors.sun};
+  }
+  &.highlight {
+    border-color: ${Colors.sand};
+    background: ${Colors.sand};
+  }
 `;
 const Divider = styled.div`
   margin: 0 .2em;
@@ -38,9 +37,10 @@ const Name = styled.div`
   margin-left: .3em;
   font-weight: 500;
 `;
-const ActionButton = styled(props(Button,'active'))`
-  color: ${props => props.active ? Colors.sand : Colors.sun};
+const ActionButton = styled(Button)`
+  color: ${Colors.sun};
   &:not(:disabled) {
+    color: ${Colors.sand};
     &:focus {
       text-decoration: underline;
     }
@@ -87,7 +87,7 @@ class Action extends React.Component {
       const active = !disabled && unlocked && i == value + 1
       dots.push(
         <ActionDot key={i} checked={value >= i}
-                   active={active} isButton={false}/>
+                   highlight={active} isButton={false}/>
       )
       if (i == 1) {
         dots.push(
@@ -106,7 +106,7 @@ class Action extends React.Component {
       }
     }
     return (
-      <ActionButton active={active} {...handlers} disabled={!active}>
+      <ActionButton {...handlers} disabled={!active}>
         <Row>
           {dots}
           <Name dataset={{active}}>

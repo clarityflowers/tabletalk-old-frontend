@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import cx from 'classnames';
+import autobind from 'autobind-decorator';
 
 import Roll from './roll';
 import Log from './log';
@@ -42,6 +42,14 @@ class Chatbox extends React.Component {
   constructor(props) {
     super(props);
     this.newest = null;
+    this.renderEvent = this.renderEvent.bind(this);
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.props.events.length, nextProps.events.length);
+    if (this.props.events.length == nextProps.events.length) {
+      return false;
+    }
+    return true;
   }
   renderEvent(event) {
     if (event.action == ACTIONS.ROLL) {
@@ -71,7 +79,7 @@ class Chatbox extends React.Component {
       }
     }
     return (
-      <StyledChatbox {...this.props} renderEvent={this.renderEvent.bind(this)}/>
+      <StyledChatbox {...this.props} renderEvent={this.renderEvent}/>
     )
   }
 }

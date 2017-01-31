@@ -9,15 +9,19 @@ import Fonts from 'games/blades-in-the-dark/common/fonts';
 import { lighten, darken } from 'utils/color-tools';
 import { HoverWiggle } from 'utils/hover-animate.js';
 import props from 'utils/props';
+import cz from 'utils/styled-classes';
 
-const Container = styled(props('div', 'off'))`
+const Container = styled(cz('div', 'off'))`
   z-index: 9;
   position: relative;
-  width: ${props => props.off ? '0' : '2.5em'};
+  width: 2.5em;
   transition-property: width;
   transition-duration: .3s;
   transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
   font-size: 1.25em;
+  &.off {
+    width: 0em;
+  }
 `
 const focus = lighten(Colors.fire, 0.2);
 const Button = styled(CommonButton)`
@@ -27,7 +31,6 @@ const Button = styled(CommonButton)`
   box-sizing: border-box;
   font-family: 'League Spartan';
   padding-top: .2em;
-  /*padding: .15em .2em 0 .2em;*/
   vertical-align: middle;
   width: 1.5em;
   height: 1.5em;

@@ -1,6 +1,6 @@
 'use strict'
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
 import StashRow from './stash-row';
@@ -12,6 +12,7 @@ import Button from 'common/button';
 import Colors from 'games/blades-in-the-dark/common/colors';
 import { lighten } from 'utils/color-tools';
 import Fonts from 'games/blades-in-the-dark/common/fonts';
+import connect from 'utils/connect';
 
 const Div = styled(Row)`
   justify-content: center;
@@ -54,7 +55,7 @@ const Right = styled(Column)`
   align-self: flex-end;
 `
 
-class Money extends React.Component {
+class Money extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,22 +71,23 @@ class Money extends React.Component {
     this.setState({hover: null});
   }
   transferToStash() {
-    const { coin, stash, transferToStash } = this.props;
+    const { coin, stash, dispatch } = this.props;
     const { hover } = this.state;
     if (hover == 'coin_to_stash' && (stash + 1 > 39 || coin - 1 < 1)) {
       this.setState({hover: null});
     }
-    transferToStash();
+    dispatch('transfer_to_stash');
   }
   transferToCoin() {
-    const { coin, stash, transferToCoin } = this.props;
+    const { coin, stash, dispatch } = this.props;
     const { hover } = this.state;
     if (hover == 'stash_to_coin' && (stash - 2 < 2 || coin + 1 > 3)) {
       this.setState({hover: null});
     }
-    transferToCoin();
+    dispatch('transfer_to_coin');
   }
   render() {
+    console.log('render money');
     const {
       coin, stash,
       increment, decrement, transferToStash, transferToCoin,
@@ -140,75 +142,17 @@ class Money extends React.Component {
   }
 }
 
-// const ACTIONS = {
-//   increment_coin:  { coin:  1, stash:  0 },
-//   decrement_coin:  { coin: -1, stash:  0 },
-//   increment_stash: { coin:  0, stash:  1 },
-//   decrement_stash: { coin:  0, stash: -1 },
-//   stash_to_coin:   { coin:  1, stash: -2 },
-//   coin_to_stash:   { coin: -1, stash:  1 }
-// }
-//
-// class Money extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       hover: null
-//     };
-//   }
-//   mouseOver(hover) {
-//     return () => {
-//       if (!this.props.disabled) {
-//         this.setState({hover: hover});
-//       }
-//     }
-//   }
-//   handleMouseLeave(hover) {
-//     if (!this.props.disabled) {
-//       this.setState({hover: null});
-//     }
-//   }
-//   render() {
-//     let coinHighlight = 0;
-//     let stashHighlight = 0;
-//     if (this.state.hover) {
-//       let action = ACTIONS[this.state.hover];
-//       if (action) {
-//         coinHighlight = action.coin;
-//         stashHighlight = action.stash;
-//       }
-//     }
-//     let coinProps = {
-//       length: 2,
-//       className: 'row coin',
-//       highlight: coinHighlight,
-//       disabled: disabled,
-//       checkedProps: {
-//         onClick: decrement,
-//         onMouseOver: this.mouseOver('decrement_coin'),
-//         onMouseLeave: this.handleMouseLeave.bind(this)
-//       },
-//       uncheckedProps: {
-//         onClick: increment,
-//         onMouseOver: this.mouseOver('increment_coin'),
-//         onMouseLeave: this.handleMouseLeave.bind(this)
-//       }
-//     };
-//   }
-// }
-
+const { number, bool, func } = React.PropTypes;
 Money.propTypes = {
-  coin: React.PropTypes.number.isRequired,
-  stash: React.PropTypes.number.isRequired,
-  increment: React.PropTypes.func.isRequired,
-  decrement: React.PropTypes.func.isRequired,
-  transferToStash: React.PropTypes.func.isRequired,
-  transferToCoin: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool
+  coin: number.isRequired,
+  stash: number.isRequired,
+  disabled: bool.isRequired,
+  dispatch: func.isRequired
+
 }
 
 Money.defaultProps = {
   disabled: false
 }
 
-export default Money;
+export default connect(Money);

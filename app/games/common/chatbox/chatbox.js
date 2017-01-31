@@ -98,7 +98,7 @@ const Divider = styled.div`
   border-radius: 1em;
 `
 
-class Chatbox extends React.Component {
+class Chatbox extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {

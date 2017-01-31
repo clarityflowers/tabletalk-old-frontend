@@ -29,33 +29,36 @@ const Alias = styled(Span)`
   Color: ${Colors.fire};
 `
 
-const Title = (props) => {
-  const { name, playbook, alias } = props;
-  let aliasDiv = null;
-  let playbookDiv = null;
-  if (alias) {
-    aliasDiv = (
-      <Alias>
-        "{alias}"
-      </Alias>
+class Title extends React.PureComponent {
+  render() {
+    console.log('render title');
+    const { name, playbook, alias } = this.props;
+    let aliasDiv = null;
+    let playbookDiv = null;
+    if (alias) {
+      aliasDiv = (
+        <Alias>
+          "{alias}"
+        </Alias>
+      );
+    }
+    if (playbook) {
+      playbookDiv = (
+        <Playbook>
+          the {playbook}
+        </Playbook>
+      );
+    }
+    return (
+      <Container>
+        <Name>
+          {name}
+        </Name>
+        {playbookDiv}
+        {aliasDiv}
+      </Container>
     );
   }
-  if (playbook) {
-    playbookDiv = (
-      <Playbook>
-        the {props.playbook}
-      </Playbook>
-    );
-  }
-  return (
-    <Container>
-      <Name>
-        {name}
-      </Name>
-      {playbookDiv}
-      {aliasDiv}
-    </Container>
-  );
 }
 
 Title.propTypes = {

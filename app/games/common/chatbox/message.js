@@ -13,31 +13,34 @@ const Header = styled.h1`
   margin: 2em 0 0 0;
 `
 
-let Message = (props) => {
-  let content = null;
-  let player = null;
-  if (props.prevPlayer != props.event.player) {
-    player = (
-      <Header>
-        {props.event.player.name}
-      </Header>
-    )
-  }
-  content = props.renderEvent(props.event);
-  if (content == null) {
-    if (props.event.action == ACTIONS.TALK) {
-      content = (
-        <Talk player={props.event.player}
-              message={props.event.message}/>
+class Message extends React.PureComponent {
+  render() {
+    const { prevPlayer, event, renderEvent } = this.props;
+    let content = null;
+    let player = null;
+    if (prevPlayer != event.player) {
+      player = (
+        <Header>
+          {event.player.name}
+        </Header>
       )
     }
+    content = renderEvent(event);
+    if (content == null) {
+      if (event.action == ACTIONS.TALK) {
+        content = (
+          <Talk player={event.player}
+                message={event.message}/>
+        )
+      }
+    }
+    return (
+      <div className='message'>
+        {player}
+        {content}
+      </div>
+    )
   }
-  return (
-    <div className='message'>
-      {player}
-      {content}
-    </div>
-  )
 }
 
 export default Message;

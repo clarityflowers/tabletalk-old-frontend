@@ -4,10 +4,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Coin } from './coin';
-import Button from 'common/button';
-import props from 'utils/props';
+
 import Colors from 'games/blades-in-the-dark/common/colors';
+import Button from 'common/button';
 import { darken, lighten } from 'utils/color-tools';
+import props from 'utils/props';
+import connect from 'utils/connect';
 
 const Container = styled.div`
   position: relative;
@@ -58,54 +60,62 @@ const UncheckedSquare = styled(Square)`
   flex-flow: row-reverse wrap-reverse;
 `;
 
-const Wallet = (props) => {
-  const { value, disabled, increment, decrement, highlight } = props;
-  let checked = null;
-  let unchecked = null;
-  if (value > 0) {
-    let coins = [];
-    for (let i=0; i < value; i++) {
-      coins.push(
-        <Coin key={i} checked highlight={i >= value + highlight} isButton={false}/>
+class Wallet extends React.Component {
+  increment() {
+    this.props.dispatch('increment_coin');
+  }
+  decrement() {
+    this.props.dispatch('decrement_coin');
+  }
+  render () {
+    const { value, disabled, highlight } = this.props;
+    let checked = null;
+    let unchecked = null;
+    if (value > 0) {
+      let coins = [];
+      for (let i=0; i < value; i++) {
+        coins.push(
+          <Coin key={i} checked highlight={i >= value + highlight} isButton={false}/>
+        );
+      }
+      checked = (
+        <Checked onClick={this.decrement.bind(this)} top={value <= 1}>
+          <CheckedSquare>
+            {coins}
+          </CheckedSquare>
+        </Checked>
       );
     }
-    checked = (
-      <Checked onClick={decrement} top={value <= 1}>
-        <CheckedSquare>
-          {coins}
-        </CheckedSquare>
-      </Checked>
-    );
-  }
-  if (value < 4) {
-    let coins = [];
-    for (let i=3; i >= value; i--) {
-      coins.push(
-        <Coin key={i} highlight={i < value + highlight} isButton={false}/>
+    if (value < 4) {
+      let coins = [];
+      for (let i=3; i >= value; i--) {
+        coins.push(
+          <Coin key={i} highlight={i < value + highlight} isButton={false}/>
+        )
+      }
+      unchecked = (
+        <Unchecked onClick={this.increment.bind(this)} top={value >= 3}>
+          <UncheckedSquare>
+            {coins}
+          </UncheckedSquare>
+        </Unchecked>
       )
     }
-    unchecked = (
-      <Unchecked onClick={increment} top={value >= 3}>
-        <UncheckedSquare>
-          {coins}
-        </UncheckedSquare>
-      </Unchecked>
-    )
+    return (
+      <Container>
+        {checked}
+        {unchecked}
+      </Container>
+    );
   }
-  return (
-    <Container>
-      {checked}
-      {unchecked}
-    </Container>
-  )
 }
 
+const { number, bool, func } = React.PropTypes;
 Wallet.propTypes = {
-  value: React.PropTypes.number.isRequired,
-  disabled: React.PropTypes.bool.isRequired,
-  increment: React.PropTypes.func.isRequired,
-  decrement: React.PropTypes.func.isRequired,
-  highlight: React.PropTypes.number.isRequired
+  value: number.isRequired,
+  disabled: bool.isRequired,
+  highlight: number.isRequired,
+  dispatch: func.isRequired
 }
 
-export default Wallet;
+export default connect(Wallet);

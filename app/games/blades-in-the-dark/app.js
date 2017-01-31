@@ -37,10 +37,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      characters: {}
+      characters: {},
+      tabs: []
     }
     this.updates = {};
     this.actionKeys = {};
+    this.handleChat = this.handleChat.bind(this);
+    this.send = this.send.bind(this);
   }
   processAction({what, data, key}) {
     if (key in this.actionKeys) {
@@ -240,7 +243,6 @@ class App extends React.Component {
         }};
         params = {[id]: params};
       }
-      this.setState({characters: update(this.state.characters, params)});
     }
   }
   processEvent(event) {
@@ -293,7 +295,14 @@ class App extends React.Component {
         let newCharacters = update(this.state.characters, {
           $merge: characters
         });
-        this.setState({characters: newCharacters});
+        this.setState({
+          characters: newCharacters,
+          tabs: [{
+            type: TAB_TYPES.CHARACTER,
+            character: newCharacters[1],
+            name: newCharacters[1] ? newCharacters[1].name : ""
+          }]
+        });
       }
     }
   }
@@ -302,25 +311,18 @@ class App extends React.Component {
     this.processAction({data: data.data, what: data.what, key: key});
   }
   render() {
-    const { characters, width } = this.state;
+    const { characters, width, tabs } = this.state;
     let ids = Object.keys(characters);
-    let tabs = [];
-    for (let i=0; i < ids.length; i++) {
-      tabs.push({
-        type: TAB_TYPES.CHARACTER,
-        character: this.state.characters[ids[i]]
-      })
-    }
     const me = this.props.players ? this.props.players.me : null;
     let window = (
       <Blades>
         <Window route={this.props.route}
                 tabs={tabs}
-                onChat={this.handleChat.bind(this)}
+                onChat={this.handleChat}
                 auth={this.props.auth}
                 game={this.props.game}
                 options={true}
-                send={this.send.bind(this)}
+                send={this.send}
                 me={me}
                 breakpoint={MOBILE_BREAKPOINT}/>
         <Chatbox events={this.props.events}

@@ -14,6 +14,12 @@ class GameStore extends React.Component {
     };
     this.playerHash = {},
     this.eventHash = {};
+    this.perform = this.perform.bind(this);
+    this.logEvents = this.logEvents.bind(this);
+    this.processEvent = this.processEvent.bind(this);
+    this.handleLoad = this.handleLoad.bind(this);
+    this.handleConnect = this.handleConnect.bind(this);
+    this.handleTalk = this.handleTalk.bind(this);
   }
   /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
@@ -134,12 +140,12 @@ class GameStore extends React.Component {
           events: this.state.events,
           players: this.state.players,
           eventHash: this.eventHash,
-          perform: this.perform.bind(this),
-          logEvents: this.logEvents.bind(this),
-          processEvent: this.processEvent.bind(this),
-          onLoad: this.handleLoad.bind(this),
-          onConnect: this.handleConnect.bind(this),
-          onTalk: this.handleTalk.bind(this)
+          perform: this.perform,
+          logEvents: this.logEvents,
+          processEvent: this.processEvent,
+          onLoad: this.handleLoad,
+          onConnect: this.handleConnect,
+          onTalk: this.handleTalk
         }
         if (gameType.name == 'World of Adventure')
         {
