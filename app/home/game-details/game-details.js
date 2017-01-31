@@ -13,12 +13,12 @@ import Fonts from 'common/fonts';
 import { GameTypes } from 'utils/enums';
 
 const { balloons, boxShadow } = Colors;
-const { background } = Colors.details;
+const { background, color } = Colors.details;
 
 const Container = styled.div`
   max-width: 100%;
   background-color: ${background};
-  color: $color;
+  color: ${color};
   box-shadow: ${boxShadow};
   font: ${Fonts.h1};
   font-size: 20px;

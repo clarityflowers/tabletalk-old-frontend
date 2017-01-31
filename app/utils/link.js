@@ -1,17 +1,30 @@
 import React from 'react';
+import cx from 'classnames';
 
 class Link extends React.Component {
   constructor(props) {
     super(props);
+    this.go = this.go.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
-  handleClick() {
+  go() {
     this.props.route.go();
   }
+  handleKeyDown(e) {
+    if (e.which == '32' || e.which == '13') {
+      e.preventDefault()
+      this.go();
+      return false;
+    }
+  }
   render() {
-    let props = Object.assign({}, this.props);
-    delete props.route;
+    const { route, className, disabled, children, ...rest } = this.props;
+    const name = cx(className, {disabled});
     return (
-      <a {...props} onClick={this.handleClick.bind(this)}>{this.props.children}</a>
+      <a {...rest} className={name} tabIndex="0"
+         onClick={this.go} onKeyDown={this.handleKeyDown}>
+        {children}
+      </a>
     );
   }
 }

@@ -9,7 +9,7 @@ import GameDetails from './game-details/game-details.js';
 import OptionsMenu from 'options/options-menu.js';
 import GameApi from 'api/game.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
-import Game from './game.js';
+import Game from './game/game.js';
 import './games.scss';
 
 class Games extends React.Component {
@@ -444,7 +444,7 @@ class Games extends React.Component {
             key={game.id}
             gameId={game.id}
             doneLeaving={this.onGameDoneLeaving.bind(this)}
-            isTarget={this.selectedGame() == game.id}
+            selected={this.selectedGame() == game.id}
             type={game.type}
             transition={!this.state.creatingNewGame}>
       </Game>

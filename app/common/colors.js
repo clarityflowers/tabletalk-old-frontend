@@ -10,7 +10,9 @@ const Colors = {
 
 Colors.shadowColor = fadeout(darken(Colors.confetti, 0.6), 0.6);
 Colors.boxShadow = `-2px 2px 2px 1px ${Colors.shadowColor}`;
+Colors.borderShadow = `${Colors.boxShadow} inset`;
 Colors.textShadow = `-2px 2px 2px ${Colors.shadowColor}`;
+Colors.heartsLight = lighten(Colors.hearts, 0.35);
 
 Colors.details = {
   background: lighten(Colors.balloons, 0.3),
