@@ -72,7 +72,6 @@ class Window extends React.Component {
                name={character.name}
                active={i == activeTab}
                key={`${data.type}_${character.id}`}
-               baseUrl={baseUrl}
                index={i}/>
         );
         if (i == activeTab) {
@@ -92,7 +91,6 @@ class Window extends React.Component {
                active={i == activeTab}
                name={crew.name}
                key={`${data.type}_${crew.id}`}
-               baseUrl={baseUrl}
                index={i}/>
         )
         if (i == activeTab) {
