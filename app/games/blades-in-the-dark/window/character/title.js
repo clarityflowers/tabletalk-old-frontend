@@ -31,7 +31,6 @@ const Alias = styled(Span)`
 
 class Title extends React.PureComponent {
   render() {
-    console.log('render title');
     const { name, playbook, alias } = this.props;
     let aliasDiv = null;
     let playbookDiv = null;

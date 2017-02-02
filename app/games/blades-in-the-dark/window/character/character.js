@@ -6,8 +6,7 @@ import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
 import Stats from './stats/stats';
-// import HealthAndAbilities from './health-and-abilities/health-and-abilities.js';
-// import Equipment from './equipment/equipment.js';
+import Stress from './stress/stress-and-trauma.js';
 import Title from './title';
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
@@ -26,6 +25,9 @@ const Row = styled(CommonRow)`
   justify-content: center;
   align-items: flex-start;
   flex: 1 1 auto;
+`
+const Column = styled(CommonColumn)`
+
 `
 
 class Character extends React.PureComponent {
@@ -65,6 +67,7 @@ class Character extends React.PureComponent {
       specialAbilities, strangeFriends,
       onChat, me, send
     } = this.props;
+    console.log('RENDER CHARACTER', coin);
     const action = (data) => {
       data.id = id;
       send(data);
@@ -80,7 +83,7 @@ class Character extends React.PureComponent {
       }
     }
     const disabled = !editPermission.includes(me.id);
-    const names = {name, playbook, alias}
+    const names = {name, playbook, alias};
     const stats = {
       money: {coin, stash},
       xp: playbookXP,
@@ -96,58 +99,57 @@ class Character extends React.PureComponent {
         attune, command, consort, sway,
         xp: resolveXP,
       },
-    }
-    const health = {
-      specialAbilities, strangeFriends, playbook,
-      stress: {
-        stress, trauma,
-        increment: () => { action({action: "increment_stress"}); },
-        decrement: () => { action({action: "decrement_stress"}); },
-        add: (trauma) => { action({action: "add_trauma", value: trauma}); }
-      },
-      harm: {
-        severe: harmSevere,
-        moderate1: harmModerate1,
-        moderate2: harmModerate2,
-        lesser1: harmLesser1,
-        lesser2: harmLesser2,
-        edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
-      },
-      healing: {
-        unlocked: healingUnlocked,
-        clock: healingClock,
-        unlock: (value) => { action({action: "unlock_healing", value: value}); },
-        increment: () => { action({action: "increment_healing"}); },
-        decrement: () => { action({action: "decrement_healing"}); }
-      },
-      armor: {
-        armor: {
-          used: armor,
-          available: items.includes("Armor")
-        },
-        heavy: {
-          used: heavyArmor,
-          available: armor && items.includes("+Heavy")
-        },
-        special: specialArmor,
-        use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
-      },
-      details: {
-        look, heritage, background, vice,
-      }
-    }
-    const equipment = {
-      load, items, playbook,
-      use: (name) => { action({action: "use_item", value: name}); },
-      clear: (name) => { action({action: "clear_item", value: name}); },
-      clearAll: () => { action({action: "clear_items"}); },
-      setLoad: (value) => { action({action: "set_load", value: value}); }
-    }
+    };
+    // const health = {
+    //   specialAbilities, strangeFriends, playbook,
+    //   harm: {
+    //     severe: harmSevere,
+    //     moderate1: harmModerate1,
+    //     moderate2: harmModerate2,
+    //     lesser1: harmLesser1,
+    //     lesser2: harmLesser2,
+    //     edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
+    //   },
+    //   healing: {
+    //     unlocked: healingUnlocked,
+    //     clock: healingClock,
+    //     unlock: (value) => { action({action: "unlock_healing", value: value}); },
+    //     increment: () => { action({action: "increment_healing"}); },
+    //     decrement: () => { action({action: "decrement_healing"}); }
+    //   },
+    //   armor: {
+    //     armor: {
+    //       used: armor,
+    //       available: items.includes("Armor")
+    //     },
+    //     heavy: {
+    //       used: heavyArmor,
+    //       available: armor && items.includes("+Heavy")
+    //     },
+    //     special: specialArmor,
+    //     use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
+    //   },
+    //   details: {
+    //     look, heritage, background, vice,
+    //   }
+    // }
+    // const equipment = {
+    //   load, items, playbook,
+    //   use: (name) => { action({action: "use_item", value: name}); },
+    //   clear: (name) => { action({action: "clear_item", value: name}); },
+    //   clearAll: () => { action({action: "clear_items"}); },
+    //   setLoad: (value) => { action({action: "set_load", value: value}); }
+    // }
     return (
       <Container>
         <Title {...names}/>
         <Row>
-          <Stats {...stats} disabled={disabled}/>
+          <Column>
+            <Stats {...stats} disabled={disabled}/>
+          </Column>
+          <Column>
+            <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+          </Column>
         </Row>
       </Container>
     )

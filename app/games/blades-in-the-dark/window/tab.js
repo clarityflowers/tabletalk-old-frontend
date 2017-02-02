@@ -17,35 +17,40 @@ const TabLink = styled(cz(Link, 'active'))`
   border-radius: .5em;
   padding: 0em .4em;
   margin: 0 .5em;
-  &.active {
+  &.disabled {
     color: ${Colors.fire};
     background-color: ${Colors.sun};
   }
-  &:not(.active) {
-      cursor: pointer;
-      &:hover {
-        background-color: ${Colors.sand};
-      }
-      &:focus {
-        color: ${Colors.mud};
-      }
+  &:not(.disabled) {
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      text-decoration: underline;
+    }
+    &:hover {
+      background-color: ${Colors.sand};
+    }
+    &:focus {
+      color: ${Colors.mud};
+    }
   }
 `
 
 const Tab = (props) => {
-  const { route, index, name } = props;
-  const active = parseInt(route.nextName) == index;
+  const { route, index, name, active } = props;
   return (
-    <TabLink route={route.push(index)} active={active}>
+    <TabLink route={route} disabled={active}>
       {name}
     </TabLink>
   )
 }
 
+const { object, number, string, bool } = React.PropTypes;
 Tab.propTypes = {
-  route: React.PropTypes.object.isRequired,
-  index: React.PropTypes.number.isRequired,
-  name: React.PropTypes.string.isRequired
+  route: object.isRequired,
+  index: number.isRequired,
+  name: string.isRequired,
+  active: bool.isRequired
 }
 
 export default Tab;

@@ -39,21 +39,19 @@ const Tabs = styled.div`
   z-index: 100;
 `
 
-class Window extends React.PureComponent {
+class Window extends React.Component {
   constructor(props) {
     super(props);
     this.sendCharacter = this.sendCharacter.bind(this);
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
   }
   sendCharacter(data) {
     const { send } = this.props;
     send({what: "character", data: data});
   }
   render() {
-    const { update, send, me, game, tabs, options, auth, onChat } = this.props;
-    let route = this.props.route;
+    const { update, send, me, game, tabs, route, options, auth, onChat } = this.props;
+    console.log('RENDER WINDOW', tabs);
+    let activeRoute = this.props.route;
     let portal = null;
     let tabDoms = [];
     let baseUrl = `/games/${game.id}/go`;
@@ -62,21 +60,23 @@ class Window extends React.PureComponent {
       portal = null;
     }
     else {
-      route = route.next();
-      activeTab = parseInt(route.name);
+      activeRoute = route.next();
+      activeTab = parseInt(activeRoute.name);
     }
     for (let i=0; i < tabs.length; i++) {
       let data = tabs[i];
       if (data.type == TAB_TYPES.CHARACTER) {
         let character = data.character;
         tabDoms.push(
-          <Tab route={route}
+          <Tab route={route.push(i)}
                name={character.name}
+               active={i == activeTab}
                key={`${data.type}_${character.id}`}
                baseUrl={baseUrl}
                index={i}/>
         );
         if (i == activeTab) {
+          console.log(character.coin);
           portal = (
             <Character {...character}
                        onChat={onChat}
@@ -88,7 +88,8 @@ class Window extends React.PureComponent {
       else if (data.type == TAB_TYPES.CREW) {
         let crew = data.crew;
         tabDoms.push(
-          <Tab route={route}
+          <Tab route={route.push(i)}
+               active={i == activeTab}
                name={crew.name}
                key={`${data.type}_${crew.id}`}
                baseUrl={baseUrl}

@@ -61,6 +61,11 @@ const UncheckedSquare = styled(Square)`
 `;
 
 class Wallet extends React.Component {
+  constructor(props) {
+    super(props);
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+  }
   increment() {
     this.props.dispatch('increment_coin');
   }
@@ -79,7 +84,7 @@ class Wallet extends React.Component {
         );
       }
       checked = (
-        <Checked onClick={this.decrement.bind(this)} top={value <= 1}>
+        <Checked onClick={this.decrement} top={value <= 1}>
           <CheckedSquare>
             {coins}
           </CheckedSquare>
@@ -94,7 +99,7 @@ class Wallet extends React.Component {
         )
       }
       unchecked = (
-        <Unchecked onClick={this.increment.bind(this)} top={value >= 3}>
+        <Unchecked onClick={this.increment} top={value >= 3}>
           <UncheckedSquare>
             {coins}
           </UncheckedSquare>

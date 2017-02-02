@@ -87,12 +87,7 @@ class Money extends React.PureComponent {
     dispatch('transfer_to_coin');
   }
   render() {
-    console.log('render money');
-    const {
-      coin, stash,
-      increment, decrement, transferToStash, transferToCoin,
-      disabled
-    } = this.props;
+    const { coin, stash, disabled } = this.props;
     const { hover } = this.state;
     let stashRows = [];
     let stashHighlight = 0;
@@ -130,8 +125,6 @@ class Money extends React.PureComponent {
           </CoinLabel>
           <Wallet value={coin}
                   disabled={disabled}
-                  increment={increment}
-                  decrement={decrement}
                   highlight={coinHighlight}/>
         </Left>
         <Right>

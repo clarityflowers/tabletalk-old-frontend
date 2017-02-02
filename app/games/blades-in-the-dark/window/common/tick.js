@@ -5,8 +5,6 @@ import cx from 'classnames';
 
 import { extendCheck } from 'games/blades-in-the-dark/window/common/check.js';
 
-import './tick.scss';
-
 const svg = (
   <svg x="0px"
        y="0px"

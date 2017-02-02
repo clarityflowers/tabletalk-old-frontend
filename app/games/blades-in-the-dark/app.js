@@ -51,14 +51,15 @@ class App extends React.Component {
       return;
     }
     this.actionKeys[key] = true;
-    let params = {};
     if (what == "character") {
+      let params = {};
       const { action, id, value } = data;
       if (action == "create") {
       }
       else if (id in this.state.characters) {
         params = {$apply: (c) => {
           let params = {};
+          console.log(action, c.coin);
           if (action == "increment_stress") {
             if (c.stress < 9) {
               params = {stress: {$set: c.stress + 1}};
@@ -243,6 +244,9 @@ class App extends React.Component {
         }};
         params = {[id]: params};
       }
+      const characters = update(this.state.characters, params);
+      console.log(characters);
+      this.setState({characters: characters});
     }
   }
   processEvent(event) {
@@ -299,8 +303,7 @@ class App extends React.Component {
           characters: newCharacters,
           tabs: [{
             type: TAB_TYPES.CHARACTER,
-            character: newCharacters[1],
-            name: newCharacters[1] ? newCharacters[1].name : ""
+            id: 1
           }]
         });
       }
@@ -312,12 +315,20 @@ class App extends React.Component {
   }
   render() {
     const { characters, width, tabs } = this.state;
+    let tabData = [];
+    for (let i=0; i < tabs.length; i++) {
+      let tab = tabs[i];
+      tabData.push({
+        type: tab.type,
+        character: characters[tab.id],
+      })
+    }
     let ids = Object.keys(characters);
     const me = this.props.players ? this.props.players.me : null;
     let window = (
       <Blades>
         <Window route={this.props.route}
-                tabs={tabs}
+                tabs={tabData}
                 onChat={this.handleChat}
                 auth={this.props.auth}
                 game={this.props.game}

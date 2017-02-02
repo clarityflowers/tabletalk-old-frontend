@@ -5,8 +5,6 @@ import cx from 'classnames';
 
 import { TickArray } from 'games/blades-in-the-dark/window/common/tick.js';
 
-import './tickbars.scss';
-
 const Stress = (props) => {
   const { disabled, stress, increment, decrement } = props;
   const checkedProps = {
