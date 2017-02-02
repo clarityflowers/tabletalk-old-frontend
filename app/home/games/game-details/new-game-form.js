@@ -224,7 +224,8 @@ class NewGameForm extends React.Component {
           <FormInput>
             <TextInput value={value}
                        onChange={this.handleChange.bind(this)}
-                       ref={e => this.input = e}/>
+                       ref={e => this.input = e}
+                       disabled={off}/>
             <InputCover off={showInput}/>
             <Submit value='>' disabled={!showInput}/>
           </FormInput>

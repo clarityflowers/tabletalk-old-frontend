@@ -1,16 +1,52 @@
 'use strict'
 
 import React from 'react';
+import styled from 'styled-components';
 import ReactTransitionGroup from 'react-addons-transition-group';
-import Link from 'utils/link.js';
 import cx from 'classnames';
-import GameWindow from 'games/common/game-window.js';
-import GameDetails from './game-details/game-details.js';
-import OptionsMenu from 'options/options-menu.js';
-import GameApi from 'api/game.js';
-import { HoverWiggle } from 'utils/hover-animate.js';
-import Game from './game/game.js';
-import './games.scss';
+
+import GameWindow from 'games/common/game-window';
+import OptionsMenu from 'options/options-menu';
+import Game from './game/game';
+import List from './list';
+
+import Colors from 'common/colors';
+import GameApi from 'api/game';
+
+import cz from 'utils/styled-classes';
+
+const { boxShadow, balloons } = Colors;
+
+const Container = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+  position: absolute;
+  font-size: 10px;
+  z-index: 1;
+`
+const Panel = styled(cz('div', 'off'))`
+  z-index: 7;
+  background-color: ${balloons};
+  position: absolute;
+  overflow-y: scroll;
+  width: 100%;
+  min-height: 100vh;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  flex: none;
+  top: -10vh;
+  margin-top: 10vh;
+  padding: 10vh 0 10vh 0;
+  box-shadow: ${boxShadow};
+  transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
+  &.off {
+    top: -200vh;
+  }
+`
 
 class Games extends React.Component {
   constructor(props) {
@@ -32,6 +68,7 @@ class Games extends React.Component {
     this.leaveCallback = null;
     this.timeout = null;
     this.refreshInterval = null;
+    this.handleUpdateGameDetails = this.handleUpdateGameDetails.bind(this);
   }
   /* ---------- lifecycle ----------------------------------------------------*/
   componentDidMount() {
@@ -50,8 +87,9 @@ class Games extends React.Component {
     ) {
       this.load();
     }
-    let hasTarget = this.selectedGame(newProps) == 'new' || this.hasGame(this.selectedGame(newProps));
-    let hadTarget = this.selectedGame() == 'new' || this.hasTarget();
+    let hasTarget = this.hasGame(this.selectedGame(newProps));
+    let hadTarget = this.hasTarget();
+    let target = hasTarget ? (this.selectedGame()) : null;
     if (!this.selectedGame() && this.selectedGame(newProps) && !hasTarget) {
       this.preview(this.selectedGame(newProps));
     }
@@ -411,14 +449,6 @@ class Games extends React.Component {
     GameApi.join({player: player, game: this.selectedGame()}, resolve, reject);
   }
   /* ---------- utilities ----------------------------------------------------*/
-  selectedGame(props) {
-    if (props) {
-      return props.route.nextName;
-    }
-    else {
-      return this.props.route.nextName;
-    }
-  }
   getGame(id) {
     let game = null;
     if (this.hasGame(id)) {
@@ -432,23 +462,13 @@ class Games extends React.Component {
       id in this.state.gameHash
     );
   }
+  selectedGame(props) {
+    const route = props ? props.route : this.props.route;
+    return route.nextName;
+  }
   hasTarget() {
     let target = this.selectedGame();
     return this.hasGame(target);
-  }
-  game(i) {
-    let game = this.state.games[i];
-    return (
-      <Game route={this.props.route}
-            name={game.name}
-            key={game.id}
-            gameId={game.id}
-            doneLeaving={this.onGameDoneLeaving.bind(this)}
-            selected={this.selectedGame() == game.id}
-            type={game.type}
-            transition={!this.state.creatingNewGame}>
-      </Game>
-    )
   }
   isGo() {
     let route = this.props.route;
@@ -461,26 +481,6 @@ class Games extends React.Component {
     return false;
   }
   /* ---------- handlers -----------------------------------------------------*/
-  onGameDoneLeaving() {
-    this.gamesDoneLeaving++;
-    let finalValue = this.state.games.length;
-    if (
-      (
-        this.state.leaving ||
-        !this.props.online
-      ) &&
-      this.gamesDoneLeaving >= finalValue
-    ) {
-      setTimeout(() => {
-        if (this.leaveCallback) {
-          this.leaveCallback()
-        }
-        else {
-          this.props.doneAnimating();
-        }
-      }, 0);
-    }
-  }
   handleUpdateGameDetails({
     type = null,
     name = null,
@@ -534,113 +534,71 @@ class Games extends React.Component {
   }
   /* ---------- render -------------------------------------------------------*/
   render() {
+    const { route, auth, doneAnimating, options } = this.props;
+    const { games, loaded, entering, leaving, creatingNewGame } = this.state;
     let details = null;
-    let games = [];
     let alternate = 1;
     if (this.state.animation == 2) {
       alternate = 2;
     }
-    let hadTarget = this.hasTarget(this.state.target);
-    let hasTarget = this.hasTarget(this.selectedGame());
-    let target = hasTarget ? (this.selectedGame()) : null;
-    for (let i=0; i < this.state.games.length; i++) {
-      let game = this.state.games[i];
-      if (game.isVisible) {
-        games.push(this.game(i));
-      }
-    }
-    let backClass = cx(
-      'back',
-      {
-        off: (
-          !this.hasTarget(this.selectedGame()) ||
-          this.state.loading ||
-          this.state.leaving ||
-          this.state.games.length == 0
-        )
-      }
-    )
     let game = null;
-    let gameData = this.state.games[this.state.gameHash[this.selectedGame()]];
-    if (gameData == null) {
-      game = {
-        id: 'new',
-        name: null,
-        type: null,
-        maxPlayers: null,
-        players: [],
-        me: null
+    if (this.selectedGame()) {
+      if (this.selectedGame() == 'new')  {
+        game = {
+          id: 'new',
+          name: null,
+          type: null,
+          maxPlayers: null,
+          players: [],
+          me: null
+        }
       }
-    }
-    else {
-      game = {
-        id: gameData.id,
-        name: gameData.name,
-        type: gameData.type,
-        maxPlayers: gameData.maxPlayers,
-        players: gameData.players,
-        me: gameData.me
+      else if (this.hasTarget()) {
+        let gameData = this.state.games[this.state.gameHash[this.selectedGame()]];
+        if (gameData != null) {
+          game = {
+            id: gameData.id,
+            name: gameData.name,
+            type: gameData.type,
+            maxPlayers: gameData.maxPlayers,
+            players: gameData.players,
+            me: gameData.me
+          }
+        }
       }
-    }
-    if (
-      !this.state.loading &&
-      this.props.auth.online &&
-      !this.state.leaving && (
-        this.selectedGame() == 'new' ||
-        this.hasTarget()
-      )
-    ) {
-      details = (
-        <GameDetails route={this.props.route.next()}
-                     auth={this.props.auth}
-                     updateGame={this.handleUpdateGameDetails.bind(this)}
-                     game={game}/>
-      );
     }
     let go = (
       this.isGo() &&
-      this.props.auth.online &&
-      this.state.loaded &&
-      !this.state.entering &&
-      !this.state.leaving &&
+      auth.online &&
+      loaded &&
+      !entering &&
+      !leaving &&
       game.me != null
-    );
-    let listContainerClassName = cx(
-      'list-container',
-      {
-        off: go
-      }
     );
     let gameWindow = null;
     if (go) {
       gameWindow = (
-        <GameWindow route={this.props.route.next().next()}
-                    auth={this.props.auth}
+        <GameWindow route={route.next().next()}
+                    auth={auth}
                     game={game}
-                    options={this.props.options}
+                    options={options}
                     go={go}/>
       );
     }
     return (
-      <div id='games'>
-        <div className={listContainerClassName}>
-          <OptionsMenu route={this.props.route}
-                       auth={this.props.auth}
-                       on={this.props.options}/>
-          <div className='list'>
-            <HoverWiggle className={backClass}>
-              <Link route={this.props.route} className='home-button'>&lt;</Link>
-            </HoverWiggle>
-            <ReactTransitionGroup component='div'>
-              {games}
-            </ReactTransitionGroup>
-            <ReactTransitionGroup component='div' className='children'>
-              {details}
-            </ReactTransitionGroup>
-          </div>
-        </div>
+      <Container>
+        <Panel off={go}>
+          <List games={games} route={route} creatingNewGame={creatingNewGame}
+                online={auth.online} game={game}
+                onDoneLeaving={this.leaveCallback ? this.leaveCallback : doneAnimating}
+                leaving={leaving}
+                onUpdateGameDetails={this.handleUpdateGameDetails}/>
+          <OptionsMenu route={route}
+                       auth={auth}
+                       on={options}/>
+        </Panel>
         {gameWindow}
-      </div>
+      </Container>
     );
   }
 }

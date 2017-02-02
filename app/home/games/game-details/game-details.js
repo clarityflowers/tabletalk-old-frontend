@@ -112,7 +112,6 @@ class GameDetails extends React.Component {
     }
   }
   handleSubmit(key, value, id) {
-    console.log('HANDLE SUBMIT', key, value, id);
     this.props.updateGame({[key]: value, id: id});
     if (key == 'join') {
       this.setState({joining: true});

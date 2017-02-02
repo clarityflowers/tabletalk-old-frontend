@@ -1,9 +1,22 @@
 import React from 'react';
+import styled from 'styled-components';
 import ReactTransitionGroup from 'react-addons-transition-group';
-import Login from './login.js';
-import Games from './games.js';
+import Login from './login/login.js';
+import Games from './games/games.js';
 import Auth from 'utils/auth.js';
-import './home.scss';
+
+const Container = styled.div`
+  background-color: transparent;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 20px;
+  margin: 0;
+  overflow: hidden;
+`
 
 class Home extends React.Component {
   constructor(props) {
@@ -54,12 +67,12 @@ class Home extends React.Component {
       }
     }
     return (
-      <div>
-        <ReactTransitionGroup className='content' component='div' id='home'>
+      <Container>
+        <ReactTransitionGroup component='div'>
           {content}
+          {login}
         </ReactTransitionGroup>
-        {login}
-      </div>
+      </Container>
     )
   }
 }

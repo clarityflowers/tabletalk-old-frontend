@@ -12,6 +12,7 @@ const Container = styled.div`
   pointer-events: auto;
   text-align: left;
   overflow: hidden;
+  margin: 0;
   transition-property: width;
   transition-duration: .5s;
   transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
@@ -28,6 +29,7 @@ const Content = styled.span`
   float: right;
   overflow: visible;
   text-decoration: none;
+  width: auto;
 `
 
 class Label extends React.Component {

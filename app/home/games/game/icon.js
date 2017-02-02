@@ -19,7 +19,7 @@ const StyledIcon = styled(cz('div', classes))`
   pointer-events: auto;
   position: absolute;
   left: 0em;
-  top: 1.5em;
+  top: -1.5em;
   width: 6em;
   height: 6em;
   border: 1em solid ${hearts};

@@ -3,9 +3,11 @@
 import { lighten, darken, fadeout } from 'utils/color-tools';
 
 const Colors = {
-  confetti: `hsla(2, 94%, 80%, 1)`,
-  hearts:   `hsla(349, 99%, 63%, 1)`,
-  balloons: `hsla(153, 22%, 60%, 1)`
+  confetti:  `hsla(2, 94%, 80%, 1)`,
+  hearts:    `hsla(349, 99%, 63%, 1)`,
+  balloons:  `hsla(153, 22%, 60%, 1)`,
+  champaign: `hsla(25, 86%, 83%, 1)`,
+  euphoria:  `hsla(60, 22%, 72%, 1)`
 }
 
 Colors.shadowColor = fadeout(darken(Colors.confetti, 0.6), 0.6);

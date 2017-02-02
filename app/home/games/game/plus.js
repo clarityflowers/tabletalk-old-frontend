@@ -13,7 +13,7 @@ const Container = styled(cz('div', 'off'))`
   pointer-events: auto;
   position: absolute;
   left: 4em;
-  top: 5.6em;
+  top: 2.6em;
   width: 0;
   height: 0;
   display: inline-block;

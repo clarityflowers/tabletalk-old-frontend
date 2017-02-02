@@ -45,7 +45,6 @@ class Window extends React.PureComponent {
     this.sendCharacter = this.sendCharacter.bind(this);
   }
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('should window update', nextProps, this.props.tabs == nextProps.tabs);
     return true;
   }
   sendCharacter(data) {
@@ -53,7 +52,6 @@ class Window extends React.PureComponent {
     send({what: "character", data: data});
   }
   render() {
-    console.log('render window');
     const { update, send, me, game, tabs, options, auth, onChat } = this.props;
     let route = this.props.route;
     let portal = null;

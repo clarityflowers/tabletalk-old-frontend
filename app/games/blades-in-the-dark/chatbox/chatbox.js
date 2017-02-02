@@ -45,7 +45,6 @@ class Chatbox extends React.Component {
     this.renderEvent = this.renderEvent.bind(this);
   }
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props.events.length, nextProps.events.length);
     if (this.props.events.length == nextProps.events.length) {
       return false;
     }
