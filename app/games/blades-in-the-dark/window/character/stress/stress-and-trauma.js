@@ -9,7 +9,6 @@ import Tickbars from './tickbars';
 const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
-  margin: 0 .5em;
 `
 
 const StressAndTrauma = (props) => {

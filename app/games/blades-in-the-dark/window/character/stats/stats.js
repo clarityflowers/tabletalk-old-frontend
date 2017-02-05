@@ -36,13 +36,21 @@ class Stats extends React.PureComponent {
   }
   render () {
     const {
-      disabled, money, insight, prowess, resolve, xp
+      coin, stash, playbookXP,
+      hunt, study, survey, tinker, insightXP,
+      finesse, prowl, skirmish, wreck, prowessXP,
+      attune, command, consort, sway, resolveXP,
+      disabled
     } = this.props;
+    const money = {coin, stash};
+    const insight = {hunt, study, survey, tinker, xp: insightXP};
+    const prowess = {finesse, prowl, skirmish, wreck, xp: prowessXP};
+    const resolve = {attune, command, consort, sway, xp: resolveXP};
     return (
       <Div>
         <Section>
           <Money {...money} disabled={disabled}/>
-          <Header name='Playbook' disabled={disabled} value={xp} length={8}
+          <Header name='Playbook' disabled={disabled} value={playbookXP} length={8}
                   increment={this.increment} decrement={this.decrement}/>
         </Section>
         <Stat name='Insight' {...insight} disabled={disabled}/>
@@ -53,13 +61,27 @@ class Stats extends React.PureComponent {
   }
 }
 
+const { number, bool } = React.PropTypes;
 Stats.propTypes = {
-  xp: React.PropTypes.number.isRequired,
-  insight: React.PropTypes.object.isRequired,
-  prowess: React.PropTypes.object.isRequired,
-  resolve: React.PropTypes.object.isRequired,
-  money: React.PropTypes.object.isRequired,
-  disabled: React.PropTypes.bool
+  coin: number.isRequired,
+  stash: number.isRequired,
+  playbookXP: number.isRequired,
+  hunt: number.isRequired,
+  study: number.isRequired,
+  survey: number.isRequired,
+  tinker: number.isRequired,
+  insightXP: number.isRequired,
+  finesse: number.isRequired,
+  prowl: number.isRequired,
+  skirmish: number.isRequired,
+  wreck: number.isRequired,
+  prowessXP: number.isRequired,
+  attune: number.isRequired,
+  command: number.isRequired,
+  consort: number.isRequired,
+  sway: number.isRequired,
+  resolveXP: number.isRequired,
+  disabled: bool.isRequired
 }
 
 Stats.defaultProps = {

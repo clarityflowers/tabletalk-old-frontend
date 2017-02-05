@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import Stress from './stress';
 import TraumaBar from './trauma-bar';
-import TraumaList from './trauma-list';
 
 import { TickArray } from 'games/blades-in-the-dark/window/common/tick';
 
@@ -23,8 +22,7 @@ const Tickbars = (props) => {
   return(
     <Container>
       <Stress stress={stress} disabled={disabled}/>
-      <TraumaBar count={trauma.length}/>
-      <TraumaList trauma={trauma}/>
+      <TraumaBar trauma={trauma}/>
     </Container>
   );
 }

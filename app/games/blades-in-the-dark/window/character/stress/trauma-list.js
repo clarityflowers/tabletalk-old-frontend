@@ -10,7 +10,10 @@ import Fonts from 'games/blades-in-the-dark/common/fonts';
 
 const { sky, textShadow } = Colors;
 
-const Container = styled(Bar)`
+const Container = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: row wrap;
   padding: .75em 0 0 .4em;
   flex: 100 1 0;
   justify-content: flex-start;

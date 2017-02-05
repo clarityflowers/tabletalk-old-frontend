@@ -59,7 +59,6 @@ class App extends React.Component {
       else if (id in this.state.characters) {
         params = {$apply: (c) => {
           let params = {};
-          console.log(action, c.coin);
           if (action == "increment_stress") {
             if (c.stress < 9) {
               params = {stress: {$set: c.stress + 1}};
@@ -144,7 +143,7 @@ class App extends React.Component {
           }
           else if (action == "edit_harm") {
             const { harm, text } = value;
-            const prop = "harm" + harm[0].toUpperCase() + harm.slice(1);
+            const prop = "harm" + harm[0].toUpperCase() + harm.slice(1).toLowerCase();
             if (!c[prop] && text) {
               params.healingUnlocked = {$set: false};
             }
@@ -245,7 +244,6 @@ class App extends React.Component {
         params = {[id]: params};
       }
       const characters = update(this.state.characters, params);
-      console.log(characters);
       this.setState({characters: characters});
     }
   }

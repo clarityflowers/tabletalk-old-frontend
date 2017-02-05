@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const Section = styled.div`
   width: 10.5em;
   max-width: 11em;
-  margin: .5em;
+  margin: .5em 0;
   flex: 1 0 auto;
 `
 

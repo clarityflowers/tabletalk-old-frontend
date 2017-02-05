@@ -8,7 +8,8 @@ import Colors from 'games/blades-in-the-dark/common/colors';
 const { shadow, sun } = Colors;
 
 const Bar = styled.div`
-  margin-bottom: .2em;
+  margin-bottom: .5em;
+
   display: flex;
   flex-flow: row nowrap;
   align-items: flex-start;

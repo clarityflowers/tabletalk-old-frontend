@@ -6,6 +6,11 @@ import cx from 'classnames';
 const cz = (Component, names, namesPassThrough) => {
   return (props) => {
     const properties = Object.assign({}, props);
+    let ref = null;
+    if ('innerRef' in properties) {
+      ref = properties.innerRef;
+      delete properties.innerRef;
+    }
     let classNames = [];
     if (names != undefined) {
       if (names.constructor !== Array) {
@@ -33,7 +38,7 @@ const cz = (Component, names, namesPassThrough) => {
     const className = cx(props.className, classNames);
     delete properties.className;
     return (
-      <Component className={className} {...properties}/>
+      <Component ref={ref} className={className} {...properties}/>
     );
   }
 }

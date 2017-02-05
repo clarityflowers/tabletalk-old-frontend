@@ -5,9 +5,11 @@ import React from 'react';
 import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
-import Stats from './stats/stats';
-import Stress from './stress/stress-and-trauma.js';
 import Title from './title';
+import Stats from './stats/stats';
+import Stress from './stress/stress-and-trauma';
+import Harm from './harm/harm'
+
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
 
@@ -20,6 +22,7 @@ const Container = styled.div`
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 3em;
+  padding: 0.5em;
 `
 const Row = styled(CommonRow)`
   justify-content: center;
@@ -27,7 +30,8 @@ const Row = styled(CommonRow)`
   flex: 1 1 auto;
 `
 const Column = styled(CommonColumn)`
-
+  align-items: stretch;
+  margin: 0 0.5em;
 `
 
 class Character extends React.PureComponent {
@@ -43,6 +47,7 @@ class Character extends React.PureComponent {
       id: this.props.id,
       action: action
     };
+    console.log('UPDATE', action, value);
     if (value != undefined) {
       data.value = value;
     }
@@ -84,54 +89,46 @@ class Character extends React.PureComponent {
     const disabled = !editPermission.includes(me.id);
     const names = {name, playbook, alias};
     const stats = {
-      money: {coin, stash},
-      xp: playbookXP,
-      insight: {
-        hunt, study, survey, tinker,
-        xp: insightXP,
-      },
-      prowess: {
-        finesse, prowl, skirmish, wreck,
-        xp: prowessXP,
-      },
-      resolve: {
-        attune, command, consort, sway,
-        xp: resolveXP,
-      },
+      coin, stash, playbookXP,
+      hunt, study, survey, tinker, insightXP,
+      finesse, prowl, skirmish, wreck, prowessXP,
+      attune, command, consort, sway, resolveXP
     };
-    // const health = {
-    //   specialAbilities, strangeFriends, playbook,
-    //   harm: {
-    //     severe: harmSevere,
-    //     moderate1: harmModerate1,
-    //     moderate2: harmModerate2,
-    //     lesser1: harmLesser1,
-    //     lesser2: harmLesser2,
-    //     edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
-    //   },
-    //   healing: {
-    //     unlocked: healingUnlocked,
-    //     clock: healingClock,
-    //     unlock: (value) => { action({action: "unlock_healing", value: value}); },
-    //     increment: () => { action({action: "increment_healing"}); },
-    //     decrement: () => { action({action: "decrement_healing"}); }
-    //   },
-    //   armor: {
-    //     armor: {
-    //       used: armor,
-    //       available: items.includes("Armor")
-    //     },
-    //     heavy: {
-    //       used: heavyArmor,
-    //       available: armor && items.includes("+Heavy")
-    //     },
-    //     special: specialArmor,
-    //     use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
-    //   },
-    //   details: {
-    //     look, heritage, background, vice,
-    //   }
-    // }
+    const harm = {
+      severe: harmSevere,
+      moderate1: harmModerate1,
+      moderate2: harmModerate2,
+      lesser1: harmLesser1,
+      lesser2: harmLesser2,
+    };
+    const health = {
+      specialAbilities, strangeFriends, playbook,
+      harm: {
+        edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
+      },
+      healing: {
+        unlocked: healingUnlocked,
+        clock: healingClock,
+        unlock: (value) => { action({action: "unlock_healing", value: value}); },
+        increment: () => { action({action: "increment_healing"}); },
+        decrement: () => { action({action: "decrement_healing"}); }
+      },
+      armor: {
+        armor: {
+          used: armor,
+          available: items.includes("Armor")
+        },
+        heavy: {
+          used: heavyArmor,
+          available: armor && items.includes("+Heavy")
+        },
+        special: specialArmor,
+        use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
+      },
+      details: {
+        look, heritage, background, vice,
+      }
+    }
     // const equipment = {
     //   load, items, playbook,
     //   use: (name) => { action({action: "use_item", value: name}); },
@@ -148,6 +145,7 @@ class Character extends React.PureComponent {
           </Column>
           <Column>
             <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+            <Harm {...harm} disabled={disabled}/>
           </Column>
         </Row>
       </Container>

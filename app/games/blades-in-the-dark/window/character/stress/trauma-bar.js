@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Bar from './bar';
 import Label from './label';
+import TraumaList from './trauma-list';
 
 import TickArray from './tick-array.js';
 
@@ -15,11 +16,11 @@ const { stone, sun } = Colors;
 const dark = darken(stone, 0.1);
 
 const Container = styled(Bar)`
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   margin-left: -.5em;
   z-index: 1;
   &:after {
-    content: none;
+    left: 0.5em;
   }
 `
 
@@ -43,26 +44,28 @@ const Array = styled(TickArray)`
 const TraumaLabel = styled(Label)`
   text-align: center;
   box-shadow: none;
-  width: calc(100% - .5em);
   box-sizing: border-box;
+  width: 4.6em;
   position: absolute;
   left: .5em;
 `
 
 const TraumaBar = (props) => {
-  const { count } = props;
+  const { trauma } = props;
   return (
     <Container>
       <TraumaLabel disabled>
         TRAUMA
       </TraumaLabel>
-      <Array isButton={false} value={count} className='ticks' length={4}/>
+      <Array isButton={false} value={trauma.length} className='ticks' length={4}/>
+      <TraumaList trauma={trauma}/>
     </Container>
   );
 }
 
+const { array } = React.PropTypes;
 TraumaBar.propTypes = {
-  count: React.PropTypes.number.isRequired
+  trauma: array.isRequired
 }
 
 export default TraumaBar;
