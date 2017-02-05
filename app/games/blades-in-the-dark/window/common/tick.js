@@ -1,23 +1,50 @@
 'use strict'
 
 import React from 'react';
-import cx from 'classnames';
+import styled from 'styled-components';
 
-import { extendCheck } from 'games/blades-in-the-dark/window/common/check.js';
+import { extendCheck, extendCheckArray } from 'games/blades-in-the-dark/window/common/check.js';
 
-const svg = (
-  <svg x="0px"
-       y="0px"
-       preserveAspectRatio="none"
-       width=".5em"
-       height="1.2em"
-       viewBox="0 0 60 110">
-     <polygon points="5,5 55,5 55,80 5,105" strokeWidth="10"/>
-  </svg>
-);
+import Colors from 'games/blades-in-the-dark/common/colors';
+import { darken } from 'utils/color-tools';
 
-const { node, nodeArray } = extendCheck({name: 'tick', children: svg});
-const Tick = node;
-const TickArray = nodeArray;
+const { sun, stone, textShadow } = Colors;
+const background = darken(stone, 0.1);
+
+const Svg = styled.svg`
+  overflow: visible;
+  filter: drop-shadow(${textShadow});
+`;
+
+const Polygon = styled.polygon`
+  stroke-width: 10;
+  stroke: ${sun};
+  fill: darken(${stone}, 10%);
+`
+
+const Component = (props) => {
+  return (
+    <Svg x="0px"
+         y="0px"
+         preserveAspectRatio="none"
+         width=".5em"
+         height="1.2em"
+         viewBox="0 0 60 110">
+       <Polygon points="5,5 55,5 55,80 5,105" />
+     </Svg>
+   );
+};
+
+const Tick = styled(extendCheck(<Component/>))`
+  font-size: 1em;
+  width: auto;
+  width: .5em;
+  height: 1.2em;
+  position: relative;
+  &.checked svg polygon {
+    fill: ${sun};
+  }
+`
+const TickArray = extendCheckArray(Tick);
 
 export { Tick, TickArray };

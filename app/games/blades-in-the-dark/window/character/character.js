@@ -67,7 +67,6 @@ class Character extends React.PureComponent {
       specialAbilities, strangeFriends,
       onChat, me, send
     } = this.props;
-    console.log('RENDER CHARACTER', coin);
     const action = (data) => {
       data.id = id;
       send(data);

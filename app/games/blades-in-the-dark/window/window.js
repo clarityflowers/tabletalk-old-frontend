@@ -50,7 +50,6 @@ class Window extends React.Component {
   }
   render() {
     const { update, send, me, game, tabs, route, options, auth, onChat } = this.props;
-    console.log('RENDER WINDOW', tabs);
     let activeRoute = this.props.route;
     let portal = null;
     let tabDoms = [];
@@ -75,7 +74,6 @@ class Window extends React.Component {
                index={i}/>
         );
         if (i == activeTab) {
-          console.log(character.coin);
           portal = (
             <Character {...character}
                        onChat={onChat}

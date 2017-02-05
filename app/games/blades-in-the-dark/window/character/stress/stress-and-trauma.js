@@ -9,6 +9,7 @@ import Tickbars from './tickbars';
 const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  margin: 0 .5em;
 `
 
 const StressAndTrauma = (props) => {
@@ -19,6 +20,7 @@ const StressAndTrauma = (props) => {
   }
   return(
     <Container>
+      <Tickbars trauma={trauma} stress={stress} disabled={disabled}/>
       <TraumaSelector trauma={trauma} off={disabled || !showTraumaSelector}/>
     </Container>
   );

@@ -9,50 +9,52 @@ import Button from 'common/button';
 
 import filter from 'utils/filter';
 
-const Check = (props) => {
-  const {
-    className, checked,
-    onClick, onHover,
-    value, highlight,
-    isButton, ...buttonProps
-  } = props;
-  const { disabled } = buttonProps;
-  const handleClick = () => {
-    if (onClick && !disabled) {
-      onClick(value);
+class Check extends React.PureComponent {
+  render() {
+    const {
+      className, checked, children,
+      onClick, onHover,
+      value, highlight,
+      isButton, ...buttonProps
+    } = this.props;
+    const { disabled } = buttonProps;
+    const handleClick = () => {
+      if (onClick && !disabled) {
+        onClick(value);
+      }
+    };
+    const handleMouseOver = () => {
+      if (onHover && !disabled) {
+        onHover(value);
+      }
+    };
+    const handleMouseLeave = () => {
+      if (onHover && !disabled) {
+        onHover(null);
+      }
+    };
+    const buttonClassName = cx(className, 'check', {checked, highlight});
+    let result = null;
+    if (isButton) {
+      result = (
+        <Button className={buttonClassName}
+                onClick={handleClick.bind(this)}
+                onMouseOver={handleMouseOver.bind(this)}
+                onMouseLeave={handleMouseLeave.bind(this)}
+                {...buttonProps}>
+          {children}
+        </Button>
+      );
     }
-  };
-  const handleMouseOver = () => {
-    if (onHover && !disabled) {
-      onHover(value);
+    else {
+      result = (
+        <div className={buttonClassName} {...buttonProps}>
+          {children}
+        </div>
+      );
     }
-  };
-  const handleMouseLeave = () => {
-    if (onHover && !disabled) {
-      onHover(null);
-    }
-  };
-  const buttonClassName = cx(className, 'check', {checked, highlight});
-  let result = null;
-  if (isButton) {
-    result = (
-      <Button className={buttonClassName}
-              onClick={handleClick.bind(this)}
-              onMouseOver={handleMouseOver.bind(this)}
-              onMouseLeave={handleMouseLeave.bind(this)}
-              {...buttonProps}>
-        {props.children}
-      </Button>
-    );
+    return result;
   }
-  else {
-    result = (
-      <div className={buttonClassName} {...buttonProps}>
-        {props.children}
-      </div>
-    );
-  }
-  return result;
 }
 
 Check.propTypes = {
@@ -67,11 +69,6 @@ Check.propTypes = {
 
 Check.defaultProps = {
   checked: false,
-  className: null,
-  onClick: null,
-  onHover: null,
-  value: null,
-  highlight: null,
   isButton: true
 }
 
@@ -160,19 +157,12 @@ CheckArray.defaultProps = {
   isButton: true
 }
 
-const extendCheck = ({name, children}) => {
+const extendCheck = (children) => {
   const node = (props) => {
-    let className = cx(name, props.className);
-    let properties = Object.assign({}, props);
-    delete properties.className;
     return (
-      <Check className={className} {...properties}>
-        {children}
+      <Check {...props} children={children}>
       </Check>
     );
-  };
-  node.propTypes = {
-    className: React.PropTypes.string
   };
   return node;
 }
