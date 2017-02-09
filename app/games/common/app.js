@@ -12,7 +12,7 @@ const Container = styled.div`
   height: 100%;
   min-height: 100vh;
   align-items: stretch;
-  pointer-events: all;
+  pointer-events: auto;
   overflow: hidden;
   position: fixed;
   overflow: none;
@@ -22,7 +22,7 @@ const Container = styled.div`
       width: 100%;
       height: 100%;
       align-items: stretch;
-      pointer-events: all;
+      pointer-events: auto;
       box-sizing: border-box;
       @media only screen and (max-width: ${MOBILE_BREAKPOINT}px) {
         padding-top: 32px;

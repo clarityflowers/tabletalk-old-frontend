@@ -20,7 +20,8 @@ const Container = styled(Bar)`
   margin-left: -.5em;
   z-index: 1;
   &:after {
-    left: 0.5em;
+    margin-left: 0.5em;
+    width: calc(100% - 0.5em);
   }
 `
 

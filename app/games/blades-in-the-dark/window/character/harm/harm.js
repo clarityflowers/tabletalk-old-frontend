@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
-  max-width: 40em;
+  flex: 1 1 auto;
   margin-bottom: 1em;
 `
 const Header = styled.div`

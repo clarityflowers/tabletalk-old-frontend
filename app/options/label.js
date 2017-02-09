@@ -31,7 +31,7 @@ const Container = styled.div`
 const Button = styled.div`
   font: ${Fonts.h1};
   color: white;
-  pointer-events: all;
+  pointer-events: auto;
   position: relative;
   white-space: nowrap;
   text-shadow: ${textShadow};

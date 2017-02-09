@@ -9,6 +9,7 @@ import Title from './title';
 import Stats from './stats/stats';
 import Stress from './stress/stress-and-trauma';
 import Harm from './harm/harm'
+import ArmorHealing from './armor-healing/armor-healing';
 
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
@@ -31,7 +32,15 @@ const Row = styled(CommonRow)`
 `
 const Column = styled(CommonColumn)`
   align-items: stretch;
+`
+const StressHarm = styled(Column)`
+  max-width: 35em;
+  flex: 1 1 auto;
+`
+const MiddleRow = styled(CommonRow)`
+  flex: 1 1 auto;
   margin: 0 0.5em;
+  align-items: flex-start;
 `
 
 class Character extends React.PureComponent {
@@ -101,34 +110,42 @@ class Character extends React.PureComponent {
       lesser1: harmLesser1,
       lesser2: harmLesser2,
     };
-    const health = {
-      specialAbilities, strangeFriends, playbook,
-      harm: {
-        edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
-      },
-      healing: {
-        unlocked: healingUnlocked,
-        clock: healingClock,
-        unlock: (value) => { action({action: "unlock_healing", value: value}); },
-        increment: () => { action({action: "increment_healing"}); },
-        decrement: () => { action({action: "decrement_healing"}); }
-      },
-      armor: {
-        armor: {
-          used: armor,
-          available: items.includes("Armor")
-        },
-        heavy: {
-          used: heavyArmor,
-          available: armor && items.includes("+Heavy")
-        },
-        special: specialArmor,
-        use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
-      },
-      details: {
-        look, heritage, background, vice,
-      }
-    }
+    const armorHealing = {
+      armorUsed: armor,
+      armorAvailable: items.includes("Armor"),
+      heavyUsed: heavyArmor,
+      heavyAvailable: armor && items.includes("+Heavy"),
+      specialUsed: specialArmor,
+      healingClock, healingUnlocked
+    };
+    // const health = {
+    //   specialAbilities, strangeFriends, playbook,
+    //   harm: {
+    //     edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
+    //   },
+    //   healing: {
+    //     unlocked: healingUnlocked,
+    //     clock: healingClock,
+    //     unlock: (value) => { action({action: "unlock_healing", value: value}); },
+    //     increment: () => { action({action: "increment_healing"}); },
+    //     decrement: () => { action({action: "decrement_healing"}); }
+    //   },
+    //   armor: {
+    //     armor: {
+    //       used: armor,
+    //       available: items.includes("Armor")
+    //     },
+    //     heavy: {
+    //       used: heavyArmor,
+    //       available: armor && items.includes("+Heavy")
+    //     },
+    //     special: specialArmor,
+    //     use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
+    //   },
+    //   details: {
+    //     look, heritage, background, vice,
+    //   }
+    // }
     // const equipment = {
     //   load, items, playbook,
     //   use: (name) => { action({action: "use_item", value: name}); },
@@ -143,10 +160,13 @@ class Character extends React.PureComponent {
           <Column>
             <Stats {...stats} disabled={disabled}/>
           </Column>
-          <Column>
-            <Stress stress={stress} trauma={trauma} disabled={disabled}/>
-            <Harm {...harm} disabled={disabled}/>
-          </Column>
+          <MiddleRow>
+            <StressHarm>
+              <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+              <Harm {...harm} disabled={disabled}/>
+            </StressHarm>
+            <ArmorHealing {...armorHealing} disabled={disabled}/>
+          </MiddleRow>
         </Row>
       </Container>
     )
@@ -191,7 +211,7 @@ Character.propTypes = {
   harmLesser2: React.PropTypes.string.isRequired,
   armor: React.PropTypes.bool.isRequired,
   heavyArmor: React.PropTypes.bool.isRequired,
-  specialArmor: React.PropTypes.array.isRequired,
+  specialArmor: React.PropTypes.bool.isRequired,
   load: React.PropTypes.number.isRequired,
   items: React.PropTypes.array.isRequired,
   editPermission: React.PropTypes.array.isRequired,

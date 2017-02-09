@@ -160,24 +160,15 @@ class App extends React.Component {
             else if (name == "heavy") {
               params = {heavyArmor: {$set: used}};
             }
-            else {
-              let i = 0;
-              while (
-                i < c.specialArmor.length &&
-                c.specialArmor[i].name != name
-              ) {
-                i++;
-              }
-              if (i in c.specialArmor) {
-                params = {specialArmor: {[i]: {used: {$set: used}}}};
-              }
+            else if (name == "special") {
+              params = {specialArmor: {$set: used}}
             }
           }
           else if (action == "unlock_healing") {
             params = {healingUnlocked: {$set: value}};
           }
           else if (action == "increment_healing") {
-            if (c.healingClock < 8) {
+            if (c.healingClock < 4) {
               params = {healingClock: {$set: c.healingClock + 1}};
             }
             else {
