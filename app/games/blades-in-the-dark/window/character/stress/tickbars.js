@@ -14,6 +14,7 @@ const Container = styled.div`
   position: relative;
   align-items: flex-start;
   justify-content: flex-end;
+  flex: 1 1 auto;
 `
 
 

@@ -43,6 +43,7 @@ const Container = styled.div`
   position: relative;
   flex: 1 1 auto;
   margin-bottom: 2em;
+  margin-left: -.5em;
 `
 
 const Equipment = (props) => {

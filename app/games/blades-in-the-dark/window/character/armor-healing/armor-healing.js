@@ -16,8 +16,8 @@ const Container = styled.div`
   flex-flow: column nowrap;
   align-items: stretch;
   justify-content: space-between;
-  max-width: 10em;
-  width: 100%;
+  width: 6em;
+  max-width: 9em;
   position: relative;
   padding-left: .5em;
   box-sizing: border-box;

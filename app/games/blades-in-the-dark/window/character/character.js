@@ -11,9 +11,12 @@ import Stress from './stress/stress-and-trauma';
 import Harm from './harm/harm'
 import ArmorHealing from './armor-healing/armor-healing';
 import Equipment from './equipment/equipment';
+import Abilities from './abilities/abilities';
 
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
+
+const margin = .5;
 
 const Container = styled.div`
   display: flex;
@@ -23,7 +26,6 @@ const Container = styled.div`
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 3em;
-  padding: 0.5em;
 `
 const Row = styled(CommonRow)`
   justify-content: center;
@@ -34,14 +36,22 @@ const Column = styled(CommonColumn)`
   align-items: stretch;
   flex: 0 100 auto;
 `
+const Side = styled(Column)`
+  margin: 0 ${margin}em;
+`
 const StressHarm = styled(Column)`
-  max-width: 35em;
   flex: 1 1 auto;
+  width: 25em;
+  justify-content: space-between;
 `
 const MiddleRow = styled(CommonRow)`
-  flex: 100 1 auto;
-  margin: 0 0.5em;
-  align-items: flex-start;
+  flex: 1 1 0;
+  flex-flow: row wrap;
+  align-items: stretch;
+`
+const Health = styled(Row)`
+  margin: ${margin}em;
+  align-items: stretch;
 `
 
 class Character extends React.PureComponent {
@@ -120,6 +130,7 @@ class Character extends React.PureComponent {
       healingClock, healingUnlocked
     };
     const equipment = {load, items, playbook};
+    const abilities = {specialAbilities, playbook};
     // const health = {
     //   specialAbilities, strangeFriends, playbook,
     //   harm: {
@@ -159,19 +170,22 @@ class Character extends React.PureComponent {
       <Container>
         <Title {...names}/>
         <Row>
-          <Column>
+          <Side>
             <Stats {...stats} disabled={disabled}/>
-          </Column>
+          </Side>
           <MiddleRow>
-            <StressHarm>
-              <Stress stress={stress} trauma={trauma} disabled={disabled}/>
-              <Harm {...harm} disabled={disabled}/>
-            </StressHarm>
-            <ArmorHealing {...armorHealing} disabled={disabled}/>
+            <Health>
+              <StressHarm>
+                <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+                <Harm {...harm} disabled={disabled}/>
+              </StressHarm>
+              <ArmorHealing {...armorHealing} disabled={disabled}/>
+            </Health>
+            <Abilities {...abilities}/>
           </MiddleRow>
-          <Column>
+          <Side>
             <Equipment {...equipment} disabled={disabled}/>
-          </Column>
+          </Side>
         </Row>
       </Container>
     )

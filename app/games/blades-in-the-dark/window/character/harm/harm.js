@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   margin-bottom: 1em;
 `
 const Header = styled.div`

@@ -9,6 +9,8 @@ import Tickbars from './tickbars';
 const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  flex: 1 1 auto;
+  justify-content: space-between;
 `
 
 const StressAndTrauma = (props) => {
