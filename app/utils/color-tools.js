@@ -39,6 +39,12 @@ export const fadeout = (string, amount) => {
   return unparse({h,s,l,a});
 }
 
+export const fadein = (string, amount) => {
+  let { h,s,l,a } = parse(string);
+  a = Math.max(a + amount, 1);
+  return unparse({h,s,l,a});
+}
+
 const blend = (value1, value2, amount, wrap) => {
   let diff = value2 - value1;
   if (wrap) {

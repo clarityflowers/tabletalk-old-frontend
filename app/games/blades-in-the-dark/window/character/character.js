@@ -10,6 +10,7 @@ import Stats from './stats/stats';
 import Stress from './stress/stress-and-trauma';
 import Harm from './harm/harm'
 import ArmorHealing from './armor-healing/armor-healing';
+import Equipment from './equipment/equipment';
 
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
@@ -19,7 +20,6 @@ const Container = styled.div`
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: stretch;
-  overflow: hidden;
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 3em;
@@ -32,13 +32,14 @@ const Row = styled(CommonRow)`
 `
 const Column = styled(CommonColumn)`
   align-items: stretch;
+  flex: 0 100 auto;
 `
 const StressHarm = styled(Column)`
   max-width: 35em;
   flex: 1 1 auto;
 `
 const MiddleRow = styled(CommonRow)`
-  flex: 1 1 auto;
+  flex: 100 1 auto;
   margin: 0 0.5em;
   align-items: flex-start;
 `
@@ -118,6 +119,7 @@ class Character extends React.PureComponent {
       specialUsed: specialArmor,
       healingClock, healingUnlocked
     };
+    const equipment = {load, items, playbook};
     // const health = {
     //   specialAbilities, strangeFriends, playbook,
     //   harm: {
@@ -167,6 +169,9 @@ class Character extends React.PureComponent {
             </StressHarm>
             <ArmorHealing {...armorHealing} disabled={disabled}/>
           </MiddleRow>
+          <Column>
+            <Equipment {...equipment} disabled={disabled}/>
+          </Column>
         </Row>
       </Container>
     )

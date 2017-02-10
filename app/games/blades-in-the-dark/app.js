@@ -204,6 +204,7 @@ class App extends React.Component {
               items.splice(index, 1);
               if (value == "Armor") {
                 params.armor = {$set: false};
+                params.heavyArmor = {$set: false};
                 const index = c.items.indexOf("+Heavy");
                 if (index >= 0) {
                   items.splice(index, 1);
@@ -229,6 +230,9 @@ class App extends React.Component {
           }
           else if (action == "set_load") {
             params = {load: {$set: value}};
+          }
+          else {
+            console.error(`"${action}" is not a valid action`);
           }
           return update(c, params);
         }};
