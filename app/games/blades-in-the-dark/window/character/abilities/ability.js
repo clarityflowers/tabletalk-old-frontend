@@ -3,11 +3,19 @@ import styled from 'styled-components';
 
 import Colors from 'games/blades-in-the-dark/common/colors';
 import Fonts from 'games/blades-in-the-dark/common/fonts';
+import { fadeout } from 'utils/color-tools';
 import {
   SPECIAL_ABILITIES, PLAYBOOK_ABILITIES
 } from 'games/blades-in-the-dark/window/character/data/special-abilities.js';
 
-const { sand } = Colors;
+const { sand, stone, sun } = Colors;
+
+const Strong = styled.strong`
+  font-weight: 500;
+`
+const Em = styled.em`
+  color: ${fadeout(sun, 0.5)};
+`;
 
 const parse = (array, ending) => {
   let result = [];
@@ -27,12 +35,12 @@ const parse = (array, ending) => {
       const inner = parse(array, char);
       if (char == "*") {
         result.push(
-          <strong key={i++}>{inner}</strong>
+          <Strong key={i++}>{inner}</Strong>
         );
       }
       else if (char == "_") {
         result.push(
-          <em key={i++}>{inner}</em>
+          <Em key={i++}>{inner}</Em>
         );
       }
     }
