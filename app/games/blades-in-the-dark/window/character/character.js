@@ -15,6 +15,8 @@ import Abilities from './abilities/abilities';
 import Detail from './details/detail';
 import StrangeFriends from './friends/strange-friends';
 
+import Dispatcher from 'utils/dispatcher';
+
 import CommonRow from 'common/row';
 import CommonColumn from 'common/column';
 
@@ -70,9 +72,6 @@ class Character extends React.PureComponent {
     super(props);
     this.update = this.update.bind(this);
   }
-  getChildContext() {
-    return { dispatch: this.update };
-  }
   update (action, value) {
     const data = {
       id: this.props.id,
@@ -103,20 +102,6 @@ class Character extends React.PureComponent {
       specialAbilities, strangeFriends,
       onChat, me, send
     } = this.props;
-    const action = (data) => {
-      data.id = id;
-      send(data);
-    }
-    const incrementXP = (stat) => {
-      return () => {
-        action({action: "increment_xp", value: stat});
-      }
-    }
-    const decrementXP = (stat) => {
-      return () => {
-        action({action: "decrement_xp", value: stat});
-      }
-    }
     const disabled = !editPermission.includes(me.id);
     const names = {name, playbook, alias};
     const stats = {
@@ -178,46 +163,48 @@ class Character extends React.PureComponent {
     //   setLoad: (value) => { action({action: "set_load", value: value}); }
     // }
     return (
-      <Container>
-        <Title {...names}/>
-        <Row>
-          <Side>
-            <Stats {...stats} disabled={disabled}/>
-          </Side>
-          <Column>
-            <MiddleRow>
-              <Health>
-                <StressHarm>
-                  <Stress stress={stress} trauma={trauma} disabled={disabled}/>
-                  <Harm {...harm} disabled={disabled}/>
-                </StressHarm>
-                <ArmorHealing {...armorHealing} disabled={disabled}/>
-              </Health>
-              <MiddleColumn>
-                <Detail name="Special Abilities">
-                  <Abilities {...abilities}/>
-                </Detail>
-              </MiddleColumn>
-            </MiddleRow>
-            <MiddleRow>
-              <MiddleColumn>
-                <Detail name="Strange Friends">
-                  <StrangeFriends strangeFriends={strangeFriends}/>
-                </Detail>
-              </MiddleColumn>
-              <MiddleColumn>
-                <Detail name="Look">{look}</Detail>
-                <Detail name="Heritage">{heritage}</Detail>
-                <Detail name="Background">{background}</Detail>
-                <Detail name="Vice">{vice}</Detail>
-              </MiddleColumn>
-            </MiddleRow>
-          </Column>
-          <Side>
-            <Equipment {...equipment} disabled={disabled}/>
-          </Side>
-        </Row>
-      </Container>
+      <Dispatcher dispatch={this.update}>
+        <Container>
+          <Title {...names}/>
+          <Row>
+            <Side>
+              <Stats {...stats} disabled={disabled}/>
+            </Side>
+            <Column>
+              <MiddleRow>
+                <Health>
+                  <StressHarm>
+                    <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+                    <Harm {...harm} disabled={disabled}/>
+                  </StressHarm>
+                  <ArmorHealing {...armorHealing} disabled={disabled}/>
+                </Health>
+                <MiddleColumn>
+                  <Detail name="Special Abilities">
+                    <Abilities {...abilities}/>
+                  </Detail>
+                </MiddleColumn>
+              </MiddleRow>
+              <MiddleRow>
+                <MiddleColumn>
+                  <Detail name="Strange Friends">
+                    <StrangeFriends strangeFriends={strangeFriends}/>
+                  </Detail>
+                </MiddleColumn>
+                <MiddleColumn>
+                  <Detail name="Look">{look}</Detail>
+                  <Detail name="Heritage">{heritage}</Detail>
+                  <Detail name="Background">{background}</Detail>
+                  <Detail name="Vice">{vice}</Detail>
+                </MiddleColumn>
+              </MiddleRow>
+            </Column>
+            <Side>
+              <Equipment {...equipment} disabled={disabled}/>
+            </Side>
+          </Row>
+        </Container>
+      </Dispatcher>
     )
   }
 };
@@ -270,10 +257,6 @@ Character.propTypes = {
   onChat: React.PropTypes.func.isRequired,
   me: React.PropTypes.object.isRequired,
   send: React.PropTypes.func.isRequired
-}
-
-Character.childContextTypes = {
-  dispatch: React.PropTypes.func
 }
 
 export default Character;

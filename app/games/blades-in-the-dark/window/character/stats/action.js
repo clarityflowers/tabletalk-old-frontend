@@ -9,6 +9,7 @@ import Colors from 'games/blades-in-the-dark/common/colors';
 import { lighten, darken } from 'utils/color-tools';
 import Fonts from 'games/blades-in-the-dark/common/fonts';
 import props from 'utils/props';
+import connect from 'utils/connect';
 
 
 const unchecked = darken(Colors.stone, 0.05);
@@ -75,12 +76,12 @@ class Action extends React.Component {
   handleClick() {
     if (!this.clicked) {
       this.clicked = true;
-      this.props.advance();
+      this.props.dispatch('advance_action', this.props.name.toLowerCase());
     }
     setTimeout(() => {this.clicked = false}, 2000);
   }
   render() {
-    const { name, value, disabled, unlocked, advance } = this.props;
+    const { name, value, disabled, unlocked } = this.props;
     const { hover } = this.state;
     let dots = [];
     for (let i=1; i <= 4; i++) {
@@ -123,11 +124,11 @@ Action.propTypes = {
   value: React.PropTypes.number.isRequired,
   disabled: React.PropTypes.bool,
   unlocked: React.PropTypes.bool.isRequired,
-  advance: React.PropTypes.func.isRequired
+  dispatch: React.PropTypes.func.isRequired
 }
 
 Action.defaultProps = {
   disabled: false
 }
 
-export default Action;
+export default connect(Action);

@@ -46,7 +46,7 @@ const Array = styled(TickArray)`
         stroke: ${fire};
       }
       &:not(.checked):first-child svg polygon {
-        fill: ${dark};
+        fill: ${fire};
       }
     }
     &:active .check {

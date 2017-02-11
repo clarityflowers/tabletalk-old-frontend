@@ -12,6 +12,8 @@ import Colors from 'games/blades-in-the-dark/common/colors';
 import Fonts from 'games/blades-in-the-dark/common/fonts';
 import { MOBILE_BREAKPOINT } from 'games/blades-in-the-dark/common/constants';
 
+import reduceCharacter from './reducers/character';
+
 const Blades = styled.div`
   background-color: ${Colors.stone};
   font: ${Fonts.h1};
@@ -44,6 +46,14 @@ class App extends React.Component {
     this.actionKeys = {};
     this.handleChat = this.handleChat.bind(this);
     this.send = this.send.bind(this);
+    this.reduce = this.reduce.bind(this);
+  }
+  reduce(what, data) {
+    let result = {};
+    if (what == 'character') {
+      result.characters = update(this.state.characters, reduceCharacter(data));
+    }
+    return result;
   }
   processAction({what, data, key}) {
     if (key in this.actionKeys) {
@@ -51,196 +61,7 @@ class App extends React.Component {
       return;
     }
     this.actionKeys[key] = true;
-    if (what == "character") {
-      let params = {};
-      const { action, id, value } = data;
-      if (action == "create") {
-      }
-      else if (id in this.state.characters) {
-        params = {$apply: (c) => {
-          let params = {};
-          if (action == "increment_stress") {
-            if (c.stress < 9) {
-              params = {stress: {$set: c.stress + 1}};
-            }
-          }
-          else if (action == "decrement_stress") {
-            if (c.stress > 0) {
-              params = {stress: {$set: c.stress - 1}};
-            }
-          }
-          else if (action == "add_trauma") {
-            params = {
-              trauma: {$push: [value]},
-              stress: {$set: 0}
-            };
-          }
-          else if (action == "increment_coin") {
-            if (c.coin < 4) {
-              params = {coin: {$set: c.coin + 1}};
-            }
-          }
-          else if (action == "decrement_coin") {
-            if (c.coin > 0) {
-              params = {coin: {$set: c.coin - 1}};
-            }
-          }
-          else if (action == "transfer_to_stash") {
-            if (c.stash < 40 && c.coin > 0) {
-              params = {
-                coin: {$set: c.coin - 1},
-                stash: {$set: c.stash + 1}
-              }
-            }
-          }
-          else if (action == "transfer_to_coin") {
-            if (c.stash >= 2 && c.coin < 4) {
-              params = {
-                coin: {$set: c.coin + 1},
-                stash: {$set: c.stash - 2}
-              }
-            }
-          }
-          else if (action == "increment_xp") {
-            const stat = value.toLowerCase();
-            if (stat == 'playbook') {
-              if (c.playbookXP < 8) {
-                params = {playbookXP: {$set: c.playbookXP + 1}};
-              }
-            }
-            else {
-              const prop = stat + 'XP';
-              if (c[prop] < 6) {
-                params = {[prop]: {$set: c[prop] + 1}};
-              }
-            }
-          }
-          else if (action == "decrement_xp") {
-            const stat = value.toLowerCase();
-            const prop = stat + 'XP';
-            if (c[prop] > 0) {
-              params = {[prop]: {$set: c[prop] - 1}};
-            }
-          }
-          else if (action == "advance_action") {
-            const stat = value.toLowerCase();
-            if (c[stat] < 4) {
-              let xp = "";
-              if (["hunt", "study", "survey", "tinker"].includes(stat)) {
-                xp = "insightXP";
-              }
-              if (["finesse", "prowl", "skirmish", "wreck"].includes(stat)) {
-                xp = "prowessXP";
-              }
-              if (["attune", "command", "consort", "sway"].includes(stat)) {
-                xp = "resolveXP";
-              }
-              params = {
-                [stat]: {$set: c[stat] + 1},
-                [xp]: {$set: 0}
-              };
-            }
-          }
-          else if (action == "edit_harm") {
-            const { harm, text } = value;
-            const prop = "harm" + harm[0].toUpperCase() + harm.slice(1).toLowerCase();
-            if (!c[prop] && text) {
-              params.healingUnlocked = {$set: false};
-            }
-            params[prop] = {$set: text};
-          }
-          else if (action == "use_armor") {
-            const { name, used } = value;
-            if (name == "armor") {
-              params = {armor: {$set: used}};
-              if (!used) {
-                params.heavyArmor = {$set: false};
-              }
-            }
-            else if (name == "heavy") {
-              params = {heavyArmor: {$set: used}};
-            }
-            else if (name == "special") {
-              params = {specialArmor: {$set: used}}
-            }
-          }
-          else if (action == "unlock_healing") {
-            params = {healingUnlocked: {$set: value}};
-          }
-          else if (action == "increment_healing") {
-            if (c.healingClock < 4) {
-              params = {healingClock: {$set: c.healingClock + 1}};
-            }
-            else {
-              params = {
-                healingClock: {$set: 0},
-                harmSevere: {$set: ""},
-                harmModerate1: {$set: ""},
-                harmModerate2: {$set: ""},
-                harmLesser1: {$set: ""},
-                harmLesser2: {$set: ""},
-                healingUnlocked: {$set: false}
-              };
-            }
-          }
-          else if (action == "decrement_healing") {
-            if (c.healingClock > 0) {
-              params = {healingClock: {$set: c.healingClock - 1}};
-            }
-          }
-          else if (action == "use_item") {
-            if (!c.items.includes(value)) {
-              let array = [value];
-              if (value == "+Heavy" && !c.items.includes("Armor")) {
-                array.push("Armor");
-              }
-              params = {items: {$push: array}};
-            }
-          }
-          else if (action == "clear_item") {
-            const index = c.items.indexOf(value);
-            if (index >= 0) {
-              let items = c.items.slice(0);
-              items.splice(index, 1);
-              if (value == "Armor") {
-                params.armor = {$set: false};
-                params.heavyArmor = {$set: false};
-                const index = c.items.indexOf("+Heavy");
-                if (index >= 0) {
-                  items.splice(index, 1);
-                }
-              }
-              if (value == "+Heavy") {
-                params.heavyArmor = {$set: false};
-              }
-              params.items = {$set: items};
-            }
-          }
-          else if (action == "clear_items") {
-            params = {
-              items: {$set: []},
-              load: {$set: 0},
-              armor: {$set: false},
-              heavyArmor: {$set: false}
-            }
-            params.specialArmor = {};
-            for (let i=0; i < c.specialArmor.length; i++) {
-              params.specialArmor[i] = {used: {$set: false}};
-            }
-          }
-          else if (action == "set_load") {
-            params = {load: {$set: value}};
-          }
-          else {
-            console.error(`"${action}" is not a valid action`);
-          }
-          return update(c, params);
-        }};
-        params = {[id]: params};
-      }
-      const characters = update(this.state.characters, params);
-      this.setState({characters: characters});
-    }
+    this.setState(this.reduce(what, data));
   }
   processEvent(event) {
     if (event.action == ACTIONS.ROLL) {

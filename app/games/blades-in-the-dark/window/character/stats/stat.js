@@ -36,14 +36,12 @@ class Stat extends React.PureComponent {
     for (let i=0; i < names.length; i++) {
       const name = names[i];
       const value = actions[name]
-      const advance = () => { advanceAction(name); }
       actionDivs.push(
         <Action key={i}
                 disabled={disabled}
                 name={name}
                 value={value}
-                unlocked={xp >= 6}
-                advance={advance}/>
+                unlocked={xp >= 6}/>
         );
       }
       return (
