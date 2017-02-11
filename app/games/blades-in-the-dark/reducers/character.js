@@ -152,7 +152,6 @@ const actions = {
         params.armor = {$set: false};
         params.heavyArmor = {$set: false};
         const index = items.indexOf("+Heavy");
-        console.log('CLEAR',name, index);
         if (index >= 0) {
           items.splice(index, 1);
         }

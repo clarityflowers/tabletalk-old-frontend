@@ -83,7 +83,6 @@ class Character extends React.PureComponent {
       id: this.props.id,
       action: action
     };
-    console.log('UPDATE', action, value);
     if (value != undefined) {
       data.value = value;
     }
