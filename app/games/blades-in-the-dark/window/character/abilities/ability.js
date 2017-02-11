@@ -4,9 +4,6 @@ import styled from 'styled-components';
 import Colors from 'games/blades-in-the-dark/common/colors';
 import Fonts from 'games/blades-in-the-dark/common/fonts';
 import { fadeout } from 'utils/color-tools';
-import {
-  SPECIAL_ABILITIES, PLAYBOOK_ABILITIES
-} from 'games/blades-in-the-dark/window/character/data/special-abilities.js';
 
 const { fire, stone, sun } = Colors;
 
@@ -70,16 +67,17 @@ const Name = styled.span`
 `
 
 const Ability = (props) => {
-  const { name } = props;
-  const ability = SPECIAL_ABILITIES[name];
-  let description = null;
-  if (ability && ability.description) {
-    description = ability.description.split("").reverse();
+  const { name, description } = props;
+  let result = null;
+  let title = name;
+  if (description) {
+    const array = description.split("").reverse();
+    result = parse(array);
+    title += ':';
   }
-  const result = parse(description);
   return (
     <P>
-        <Name>{name}:</Name>
+        <Name>{title}</Name>
         {result}
     </P>
   )

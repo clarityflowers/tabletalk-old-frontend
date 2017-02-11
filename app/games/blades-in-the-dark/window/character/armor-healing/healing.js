@@ -82,7 +82,7 @@ class Healing extends React.PureComponent {
     }
   }
   render() {
-    const { clock, unlocked, disabled } = this.props;
+    const { clock, unlocked, disabled, vigor } = this.props;
     const updateUnlocked = (unlocked) => { update({unlocked}); }
     return (
       <Container>
@@ -91,7 +91,7 @@ class Healing extends React.PureComponent {
           HEALING
         </Bar>
         <Clock value={clock} size={4} disabled={!unlocked || disabled}
-               locked={!unlocked}
+               locked={!unlocked} lock={vigor ? 1 : 0}
                increment={this.increment}
                decrement={this.decrement}/>
       </Container>

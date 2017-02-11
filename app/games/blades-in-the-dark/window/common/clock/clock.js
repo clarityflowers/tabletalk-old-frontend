@@ -63,13 +63,14 @@ class Clock extends React.Component {
     return false;
   }
   render() {
-    const { className, value, size, disabled, increment, decrement } = this.props;
+    const { className, value, size, disabled, increment, decrement, lock } = this.props;
+    console.log('CLOCK', lock);
     const { hover, click } = this.state;
     const r = .5;
     const stroke = 0.1;
     let highlight = 0;
     if (hover != null) {
-      if (hover < value) {
+      if (hover < value && hover >= lock ) {
         highlight = -1;
       }
       else if (hover >= value || hover == 'mid') {

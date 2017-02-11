@@ -2,6 +2,16 @@
 
 import update from 'react-addons-update';
 
+const vigor = (c) => {
+  for (let i=0; i < c.specialAbilities.length; i++) {
+    let ability = c.specialAbilities[i];
+    if (ability && ability.vigor) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 const actions = {
   increment_stress: (c) => {
     if (c.stress < 9) {
@@ -118,7 +128,7 @@ const actions = {
     }
     else {
       return {
-        healingClock: {$set: 0},
+        healingClock: {$set: vigor(c)},
         harmSevere: {$set: ""},
         harmModerate1: {$set: ""},
         harmModerate2: {$set: ""},
@@ -129,7 +139,7 @@ const actions = {
     }
   },
   decrement_healing: (c) => {
-    if (c.healingClock > 0) {
+    if (c.healingClock > vigor(c)) {
       return {healingClock: {$set: c.healingClock - 1}};
     }
   },

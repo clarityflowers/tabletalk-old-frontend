@@ -41,14 +41,14 @@ class ArmorHealing extends React.PureComponent {
   render() {
     const {
       armorUsed, armorAvailable, heavyUsed, heavyAvailable, specialUsed,
-      healingClock, healingUnlocked,
+      healingClock, healingUnlocked, vigor,
       disabled
     } = this.props;
     const armor = {
       used: armorUsed, available: armorAvailable,
       heavyUsed, heavyAvailable, specialUsed
     }
-    const healing = {clock: healingClock, unlocked: healingUnlocked};
+    const healing = {clock: healingClock, unlocked: healingUnlocked, vigor};
     return (
       <Container>
         <Armor {...armor} disabled={disabled}/>

@@ -31,27 +31,12 @@ const Container = styled.div`
 `
 
 const Abilities = (props) => {
-  const { playbook } = props;
-  let specialAbilities = props.specialAbilities.slice(0);
-  if (specialAbilities.length == 0) { return null }
-  const playbookAbilities = PLAYBOOK_ABILITIES[playbook];
-  let abilities = []
-  if (playbookAbilities) {
-    for (let i=0; i < playbookAbilities.length; i++) {
-      const name = playbookAbilities[i];
-      const index = specialAbilities.indexOf(name);
-      if (index >= 0) {
-        specialAbilities.splice(index, 1);
-        abilities.push(
-          <Ability key={'p' + i} name={name}/>
-        );
-      }
-    }
-  }
+  const { playbook, specialAbilities } = props;
+  let abilities = [];
   for (let i=0; i < specialAbilities.length; i++) {
-    const name = specialAbilities[i];
+    const ability = specialAbilities[i];
     abilities.push(
-      <Ability key={'o' + i} name={name}/>
+      <Ability key={i} {...ability}/>
     );
   }
   return (

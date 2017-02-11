@@ -15,6 +15,8 @@ import Abilities from './abilities/abilities';
 import Detail from './details/detail';
 import StrangeFriends from './friends/strange-friends';
 
+import { SPECIAL_ABILITIES } from './data/special-abilities';
+
 import Dispatcher from 'utils/dispatcher';
 
 import CommonRow from 'common/row';
@@ -108,6 +110,17 @@ class Character extends React.PureComponent {
       onChat, me, send
     } = this.props;
     const disabled = !editPermission.includes(me.id);
+    let vigor = 0;
+    let loadBonus = 0;
+    for (let i=0; i < specialAbilities.length; i++) {
+      const ability = specialAbilities[i];
+      if (ability.vigor != undefined) {
+        vigor += ability.vigor;
+      }
+      if (ability.load != undefined) {
+        loadBonus += ability.load;
+      }
+    }
     const names = {name, playbook, alias};
     const stats = {
       coin, stash, playbookXP,
@@ -128,45 +141,10 @@ class Character extends React.PureComponent {
       heavyUsed: heavyArmor,
       heavyAvailable: armor && items.includes("+Heavy"),
       specialUsed: specialArmor,
-      healingClock, healingUnlocked
+      healingClock, healingUnlocked, vigor
     };
-    const equipment = {load, items, playbook};
+    const equipment = {load, items, playbook, bonus: loadBonus};
     const abilities = {specialAbilities, playbook};
-    // const health = {
-    //   specialAbilities, strangeFriends, playbook,
-    //   harm: {
-    //     edit: ({harm, text}) => { action({action: "edit_harm", value: {harm, text}}); }
-    //   },
-    //   healing: {
-    //     unlocked: healingUnlocked,
-    //     clock: healingClock,
-    //     unlock: (value) => { action({action: "unlock_healing", value: value}); },
-    //     increment: () => { action({action: "increment_healing"}); },
-    //     decrement: () => { action({action: "decrement_healing"}); }
-    //   },
-    //   armor: {
-    //     armor: {
-    //       used: armor,
-    //       available: items.includes("Armor")
-    //     },
-    //     heavy: {
-    //       used: heavyArmor,
-    //       available: armor && items.includes("+Heavy")
-    //     },
-    //     special: specialArmor,
-    //     use: ({name, used}) => { action({action: "use_armor", value: {name, used}}); }
-    //   },
-    //   details: {
-    //     look, heritage, background, vice,
-    //   }
-    // }
-    // const equipment = {
-    //   load, items, playbook,
-    //   use: (name) => { action({action: "use_item", value: name}); },
-    //   clear: (name) => { action({action: "clear_item", value: name}); },
-    //   clearAll: () => { action({action: "clear_items"}); },
-    //   setLoad: (value) => { action({action: "set_load", value: value}); }
-    // }
     let abilityDom = null;
     if (specialAbilities.length > 0) {
       abilityDom = (

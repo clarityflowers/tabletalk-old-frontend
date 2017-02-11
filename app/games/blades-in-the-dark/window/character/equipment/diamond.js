@@ -11,11 +11,7 @@ import Fonts from 'games/blades-in-the-dark/common/fonts';
 import { lighten, darken } from 'utils/color-tools';
 import cz from 'utils/styled-classes';
 import props from 'utils/props';
-
-// const active = lighten(fire, 0.3);
-// const focus = lighten(fire, 0.2);
-// const hover = fire;
-// const dark = darken(stone, 0.2);
+import connect from 'utils/connect';
 
 const Button = styled(props(cz(CommonButton, 'checked'), 'over'))`
   width: 1.2em;
@@ -50,7 +46,7 @@ const Button = styled(props(cz(CommonButton, 'checked'), 'over'))`
     }
     &:focus {
       svg polygon {
-        stroke: ${focus};
+        stroke: ${hover};
       }
       div.label {
         opacity: 1;
@@ -98,6 +94,7 @@ class Diamond extends React.PureComponent {
     this.timeout = null;
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   handleMouseOver() {
     if (this.timeout) {
@@ -110,13 +107,18 @@ class Diamond extends React.PureComponent {
       this.setState({hover: false});
     }, 500);
   }
+  handleClick() {
+    const { dispatch, value } = this.props;
+    dispatch('set_load', value);
+  }
   render() {
-    const { checked, name, over, ...rest } = this.props;
+    const { checked, name, over, dispatch, value, ...rest } = this.props;
     const { hover } = this.state;
     return (
       <Button checked={checked} {...rest} over={over}
               onMouseOver={this.handleMouseOver}
-              onMouseLeave={this.handleMouseLeave}>
+              onMouseLeave={this.handleMouseLeave}
+              onClick={this.handleClick}>
         <Container>
           <Svg x="0px"
                y="0px"
@@ -134,11 +136,12 @@ class Diamond extends React.PureComponent {
   }
 }
 
-const { bool, string, func } = React.PropTypes;
+const { bool, string, func, number } = React.PropTypes;
 Diamond.propTypes = {
   checked: bool.isRequired,
   name: string.isRequired,
-  onClick: func.isRequired
+  dispatch: func.isRequired,
+  value: number.isRequired
 }
 
-export default Diamond;
+export default connect(Diamond);

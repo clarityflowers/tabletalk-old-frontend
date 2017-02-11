@@ -46,13 +46,7 @@ const Container = styled.div`
 `
 
 const Equipment = (props) => {
-  const {
-    load, items, playbook,
-    use, clear, clearAll, setLoad,
-    disabled
-  } = props;
-  const updateLoad = (load) => { update({load}); };
-  const updateItems = (items) => { update({items}); };
+  const { load, items, playbook, bonus, disabled } = props;
   let itemList = [];
   let carrying = 0;
 
@@ -69,18 +63,19 @@ const Equipment = (props) => {
 
   return (
     <Container>
-      <Load load={load} carrying={carrying} disabled={disabled}
-            set={setLoad} clear={clearAll}/>
-      <Items items={itemList} disabled={disabled} use={use} clear={clear}/>
+      <Load load={load} carrying={carrying} disabled={disabled} bonus={bonus}/>
+      <Items items={itemList} disabled={disabled}/>
     </Container>
   );
 }
 
+const { number, array, string, bool } = React.PropTypes;
 Equipment.propTypes = {
-  load: React.PropTypes.number.isRequired,
-  items: React.PropTypes.array.isRequired,
-  playbook: React.PropTypes.string,
-  disabled: React.PropTypes.bool.isRequired
+  load: number.isRequired,
+  items: array.isRequired,
+  playbook: string,
+  disabled: bool.isRequired,
+  bonus: number.isRequired
 }
 
 export default Equipment;

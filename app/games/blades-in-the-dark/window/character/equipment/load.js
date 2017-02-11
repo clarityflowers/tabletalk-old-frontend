@@ -64,7 +64,7 @@ const Gap = styled('div')`
   flex: 1 0 0;
 `
 
-const Dash = styled(props('div', 'length', 'over'))`
+const Dash = styled(props('div', 'length', 'over', 'max'))`
   position: relative;
   width: 1.3em;
   background: none;
@@ -88,7 +88,7 @@ const Dash = styled(props('div', 'length', 'over'))`
     position: absolute;
     left: .4em;
     top: 0;
-    height: ${p => (100 / 6) * p.length}%;
+    height: ${p => (100 / p.max) * p.length}%;
     width: .5em;
     transition: height 1s ease-in-out, background 1s;
     pointer-events: none;
@@ -104,6 +104,8 @@ const Dot = styled.div`
   z-index: 6;
   top: .1em;
 `
+
+const DEFAULT = [3, 5, 6];
 
 class Load extends React.PureComponent {
   constructor(props) {
@@ -123,48 +125,82 @@ class Load extends React.PureComponent {
     dispatch('clear_items');
   }
   heavy() {
-    const { load } = this.props;
-    if (load != 6) {
-      this.set(6);
+    const { load, bonus } = this.props;
+    if (load != DEFAULT[2] + bonus) {
+      this.set(DEFAULT[2] + bonus);
     }
   };
   normal() {
-    const { load } = this.props;
-    if (load != 5) {
-      this.set(5);
+    const { load, bonus } = this.props;
+    if (load != DEFAULT[1] + bonus) {
+      this.set(DEFAULT[1] + bonus);
     }
   };
   light() {
-    const { load } = this.props;
-    if (load != 3) {
-      this.set(3);
+    const { load, bonus } = this.props;
+    if (load != DEFAULT[0] + bonus) {
+      this.set(DEFAULT[0] + bonus);
     }
   };
   render() {
-    const { load, carrying, disabled } = this.props;
+    const { load, bonus, carrying, disabled } = this.props;
+    console.log('RENDER LOAD', load, bonus, carrying);
     const clear = null;
     const over = carrying > load;
+    let buttons = [];
+    let i=1;
+    while (i < DEFAULT[0] + bonus) {
+      buttons.push(
+        <Gap key={i}>
+          <Dot/>
+        </Gap>
+      );
+      i++;
+    }
+    buttons.push(
+      <Gap key={i}>
+        <Diamond checked={load >= i} over={over} value={i}
+                 name='light' disabled={disabled || load == i}/>
+      </Gap>
+    );
+    i++;
+    while (i < DEFAULT[1] + bonus) {
+      buttons.push(
+        <Gap key={i}>
+          <Dot/>
+        </Gap>
+      );
+      i++;
+    }
+    buttons.push(
+      <Gap key={i}>
+        <Diamond checked={load >= i} over={over} value={i}
+                 name='normal' disabled={disabled || load == i}/>
+      </Gap>
+    );
+    i++;
+    while (i < DEFAULT[2] + bonus) {
+      buttons.push(
+        <Gap key={i}>
+          <Dot/>
+        </Gap>
+      );
+      i++;
+    }
+    buttons.push(
+      <Gap key={i}>
+        <Diamond checked={load >= i} over={over} value={i}
+                 name='heavy' disabled={disabled || load == i}/>
+      </Gap>
+    );
+    i++;
     return (
       <Container>
         <Label disabled={disabled} onClick={this.clear} over={over}>
           LOAD
         </Label>
-        <Dash length={carrying} over={over}>
-          <Gap><Dot/></Gap>
-          <Gap><Dot/></Gap>
-          <Gap>
-            <Diamond checked={load >= 3} over={over}
-                     onClick={this.light} name='light' disabled={disabled}/>
-          </Gap>
-          <Gap><Dot/></Gap>
-          <Gap>
-            <Diamond checked={load >= 5} over={over}
-                     onClick={this.normal} name='normal' disabled={disabled}/>
-          </Gap>
-          <Gap>
-            <Diamond checked={load >= 6} over={over}
-                     onClick={this.heavy} name='heavy' disabled={disabled}/>
-          </Gap>
+        <Dash length={carrying} max={DEFAULT[2] + bonus} over={over}>
+          {buttons}
         </Dash>
       </Container>
     );
@@ -176,6 +212,7 @@ Load.propTypes = {
   load: number.isRequired,
   carrying: number.isRequired,
   disabled: bool.isRequired,
+  bonus: number.isRequired,
   dispatch: func.isRequired
 }
 
