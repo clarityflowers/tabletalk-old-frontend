@@ -56,7 +56,7 @@ class Clock extends React.Component {
   }
   handleContextMenu(e) {
     const { decrement, disabled } = this.props;
-    if (disabled && decrement) {
+    if (!disabled && decrement) {
       decrement();
     }
     e.preventDefault();

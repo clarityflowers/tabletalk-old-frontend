@@ -47,7 +47,9 @@ class Detail extends React.PureComponent {
     const { name, children } = this.props;
     let short = false;
     console.log('DETAIL', name, children);
+    if (children == null) { return null }
     if (typeof children == 'string') {
+      if (children.length == 0) { return null}
       if (children.length < 30) {
         short = true;
       }

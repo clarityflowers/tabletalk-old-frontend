@@ -33,6 +33,7 @@ const Container = styled.div`
 const Abilities = (props) => {
   const { playbook } = props;
   let specialAbilities = props.specialAbilities.slice(0);
+  if (specialAbilities.length == 0) { return null }
   const playbookAbilities = PLAYBOOK_ABILITIES[playbook];
   let abilities = []
   if (playbookAbilities) {

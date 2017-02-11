@@ -37,16 +37,22 @@ const Row = styled(CommonRow)`
   flex: 1 1 auto;
 `
 const Column = CommonColumn;
+const Center = styled(Column)`
+  flex: 50 1 auto;
+  max-width: 50em;
+`
 const Side = styled(Column)`
   margin: 0 ${margin}em;
-  flex: 0 100 auto;
+  flex: 0 0 auto;
   align-items: stretch;
 `
+const RightSide = styled(Side)`
+  width: 13em;
+`
 const StressHarm = styled(Column)`
-  flex: 1 1 auto;
+  flex: 1 1 23em;
   align-items: stretch;
   justify-content: space-between;
-  width: 24em;
   min-width: 15em;
   max-width: 40em;
 `
@@ -57,14 +63,14 @@ const MiddleRow = styled(CommonRow)`
   width: 100%;
 `
 const MiddleColumn = styled(Column)`
-  flex: 2 1 0;
+  flex: 1 1 0;
 `
 const Health = styled(Row)`
   margin: ${margin}em;
   align-items: stretch;
   display: flex;
-  flex-flow: row wrap;
-  flex: 3 1 auto;
+  flex-flow: row nowrap;
+  flex: 3 1 25em;
 `
 
 class Character extends React.PureComponent {
@@ -162,6 +168,26 @@ class Character extends React.PureComponent {
     //   clearAll: () => { action({action: "clear_items"}); },
     //   setLoad: (value) => { action({action: "set_load", value: value}); }
     // }
+    let abilityDom = null;
+    if (specialAbilities.length > 0) {
+      abilityDom = (
+        <MiddleColumn>
+          <Detail name="Special Abilities">
+            <Abilities {...abilities}/>
+          </Detail>
+        </MiddleColumn>
+      );
+    }
+    let friendDom = null;
+    if (strangeFriends.length > 0) {
+      friendDom = (
+        <MiddleColumn>
+          <Detail name="Strange Friends">
+            <StrangeFriends strangeFriends={strangeFriends}/>
+          </Detail>
+        </MiddleColumn>
+      );
+    }
     return (
       <Dispatcher dispatch={this.update}>
         <Container>
@@ -170,7 +196,7 @@ class Character extends React.PureComponent {
             <Side>
               <Stats {...stats} disabled={disabled}/>
             </Side>
-            <Column>
+            <Center>
               <MiddleRow>
                 <Health>
                   <StressHarm>
@@ -179,18 +205,10 @@ class Character extends React.PureComponent {
                   </StressHarm>
                   <ArmorHealing {...armorHealing} disabled={disabled}/>
                 </Health>
-                <MiddleColumn>
-                  <Detail name="Special Abilities">
-                    <Abilities {...abilities}/>
-                  </Detail>
-                </MiddleColumn>
+                {abilityDom}
               </MiddleRow>
               <MiddleRow>
-                <MiddleColumn>
-                  <Detail name="Strange Friends">
-                    <StrangeFriends strangeFriends={strangeFriends}/>
-                  </Detail>
-                </MiddleColumn>
+                {friendDom}
                 <MiddleColumn>
                   <Detail name="Look">{look}</Detail>
                   <Detail name="Heritage">{heritage}</Detail>
@@ -198,10 +216,10 @@ class Character extends React.PureComponent {
                   <Detail name="Vice">{vice}</Detail>
                 </MiddleColumn>
               </MiddleRow>
-            </Column>
-            <Side>
+            </Center>
+            <RightSide>
               <Equipment {...equipment} disabled={disabled}/>
-            </Side>
+            </RightSide>
           </Row>
         </Container>
       </Dispatcher>

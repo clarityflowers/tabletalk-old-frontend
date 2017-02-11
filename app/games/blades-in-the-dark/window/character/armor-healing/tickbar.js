@@ -11,14 +11,44 @@ import Fonts from 'games/blades-in-the-dark/common/fonts';
 import { darken, lighten } from 'utils/color-tools';
 import cz from 'utils/styled-classes';
 
-const { stone, sun, shadow } = Colors;
+const { stone, sun, shadow, fire } = Colors;
 const dark = darken(stone, 0.1);
 const light = lighten(stone, 0.1);
 
 const Button = styled(CommonButton)`
-  &:disabled {
-    .check {
-      cursor: default;
+  &:not(:disabled) {
+    &:focus {
+      .label {
+        text-decoration: underline;
+      }
+    }
+    &:hover {
+      .label {
+        color: ${fire};
+        &:after {
+          background: ${fire};
+        }
+      }
+      .check {
+        polygon {
+          stroke: ${fire};
+        }
+        &.checked {
+          polygon {
+            fill: ${fire};
+          }
+        }
+      }
+    }
+    &:active {
+      .check {
+        svg polygon {
+          fill: ${lighten(fire, 0.3)};
+        }
+        &.checked svg polygon {
+          fill: ${lighten(fire, 0.3)};
+        }
+      }
     }
   }
 `;
@@ -31,9 +61,9 @@ const Label = styled(cz('div', 'off'))`
   position: relative;
   flex: 1 1 auto;
   text-align: right;
-  transition: color .25s;
+  transition: color .1s;
   &:after {
-    transition: background .25s;
+    transition: background .1s;
     content: "";
     position: absolute;
     top: 0;
@@ -60,8 +90,7 @@ const Container = styled.div`
 const StyledTick = styled(cz(Tick, 'off'))`
   font-size: 1.5em;
   svg polygon {
-    transition-property: stroke, fill;
-    transition-duration: .25s;
+    transition: stroke .1s, fill .1s;
   }
   &.off {
     svg polygon {

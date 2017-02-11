@@ -39,8 +39,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      characters: {},
-      tabs: []
+      characters: {}
     }
     this.updates = {};
     this.actionKeys = {};
@@ -128,13 +127,15 @@ class App extends React.Component {
     this.processAction({data: data.data, what: data.what, key: key});
   }
   render() {
-    const { characters, width, tabs } = this.state;
+    const { characters, width } = this.state;
     let tabData = [];
-    for (let i=0; i < tabs.length; i++) {
-      let tab = tabs[i];
+    const keys = Object.keys(characters);
+    for (let i=0; i < keys.length; i++) {
+      const key = keys[i];
+      const character = characters[key];
       tabData.push({
-        type: tab.type,
-        character: characters[tab.id],
+        type: TAB_TYPES.CHARACTER,
+        character: character,
       })
     }
     let ids = Object.keys(characters);
