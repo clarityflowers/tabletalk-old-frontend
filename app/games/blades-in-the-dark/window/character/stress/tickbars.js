@@ -13,7 +13,7 @@ const Container = styled.div`
   flex-flow: row wrap;
   position: relative;
   align-items: flex-start;
-  justify-content: flex-end;
+  justify-content: space-between;
   flex: 1 1 auto;
 `
 

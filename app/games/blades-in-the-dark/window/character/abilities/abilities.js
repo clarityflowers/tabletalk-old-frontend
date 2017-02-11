@@ -17,11 +17,10 @@ const Container = styled.div`
   flex-flow: row wrap;
   justify-content: flex-start;
   align-content: flex-start;
-  flex: 50 1 0;
-  width: 15em;
-  min-width: 7em;
+  width: 100%;
+  max-width: 38em;
+  min-width: 15em;
   color: ${sun};
-  margin: .5em .5em 1em .5em;
   cursor: auto;
   * {
     &::selection {

@@ -5,8 +5,6 @@ import cx from 'classnames';
 
 import StrangeFriends from './strange-friends.js';
 
-import './details.scss';
-
 const Icon = (props) => {
   const { isFriend } = props;
   let triangle = null;

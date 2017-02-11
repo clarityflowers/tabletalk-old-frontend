@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-flow: column nowrap;
   flex: 1 1 auto;
   justify-content: space-between;
+  width: 100%;
 `
 
 const StressAndTrauma = (props) => {

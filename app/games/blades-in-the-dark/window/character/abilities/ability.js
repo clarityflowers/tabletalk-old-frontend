@@ -8,7 +8,7 @@ import {
   SPECIAL_ABILITIES, PLAYBOOK_ABILITIES
 } from 'games/blades-in-the-dark/window/character/data/special-abilities.js';
 
-const { sand, stone, sun } = Colors;
+const { fire, stone, sun } = Colors;
 
 const Strong = styled.strong`
   font-weight: 500;
@@ -59,14 +59,13 @@ const P = styled.p`
     margin-top: 0;
   }
   font: ${Fonts.body};
-  font-size: .8em;
   user-select: text;
 `
 const Name = styled.span`
   font: ${Fonts.h1};
   font-size: 1.25em;
   margin-right: .5em;
-  color: ${sand};
+  color: ${sun};
   line-height: .8em;
 `
 
@@ -80,7 +79,7 @@ const Ability = (props) => {
   const result = parse(description);
   return (
     <P>
-        <Name>{name.toUpperCase()}:</Name>
+        <Name>{name}:</Name>
         {result}
     </P>
   )

@@ -11,7 +11,7 @@ import Colors from 'games/blades-in-the-dark/common/colors';
 const { sun, shadow} = Colors;
 
 const Container = styled.div`
-  flex: 1 5 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
@@ -23,7 +23,6 @@ const Container = styled.div`
   box-sizing: border-box;
   z-index: 0;
   align-self: stretch;
-  margin-bottom: 1em;
   &:after {
     content: "";
     position: absolute;

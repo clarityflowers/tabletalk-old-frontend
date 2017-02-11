@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
 `
 
 const ArmorBar = styled(ArmorTickbar)`

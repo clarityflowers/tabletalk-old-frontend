@@ -24,9 +24,9 @@ const Container = styled.div`
 
 const Portal = (props) => {
   return (
-    <div className='portal'>
+    <Container>
       {props.children}
-    </div>
+    </Container>
   );
 }
 

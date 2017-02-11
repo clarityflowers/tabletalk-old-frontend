@@ -14,7 +14,7 @@ const Container = styled.div`
   flex-flow: column nowrap;
   flex-align: stretch;
   flex: 0 0 auto;
-  margin-bottom: 1em;
+  width: 100%;
 `
 const Header = styled.div`
   color: ${stone};

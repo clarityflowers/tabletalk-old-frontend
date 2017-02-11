@@ -6,8 +6,7 @@ import styled from 'styled-components';
 import Item from './item';
 
 const Container = styled.div`
-  min-width: 12.5em;
-  width: 12.5em;
+  min-width: 12.8em;
   font-size: .8em;
   display: flex;
   flex: 0 1 auto;

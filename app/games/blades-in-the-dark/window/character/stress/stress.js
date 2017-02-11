@@ -61,7 +61,7 @@ const Array = styled(TickArray)`
 `
 
 const StressBar = styled(Bar)`
-  flex: 1 0 auto;
+  flex: 1 1 auto;
 `
 
 
