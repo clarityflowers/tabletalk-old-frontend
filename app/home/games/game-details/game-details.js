@@ -152,7 +152,7 @@ class GameDetails extends React.Component {
       <Container off={off} style={style}>
         <NewGameForm off={!formMode} game={game} joining={joining}
                      onSubmit={this.handleSubmit.bind(this)}/>
-        <Content>
+        <Content innerRef={e => this.content = e}>
           {content}
         </Content>
       </Container>
