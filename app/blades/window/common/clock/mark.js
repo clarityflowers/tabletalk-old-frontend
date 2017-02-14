@@ -4,10 +4,6 @@ import cx from 'classnames';
 
 import rotate from './rotate'
 import pointsToString from './points';
-import Colors from 'blades/common/colors';
-import { lighten, darken } from 'utils/color-tools';
-
-const { fire, stone } = Colors;
 
 const TAU = Math.PI * 2;
 
@@ -34,8 +30,7 @@ const Mark = (props) => {
 
   const className = cx('mark', {checked, highlight});
   return (
-    <Polygon className={className} points={pointsToString(points)}
-             onClick={onClick}
+    <Polygon className={className} points={pointsToString(points)} onClick={onClick}
              onMouseOver={onMouseOver} onMouseLeave={onMouseLeave}/>
   )
 }
@@ -46,10 +41,8 @@ Mark.propTypes = {
   end: number.isRequired,
   highlight: bool,
   onClick: func,
-  checked: bool,
-  r: number.isRequired,
   onMouseOver: func,
-  onMouseLeave: func,
+  onMouseLeave: func
 }
 
 export default Mark;

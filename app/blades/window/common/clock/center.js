@@ -25,22 +25,18 @@ const Polygon = styled.polygon`
   &.minus {
     fill: ${minus};
   }
-  &:not(.disabled) {
-    cursor: pointer;
-  }
 `
 
 class Center extends React.PureComponent {
   render() {
-    const { r, highlight, disabled, ...rest } = this.props;
+    const { r, highlight, ...rest } = this.props;
     let points = [];
     for (let i=0; i < 8; i++) {
       points.push(rotate([0, -r], i));
     }
     const className=cx('center', {
       plus: highlight > 0,
-      minus: highlight < 0,
-      disabled
+      minus: highlight < 0
     });
     return (
       <Polygon className={className}

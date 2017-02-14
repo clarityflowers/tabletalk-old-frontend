@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import cx from 'classnames';
 
-import GameWindow from 'games/common/game-window';
+import GameWindow from 'common/game-window';
 import OptionsMenu from 'options/options-menu';
 import Game from './game/game';
 import List from './list';

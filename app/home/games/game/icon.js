@@ -7,8 +7,8 @@ import cx from 'classnames';
 import cz from 'utils/styled-classes';
 
 import Colors from 'common/colors';
-import AdventureColors from 'games/world-of-adventure/colors';
-import BladesColors from 'games/blades-in-the-dark/common/colors';
+import AdventureColors from 'adventure/colors';
+import BladesColors from 'blades/common/colors';
 import { GameTypes } from 'utils/enums';
 import { fadeout } from 'utils/color-tools';
 

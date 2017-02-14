@@ -42,8 +42,6 @@ const Clock = styled(cz(CommonClock, 'locked'))`
       fill: ${sun};
     }
   }
-  a:focus {
-  }
   &:not(.locked) {
     .mark.highlight {
       fill: ${fadeout(sun, 0.5)};
