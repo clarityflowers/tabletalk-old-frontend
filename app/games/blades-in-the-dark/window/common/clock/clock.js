@@ -14,8 +14,9 @@ import Colors from 'games/blades-in-the-dark/common/colors';
 import rotate from './rotate'
 import pointsToString from './points';
 import stroke from './stroke-css';
+import { lighten } from 'utils/color-tools';
 
-const { sun, stone, textShadow } = Colors;
+const { sun, stone, textShadow, fire, sky } = Colors;
 
 const TAU = Math.PI * 2;
 
@@ -28,6 +29,57 @@ const RANGES = {
 const Svg = styled.svg`
   filter: drop-shadow(${textShadow});
 `
+const StyledFocus = styled.a`
+  &:not(.disabled) {
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      polygon.mark {
+        &:not(.checked):first-child {
+          fill: ${lighten(stone, 0.2)};
+        }
+        &.checked:last-child {
+          fill: ${lighten(fire, 0.2)};
+        }
+      }
+    }
+  }
+`
+class Focus extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(keepFocus) {
+    const { onClick, disabled } = this.props;
+    if (onClick && !disabled) {
+      onClick();
+      if (keepFocus !== true) {
+        document.activeElement.blur();
+      }
+    }
+  }
+  handleKeyDown(e) {
+    if (e.which == '32' || e.which == '13') {
+      e.preventDefault()
+      this.handleClick(true);
+      return false;
+    }
+  }
+  render() {
+    const { onClick, disabled, ...rest } = this.props;
+    var href = null;
+    if (!disabled) {
+      href = "javascript:undefined";
+    }
+    return (
+      <StyledFocus href={href} {...rest} className={cx({disabled})}
+                   onClick={this.handleClick}
+                   onKeyDown={this.handleKeyDown}/>
+    )
+  }
+}
 
 class Clock extends React.Component {
   constructor(props) {
@@ -70,7 +122,7 @@ class Clock extends React.Component {
     const stroke = 0.1;
     let highlight = 0;
     if (hover != null) {
-      if (hover < value && hover >= lock ) {
+      if (hover < value && value > lock ) {
         highlight = -1;
       }
       else if (hover >= value || hover == 'mid') {
@@ -78,15 +130,14 @@ class Clock extends React.Component {
       }
     }
     let marks = [];
+    let uncheckedMarks = [];
     let dividers = [];
     for (let i=0; i < size; i++) {
       let start = RANGES[size][i];
       let end = RANGES[size][i + 1];
       let props = {
-        start, end, r, stroke, key: i
-      }
-      if (value > i) {
-        props.checked = true;
+        start, end, r, stroke,
+        key: i
       }
       if (!disabled) {
         props.onMouseOver = this.mouseOver(i);
@@ -98,19 +149,26 @@ class Clock extends React.Component {
           props.onClick = decrement;
         }
         if (hover != null) {
-          if (props.checked && i == value + highlight) {
+          if (i < value && i == value + highlight) {
             props.highlight = true;
           }
-          if (!props.checked && i < value + highlight) {
+          if (i >= value && i < value + highlight) {
             props.highlight = true;
           }
         }
         if (hover != null) {
         }
       }
-      marks.push(
-        <Mark {...props}/>
-      );
+      if (value > i) {
+        marks.push(
+          <Mark {...props} checked/>
+        );
+      }
+      else {
+        uncheckedMarks.push(
+          <Mark {...props}/>
+        )
+      }
       dividers.push(
         <Divider key={i} className='stroke' n={start} stroke={stroke}/>
       )
@@ -133,9 +191,15 @@ class Clock extends React.Component {
            height="1.2em"
            viewBox={`${offset} ${offset} ${width} ${width}`}
            onContextMenu={this.handleContextMenu}>
-        {marks}
+        <Focus onClick={decrement} disabled={disabled || value <= lock}>
+          {marks}
+        </Focus>
+        <Focus onClick={increment} disabled={disabled}>
+          {uncheckedMarks}
+        </Focus>
         {dividers}
-        <Center r={r} onMouseOver={disabled ? null : this.mouseOver('mid')}
+        <Center r={r} disabled={disabled}
+                onMouseOver={disabled ? null : this.mouseOver('mid')}
                 onMouseLeave={disabled ? null : this.mouseLeave('mid')}
                 onClick={disabled ? null : increment}
                 highlight={highlight}/>
