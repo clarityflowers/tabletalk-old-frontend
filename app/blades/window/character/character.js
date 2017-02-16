@@ -5,7 +5,8 @@ import React from 'react';
 import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
-import Title from './title';
+import Sheet from 'blades/window/styles/sheet';
+import Title from 'blades/common/components/title';
 import Stats from './stats/stats';
 import Stress from './stress/stress-and-trauma';
 import Harm from './harm/harm'
@@ -17,27 +18,14 @@ import StrangeFriends from './friends/strange-friends';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
 
-import Dispatcher from 'utils/dispatcher';
-
-import CommonRow from 'common/row';
+import Row from 'common/row';
+import SheetRow from 'blades/window/styles/sheet-row';
 import CommonColumn from 'common/column';
 
 const margin = 1;
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 3em;
-`
-const Row = styled(CommonRow)`
-  justify-content: center;
-  align-items: flex-start;
-  flex: 1 1 auto;
-`
+
+
 const Column = CommonColumn;
 const Center = styled(Column)`
   flex: 50 1 auto;
@@ -58,7 +46,7 @@ const StressHarm = styled(Column)`
   min-width: 15em;
   max-width: 40em;
 `
-const MiddleRow = styled(CommonRow)`
+const MiddleRow = styled(Row)`
   flex-flow: row wrap;
   align-items: stretch;
   justify-content: center;
@@ -107,7 +95,7 @@ class Character extends React.PureComponent {
       load, items,
       editPermission, viewPermission,
       specialAbilities, strangeFriends,
-      onChat, me, send
+      me
     } = this.props;
     const disabled = !editPermission.includes(me.id);
     let vigor = 0;
@@ -166,40 +154,38 @@ class Character extends React.PureComponent {
       );
     }
     return (
-      <Dispatcher dispatch={this.update}>
-        <Container>
-          <Title {...names}/>
-          <Row>
-            <Side>
-              <Stats {...stats} disabled={disabled}/>
-            </Side>
-            <Center>
-              <MiddleRow>
-                <Health>
-                  <StressHarm>
-                    <Stress stress={stress} trauma={trauma} disabled={disabled}/>
-                    <Harm {...harm} disabled={disabled}/>
-                  </StressHarm>
-                  <ArmorHealing {...armorHealing} disabled={disabled}/>
-                </Health>
-                {abilityDom}
-              </MiddleRow>
-              <MiddleRow>
-                {friendDom}
-                <MiddleColumn>
-                  <Detail name="Look">{look}</Detail>
-                  <Detail name="Heritage">{heritage}</Detail>
-                  <Detail name="Background">{background}</Detail>
-                  <Detail name="Vice">{vice}</Detail>
-                </MiddleColumn>
-              </MiddleRow>
-            </Center>
-            <RightSide>
-              <Equipment {...equipment} disabled={disabled}/>
-            </RightSide>
-          </Row>
-        </Container>
-      </Dispatcher>
+      <Sheet>
+        <Title {...names}/>
+        <SheetRow>
+          <Side>
+            <Stats {...stats} disabled={disabled}/>
+          </Side>
+          <Center>
+            <MiddleRow>
+              <Health>
+                <StressHarm>
+                  <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+                  <Harm {...harm} disabled={disabled}/>
+                </StressHarm>
+                <ArmorHealing {...armorHealing} disabled={disabled}/>
+              </Health>
+              {abilityDom}
+            </MiddleRow>
+            <MiddleRow>
+              {friendDom}
+              <MiddleColumn>
+                <Detail name="Look">{look}</Detail>
+                <Detail name="Heritage">{heritage}</Detail>
+                <Detail name="Background">{background}</Detail>
+                <Detail name="Vice">{vice}</Detail>
+              </MiddleColumn>
+            </MiddleRow>
+          </Center>
+          <RightSide>
+            <Equipment {...equipment} disabled={disabled}/>
+          </RightSide>
+        </SheetRow>
+      </Sheet>
     )
   }
 };
@@ -249,9 +235,7 @@ Character.propTypes = {
   viewPermission: React.PropTypes.array.isRequired,
   specialAbilities: React.PropTypes.array.isRequired,
   strangeFriends: React.PropTypes.array.isRequired,
-  onChat: React.PropTypes.func.isRequired,
   me: React.PropTypes.object.isRequired,
-  send: React.PropTypes.func.isRequired
 }
 
 export default Character;

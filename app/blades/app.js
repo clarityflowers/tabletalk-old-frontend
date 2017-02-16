@@ -39,7 +39,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      characters: {}
+      characters: {},
+      crews: {}
     }
     this.updates = {};
     this.actionKeys = {};
@@ -106,20 +107,18 @@ class App extends React.Component {
     this.props.onLoad(args);
     const { data } = args;
     if (data) {
-      const { characters } = data;
-      if (characters) {
-        const ids = Object.keys(characters);
-        let newCharacters = update(this.state.characters, {
-          $merge: characters
-        });
-        this.setState({
-          characters: newCharacters,
-          tabs: [{
-            type: TAB_TYPES.CHARACTER,
-            id: 1
-          }]
-        });
-      }
+      const { characters, crews } = data;
+      const ids = Object.keys(characters);
+      let newCharacters = update(this.state.characters, {
+        $merge: characters
+      });
+      let newCrews = update(this.state.crews, {
+        $merge: crews
+      })
+      this.setState({
+        characters: newCharacters,
+        crews: newCrews
+      });
     }
   }
   send(data) {
@@ -127,16 +126,29 @@ class App extends React.Component {
     this.processAction({data: data.data, what: data.what, key: key});
   }
   render() {
-    const { characters, width } = this.state;
+    const { characters, crews, width } = this.state;
     let tabData = [];
-    const keys = Object.keys(characters);
-    for (let i=0; i < keys.length; i++) {
-      const key = keys[i];
-      const character = characters[key];
-      tabData.push({
-        type: TAB_TYPES.CHARACTER,
-        character: character,
-      })
+    {
+      const keys = Object.keys(characters);
+      for (let i=0; i < keys.length; i++) {
+        const key = keys[i];
+        const character = characters[key];
+        tabData.push({
+          type: TAB_TYPES.CHARACTER,
+          character: character,
+        })
+      }
+    }
+    {
+      const keys = Object.keys(crews);
+      for (let i=0; i < keys.length; i++) {
+        const key = keys[i];
+        const crew = crews[key];
+        tabData.push({
+          type: TAB_TYPES.CREW,
+          crew: crew,
+        })
+      }
     }
     let ids = Object.keys(characters);
     const me = this.props.players ? this.props.players.me : null;

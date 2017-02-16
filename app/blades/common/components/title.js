@@ -6,10 +6,13 @@ import styled from 'styled-components';
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts'
 
+const { h1 } = Fonts;
+const { sun, sand, fire, sky } = Colors;
+
 const Container = styled.div`
-  font: ${Fonts.h1};
+  font: ${h1};
   font-size: 2em;
-  color: $sun;
+  color: ${sun};
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -17,21 +20,22 @@ const Container = styled.div`
 `
 const Span = styled.div`
   white-space: nowrap;
-  margin: 0.25em;
+  margin: 0 0.25em;
 `
-const Name = styled(Span)`
-  color: ${Colors.sun};
-`
+const Name = Span;
 const Playbook = styled(Span)`
-  color: ${Colors.sand};
+  color: ${sand};
 `
 const Alias = styled(Span)`
-  Color: ${Colors.fire};
+  color: ${fire};
+`
+const Crew = styled(Span)`
+  color: ${sky};
 `
 
 class Title extends React.PureComponent {
   render() {
-    const { name, playbook, alias } = this.props;
+    const { name, playbook, alias, crew } = this.props;
     let aliasDiv = null;
     let playbookDiv = null;
     if (alias) {
@@ -41,12 +45,17 @@ class Title extends React.PureComponent {
         </Alias>
       );
     }
-    if (playbook) {
-      playbookDiv = (
-        <Playbook>
-          the {playbook}
-        </Playbook>
-      );
+    if (playbook ) {
+      if (crew) {
+        playbookDiv = (
+          <Crew>{playbook}</Crew>
+        )
+      }
+      else {
+        playbookDiv = (
+          <Playbook>the {playbook}</Playbook>
+        )
+      }
     }
     return (
       <Container>
@@ -60,10 +69,12 @@ class Title extends React.PureComponent {
   }
 }
 
+const { string, bool } = React.PropTypes;
 Title.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  playbook: React.PropTypes.string,
-  alias: React.PropTypes.string,
+  name: string.isRequired,
+  playbook: string,
+  alias: string,
+  crew: bool
 }
 
 export default Title;

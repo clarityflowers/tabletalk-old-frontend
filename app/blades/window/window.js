@@ -9,6 +9,7 @@ import Portal from './common/portal';
 import Character from './character/character';
 import Crew from './crew/crew';
 import OptionsMenu from 'options/options-menu';
+import Dispatcher from 'utils/dispatcher';
 
 import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 import { TAB_TYPES } from 'blades/common/enums';
@@ -43,10 +44,15 @@ class Window extends React.Component {
   constructor(props) {
     super(props);
     this.sendCharacter = this.sendCharacter.bind(this);
+    this.sendCrew = this.sendCrew.bind(this);
   }
   sendCharacter(data) {
     const { send } = this.props;
     send({what: "character", data: data});
+  }
+  sendCrew(data) {
+    const { send } = this.props;
+    send({what: "crew", data: data});
   }
   render() {
     const { update, send, me, game, tabs, route, options, auth, onChat } = this.props;
@@ -75,10 +81,9 @@ class Window extends React.Component {
         );
         if (i == activeTab) {
           portal = (
-            <Character {...character}
-                       onChat={onChat}
-                       send={this.sendCharacter}
-                       me={me}/>
+            <Dispatcher dispatch={this.sendCharacter}>
+              <Character {...character} me={me}/>
+            </Dispatcher>
           )
         }
       }
@@ -93,8 +98,9 @@ class Window extends React.Component {
         )
         if (i == activeTab) {
           portal = (
-            <Crew crew={crew}
-                  onChat={onChat}/>
+            <Dispatcher dispatch={this.sendCharacter}>
+              <Crew {...crew} me={me}/>
+            </Dispatcher>
           )
         }
       }
