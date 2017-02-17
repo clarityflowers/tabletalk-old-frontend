@@ -10,6 +10,7 @@ import { lighten, darken } from 'utils/color-tools';
 import Fonts from 'blades/common/fonts';
 import props from 'utils/props';
 import connect from 'utils/connect';
+import cz from 'utils/styled-classes';
 
 
 const unchecked = darken(Colors.stone, 0.05);
@@ -25,11 +26,15 @@ const ActionDot = styled(props(Dot, 'active'))`
     background: ${Colors.sand};
   }
 `;
-const Divider = styled.div`
+const Divider = styled(cz('div', 'highlight'))`
   margin: 0 .2em;
   background: ${Colors.sun};
   width: 1px;
   align-self: stretch;
+  transition: background 1s;
+  &.highlight {
+    background: ${Colors.sand};
+  }
 `
 const Name = styled.div`
   font: ${Fonts.h2};
@@ -92,7 +97,7 @@ class Action extends React.Component {
       )
       if (i == 1) {
         dots.push(
-          <Divider key={'d'}/>
+          <Divider key={'d'} highlight={unlocked}/>
         );
       }
     }

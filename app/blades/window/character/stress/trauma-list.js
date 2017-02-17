@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Bar from './bar';
+import Bar from 'blades/window/styles/bar';
 
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';

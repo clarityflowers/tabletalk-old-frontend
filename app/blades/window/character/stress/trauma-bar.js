@@ -3,11 +3,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Bar from './bar';
-import Label from './label';
+import Bar from 'blades/window/styles/bar';
+import Label from 'blades/window/styles/label';
 import TraumaList from './trauma-list';
 
-import TickArray from './tick-array.js';
+import TickArray from 'blades/window/styles/tick-array';
 
 import Colors from 'blades/common/colors';
 import { darken } from 'utils/color-tools';
@@ -17,11 +17,11 @@ const dark = darken(stone, 0.1);
 
 const Container = styled(Bar)`
   flex: 1 1 auto;
-  margin-left: -.5em;
-  z-index: 1;
+  margin-left: 0em;
+  z-index: 0;
   &:after {
-    margin-left: 0.5em;
-    width: calc(100% - 0.5em);
+    width: 100%;
+    z-index: 0;
   }
 `
 
@@ -29,7 +29,6 @@ const Array = styled(TickArray)`
   z-index: 2;
   position: relative;
   .check {
-    margin-left: 0.33em;
     svg polygon {
       fill: ${dark};
       stroke: ${dark};
@@ -46,9 +45,8 @@ const TraumaLabel = styled(Label)`
   text-align: center;
   box-shadow: none;
   box-sizing: border-box;
-  width: 4.6em;
+  width: 4.5em;
   position: absolute;
-  left: .5em;
 `
 
 const TraumaBar = (props) => {

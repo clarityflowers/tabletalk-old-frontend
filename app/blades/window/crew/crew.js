@@ -3,11 +3,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Sheet from 'blades/window/styles/sheet';
+import RepStatus from './rep/rep-status';
 import Title from 'blades/common/components/title';
 
+import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
+import Side from 'blades/window/styles/side';
 
 class Crew extends React.PureComponent {
   render() {
@@ -25,6 +27,7 @@ class Crew extends React.PureComponent {
       edit, view,
       me
     } = this.props;
+    const disabled = !edit.includes(me.id);
     let turf = 0;
     for (let i=0; i < claims.length; i++) {
       const claim = claims[i];
@@ -47,7 +50,7 @@ class Crew extends React.PureComponent {
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
         <SheetRow>
-
+          <RepStatus {...repStatus} disabled={disabled}/>
         </SheetRow>
       </Sheet>
     );

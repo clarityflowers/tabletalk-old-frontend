@@ -43,16 +43,28 @@ const Tabs = styled.div`
 class Window extends React.Component {
   constructor(props) {
     super(props);
+    this.send = this.send.bind(this);
     this.sendCharacter = this.sendCharacter.bind(this);
     this.sendCrew = this.sendCrew.bind(this);
   }
-  sendCharacter(data) {
+  send(what, id) {
     const { send } = this.props;
-    send({what: "character", data: data});
+    return (action, value) => {
+      const data = {action};
+      if (value) {
+        data.value = value;
+      }
+      if (id) {
+        data.id = id;
+      }
+      send({what, data});
+    }
   }
-  sendCrew(data) {
-    const { send } = this.props;
-    send({what: "crew", data: data});
+  sendCharacter(id) {
+    return this.send("character", id)
+  }
+  sendCrew(id) {
+    return this.send("crew", id)
   }
   render() {
     const { update, send, me, game, tabs, route, options, auth, onChat } = this.props;
@@ -81,7 +93,7 @@ class Window extends React.Component {
         );
         if (i == activeTab) {
           portal = (
-            <Dispatcher dispatch={this.sendCharacter}>
+            <Dispatcher dispatch={this.sendCharacter(character.id)}>
               <Character {...character} me={me}/>
             </Dispatcher>
           )
@@ -98,7 +110,7 @@ class Window extends React.Component {
         )
         if (i == activeTab) {
           portal = (
-            <Dispatcher dispatch={this.sendCharacter}>
+            <Dispatcher dispatch={this.sendCrew(crew.id)}>
               <Crew {...crew} me={me}/>
             </Dispatcher>
           )

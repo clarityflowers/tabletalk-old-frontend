@@ -5,9 +5,9 @@ import { DotArray } from './dot';
 
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';
-import props from 'utils/props';
+import cz from 'utils/styled-classes';
 
-const Header = styled.div`
+const Header = styled(cz('div', 'highlight'))`
   font: ${Fonts.h1};
   display: flex;
   flex-flow: row nowrap;
@@ -18,6 +18,9 @@ const Header = styled.div`
   color: ${Colors.stone};
   padding: 0 .25em;
   box-shadow: ${Colors.shadow};
+  &.highlight {
+    background: ${Colors.sand};
+  }
 `
 
 class StatHeader extends React.PureComponent {

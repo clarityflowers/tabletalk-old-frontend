@@ -3,62 +3,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Bar from './bar';
-import Label from './label';
+import Bar from 'blades/window/styles/bar';
+import Label from 'blades/window/styles/label';
+import Array from 'blades/window/styles/thin-tick-array';
 
-import TickArray from './tick-array.js';
-
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { lighten, darken } from 'utils/color-tools';
 import connect from 'utils/connect';
-
-const { fire, sun, shadow, stone } = Colors;
-const light = lighten(fire, 0.3);
-const dark = darken(fire, 0.2);
-
-const Array = styled(TickArray)`
-  z-index: 3;
-  div.check {
-    margin-right: .33em;
-    &:after {
-      content: "";
-      position: absolute;
-      left: -.15em;
-      top: 0;
-      width: .16em;
-      height: .33em;
-      background: ${sun};
-    }
-  }
-  button:not(:disabled) {
-    &:focus .check {
-      &.checked:last-child svg polygon {
-        fill: ${light};
-      }
-      &:not(.checked):first-child svg polygon {
-        stroke: ${light};
-      }
-    }
-    &:hover .check {
-      &.checked:last-child svg polygon {
-        fill: ${fire};
-        stroke: ${fire};
-      }
-      &:not(.checked):first-child svg polygon {
-        fill: ${fire};
-      }
-    }
-    &:active .check {
-      &.checked:last-child svg polygon {
-        fill: ${light};
-      }
-      &:not(.checked):first-child svg polygon {
-        fill: ${light};
-      }
-    }
-  }
-`
 
 const StressBar = styled(Bar)`
   flex: 1 1 auto;

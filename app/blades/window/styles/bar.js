@@ -9,13 +9,12 @@ const { shadow, sun } = Colors;
 
 const Bar = styled.div`
   margin-bottom: .5em;
-
   display: flex;
   flex-flow: row nowrap;
   align-items: flex-start;
   position: relative;
   &:after {
-    z-index: 2;
+    z-index: 1;
     position: absolute;
     top: 0;
     left: 0;

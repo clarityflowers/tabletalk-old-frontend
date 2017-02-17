@@ -20,21 +20,13 @@ import { SPECIAL_ABILITIES } from './data/special-abilities';
 
 import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
+import Side from 'blades/window/styles/side';
 import CommonColumn from 'common/column';
-
-const margin = 1;
-
-
 
 const Column = CommonColumn;
 const Center = styled(Column)`
   flex: 50 1 auto;
   max-width: 50em;
-`
-const Side = styled(Column)`
-  margin: 0 ${margin}em;
-  flex: 0 0 auto;
-  align-items: stretch;
 `
 const RightSide = styled(Side)`
   width: 13em;
@@ -56,7 +48,7 @@ const MiddleColumn = styled(Column)`
   flex: 1 1 0;
 `
 const Health = styled(Row)`
-  margin: ${margin}em;
+  margin: 1em;
   align-items: stretch;
   display: flex;
   flex-flow: row nowrap;

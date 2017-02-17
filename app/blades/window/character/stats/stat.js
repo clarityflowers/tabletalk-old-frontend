@@ -56,10 +56,12 @@ class Stat extends React.PureComponent {
   }
 }
 
+const { string, number, bool, func, object } = React.PropTypes;
 Stat.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  xp: React.PropTypes.number.isRequired,
-  disabled: React.PropTypes.bool
+  name: string.isRequired,
+  xp: number.isRequired,
+  disabled: bool.isRequired,
+  dispatch: func.isRequired
 }
 
 Stat.defaultProps = {

@@ -14,10 +14,9 @@ const light = lighten(fire, 0.3);
 
 const Label = styled(Button)`
   font: ${Fonts.h1};
-  box-shadow: ${shadow};
   padding: 0 .25em;
   position: relative;
-  z-index: 4;
+  z-index: 5;
   background: ${sun};
   color: ${stone};
   &:not(:disabled) {
@@ -37,6 +36,7 @@ const Label = styled(Button)`
       color: ${light};
     }
   }
+  box-shadow: ${shadow};
 `
 
 export default Label;
