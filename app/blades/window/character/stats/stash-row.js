@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import cx from 'classnames';
 
 import Row from 'common/row';
-import { CoinArray } from './coin';
+import { CoinArray } from 'blades/window/common/coin';
 import Colors from 'blades/common/colors';
 import { darken } from 'utils/color-tools';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Dot } from './dot';
+import { Dot } from 'blades/window/common/dot';
 import Row from 'common/row';
 import Button from 'common/button';
 

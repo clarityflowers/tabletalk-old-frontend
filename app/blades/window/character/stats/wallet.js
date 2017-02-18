@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Coin } from './coin';
+import { Coin } from 'blades/window/common/coin';
 
 import Colors from 'blades/common/colors';
 import Button from 'common/button';

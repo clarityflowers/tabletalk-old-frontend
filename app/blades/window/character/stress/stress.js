@@ -11,6 +11,7 @@ import connect from 'utils/connect';
 
 const StressBar = styled(Bar)`
   flex: 1 1 auto;
+  z-index: 5;
 `
 
 

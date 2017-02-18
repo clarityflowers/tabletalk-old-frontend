@@ -16,10 +16,10 @@ const ThinTickArray = styled(TickArray)`
     &:after {
       content: "";
       position: absolute;
-      left: -.15em;
+      left: -.16em;
       top: 0;
       width: .16em;
-      height: .23em;
+      height: .34em;
       background: ${sun};
     }
   }

@@ -1,3 +1,5 @@
+'use strict'
+
 import React from 'react';
 import styled from 'styled-components';
 
@@ -15,10 +17,10 @@ const Container = styled.div`
   flex-flow: row nowrap;
   align-items: flex-start;
 `
-const Rep = styled(Bar)`
+const RepBar = styled(Bar)`
   margin-right: .16em;
 `
-const Turf = styled(Bar)`
+const TurfBar = styled(Bar)`
   margin-left: .16em;
   &:after {
     z-index: 1;
@@ -42,7 +44,7 @@ const TurfLabel = styled(Label)`
   color: ${sun};
 `
 
-class RepStatus extends React.PureComponent {
+class Rep extends React.PureComponent {
   constructor(props) {
     super(props);
     this.increment = this.increment.bind(this);
@@ -62,33 +64,34 @@ class RepStatus extends React.PureComponent {
     }
   }
   render() {
-    const { rep, turf } = this.props;
+    const { rep, turf, disabled } = this.props;
     return (
       <Container>
-        <Rep>
-          <Label>
-            Rep
+        <RepBar>
+          <Label onClick={this.increment} disabled={disabled}>
+            REP
           </Label>
-          <Array value={rep} length={12 - Math.min(turf, 6)}
+          <Array value={rep} length={12 - Math.min(turf, 6)} disabled={disabled}
                  increment={this.increment}
                  decrement={this.decrement}/>
-        </Rep>
-        <Turf>
+        </RepBar>
+        <TurfBar>
           <TurfArray value={turf} length={Math.min(turf, 6)} disabled/>
-        </Turf>
+        </TurfBar>
         <TurfLabel disabled>
-          Turf
+          TURF
         </TurfLabel>
       </Container>
     )
   }
 }
 
-const { number, func } = React.PropTypes;
-RepStatus.propTypes = {
+const { number, bool, func } = React.PropTypes;
+Rep.propTypes = {
   rep: number.isRequired,
   turf: number.isRequired,
+  disabled: bool.isRequired,
   dispatch: func.isRequired
 };
 
-export default connect(RepStatus);
+export default connect(Rep);

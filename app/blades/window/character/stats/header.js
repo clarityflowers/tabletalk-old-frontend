@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { DotArray } from './dot';
+import { DotArray } from 'blades/window/common/dot';
 
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';

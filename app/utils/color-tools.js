@@ -71,8 +71,17 @@ const blend = (value1, value2, amount, wrap) => {
 export const mix = (color1, color2, amount) => {
   let one = parse(color1);
   let two = parse(color2);
+  let hueAmount = amount;
+  if (one.s > two.s) {
+    const x = two.s / one.s;
+    hueAmount *= x;
+  }
+  else if (one.s < two.s) {
+    const x = one.s / two.s;
+    hueAmount = 1 - ((1 - hueAmount) * x);
+  }
   let result = {
-    h: blend(one.h, two.h, amount, 360),
+    h: blend(one.h, two.h, hueAmount, 360),
     s: blend(one.s, two.s, amount),
     l: blend(one.l, two.l, amount),
     a: blend(one.a, two.a, amount)

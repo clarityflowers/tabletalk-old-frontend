@@ -8,6 +8,7 @@ import Label from 'blades/window/styles/label';
 import TraumaList from './trauma-list';
 
 import TickArray from 'blades/window/styles/tick-array';
+import Array from 'blades/window/styles/thick-tick-array'
 
 import Colors from 'blades/common/colors';
 import { darken } from 'utils/color-tools';
@@ -18,29 +19,29 @@ const dark = darken(stone, 0.1);
 const Container = styled(Bar)`
   flex: 1 1 auto;
   margin-left: 0em;
-  z-index: 0;
+  z-index: 1;
   &:after {
     width: 100%;
     z-index: 0;
   }
 `
 
-const Array = styled(TickArray)`
-  z-index: 2;
-  position: relative;
-  .check {
-    svg polygon {
-      fill: ${dark};
-      stroke: ${dark};
-    }
-    &.checked svg {
-      polygon {
-        stroke: ${sun};
-        fill: ${sun};
-      }
-    }
-  }
-`
+// const Array = styled(TickArray)`
+//   z-index: 2;
+//   position: relative;
+//   .check {
+//     svg polygon {
+//       fill: ${dark};
+//       stroke: ${dark};
+//     }
+//     &.checked svg {
+//       polygon {
+//         stroke: ${sun};
+//         fill: ${sun};
+//       }
+//     }
+//   }
+// `
 const TraumaLabel = styled(Label)`
   text-align: center;
   box-shadow: none;

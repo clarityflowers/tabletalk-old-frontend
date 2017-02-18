@@ -19,6 +19,7 @@ const Label = styled(Button)`
   z-index: 5;
   background: ${sun};
   color: ${stone};
+  box-shadow: ${shadow};
   &:not(:disabled) {
     cursor: pointer;
     &:focus {
@@ -36,7 +37,6 @@ const Label = styled(Button)`
       color: ${light};
     }
   }
-  box-shadow: ${shadow};
 `
 
 export default Label;

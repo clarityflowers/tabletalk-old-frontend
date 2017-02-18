@@ -7,7 +7,6 @@ import { TickArray } from 'blades/window/common/tick.js';
 
 const Array = styled(TickArray)`
   font-size: 1.5em;
-  margin-top: .1em;
   position: relative;
   button:first-child:not(:last-child) {
     margin-right: .16em;

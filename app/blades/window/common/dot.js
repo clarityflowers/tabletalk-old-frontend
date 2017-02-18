@@ -9,7 +9,7 @@ import { lighten, darken, mix, desaturate } from 'utils/color-tools';
 import { Check, extendCheckArray } from 'blades/window/common/check.js';
 
 const unchecked = mix(Colors.stone, desaturate(Colors.sun, .6), 0.8);
-const checked = mix(Colors.stone, desaturate(Colors.sun, .6), 0.3);
+const checked = mix(Colors.stone, desaturate(Colors.sun, .6), 0.1);
 const lightHover = lighten(Colors.fire, 0.1);
 const focusChecked = Colors.sun;
 const active = lighten(Colors.fire, 0.3);

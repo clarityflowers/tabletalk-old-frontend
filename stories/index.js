@@ -6,7 +6,10 @@ import Stat from 'blades/window/character/stats/stat';
 import Money from 'blades/window/character/stats/money';
 import Title from 'blades/common/components/title';
 import StressTrauma from 'blades/window/character/stress/stress-and-trauma';
-import RepStatus from 'blades/window/crew/rep/rep-status';
+import Rep from 'blades/window/crew/rep';
+import Tier from 'blades/window/crew/tier';
+import Heat from 'blades/window/crew/heat';
+import Vaults from 'blades/window/crew/vaults';
 
 import Colors from 'blades/common/colors';
 import { darken } from 'utils/color-tools';
@@ -88,15 +91,54 @@ storiesOf('Character.stress-and-trauma', module)
     <StressTrauma stress={9} trauma={[]} disabled={false}/>
   ))
 
-storiesOf('Crew.rep-status', module)
+storiesOf('Crew.rep', module)
   .add('default', () => (
-    <RepStatus rep={3} turf={2}/>
+    <Rep rep={3} turf={2} disabled={false}/>
   ))
   .add('no turf', () => (
-    <RepStatus rep={7} turf={0}/>
+    <Rep rep={7} turf={0} disabled={false}/>
   ))
   .add('too much turf', () => (
-    <RepStatus rep={5} turf={20}/>
+    <Rep rep={5} turf={20} disabled={false}/>
+  ))
+  .add('disabled', () => (
+    <Rep rep={2} turf={2} disabled={true}/>
+  ))
+
+storiesOf('Crew.tier', module)
+  .add('weak', () => (
+    <Tier tier={2} strong={false}/>
+  ))
+  .add('strong', () => (
+    <Tier tier={0} strong={true}/>
+  ))
+
+storiesOf('Crew.heat', module)
+  .add('default', () => (
+    <Heat heat={2} wantedLevel={1} disabled={false}/>
+  ))
+  .add('disabled', () => (
+    <Heat heat={5} wantedLevel={4} disabled={true}/>
+  ))
+
+storiesOf('Crew.coin', module)
+  .add('no vaults', () => (
+    <Vaults coin={3} vaults={0} disabled={false}/>
+  ))
+  .add('one vault', () => (
+    <Vaults coin={7} vaults={1} disabled={false}/>
+  ))
+  .add('two vaults', () => (
+    <Vaults coin={12} vaults={2} disabled={false}/>
+  ))
+  .add('coin over', () => (
+    <Vaults coin={12} vaults={0} disabled={false}/>
+  ))
+  .add('disabled', () => (
+    <Vaults coin={5} vaults={2} disabled={true}/>
+  ))
+  .add('edge', () => (
+    <Vaults coin={8} vaults={1} disabled={false}/>
   ))
 
 // storiesOf('Welcome', module)

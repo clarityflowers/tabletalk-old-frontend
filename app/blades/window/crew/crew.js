@@ -3,8 +3,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import RepStatus from './rep/rep-status';
 import Title from 'blades/common/components/title';
+import Rep from './rep';
+import Tier from './tier';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
@@ -35,8 +36,6 @@ class Crew extends React.PureComponent {
         turf++;
       }
     }
-    const repStatus = {rep, turf};
-    const tierStatus = {tier, strong};
     const heatStatus = {heat, wantedLevel};
     let vault1 = false; // TODO
     let vault2 = false; // TODO
@@ -50,7 +49,8 @@ class Crew extends React.PureComponent {
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
         <SheetRow>
-          <RepStatus {...repStatus} disabled={disabled}/>
+          <Rep rep={rep} turf={turf} disabled={disabled}/>
+          <Tier tier={tier} strong={strong}/>
         </SheetRow>
       </Sheet>
     );

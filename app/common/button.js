@@ -9,6 +9,7 @@ const Button = styled.button`
   margin: 0;
   padding: 0;
   font-size: 1em;
+  user-select: none;
   &:focus {
     outline: none;
   }
