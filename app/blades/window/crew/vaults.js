@@ -39,7 +39,6 @@ const VaultCoins = styled(cz(CoinArray, 'locked'))`
   }
 `
 
-const SIZE = [4, 4, 8]
 const TOTAL_SIZE = [4, 8, 16]
 
 class Vaults extends React.PureComponent {
