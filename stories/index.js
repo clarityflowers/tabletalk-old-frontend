@@ -33,15 +33,18 @@ const Wrapper = styled.div`
   overflow-x: auto;
   overflow-y: h;
   background: ${darken(Colors.stone, 0.15)};
+  font-size: 40px;
 `
 const Border = styled.div`
   background: ${Colors.stone};
   outline: 2px solid ${Colors.sun};
-  font-size: 40px;
 `
 const Container = styled.div`
   overflow: hidden;
   margin: 50px;
+`
+const Small = styled.div`
+  font-size: .5em;
 `
 
 addDecorator((story) => (
@@ -161,5 +164,7 @@ storiesOf('Crew.claims', module)
     <Claim name="Turf" owned={true} disabled={false}/>
   ))
   .add('claims', () => (
-    <Claims {...claims} disabled={false}/>
+    <Small>
+      <Claims {...claims} disabled={false}/>
+    </Small>
   ))
