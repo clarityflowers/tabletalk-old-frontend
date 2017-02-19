@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Label from 'blades/window/styles/label';
 import { CoinArray } from 'blades/window/common/coin';
+import StatusBar from './status-bar';
 
 import Colors from 'blades/common/colors';
 import { lighten, darken } from 'utils/color-tools';
@@ -13,11 +14,6 @@ import cz from 'utils/styled-classes';
 
 const { stone } = Colors;
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-`
 const Column = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -101,7 +97,7 @@ class Vaults extends React.PureComponent {
       onMouseOver: this.mouseOver(1)
     }
     return (
-      <Container>
+      <StatusBar>
         <Column>
           <Label {...labelProps} disabled={disabled}>
             COIN
@@ -130,7 +126,7 @@ class Vaults extends React.PureComponent {
                       disabled={disabled || !vault2}
                       locked={!vault2} {...arrayProps}/>
         </Column>
-      </Container>
+      </StatusBar>
     )
   }
 }

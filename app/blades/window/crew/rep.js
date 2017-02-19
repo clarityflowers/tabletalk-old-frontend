@@ -6,22 +6,18 @@ import styled from 'styled-components';
 import Label from 'blades/window/styles/label';
 import Array from 'blades/window/styles/thin-tick-array';
 import Bar from 'blades/window/styles/bar';
+import StatusBar from './status-bar';
 
 import Colors from 'blades/common/colors';
 import connect from 'utils/connect';
 
 const { sky, sun } = Colors;
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-`
 const RepBar = styled(Bar)`
   margin-right: .16em;
 `
 const TurfBar = styled(Bar)`
-  margin-left: .16em;
+  margin-left: .32em;
   &:after {
     z-index: 1;
     background: ${sky};
@@ -35,6 +31,9 @@ const TurfArray = styled(Array)`
     }
     &:after {
       background: ${sky};
+    }
+    &:last-child {
+      margin-right: .32em;
     }
   }
 `
@@ -54,19 +53,19 @@ class Rep extends React.PureComponent {
     const { rep, turf, dispatch } = this.props;
     const target = 12 - Math.min(turf, 6);
     if (rep < target) {
-      dispatch('increment_turf');
+      dispatch('increment_rep');
     }
   }
   decrement() {
     const { rep, turf, dispatch } = this.props;
     if (rep > 0) {
-      dispatch('decrement_turf');
+      dispatch('decrement_rep');
     }
   }
   render() {
     const { rep, turf, disabled } = this.props;
     return (
-      <Container>
+      <StatusBar>
         <RepBar>
           <Label onClick={this.increment} disabled={disabled}>
             REP
@@ -81,7 +80,7 @@ class Rep extends React.PureComponent {
         <TurfLabel disabled>
           TURF
         </TurfLabel>
-      </Container>
+      </StatusBar>
     )
   }
 }

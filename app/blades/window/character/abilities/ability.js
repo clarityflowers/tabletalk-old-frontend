@@ -4,49 +4,10 @@ import styled from 'styled-components';
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';
 import { fadeout } from 'utils/color-tools';
+import parse from 'blades/common/parse';
+
 
 const { fire, stone, sun } = Colors;
-
-const Strong = styled.strong`
-  font-weight: 500;
-`
-const Em = styled.em`
-  color: ${fadeout(sun, 0.5)};
-`;
-
-const parse = (array, ending) => {
-  let result = [];
-  let buffer = "";
-  let char = array.pop();
-  let i=0;
-  while (true) {
-    if (char == ending) {
-      result.push(buffer);
-      return result;
-    }
-    else if (['*', '_'].includes(char)) {
-      if (buffer) {
-        result.push(buffer);
-        buffer = "";
-      }
-      const inner = parse(array, char);
-      if (char == "*") {
-        result.push(
-          <Strong key={i++}>{inner}</Strong>
-        );
-      }
-      else if (char == "_") {
-        result.push(
-          <Em key={i++}>{inner}</Em>
-        );
-      }
-    }
-    else {
-      buffer += char;
-    }
-    char = array.pop();
-  }
-}
 
 const P = styled.p`
   width: 100%;
@@ -57,6 +18,12 @@ const P = styled.p`
   }
   font: ${Fonts.body};
   user-select: text;
+  strong {
+    font-weight: 500;
+  }
+  em {
+    color: ${fadeout(sun, 0.5)};
+  }
 `
 const Name = styled.span`
   font: ${Fonts.h1};
@@ -71,8 +38,7 @@ const Ability = (props) => {
   let result = null;
   let title = name;
   if (description) {
-    const array = description.split("").reverse();
-    result = parse(array);
+    result = parse(description);
     title += ':';
   }
   return (

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Label from 'blades/window/styles/label';
 import Bar from 'blades/window/styles/bar';
 import { DotArray } from 'blades/window/common/dot'
+import StatusBar from './status-bar';
 
 import Fonts from 'blades/common/fonts';
 import Colors from 'blades/common/colors';
@@ -16,11 +17,6 @@ const { h1 } = Fonts;
 
 import cz from 'utils/styled-classes';
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-`
 const HoldBar = styled(Bar)`
   padding-top: .5em;
 `
@@ -61,7 +57,7 @@ class Tier extends React.PureComponent {
   render () {
     const { tier, strong } = this.props;
     return (
-      <Container>
+      <StatusBar>
         <Label disabled>
           HOLD
         </Label>
@@ -77,7 +73,7 @@ class Tier extends React.PureComponent {
           TIER
           <Array value={tier} length={4} isButton={false}/>
         </TierLabel>
-      </Container>
+      </StatusBar>
     )
   }
 }

@@ -10,6 +10,10 @@ import Rep from 'blades/window/crew/rep';
 import Tier from 'blades/window/crew/tier';
 import Heat from 'blades/window/crew/heat';
 import Vaults from 'blades/window/crew/vaults';
+import Claim from 'blades/window/crew/claims/claim';
+import Claims from 'blades/window/crew/claims/claims';
+
+import claims from './claims';
 
 import Colors from 'blades/common/colors';
 import { darken } from 'utils/color-tools';
@@ -141,15 +145,21 @@ storiesOf('Crew.coin', module)
     <Vaults coin={8} vaults={1} disabled={false}/>
   ))
 
-// storiesOf('Welcome', module)
-//   .add('to Storybook', () => (
-//     <Welcome showApp={linkTo('Button')}/>
-//   ));
-//
-// storiesOf('Button', module)
-//   .add('with text', () => (
-//     <Button onClick={action('clicked')}>Hello Button</Button>
-//   ))
-//   .add('with some emoji', () => (
-//     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
-//   ));
+console.log(claims);
+
+storiesOf('Crew.claims', module)
+  .add('owned claim', () => (
+    <Claim name="Loyal Fence" description="*+2 coin* for burglary or robbery"
+           owned={true} disabled={false}/>
+  ))
+  .add('unowned claim', () => (
+    <Claim name="Hagfish Farm"
+      description="Body disposal, *+1d* to reduce heat after killing"
+           owned={false} disabled={false}/>
+  ))
+  .add('turf', () => (
+    <Claim name="Turf" owned={true} disabled={false}/>
+  ))
+  .add('claims', () => (
+    <Claims {...claims} disabled={false}/>
+  ))

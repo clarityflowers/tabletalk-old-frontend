@@ -15,12 +15,11 @@ const Array = styled(TickArray)`
     margin-left: .16em;
   }
   div.check {
-    margin: 0 .16em;
-    &:first-child {
-      margin-left: 0;
+    &:not(:last-child) {
+      margin-right: .16em;
     }
-    &:last-child {
-      margin-right: 0;
+    &:not(:first-child) {
+      margin-left: .16em;
     }
     position: relative;
   }

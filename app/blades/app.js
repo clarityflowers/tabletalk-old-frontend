@@ -13,6 +13,7 @@ import Fonts from 'blades/common/fonts';
 import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 
 import reduceCharacter from './reducers/character';
+import reduceCrew from './reducers/crew';
 
 const Blades = styled.div`
   background-color: ${Colors.stone};
@@ -52,6 +53,9 @@ class App extends React.Component {
     let result = {};
     if (what == 'character') {
       result.characters = update(this.state.characters, reduceCharacter(data));
+    }
+    if (what == 'crew') {
+      result.crews = update(this.state.crews, reduceCrew(data));
     }
     return result;
   }

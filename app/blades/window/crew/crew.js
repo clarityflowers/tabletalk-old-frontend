@@ -6,11 +6,24 @@ import styled from 'styled-components';
 import Title from 'blades/common/components/title';
 import Rep from './rep';
 import Tier from './tier';
+import Claims from './claims/claims';
+import Heat from './heat';
+import Vaults from './vaults';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
 import Side from 'blades/window/styles/side';
+
+const StatusRow = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+`
+const Column = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+`
 
 class Crew extends React.PureComponent {
   render() {
@@ -30,27 +43,41 @@ class Crew extends React.PureComponent {
     } = this.props;
     const disabled = !edit.includes(me.id);
     let turf = 0;
-    for (let i=0; i < claims.length; i++) {
-      const claim = claims[i];
-      if (claim.owned && claim.name == 'Turf') {
-        turf++;
+    for (let r=0; r < claims.claims.length; r++) {
+      const row = claims.claims[r];
+      for (let c=0; c < row.length; c++) {
+        const claim = row[c];
+        if (claim.owned && claim.name == 'Turf') {
+          turf++;
+        }
       }
     }
-    const heatStatus = {heat, wantedLevel};
-    let vault1 = false; // TODO
-    let vault2 = false; // TODO
-    const money = {coin, vault1, vault2}
+    let vaults = 0;
+    for (let i=0; i < upgrades.length; i++) {
+      const upgrade = upgrades[i];
+      if (upgrade == "Vault") {
+        vaults++;
+      }
+    }
     const grounds = {
       type: huntingGrounds,
       description: huntingGroundsDescription
     };
-
     return (
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
         <SheetRow>
-          <Rep rep={rep} turf={turf} disabled={disabled}/>
-          <Tier tier={tier} strong={strong}/>
+          <Column>
+            <StatusRow>
+              <Rep rep={rep} turf={turf} disabled={disabled}/>
+              <Tier tier={tier} strong={strong}/>
+            </StatusRow>
+            <Claims {...claims} disabled={disabled}/>
+            <StatusRow>
+              <Heat heat={heat} wantedLevel={wantedLevel} disabled={disabled}/>
+              <Vaults coin={coin} vaults={vaults} disabled={disabled}/>
+            </StatusRow>
+          </Column>
         </SheetRow>
       </Sheet>
     );
@@ -76,7 +103,7 @@ Crew.propTypes = {
   availableUpgrades: number.isRequired,
   edit: array.isRequired,
   view: array.isRequired,
-  claims: array.isRequired,
+  claims: object.isRequired,
   abilities: array.isRequired,
   contacts: array.isRequired,
   upgrades: array.isRequired,

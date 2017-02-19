@@ -7,17 +7,13 @@ import Label from 'blades/window/styles/label';
 import Bar from 'blades/window/styles/bar';
 import HeatArray from 'blades/window/styles/thin-tick-array';
 import ThickArray from 'blades/window/styles/thick-tick-array';
+import StatusBar from './status-bar';
 
 import Colors from 'blades/common/colors';
 import connect from 'utils/connect';
 
 const { shadow } = Colors;
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-`
 const HeatBar = styled(Bar)`
   padding-right: .5em;
 `
@@ -54,7 +50,8 @@ class Heat extends React.PureComponent {
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOLeave= this.handleMouseLeave.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.serveTime = this.serveTime.bind(this);
   }
   increment() {
     const { heat, dispatch } = this.props;
@@ -82,7 +79,7 @@ class Heat extends React.PureComponent {
     const { heat, wantedLevel, disabled } = this.props;
     const { hover } = this.state;
     return (
-      <Container>
+      <StatusBar>
         <HeatBar>
           <Label onClick={this.increment} disabled={disabled}>
             HEAT
@@ -94,14 +91,14 @@ class Heat extends React.PureComponent {
         </HeatBar>
         <Wanted>
           <Shadow/>
-          <WantedLabel onClick={this.serveTime} disabled={disabled}
+          <WantedLabel onClick={this.serveTime} disabled={disabled || wantedLevel == 0}
                        onMouseOver={this.handleMouseOver}
                        onMouseLeave={this.handleMouseLeave}>
             WANTED LEVEL
           </WantedLabel>
           <WantedArray value={wantedLevel} length={4} isButton={false}/>
         </Wanted>
-      </Container>
+      </StatusBar>
     )
   }
 }
