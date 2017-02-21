@@ -9,6 +9,8 @@ import Tier from './tier';
 import Claims from './claims/claims';
 import Heat from './heat';
 import Vaults from './vaults';
+import Detail from 'blades/window/common/detail';
+import Abilities from 'blades/window/common/abilities/abilities';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
@@ -59,10 +61,16 @@ class Crew extends React.PureComponent {
         vaults++;
       }
     }
-    const grounds = {
-      type: huntingGrounds,
-      description: huntingGroundsDescription
-    };
+    let abilityDOM = null;
+    if (abilities.length > 0) {
+      abilityDOM = (
+        <Column>
+          <Detail name="Special Abilities">
+            <Abilities specialAbilities={abilities}/>
+          </Detail>
+        </Column>
+      );
+    }
     return (
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
@@ -78,6 +86,7 @@ class Crew extends React.PureComponent {
               <Vaults coin={coin} vaults={vaults} disabled={disabled}/>
             </StatusRow>
           </Column>
+          {abilityDOM}
         </SheetRow>
       </Sheet>
     );

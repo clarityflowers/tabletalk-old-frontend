@@ -12,8 +12,8 @@ import Stress from './stress/stress-and-trauma';
 import Harm from './harm/harm'
 import ArmorHealing from './armor-healing/armor-healing';
 import Equipment from './equipment/equipment';
-import Abilities from './abilities/abilities';
-import Detail from './details/detail';
+import Abilities from 'blades/window/common/abilities/abilities';
+import Detail from 'blades/window/common/detail';
 import StrangeFriends from './friends/strange-friends';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
@@ -124,13 +124,12 @@ class Character extends React.PureComponent {
       healingClock, healingUnlocked, vigor
     };
     const equipment = {load, items, playbook, bonus: loadBonus};
-    const abilities = {specialAbilities, playbook};
     let abilityDom = null;
     if (specialAbilities.length > 0) {
       abilityDom = (
         <MiddleColumn>
           <Detail name="Special Abilities">
-            <Abilities {...abilities}/>
+            <Abilities specialAbilities={specialAbilities}/>
           </Detail>
         </MiddleColumn>
       );

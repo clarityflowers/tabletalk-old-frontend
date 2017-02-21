@@ -47,8 +47,7 @@ const Abilities = (props) => {
 }
 
 Abilities.propTypes = {
-  specialAbilities: React.PropTypes.array.isRequired,
-  playbook: React.PropTypes.string
+  specialAbilities: React.PropTypes.array.isRequired
 }
 
 export default Abilities;

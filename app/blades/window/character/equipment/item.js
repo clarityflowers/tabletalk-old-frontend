@@ -11,15 +11,17 @@ import { lighten, fadeout, fadein } from 'utils/color-tools';
 import cz from 'utils/styled-classes';
 import connect from 'utils/connect';
 
-const { stone, sky, sand } = Colors;
+const { stone, sky, sand, fire } = Colors;
 const normal = lighten(stone, 0.3);
 const normalUsed = lighten(normal, 0.2);
 const light = sky;
 const lightUsed = lighten(light, 0.1);
 const heavy = fadeout(sand, 0.4);
 const heavyUsed = fadein(heavy, 0.3);
+const huge = fadeout(fire, 0.1);
+const hugeUsed = fadein(huge, 0.3);
 
-const Button = styled(cz(CommonButton, ['heavy', 'light', 'used']))`
+const Button = styled(cz(CommonButton, ['heavy', 'huge', 'light', 'used']))`
   font: ${Fonts.body};
   text-align: left;
   font: $body;
@@ -27,6 +29,9 @@ const Button = styled(cz(CommonButton, ['heavy', 'light', 'used']))`
   margin: 0 1em .2em 0;
   &.heavy {
     color: ${heavy};
+  }
+  &.huge {
+    color: ${huge}
   }
   &.light {
     color: ${light};
@@ -36,6 +41,9 @@ const Button = styled(cz(CommonButton, ['heavy', 'light', 'used']))`
     color: ${normalUsed};
     &.heavy {
       color: ${heavyUsed};
+    }
+    &.huge {
+      color: ${hugeUsed};
     }
     &.light {
       color: ${lightUsed};
@@ -102,7 +110,7 @@ class Item extends React.PureComponent {
     const { name, load, used, disabled } = this.props;
     return (
       <Button disabled={disabled} onClick={this.handleClick}
-              used={used} heavy={load > 1} light={load < 1}>
+              used={used} heavy={load == 2} huge={load > 2} light={load < 1}>
         {name}
       </Button>
     )

@@ -2,9 +2,12 @@
 
 const ITEMS = {
   "+Heavy": {
-    load: 2
+    load: 3
   },
   "A Large Weapon": {
+    load: 2
+  },
+  "Armor": {
     load: 2
   },
   "Climbing Gear": {

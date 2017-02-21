@@ -24,6 +24,7 @@ const WantedLabel = styled(Label)`
   box-shadow: none;
   position: relative;
   z-index: 2;
+  min-width: 7em;
 `
 const Shadow = styled(Label)`
   width: 100%;
