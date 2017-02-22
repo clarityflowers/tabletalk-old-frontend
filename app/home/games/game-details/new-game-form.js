@@ -40,6 +40,7 @@ const Transition = styled(CSSTransitionGroup)`
   position: relative;
   top: -1.1em;
   height: 1em;
+  width: 100%;
 `
 const LabelContainer = styled.div`
   right: 0;
@@ -78,7 +79,7 @@ const TextInput = styled(CommonTextInput)`
   -webkit-appearance: none;
   border: none;
   font: ${Fonts.body};
-  color: $color;
+  color: ${color};
   border-radius: 0;
   background-color: ${middleground};
   font-weight: bold;
@@ -104,7 +105,7 @@ const InputCover = styled.div`
   width: ${p => p.off ? '0%' : '110%'};
   left: ${p => p.off ? '105%' : '-5%'};
   height: 110%;
-  background-color: $color;
+  background-color: ${color};
   z-index: 4;
   transition-duration: .4s;
   transition-timing-function: ease-in-out;
@@ -129,7 +130,7 @@ const Submit = styled(CommonSubmit)`
   transition-property: color, background-color, box-shadow, text-shadow;
   &:not(:disabled) {
     background-color: ${middleground};
-    color: $color;
+    color: ${color};
     &:active, &:focus, &:hover {
       background-color: ${background};
       outline: none;
@@ -217,6 +218,7 @@ class NewGameForm extends React.Component {
       <Container off={off}>
         <Form onSubmit={this.handleSubmit.bind(this, key)}>
           <Transition transitionName="anim"
+                      component='div'
                       transitionEnterTimeout={1100}
                       transitionLeaveTimeout={1100}>
             {label}

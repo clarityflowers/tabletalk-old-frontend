@@ -489,6 +489,7 @@ class Games extends React.Component {
     id = null
   }
   ) {
+    console.log('UPDATE GAME DETAILS', type, name, player, join, id)
     this.setState((state) => {
       if (id == null) {
         id = 'new'
@@ -543,18 +544,18 @@ class Games extends React.Component {
     }
     let game = null;
     if (this.selectedGame()) {
+      let gameData = this.state.games[this.state.gameHash[this.selectedGame()]];
       if (this.selectedGame() == 'new')  {
         game = {
           id: 'new',
-          name: null,
-          type: null,
-          maxPlayers: null,
-          players: [],
-          me: null
+          name: gameData.name,
+          type: gameData.type,
+          maxPlayers: gameData.maxPlayers,
+          players: gameData.players,
+          me: gameData.me
         }
       }
       else if (this.hasTarget()) {
-        let gameData = this.state.games[this.state.gameHash[this.selectedGame()]];
         if (gameData != null) {
           game = {
             id: gameData.id,
