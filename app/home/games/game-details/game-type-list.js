@@ -6,32 +6,92 @@ import Colors from 'common/colors';
 import Fonts from 'common/fonts';
 import { GameTypes } from 'utils/enums';
 import { HoverBuzz } from 'utils/hover-animate';
+import Button from 'common/button';
+import { fadeout, darken } from 'utils/color-tools';
 
+import AdventureColors from 'games/world-of-adventure/colors';
+import AdventureFonts from 'games/world-of-adventure/fonts';
+
+import BladesColors from 'games/blades-in-the-dark/common/colors';
+import BladesFonts from 'games/blades-in-the-dark/common/fonts';
+
+const TypeButton = styled(Button)`
+  width: 100%;
+  margin-bottom: 1em;
+  height: 2em;
+  font-size: 2em;
+  &:focus {
+    text-decoration: underline;
+  }
+`
+const Adventure = styled(TypeButton)`
+  color: ${AdventureColors.coldBreath};
+  font: ${AdventureFonts.h1};
+  font-size: 2em;
+  text-shadow: ${Colors.textShadow};
+  ${AdventureColors.stripesBackground(.5, .5, 0, 20)}
+  border: .15em solid transparent;
+  box-shadow: -2px 2px 2px 1px ${fadeout(darken(Colors.balloons, 0.4), 0.5)},
+              -1px 1px 3px 2px ${fadeout(darken(AdventureColors.deep, 0.0), 0.0)} inset;
+  &:hover {
+    border-color: ${AdventureColors.coldBreath};
+  }
+  &:active {
+    border-color: ${AdventureColors.fireworth};
+  }
+`
+const Blades = styled(TypeButton)`
+  color: ${BladesColors.sun};
+  font: ${BladesFonts.h1};
+  font-size: 2em;
+  text-shadow: ${BladesColors.textShadow};
+  background: ${BladesColors.stone};
+  border: .15em solid ${BladesColors.stone};
+  box-shadow: -2px 2px 2px 1px ${fadeout(darken(Colors.balloons, 0.4), 0.5)},
+              -1px 1px 3px 2px ${fadeout(darken(BladesColors.stone, 0.2), 0.0)} inset;
+  &:hover {
+    border-color: ${BladesColors.sun};
+  }
+  &:active {
+    border-color: ${BladesColors.fire};
+  }
+`
+const Container = 'div';
+const Header = styled.div`
+  padding: 1em;
+  text-align: center;
+`
+const List = 'div';
+
+const TYPE = {
+  "World of Adventure": Adventure,
+  "Blades in the Dark": Blades
+}
 
 const GameTypeList = (props) => {
   const { onClick } = props;
   let gameTypes = [];
   for (let i=0; i < GameTypes.length; i++) {
+    let gameType = GameTypes[i];
+    let Node = TYPE[gameType.name];
     gameTypes.push(
-      <HoverBuzz key={i}>
-      <button className={`game-type ${GameTypes[i].className}`}
-      onClick={() => onClick(i)}>
-      {GameTypes[i].name}
-      </button>
-      </HoverBuzz>
+      <Node key={i} className={`game-type ${GameTypes[i].className}`}
+        onClick={() => onClick(i)}>
+        {GameTypes[i].name}
+      </Node>
     )
   }
   let showInput = false;
   let subContent = null;
   return (
-    <div>
-      <div className='header'>
+    <Container>
+      <Header className='header'>
         Choose a game
-      </div>
-      <div className='game-type-list'>
+      </Header>
+      <List>
         {gameTypes}
-      </div>
-    </div>
+      </List>
+    </Container>
   );
 }
 
