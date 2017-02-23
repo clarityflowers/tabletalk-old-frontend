@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import rotate from './rotate'
 import pointsToString from './points';
-import Colors from 'games/blades-in-the-dark/common/colors';
+import Colors from 'blades/common/colors';
 import { lighten, darken } from 'utils/color-tools';
 
 const { fire, stone } = Colors;

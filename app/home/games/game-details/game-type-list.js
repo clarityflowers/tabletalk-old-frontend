@@ -9,11 +9,11 @@ import { HoverBuzz } from 'utils/hover-animate';
 import Button from 'common/button';
 import { fadeout, darken } from 'utils/color-tools';
 
-import AdventureColors from 'games/world-of-adventure/colors';
-import AdventureFonts from 'games/world-of-adventure/fonts';
+import AdventureColors from 'adventure/colors';
+import AdventureFonts from 'adventure/fonts';
 
-import BladesColors from 'games/blades-in-the-dark/common/colors';
-import BladesFonts from 'games/blades-in-the-dark/common/fonts';
+import BladesColors from 'blades/common/colors';
+import BladesFonts from 'blades/common/fonts';
 
 const TypeButton = styled(Button)`
   width: 100%;
