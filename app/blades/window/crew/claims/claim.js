@@ -15,7 +15,9 @@ import parse from 'blades/common/parse';
 const { stone, fire, sun, shadow } = Colors;
 const { h1, body } = Fonts;
 
-const available = mix(desaturate(sun, 0.7), stone, 0.7);
+const available = mix(desaturate(sun, 0.6), stone, 0.9);
+// const owned = darken(fire, 0.1);
+const owned = sun;
 
 const Container = styled(cz(Button, ['owned', 'available']))`
   font-size: .75em;
@@ -49,13 +51,14 @@ const Container = styled(cz(Button, ['owned', 'available']))`
     }
   }
   &.owned {
-    color: ${sun};
-    background: ${darken(fire, 0.1)};
+    color: ${stone};
+    background: ${owned};
     &:hover {
-      background: ${fire}
+      background: ${lighten(owned, 0.1)}
     }
     &:active {
-      background: ${lighten(fire, 0.2)}
+      background: ${darken(stone, 0.1)}
+      color: ${sun};
     }
   }
 `

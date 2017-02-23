@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Claim from './claim';
 
 import Colors from 'blades/common/colors';
-import { darken, lighten, fadeout, mix } from 'utils/color-tools';
+import { darken, lighten, fadeout, mix, desaturate } from 'utils/color-tools';
 import cz from 'utils/styled-classes';
 
 const { sun, stone, fire, shadow } = Colors;
@@ -27,10 +27,11 @@ const Dividers = styled(cz('div', ['show', 'highlight', 'owned']))`
     box-shadow: ${shadow};
     background: ${darken(stone, 0.1)};
     &.highlight {
-      background: ${fadeout(sun, 0.8)};
+      background: ${fadeout(sun, 0.9)};
+      // background: ${mix(fire, stone, 0.5)};
     }
     &.owned {
-      background: ${mix(fire, stone, 0.5)};
+      background: ${mix(desaturate(sun, 0.5), stone, 0.6)};
     }
   }
 `
