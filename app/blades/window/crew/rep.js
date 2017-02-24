@@ -24,11 +24,21 @@ const TurfBar = styled(Bar)`
   }
 `
 const Array = styled(CommonArray)`
-  button:last-child:not(:first-child) {
-    margin-left: .25em;
+  button {
+    &:last-child:not(:first-child) {
+      margin-left: .2em;
+    }
+    &:first-child:not(:last-child) {
+      margin-right: .2em;
+    }
   }
-  div.check:not(:first-child) {
-    margin-left: .25em;
+  div.check {
+    &:not(:first-child) {
+      margin-left: .2em;
+    }
+    &:not(:last-child) {
+      margin-right: .2em;
+    }
   }
 `
 const TurfArray = styled(Array)`
@@ -41,7 +51,7 @@ const TurfArray = styled(Array)`
       background: ${sky};
     }
     &:last-child {
-      margin-right: .32em;
+      margin-right: .40em;
     }
   }
 `
@@ -65,7 +75,7 @@ class Rep extends React.PureComponent {
     }
   }
   decrement() {
-    const { rep, turf, dispatch } = this.props;
+    const { rep, dispatch } = this.props;
     if (rep > 0) {
       dispatch('decrement_rep');
     }
