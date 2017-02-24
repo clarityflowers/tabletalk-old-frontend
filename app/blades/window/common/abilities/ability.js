@@ -35,7 +35,6 @@ const Name = styled.span`
 
 const Ability = (props) => {
   const { name, description } = props;
-  console.log('ABILITIY', name, description);
   let result = null;
   let title = name;
   if (description) {
