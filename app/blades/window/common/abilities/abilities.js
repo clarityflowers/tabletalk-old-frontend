@@ -31,7 +31,7 @@ const Container = styled.div`
 `
 
 const Abilities = (props) => {
-  const { playbook, specialAbilities } = props;
+  const { playbook, specialAbilities, ...rest } = props;
   let abilities = [];
   for (let i=0; i < specialAbilities.length; i++) {
     const ability = specialAbilities[i];
@@ -40,7 +40,7 @@ const Abilities = (props) => {
     );
   }
   return (
-    <Container>
+    <Container {...rest}>
       {abilities}
     </Container>
   )

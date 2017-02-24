@@ -9,10 +9,9 @@ import Fonts from 'blades/common/fonts';
 const { stone, sun, sand } = Colors;
 
 const Container = styled.div`
-  flex: 1 1 auto;
+  flex: 1 1 20em;
   max-width: 38em;
   min-width: 15em;
-  width: 100%;
   margin: 1em 1em 0 1em;
   align-self: flex-start;
   * {
@@ -44,7 +43,7 @@ const Body = styled.div`
 
 class Detail extends React.PureComponent {
   render() {
-    const { name, children } = this.props;
+    const { name, children, className } = this.props;
     let short = false;
     if (children == null) { return null }
     if (typeof children == 'string') {
@@ -55,7 +54,7 @@ class Detail extends React.PureComponent {
     }
     if (short) {
       return (
-        <Short>
+        <Short className={className}>
           <Header>
             {name.toUpperCase()}:
           </Header>
@@ -67,7 +66,7 @@ class Detail extends React.PureComponent {
     }
     else {
       return (
-        <Long>
+        <Long className={className}>
           <Header>
             {name.toUpperCase()}
           </Header>

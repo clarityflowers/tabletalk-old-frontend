@@ -28,14 +28,13 @@ const Container = styled.div`
   padding-left: .5em;
   transition: width .3s ${easing} ${delay}s, ${leftAnim};
 `
-const Button = styled.div`
+const Button = styled(CommonButton)`
   font: ${Fonts.h1};
   color: white;
   pointer-events: auto;
   position: relative;
   white-space: nowrap;
   text-shadow: ${textShadow};
-  cursor: pointer;
   padding: .8em 0.8em .5em 1em;
   margin: -.5em;
   left: 0;
@@ -84,7 +83,7 @@ class Label extends React.Component {
     this.props.onClick();
   }
   render() {
-    const { on, menuState, isHovering, isToggling, text, isTitle } = this.props;
+    const { on, menuState, isHovering, isToggling, text, isTitle, disabled } = this.props;
     const { width } = this.state;
     let style = {
       width: 0,
@@ -103,6 +102,7 @@ class Label extends React.Component {
       <Container style={style} state={menuState} isTitle={isTitle}>
         <Button  innerRef={e => this.label = e}
                  onClick={this.click.bind(this)}
+                 disabled={disabled}
                  onMouseEnter={this.mouseEnter.bind(this)}
                  onMouseLeave={this.mouseLeave.bind(this)}
                  onTouchMove={this.mouseLeave.bind(this)}>

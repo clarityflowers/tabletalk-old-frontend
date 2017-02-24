@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Header from './header';
+import Header from 'blades/window/common/xp';
 import Money from './money';
 import Section from './section';
 import Stat from './stat';

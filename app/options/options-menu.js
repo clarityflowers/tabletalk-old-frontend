@@ -207,6 +207,7 @@ class OptionsMenu extends React.Component {
                onMouseLeave={this.handleMouseLeave.bind(this)}
                menuState={state}
                isTitle={i == 0}
+               disabled={!option.on}
                onClick={option.onClick}/>
       );
       buttons.push(
@@ -216,6 +217,7 @@ class OptionsMenu extends React.Component {
                        isHovering={buttonIsHovering}
                        onMouseEnter={this.handleMouseEnter.bind(this)}
                        onMouseLeave={this.handleMouseLeave.bind(this)}
+                       disabled={i != 0 && !this.state.open}
                        glyph={option.glyph}/>
       );
     }

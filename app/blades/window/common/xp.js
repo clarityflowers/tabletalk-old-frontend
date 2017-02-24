@@ -23,7 +23,7 @@ const Header = styled(cz('div', 'highlight'))`
   }
 `
 
-class StatHeader extends React.PureComponent {
+class XP extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,7 +71,7 @@ class StatHeader extends React.PureComponent {
   }
 }
 
-StatHeader.propTypes = {
+XP.propTypes = {
   name: React.PropTypes.string.isRequired,
   value: React.PropTypes.number.isRequired,
   length: React.PropTypes.number.isRequired,
@@ -80,8 +80,8 @@ StatHeader.propTypes = {
   disabled: React.PropTypes.bool
 }
 
-StatHeader.defaultProps = {
+XP.defaultProps = {
   disabled: false
 }
 
-export default StatHeader;
+export default XP;

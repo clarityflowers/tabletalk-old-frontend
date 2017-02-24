@@ -12,6 +12,7 @@ import Heat from 'blades/window/crew/heat';
 import Vaults from 'blades/window/crew/vaults';
 import Claim from 'blades/window/crew/claims/claim';
 import Claims from 'blades/window/crew/claims/claims';
+import Cohort from 'blades/window/crew/cohorts/cohort';
 
 import claims from './claims';
 
@@ -30,8 +31,6 @@ const Wrapper = styled.div`
   height: 100%;
   padding: 50px;
   box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: h;
   background: ${darken(Colors.stone, 0.15)};
   font-size: 40px;
 `
@@ -40,7 +39,6 @@ const Border = styled.div`
   outline: 2px solid ${Colors.sun};
 `
 const Container = styled.div`
-  overflow: hidden;
   margin: 50px;
 `
 const Small = styled.div`
@@ -148,8 +146,6 @@ storiesOf('Crew.coin', module)
     <Vaults coin={8} vaults={1} disabled={false}/>
   ))
 
-console.log(claims);
-
 storiesOf('Crew.claims', module)
   .add('owned claim', () => (
     <Claim name="Loyal Fence" description="*+2 coin* for burglary or robbery"
@@ -167,4 +163,37 @@ storiesOf('Crew.claims', module)
     <Small>
       <Claims {...claims} disabled={false}/>
     </Small>
+  ))
+
+storiesOf('Crew.cohort', module)
+  .add('with description', () => (
+    <Cohort id={1} name="Zopheea" kind="Burglar" isGang={false} quality={5} weak={true}
+            impaired={false}
+            broken={true} armor={false} edges={["Fearsome", "Loyal"]}
+            flaws={["Unreliable", "Principled"]}
+            description="None other than the INFAMOUS ZOPHEEA"
+            disabled={false}/>
+  ))
+  .add('zero quality', () => (
+    <Cohort id={2} name="Friends" kind="Thugs" isGang={true} quality={0} weak={false} impaired={true}
+            broken={false} armor={true} edges={["Independant"]}
+            flaws={["Savage"]}
+            description="A gang of friendly individuals"
+            disabled={false}/>
+  ))
+  .add('long name', () => (
+    <Cohort id={2} name="Gang of Irreputable Miscreants" kind="Skulks" isGang={true}
+            quality={2} weak={false} impaired={true}
+            broken={false} armor={true} edges={["Fearsome"]}
+            flaws={["Unreliable"]}
+            description="A gang of even more friendly individuals"
+            disabled={false}/>
+  ))
+  .add('no name & disabled', () => (
+    <Cohort id={2} kind="Adepts" isGang={true}
+            quality={3} weak={true} impaired={true}
+            broken={false} armor={true} edges={["Tenacious"]}
+            flaws={["Wild"]}
+            description="Some perfectly ordinary friends with nothing strange about them whatsoever, nosirree"
+            disabled={true}/>
   ))

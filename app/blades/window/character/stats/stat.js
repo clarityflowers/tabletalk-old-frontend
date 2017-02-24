@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
 import Action from './action';
-import Header from './header';
+import Header from 'blades/window/common/xp';
 import Section from './section';
 
 import connect from 'utils/connect';

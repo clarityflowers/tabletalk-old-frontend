@@ -30,6 +30,7 @@ const Center = styled(Column)`
 `
 const RightSide = styled(Side)`
   width: 13em;
+  margin-left: 0;
 `
 const StressHarm = styled(Column)`
   flex: 1 1 23em;

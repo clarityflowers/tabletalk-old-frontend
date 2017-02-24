@@ -9,8 +9,8 @@ import Tier from './tier';
 import Claims from './claims/claims';
 import Heat from './heat';
 import Vaults from './vaults';
-import Detail from 'blades/window/common/detail';
-import Abilities from 'blades/window/common/abilities/abilities';
+import Abilities from './abilities';
+import Cohorts from './cohorts/cohorts';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
@@ -25,6 +25,7 @@ const StatusRow = styled.div`
 const Column = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  align-items: stretch;
 `
 
 class Crew extends React.PureComponent {
@@ -38,13 +39,16 @@ class Crew extends React.PureComponent {
       huntingGrounds, huntingGroundsDescription,
       lair,
       upgrades, availableUpgrades,
-      claims,
+      claims, cohorts,
       abilities, contacts,
       edit, view,
       me
     } = this.props;
     const disabled = !edit.includes(me.id);
     let turf = 0;
+    let vaults = 0;
+    let cohortDOM = null;
+
     for (let r=0; r < claims.claims.length; r++) {
       const row = claims.claims[r];
       for (let c=0; c < row.length; c++) {
@@ -54,23 +58,22 @@ class Crew extends React.PureComponent {
         }
       }
     }
-    let vaults = 0;
+
     for (let i=0; i < upgrades.length; i++) {
       const upgrade = upgrades[i];
       if (upgrade == "Vault") {
         vaults++;
       }
     }
-    let abilityDOM = null;
-    if (abilities.length > 0) {
-      abilityDOM = (
+
+    if (cohorts.length > 0) {
+      cohortDOM = (
         <Column>
-          <Detail name="Special Abilities">
-            <Abilities specialAbilities={abilities}/>
-          </Detail>
+          <Cohorts cohorts={cohorts} disabled={disabled}/>
         </Column>
-      );
+      )
     }
+
     return (
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
@@ -86,7 +89,10 @@ class Crew extends React.PureComponent {
               <Vaults coin={coin} vaults={vaults} disabled={disabled}/>
             </StatusRow>
           </Column>
-          {abilityDOM}
+          <Column>
+            <Abilities xp={xp} abilities={abilities} disabled={disabled}/>
+          </Column>
+          {cohortDOM}
         </SheetRow>
       </Sheet>
     );
@@ -113,6 +119,7 @@ Crew.propTypes = {
   edit: array.isRequired,
   view: array.isRequired,
   claims: object.isRequired,
+  cohorts: array.isRequired,
   abilities: array.isRequired,
   contacts: array.isRequired,
   upgrades: array.isRequired,

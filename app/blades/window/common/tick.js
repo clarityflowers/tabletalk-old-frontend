@@ -39,7 +39,7 @@ const Tick = styled(extendCheck(<Component/>))`
   font-size: 1em;
   width: auto;
   width: .5em;
-  height: 1.2em;
+  height: 1.3em;
   position: relative;
   &.checked svg polygon {
     fill: ${sun};
