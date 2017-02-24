@@ -58,15 +58,13 @@ const actions = {
       return {rep: {$set: c.rep + 1}};
     }
     if (c.rep == target) {
-      // let result = {rep: {$set: 0}};
-      // if (!c.strong) {
-      //   result.strong = {$set: true};
-      // }
-      // else if (c.strong && c.tier < 4) {
-      //   result.strong = {$set: false};
-      //   result.tier = {$set: c.tier + 1};
-      // }
-      // return result;
+      if (!c.strong) {
+        let result = {
+          rep: {$set: 0},
+          strong: {$set: true}
+        };
+      }
+      return result;
     }
   },
   decrement_rep: (c) => {
