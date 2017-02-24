@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Label from 'blades/window/styles/label';
-import Array from 'blades/window/styles/thin-tick-array';
+import CommonArray from 'blades/window/styles/thin-tick-array';
 import Bar from 'blades/window/styles/bar';
 import StatusBar from './status-bar';
 
@@ -21,6 +21,14 @@ const TurfBar = styled(Bar)`
   &:after {
     z-index: 1;
     background: ${sky};
+  }
+`
+const Array = styled(CommonArray)`
+  button:last-child:not(:first-child) {
+    margin-left: .25em;
+  }
+  div.check:not(:first-child) {
+    margin-left: .25em;
   }
 `
 const TurfArray = styled(Array)`

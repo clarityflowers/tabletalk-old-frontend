@@ -7,6 +7,8 @@ import CommonDetail from 'blades/window/common/detail';
 import CommonAbilities from 'blades/window/common/abilities/abilities';
 import XP from 'blades/window/common/xp';
 
+import connect from 'utils/connect';
+
 const Container = styled.div`
   margin: .5em;
 `
@@ -25,10 +27,16 @@ class Abilities extends React.PureComponent {
     this.decrement = this.decrement.bind(this);
   }
   increment() {
-
+    const { xp, dispatch } = this.props;
+    if (xp < 8) {
+      dispatch('increment_xp');
+    }
   }
   decrement() {
-
+    const { xp, dispatch } = this.props;
+    if (xp > 0) {
+      dispatch('decrement_xp');
+    }
   }
   render() {
     const { abilities, xp, disabled } = this.props;
@@ -43,11 +51,12 @@ class Abilities extends React.PureComponent {
   }
 }
 
-const { number, array, bool } = React.PropTypes;
+const { number, array, bool, func } = React.PropTypes;
 Abilities.propTypes = {
   xp: number.isRequired,
   abilities: array.isRequired,
-  disabled: bool.isRequired
+  disabled: bool.isRequired,
+  dispatch: func.isRequired
 }
 
-export default Abilities;
+export default connect(Abilities);

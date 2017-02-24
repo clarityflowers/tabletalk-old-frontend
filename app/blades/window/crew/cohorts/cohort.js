@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import CommonLabel from 'blades/window/styles/label';
 import Stat from './stat';
+import Tier from 'blades/window/common/tier';
 
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';
@@ -47,21 +48,6 @@ color: ${fadeout(fire, .0)}
 `
 const Name = styled.div`
 margin-right: .3em;
-`
-const Mark = styled.div`
-  width: .4em;
-  height: 100%;
-  background: ${sand};
-  margin-left: .2em;
-  box-shadow: ${shadow};
-`
-const Quality = styled.div`
-  flex: 0 0 auto;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  align-self: stretch;
-  width: 3em;
 `
 const Tags = styled.div`
   display: flex;
@@ -128,13 +114,8 @@ class Cohort extends React.PureComponent {
       disabled
     } = this.props;
     let label = null;
-    const marks = [];
     const edgeTags = [];
     const flawTags = [];
-
-    for (let i=0; i < quality; i++) {
-      marks.push(<Mark key={i}/>);
-    }
 
     if (name) {
       label = (
@@ -162,7 +143,7 @@ class Cohort extends React.PureComponent {
       <Container>
         <Header>
           {label}
-          <Quality>{marks}</Quality>
+          <Tier value={quality} max={5}/>
         </Header>
         <Status>
           <Stat name="Weak" harm checked={weak}

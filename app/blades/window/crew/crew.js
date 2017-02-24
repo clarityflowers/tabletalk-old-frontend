@@ -69,7 +69,7 @@ class Crew extends React.PureComponent {
     if (cohorts.length > 0) {
       cohortDOM = (
         <Column>
-          <Cohorts cohorts={cohorts} disabled={disabled}/>
+          <Cohorts cohorts={[]} disabled={disabled}/>
         </Column>
       )
     }

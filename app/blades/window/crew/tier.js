@@ -7,6 +7,7 @@ import Label from 'blades/window/styles/label';
 import Bar from 'blades/window/styles/bar';
 import { DotArray } from 'blades/window/common/dot'
 import StatusBar from './status-bar';
+import TierMarks from 'blades/window/common/tier';
 
 import Fonts from 'blades/common/fonts';
 import Colors from 'blades/common/colors';
@@ -28,14 +29,14 @@ const Hold = styled.div`
 `
 const Weak = styled(cz(Hold, 'highlight'))`
   color: ${mix(sky, stone, 0.7)};
-  margin: 0 .25em 0 .5em;
+  margin: 0 .35em 0 .7em;
   &.highlight {
     color: ${sky};
   }
 `
 const Strong = styled(cz(Hold, 'highlight'))`
   color: ${mix(fire, stone, 0.7)};
-  margin: 0 .5em 0 .25em;
+  margin: 0 .7em 0 .35em;
   &.highlight {
     color: ${fire};
   }
@@ -51,6 +52,12 @@ const Array = styled(DotArray)`
   .check {
     margin: 0 0.2em;
   }
+`
+const TierBar = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  height: 1.3em;
 `
 
 class Tier extends React.PureComponent {
@@ -69,10 +76,12 @@ class Tier extends React.PureComponent {
             STRONG
           </Strong>
         </HoldBar>
-        <TierLabel disabled>
-          TIER
-          <Array value={tier} length={4} isButton={false}/>
-        </TierLabel>
+        <TierBar>
+          <TierLabel disabled>
+            TIER
+          </TierLabel>
+          <TierMarks value={tier}/>
+        </TierBar>
       </StatusBar>
     )
   }

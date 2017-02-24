@@ -75,19 +75,43 @@ const actions = {
     }
   },
   toggle_claim: (ch, {r, c}) => {
-     return {
+    return {
+     claims: {
        claims: {
-         claims: {
-           [r]: {
-             [c]: {
-               owned: {
-                 $apply: (owned) => (!owned)
-               }
+         [r]: {
+           [c]: {
+             owned: {
+               $apply: (owned) => (!owned)
              }
            }
          }
        }
      }
+    }
+  },
+  increment_xp: (c) => {
+    if (c.xp < 8) {
+      return {xp: {$set: c.xp + 1}};
+    }
+  },
+  decrement_xp: (c) => {
+    if (c.xp > 0) {
+      return {xp: {$set: c.xp - 1}};
+    }
+  },
+  cohort: (c, {id, field, value}) => {
+    if (["weak", "impaired", "broken", "armor"].includes(field)) {
+      let index = null;
+      for (let i=0; i < c.cohorts.length; i++) {
+        const cohort = c.cohorts[i];
+        if (cohort.id == id) {
+          index = i;
+        }
+      }
+      if (index != null) {
+        return { cohorts: {[index]: {[field]: {$set: value}}}}
+      }
+    }
   }
 }
 
