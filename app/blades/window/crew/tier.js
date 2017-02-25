@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Label from 'blades/window/styles/label';
+import Label from 'blades/window/styles/label-button';
 import Bar from 'blades/window/styles/bar';
 import { DotArray } from 'blades/window/common/dot'
 import StatusBar from './status-bar';

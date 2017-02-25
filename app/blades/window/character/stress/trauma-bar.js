@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Bar from 'blades/window/styles/bar';
-import Label from 'blades/window/styles/label';
+import Label from 'blades/window/styles/label-button';
 import TraumaList from './trauma-list';
 
 import TickArray from 'blades/window/styles/tick-array';

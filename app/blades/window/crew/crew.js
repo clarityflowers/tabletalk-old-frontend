@@ -11,6 +11,7 @@ import Heat from './heat';
 import Vaults from './vaults';
 import Abilities from './abilities';
 import Cohorts from './cohorts/cohorts';
+import Upgrades from './upgrades/upgrades';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
@@ -38,7 +39,8 @@ class Crew extends React.PureComponent {
       coin, xp,
       huntingGrounds, huntingGroundsDescription,
       lair,
-      upgrades, availableUpgrades,
+      lairUpgrades, qualityUpgrades, trainingUpgrades, crewUpgrades,
+      availableUpgrades,
       claims, cohorts,
       abilities, contacts,
       edit, view,
@@ -56,13 +58,6 @@ class Crew extends React.PureComponent {
         if (claim.owned && claim.name == 'Turf') {
           turf++;
         }
-      }
-    }
-
-    for (let i=0; i < upgrades.length; i++) {
-      const upgrade = upgrades[i];
-      if (upgrade == "Vault") {
-        vaults++;
       }
     }
 
@@ -86,13 +81,23 @@ class Crew extends React.PureComponent {
             <Claims {...claims} disabled={disabled}/>
             <StatusRow>
               <Heat heat={heat} wantedLevel={wantedLevel} disabled={disabled}/>
-              <Vaults coin={coin} vaults={vaults} disabled={disabled}/>
+              <Vaults coin={coin} vaults={lairUpgrades[5].value} disabled={disabled}/>
             </StatusRow>
           </Column>
           <Column>
             <Abilities xp={xp} abilities={abilities} disabled={disabled}/>
           </Column>
           {cohortDOM}
+        </SheetRow>
+        <SheetRow>
+          <Upgrades upgrades={crewUpgrades} name="Upgrades"
+                    available={availableUpgrades} disabled={disabled}/>
+          <Upgrades upgrades={lairUpgrades} name="Lair"
+                    available={availableUpgrades} disabled={disabled}/>
+          <Upgrades upgrades={qualityUpgrades} name="Quality"
+                    available={availableUpgrades} disabled={disabled}/>
+          <Upgrades upgrades={trainingUpgrades} name="Training"
+                    available={availableUpgrades} disabled={disabled}/>
         </SheetRow>
       </Sheet>
     );
@@ -122,7 +127,10 @@ Crew.propTypes = {
   cohorts: array.isRequired,
   abilities: array.isRequired,
   contacts: array.isRequired,
-  upgrades: array.isRequired,
+  lairUpgrades: array.isRequired,
+  qualityUpgrades: array.isRequired,
+  trainingUpgrades: array.isRequired,
+  crewUpgrades: array.isRequired,
   me: object.isRequired
 }
 

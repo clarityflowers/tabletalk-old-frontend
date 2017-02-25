@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Label from 'blades/window/styles/label';
+import Label from 'blades/window/styles/label-button';
 import CommonArray from 'blades/window/styles/thin-tick-array';
 import Bar from 'blades/window/styles/bar';
 import StatusBar from './status-bar';

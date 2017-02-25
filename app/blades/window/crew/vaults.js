@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Label from 'blades/window/styles/label';
+import Label from 'blades/window/styles/label-button';
 import { CoinArray } from 'blades/window/common/coin';
 import StatusBar from './status-bar';
 

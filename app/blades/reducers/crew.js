@@ -88,8 +88,14 @@ const actions = {
     }
   },
   increment_xp: (c) => {
-    if (c.xp < 8) {
+    if (c.xp < 7) {
       return {xp: {$set: c.xp + 1}};
+    }
+    else {
+      return {
+        xp: {$set: 0},
+        availableUpgrades: {$set: c.availableUpgrades + 2}
+      }
     }
   },
   decrement_xp: (c) => {

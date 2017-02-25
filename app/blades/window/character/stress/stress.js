@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Bar from 'blades/window/styles/bar';
-import Label from 'blades/window/styles/label';
+import Label from 'blades/window/styles/label-button';
 import Array from 'blades/window/styles/thin-tick-array';
 
 import connect from 'utils/connect';

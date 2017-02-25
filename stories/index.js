@@ -13,7 +13,10 @@ import Vaults from 'blades/window/crew/vaults';
 import Claim from 'blades/window/crew/claims/claim';
 import Claims from 'blades/window/crew/claims/claims';
 import Cohort from 'blades/window/crew/cohorts/cohort';
+import Upgrade from 'blades/window/crew/upgrades/upgrade';
+import Upgrades from 'blades/window/crew/upgrades/upgrades';
 
+import upgrades from './data/upgrades';
 import claims from './claims';
 
 import Colors from 'blades/common/colors';
@@ -196,4 +199,60 @@ storiesOf('Crew.cohort', module)
             flaws={["Wild"]}
             description="Some perfectly ordinary friends with nothing strange about them whatsoever, nosirree"
             disabled={true}/>
+  ))
+
+storiesOf('Crew.upgrade', module)
+  .add('unchecked', () => (
+    <Upgrade name="Documents" value={0} available={0} disabled={false}/>
+  ))
+  .add('checked', () => (
+    <Upgrade name="Pet/Special" value={1} available={0} disabled={false}/>
+  ))
+  .add('unlocked', () => (
+    <Upgrade name="Workshop" value={0} available={1} disabled={false}/>
+  ))
+  .add('x2 value = 0', () => (
+    <Upgrade name="Vault" value={0} max={2} available={0} disabled={false}/>
+  ))
+  .add('x2 value = 1', () => (
+    <Upgrade name="Carriage" value={1} max={2} available={0} disabled={false}/>
+  ))
+  .add('x2 value = 2', () => (
+    <Upgrade name="Boat" value={2} max={2} available={0} disabled={false}/>
+  ))
+  .add('x2 unlocked value = 0', () => (
+    <Upgrade name="Secure" value={0} max={2} available={1} disabled={false}/>
+  ))
+  .add('x2 unlocked value = 1', () => (
+    <Upgrade name="Carriage" value={1} max={2} available={1} disabled={false}/>
+  ))
+  .add('x2 unlocked value = 2', () => (
+    <Upgrade name="Boat" value={2} max={2} available={1} disabled={false}/>
+  ))
+  .add('steady value = 0', () => (
+    <Upgrade name="Steady" value={0} cost={3} available={0} disabled={false}
+             stress={true}/>
+  ))
+  .add('steady value = 1', () => (
+    <Upgrade name="Steady" value={1} cost={3} available={0} disabled={false}
+             stress={true}/>
+  ))
+  .add('cost = 4, value = 1', () => (
+    <Upgrade name="Mastery" value={1} cost={4} available={0} disabled={false}/>
+  ))
+  .add('rigging', () => (
+    <Upgrade name="Thief Rigging" value={1} available={0} disabled={false}
+             rigging={["tools", "gear"]}/>
+  ))
+
+
+storiesOf('Crew.upgrades', module)
+  .add('0 available', () => (
+    <Upgrades upgrades={upgrades.training} available={0} disabled={false}/>
+  ))
+  .add('1 available', () => (
+    <Upgrades upgrades={upgrades.crew} available={1} disabled={false}/>
+  ))
+  .add('1 available, disabled', () => (
+    <Upgrades upgrades={upgrades.lair} available={1} disabled={true}/>
   ))

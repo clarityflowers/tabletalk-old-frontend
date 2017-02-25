@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import CommonLabel from 'blades/window/styles/label';
+import CommonLabel from 'blades/window/styles/label-button';
 import Stat from './stat';
 import Tier from 'blades/window/common/tier';
 
