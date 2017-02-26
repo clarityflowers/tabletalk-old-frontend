@@ -116,6 +116,34 @@ const actions = {
         return { cohorts: {[index]: {[field]: {$set: value}}}}
       }
     }
+  },
+  add_upgrade: (c, name) => {
+    let result = null;
+    let category = null;
+    if (c.crewUpgrades[name]) {
+      category = 'crewUpgrades';
+    }
+    else if (c.lairUpgrades[name]) {
+      category = 'lairUpgrades';
+    }
+    else if (c.qualityUpgrades[name]) {
+      category = 'qualityUpgrades';
+    }
+    else if (c.trainingUpgrades[name]) {
+      category = 'trainingUpgrades';
+    }
+    if (category) {
+      const upgrade = c[category][name];
+      const max = upgrade.max || 1;
+      const value = upgrade.value;
+      const cost = upgrade.cost || 1;
+      if (value < max && c.availableUpgrades >= cost) {
+        return {
+          [category]: {[name]: {value: {$set: value + 1}}},
+          availableUpgrades: {$set: c.availableUpgrades - cost}
+        }
+      }
+    }
   }
 }
 

@@ -81,7 +81,7 @@ class Crew extends React.PureComponent {
             <Claims {...claims} disabled={disabled}/>
             <StatusRow>
               <Heat heat={heat} wantedLevel={wantedLevel} disabled={disabled}/>
-              <Vaults coin={coin} vaults={lairUpgrades[5].value} disabled={disabled}/>
+              <Vaults coin={coin} vaults={lairUpgrades["Vault"].value} disabled={disabled}/>
             </StatusRow>
           </Column>
           <Column>
@@ -90,7 +90,7 @@ class Crew extends React.PureComponent {
           {cohortDOM}
         </SheetRow>
         <SheetRow>
-          <Upgrades upgrades={crewUpgrades} name="Upgrades"
+          <Upgrades upgrades={crewUpgrades} name="Upgrades" showAvailable
                     available={availableUpgrades} disabled={disabled}/>
           <Upgrades upgrades={lairUpgrades} name="Lair"
                     available={availableUpgrades} disabled={disabled}/>
@@ -127,10 +127,10 @@ Crew.propTypes = {
   cohorts: array.isRequired,
   abilities: array.isRequired,
   contacts: array.isRequired,
-  lairUpgrades: array.isRequired,
-  qualityUpgrades: array.isRequired,
-  trainingUpgrades: array.isRequired,
-  crewUpgrades: array.isRequired,
+  lairUpgrades: object.isRequired,
+  qualityUpgrades: object.isRequired,
+  trainingUpgrades: object.isRequired,
+  crewUpgrades: object.isRequired,
   me: object.isRequired
 }
 

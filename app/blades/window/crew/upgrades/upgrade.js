@@ -13,9 +13,7 @@ import connect from 'utils/connect';
 const { body } = Fonts;
 const { sun, stone, fire, sand, textShadow } = Colors;
 
-const Container = styled.div`
-  // margin-bottom: .2em;
-`
+const Container = ({order, ...rest}) => (<div style={{order}} {...rest}/>);
 const Button = styled(cz(CommonButton, ['checked', 'unlocked']))`
   font: ${body};
   font-weight: 500;
@@ -30,7 +28,6 @@ const Button = styled(cz(CommonButton, ['checked', 'unlocked']))`
   }
   &.unlocked {
     color: ${sand};
-    text-shadow: ${textShadow}
     &:not(:disabled) {
       &:focus {
         text-decoration: underline;
@@ -39,7 +36,7 @@ const Button = styled(cz(CommonButton, ['checked', 'unlocked']))`
         color: ${fire};
       }
       &:active {
-        color: ${lighten(fire, 0.3)}
+        color: ${lighten(fire, 0.3)};
       }
     }
   }
@@ -62,7 +59,7 @@ class Upgrade extends React.PureComponent {
     const {
       name, max, value, cost,
       rigging, stress, trauma,
-      available, disabled
+      available, disabled, order
     } = this.props;
     let display = [name];
     let paren = [];
@@ -96,7 +93,7 @@ class Upgrade extends React.PureComponent {
       )
     }
     return (
-      <Container>
+      <Container order={value ? order : order + 10}>
         <Button unlocked={firstUnlocked} checked={value}
                 disabled={!firstUnlocked || disabled}
                 onClick={this.handleClick}>
@@ -119,6 +116,7 @@ Upgrade.propTypes = {
   trauma: bool,
   available: number.isRequired,
   disabled: bool.isRequired,
+  order: number.isRequired,
   dispatch: func.isRequired
 }
 Upgrade.defaultProps = {

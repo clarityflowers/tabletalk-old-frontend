@@ -248,11 +248,14 @@ storiesOf('Crew.upgrade', module)
 
 storiesOf('Crew.upgrades', module)
   .add('0 available', () => (
-    <Upgrades upgrades={upgrades.training} available={0} disabled={false}/>
+    <Upgrades name="Training" upgrades={upgrades.training} available={0}
+              disabled={false}/>
   ))
-  .add('1 available', () => (
-    <Upgrades upgrades={upgrades.crew} available={1} disabled={false}/>
+  .add('2 available', () => (
+    <Upgrades name="Upgrades" upgrades={upgrades.crew} available={2}
+              disabled={false} showAvailable={true}/>
   ))
   .add('1 available, disabled', () => (
-    <Upgrades upgrades={upgrades.lair} available={1} disabled={true}/>
+    <Upgrades name="Lair" upgrades={upgrades.lair} available={1}
+              disabled={true}/>
   ))
