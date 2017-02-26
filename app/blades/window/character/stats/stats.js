@@ -40,12 +40,13 @@ class Stats extends React.PureComponent {
       hunt, study, survey, tinker, insightXP,
       finesse, prowl, skirmish, wreck, prowessXP,
       attune, command, consort, sway, resolveXP,
+      mastery,
       disabled
     } = this.props;
     const money = {coin, stash};
-    const insight = {hunt, study, survey, tinker, xp: insightXP};
-    const prowess = {finesse, prowl, skirmish, wreck, xp: prowessXP};
-    const resolve = {attune, command, consort, sway, xp: resolveXP};
+    const insight = {hunt, study, survey, tinker, mastery, xp: insightXP};
+    const prowess = {finesse, prowl, skirmish, wreck, mastery, xp: prowessXP};
+    const resolve = {attune, command, consort, sway, mastery, xp: resolveXP};
     return (
       <Div>
         <Section>
@@ -81,6 +82,7 @@ Stats.propTypes = {
   consort: number.isRequired,
   sway: number.isRequired,
   resolveXP: number.isRequired,
+  mastery: bool.isRequired,
   disabled: bool.isRequired
 }
 

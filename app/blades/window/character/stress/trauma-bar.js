@@ -25,47 +25,41 @@ const Container = styled(Bar)`
     z-index: 0;
   }
 `
-
-// const Array = styled(TickArray)`
-//   z-index: 2;
-//   position: relative;
-//   .check {
-//     svg polygon {
-//       fill: ${dark};
-//       stroke: ${dark};
-//     }
-//     &.checked svg {
-//       polygon {
-//         stroke: ${sun};
-//         fill: ${sun};
-//       }
-//     }
-//   }
-// `
+const Ticks = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  position: relative;
+`
 const TraumaLabel = styled(Label)`
   text-align: center;
   box-shadow: none;
   box-sizing: border-box;
-  width: 4.5em;
+  width: 100%;
   position: absolute;
 `
 
 const TraumaBar = (props) => {
-  const { trauma } = props;
+  const { trauma, bonus } = props;
   return (
     <Container>
-      <TraumaLabel disabled>
-        TRAUMA
-      </TraumaLabel>
-      <Array isButton={false} value={trauma.length} className='ticks' length={4}/>
+      <Ticks>
+        <TraumaLabel disabled>
+          TRAUMA
+        </TraumaLabel>
+        <Array isButton={false} value={trauma.length} className='ticks' length={4 + bonus}/>
+      </Ticks>
       <TraumaList trauma={trauma}/>
     </Container>
   );
 }
 
-const { array } = React.PropTypes;
+const { array, number } = React.PropTypes;
 TraumaBar.propTypes = {
-  trauma: array.isRequired
+  trauma: array.isRequired,
+  bonus: number
+}
+TraumaBar.defaultProps = {
+  bonus: 0
 }
 
 export default TraumaBar;

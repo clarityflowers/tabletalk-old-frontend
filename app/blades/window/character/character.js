@@ -88,11 +88,31 @@ class Character extends React.PureComponent {
       load, items,
       editPermission, viewPermission,
       specialAbilities, strangeFriends,
+      crew,
       me
     } = this.props;
-    const disabled = !editPermission.includes(me.id);
+    let stressBonus = 0;
+    let traumaBonus = 0;
+    let rigging = [];
+    if (crew) {
+      const upgrades = Object.keys(crew.crewUpgrades);
+      for (let i=0; i < upgrades.length; i++) {
+        const name = upgrades[i];
+        const upgrade = crew.crewUpgrades[name];
+        if (upgrade.stress) {
+          stressBonus += 1;
+        }
+        if (upgrade.trauma) {
+          traumaBonus += 1;
+        }
+        if (upgrade.rigging) {
+          rigging.push(upgrade.rigging);
+        }
+      }
+    }
     let vigor = 0;
     let loadBonus = 0;
+    const disabled = !editPermission.includes(me.id);
     for (let i=0; i < specialAbilities.length; i++) {
       const ability = specialAbilities[i];
       if (ability.vigor != undefined) {
@@ -107,7 +127,8 @@ class Character extends React.PureComponent {
       coin, stash, playbookXP,
       hunt, study, survey, tinker, insightXP,
       finesse, prowl, skirmish, wreck, prowessXP,
-      attune, command, consort, sway, resolveXP
+      attune, command, consort, sway, resolveXP,
+      mastery: !!crew.trainingUpgrades["Mastery"].value
     };
     const harm = {
       severe: harmSevere,
@@ -124,7 +145,7 @@ class Character extends React.PureComponent {
       specialUsed: specialArmor,
       healingClock, healingUnlocked, vigor
     };
-    const equipment = {load, items, playbook, bonus: loadBonus};
+    const equipment = {load, items, playbook, rigging, bonus: loadBonus};
     let abilityDom = null;
     if (specialAbilities.length > 0) {
       abilityDom = (
@@ -156,7 +177,8 @@ class Character extends React.PureComponent {
             <MiddleRow>
               <Health>
                 <StressHarm>
-                  <Stress stress={stress} trauma={trauma} disabled={disabled}/>
+                  <Stress stress={stress} trauma={trauma} disabled={disabled}
+                          stressBonus={stressBonus} traumaBonus={traumaBonus}/>
                   <Harm {...harm} disabled={disabled}/>
                 </StressHarm>
                 <ArmorHealing {...armorHealing} disabled={disabled}/>
@@ -228,6 +250,7 @@ Character.propTypes = {
   specialAbilities: React.PropTypes.array.isRequired,
   strangeFriends: React.PropTypes.array.isRequired,
   me: React.PropTypes.object.isRequired,
+  crew: React.PropTypes.object
 }
 
 export default Character;

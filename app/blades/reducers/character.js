@@ -13,8 +13,19 @@ const vigor = (c) => {
 }
 
 const actions = {
-  increment_stress: (c) => {
-    if (c.stress < 9) {
+  increment_stress: (c, {crew}) => {
+    let bonus = 0;
+    if (crew) {
+      const upgrades = Object.keys(crew.crewUpgrades);
+      for (let i=0; i < upgrades.length; i++) {
+        const name = upgrades[i];
+        const upgrade = crew.crewUpgrades[name];
+        if (upgrade.stress) {
+          bonus++;
+        }
+      }
+    }
+    if (c.stress < 9 + bonus) {
       return {stress: {$set: c.stress + 1}};
     }
   },
@@ -23,9 +34,9 @@ const actions = {
       return {stress: {$set: c.stress - 1}};
     }
   },
-  add_trauma: (c, trauma) => {
+  add_trauma: (c, {value}) => {
     return {
-      trauma: {$push: [trauma]},
+      trauma: {$push: [value]},
       stress: {$set: 0}
     };
   },
@@ -55,7 +66,7 @@ const actions = {
       }
     }
   },
-  increment_xp: (c, value) => {
+  increment_xp: (c, {value}) => {
     const stat = value.toLowerCase();
     if (stat == 'playbook') {
       if (c.playbookXP < 8) {
@@ -69,14 +80,14 @@ const actions = {
       }
     }
   },
-  decrement_xp: (c, value) => {
+  decrement_xp: (c, {value}) => {
     const stat = value.toLowerCase();
     const prop = stat + 'XP';
     if (c[prop] > 0) {
       return {[prop]: {$set: c[prop] - 1}};
     }
   },
-  advance_action: (c, value) => {
+  advance_action: (c, {value}) => {
     const stat = value.toLowerCase();
     if (c[stat] < 4) {
       let xp = "";
@@ -95,7 +106,8 @@ const actions = {
       };
     }
   },
-  edit_harm: (c, {harm, text}) => {
+  edit_harm: (c, {value}) => {
+    const { harm, text } = value;
     let params = {};
     const prop = "harm" + harm[0].toUpperCase() + harm.slice(1).toLowerCase();
     params[prop] = {$set: text};
@@ -104,7 +116,8 @@ const actions = {
     }
     return params;
   },
-  use_armor: (c, {name, used}) => {
+  use_armor: (c, {value}) => {
+    const { name, used } = value;
     if (name == "armor") {
       let params = {armor: {$set: used}};
       if (!used) {
@@ -119,8 +132,8 @@ const actions = {
       return {specialArmor: {$set: used}}
     }
   },
-  unlock_healing: (c, unlocked) => {
-    return {healingUnlocked: {$set: unlocked}};
+  unlock_healing: (c, {value}) => {
+    return {healingUnlocked: {$set: value}};
   },
   increment_healing: (c) => {
     if (c.healingClock < 4) {
@@ -143,22 +156,22 @@ const actions = {
       return {healingClock: {$set: c.healingClock - 1}};
     }
   },
-  use_item: (c, name) => {
-    if (!c.items.includes(name)) {
-      let array = [name];
-      if (name == "+Heavy" && !c.items.includes("Armor")) {
+  use_item: (c, {value}) => {
+    if (!c.items.includes(value)) {
+      let array = [value];
+      if (value == "+Heavy" && !c.items.includes("Armor")) {
         array.push("Armor");
       }
       return {items: {$push: array}};
     }
   },
-  clear_item: (c, name) => {
-    const index = c.items.indexOf(name);
+  clear_item: (c, {value}) => {
+    const index = c.items.indexOf(value);
     if (index >= 0) {
       let params = {};
       let items = c.items.slice(0);
       items.splice(index, 1);
-      if (name == "Armor") {
+      if (value == "Armor") {
         params.armor = {$set: false};
         params.heavyArmor = {$set: false};
         const index = items.indexOf("+Heavy");
@@ -166,7 +179,7 @@ const actions = {
           items.splice(index, 1);
         }
       }
-      if (name == "+Heavy") {
+      if (value == "+Heavy") {
         params.heavyArmor = {$set: false};
       }
       params.items = {$set: items};
@@ -186,34 +199,38 @@ const actions = {
     }
     return params;
   },
-  set_load: (c, value) => {
+  set_load: (c, {value}) => {
     return {load: {$set: value}};
   }
 }
 
 const reduce = ({action, id, value}) => {
-  let params = {};
-  if (action in actions) {
-    if (action == "create") {
-    }
-    else {
-      params = {$apply: c => {
-        let result = c;
-        if (c != null) {
-          const params = actions[action](c, value);
+  return (state) => {
+    let params = {};
+    if (action in actions) {
+      if (action == "create") {
+      }
+      else {
+        const character = state.characters[id];
+        const crew = state.crews[character.crewId];
+        let result = character;
+        if (character != null) {
+          const params = actions[action](character, {value, crew});
           if (params) {
-            result = update(c, params);
+            result = update(character, params);
           }
         }
-        return result;
-      }};
+        params = {$set: result};
+      }
+      params = {[id]: params};
     }
-    params = {[id]: params};
+    else {
+      console.error(`"${action}" is not a valid character action`);
+    }
+    return {
+      characters: update(state.characters, params)
+    }
   }
-  else {
-    console.error(`"${action}" is not a valid character action`);
-  }
-  return params;
 }
 
 export default reduce;

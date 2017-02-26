@@ -22,8 +22,8 @@ class Stress extends React.PureComponent {
     this.decrement = this.decrement.bind(this);
   }
   increment() {
-    const { stress, dispatch } = this.props;
-    if (stress < 9) {
+    const { stress, bonus, dispatch } = this.props;
+    if (stress < 9 + bonus) {
       dispatch('increment_stress');
     }
   }
@@ -34,14 +34,14 @@ class Stress extends React.PureComponent {
     }
   }
   render() {
-    const { disabled, stress } = this.props;
+    const { disabled, stress, bonus } = this.props;
 
     return (
       <StressBar>
-        <Label disabled={disabled || stress == 9} onClick={this.increment}>
+        <Label disabled={disabled || stress == 9 + bonus} onClick={this.increment}>
           STRESS
         </Label>
-        <Array value={stress} length={9} disabled={disabled}
+        <Array value={stress} length={9 + bonus} disabled={disabled}
                increment={this.increment} decrement={this.decrement}/>
       </StressBar>
     );
@@ -52,7 +52,11 @@ const { number, bool, func } = React.PropTypes;
 Stress.propTypes = {
   stress: number.isRequired,
   disabled: bool.isRequired,
-  dispatch: func.isRequired
+  dispatch: func.isRequired,
+  bonus: number
+}
+Stress.defaultProps = {
+  bonus: 0
 }
 
 export default connect(Stress);

@@ -19,19 +19,26 @@ const Container = styled.div`
 
 
 const Tickbars = (props) => {
-  const { trauma, stress, disabled } = props;
+  const { trauma, stress, disabled, stressBonus, traumaBonus } = props;
   return(
     <Container>
-      <Stress stress={stress} disabled={disabled}/>
-      <TraumaBar trauma={trauma}/>
+      <Stress stress={stress} disabled={disabled} bonus={stressBonus}/>
+      <TraumaBar trauma={trauma} bonus={traumaBonus}/>
     </Container>
   );
 }
 
+const { number, array, bool } = React.PropTypes;
 Tickbars.propTypes = {
-  stress: React.PropTypes.number.isRequired,
-  trauma: React.PropTypes.array.isRequired,
-  disabled: React.PropTypes.bool
+  stress: number.isRequired,
+  trauma: array.isRequired,
+  disabled: bool,
+  stressBonus: number,
+  traumaBonus: number
+}
+Tickbars.defaultProps = {
+  stressBonus: 0,
+  traumaBonus: 0
 }
 
 export default Tickbars;

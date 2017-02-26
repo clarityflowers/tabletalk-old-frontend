@@ -28,7 +28,7 @@ class Stat extends React.PureComponent {
   }
   render() {
     const {
-      disabled, xp, name, dispatch, ...actions
+      disabled, xp, name, mastery, dispatch,...actions
     } = this.props;
     let actionDivs = [];
     let dots = [];
@@ -41,7 +41,7 @@ class Stat extends React.PureComponent {
                 disabled={disabled}
                 name={name}
                 value={value}
-                unlocked={xp >= 6}/>
+                unlocked={xp >= 6 && (value < 3 || mastery)}/>
         );
       }
       return (
@@ -61,6 +61,7 @@ Stat.propTypes = {
   name: string.isRequired,
   xp: number.isRequired,
   disabled: bool.isRequired,
+  mastery: bool.isRequired,
   dispatch: func.isRequired
 }
 

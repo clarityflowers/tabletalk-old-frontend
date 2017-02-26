@@ -52,7 +52,7 @@ class App extends React.Component {
   reduce(what, data) {
     let result = {};
     if (what == 'character') {
-      result.characters = update(this.state.characters, reduceCharacter(data));
+      return reduceCharacter(data);
     }
     if (what == 'crew') {
       result.crews = update(this.state.crews, reduceCrew(data));
@@ -140,6 +140,7 @@ class App extends React.Component {
         tabData.push({
           type: TAB_TYPES.CHARACTER,
           character: character,
+          crew: crews[character.crewId]
         })
       }
     }

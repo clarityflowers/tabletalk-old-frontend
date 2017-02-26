@@ -10,28 +10,30 @@ import {
   ITEMS, COMMON_ITEMS, PLAYBOOK_ITEMS
 } from 'blades/window/character/data/items.js';
 
-const getItemsFromList = (list, items) => {
+const getItemsFromList = (list, items, rigging) => {
   let itemList = [];
   let carrying = 0;
   for (let i=0; i < list.length; i++) {
     const name = list[i];
     const defItem = ITEMS[name];
     let load = 1;
+    let type = null;
     if (defItem) {
       if (defItem.load != undefined) {
         load = defItem.load;
       }
+      type = defItem.type;
     }
     const used = items.includes(name);
-    if (used) { carrying += load; }
     let item = {
       name: name,
       load: load,
+      type: type,
       used: items.includes(name)
     }
     itemList.push(item);
   }
-  return { itemList, carrying };
+  return itemList;
 }
 
 const Container = styled.div`
@@ -46,19 +48,46 @@ const Container = styled.div`
 `
 
 const Equipment = (props) => {
-  const { load, items, playbook, bonus, disabled } = props;
+  const { load, items, playbook, bonus, rigging, disabled } = props;
   let itemList = [];
   let carrying = 0;
 
-  let result = getItemsFromList(COMMON_ITEMS, items);
-  itemList = itemList.concat(result.itemList);
-  carrying += result.carrying;
+  itemList = getItemsFromList(COMMON_ITEMS, items);
 
   const playbookItems = PLAYBOOK_ITEMS[playbook];
   if (playbookItems) {
     let result = getItemsFromList(playbookItems, items);
-    itemList = itemList.concat(result.itemList);
-    carrying += result.carrying;
+    itemList = itemList.concat(result);
+  }
+
+  const riggingAvailable = [];
+  for (let r=0; r < rigging.length; r++) {
+    riggingAvailable.push(2);
+  }
+  console.log(itemList, rigging);
+  for (let i=0; i < itemList.length; i++) {
+    const item = itemList[i];
+    let cost = item.load;
+    if (item.used) {
+      let free = false;
+      for (let rig=0; rig < rigging.length; rig++) {
+        console.log(item.name, rigging[rig]);
+        for (let r=0; r < rigging[rig].length; r++) {
+          const match = (
+            item.name.toLowerCase().includes(rigging[rig][r].toLowerCase()) || (
+              item.type && item.type == rigging[rig][r]
+            )
+          );
+          if (match) {
+            if (riggingAvailable[rig] > 0) {
+              cost = Math.max(0, cost - riggingAvailable);
+              riggingAvailable[rig] -= item.load;
+            }
+          }
+        }
+      }
+      carrying += cost;
+    }
   }
 
   return (
@@ -74,8 +103,9 @@ Equipment.propTypes = {
   load: number.isRequired,
   items: array.isRequired,
   playbook: string,
-  disabled: bool.isRequired,
-  bonus: number.isRequired
+  bonus: number.isRequired,
+  rigging: array.isRequired,
+  disabled: bool.isRequired
 }
 
 export default Equipment;

@@ -4,20 +4,24 @@ const ITEMS = {
   "+Heavy": {
     load: 3
   },
-  "A Large Weapon": {
-    load: 2
-  },
   "Armor": {
     load: 2
   },
+  "A Blade or Two": {
+    type: 'weapons'
+  },
+  "A Cane-Sword": {
+    type: 'weapons'
+  },
   "Climbing Gear": {
-    load: 2
+    load: 2,
   },
   "Concealed Palm Blaster": {
-    load: 0
+    load: 0,
+    type: 'weapons'
   },
   "Demolition Tools": {
-    load: 2
+    load: 2,
   },
   "Fine Clothes & Jewelry": {
     load: 0
@@ -25,27 +29,60 @@ const ITEMS = {
   "Fine Cover Identity": {
     load: 0
   },
+  "Fine Hand Weapon": {
+    type: 'weapons'
+  },
   "Fine Heavy Weapon": {
-    load: 2
+    load: 2,
+    type: 'weapons'
+  },
+  "Fine Lightning Hook": {
+    load: 2,
+    type: 'weapons'
   },
   "Fine Loaded Dice, Trick Cards": {
     load: 0
   },
+  "Fine Long Rifle": {
+    type: 'weapons'
+  },
+  "Fine Pair of Blasters": {
+    type: 'weapons'
+  },
+  "A Large Weapon": {
+    load: 2,
+    type: 'weapons'
+  },
   "Manacles & Chain": {
     load: 0
+  },
+  "A Blaster": {
+    type: 'weapons'
   },
   "Rage Essence Vial": {
     load: 0
   },
+  "Scary Weapon or Tool": {
+    type: 'weapons'
+  },
   "Spiritbane Charm": {
     load: 0
+  },
+  "Throwing Knives": {
+    type: 'weapons',
   },
   "Trance Powder": {
     load: 0
   },
+  "An Unusual Weapon": {
+    type: 'weapons'
+  },
   "Vial of Slumber Essence": {
     load: 0
-  }
+  },
+  "A 2nd Blaster": {
+    type: 'weapons'
+  },
 }
 
 const COMMON_ITEMS = [
@@ -66,7 +103,7 @@ const PLAYBOOK_ITEMS = {
   ],
   "Slide": [
     "Fine Clothes & Jewelry", "Fine Disguise Kit",
-    "Fine Loaded Dice, Trick Cards", "Trance Powder", "A Cane Sword",
+    "Fine Loaded Dice, Trick Cards", "Trance Powder", "A Cane-Sword",
     "Spiritbane Charm"
   ]
 };

@@ -94,7 +94,7 @@ class Window extends React.Component {
         if (i == activeTab) {
           portal = (
             <Dispatcher dispatch={this.sendCharacter(character.id)}>
-              <Character {...character} me={me}/>
+              <Character {...character} crew={data.crew} me={me}/>
             </Dispatcher>
           )
         }
