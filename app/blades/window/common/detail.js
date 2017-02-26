@@ -9,7 +9,7 @@ import Fonts from 'blades/common/fonts';
 const { stone, sun, sand } = Colors;
 
 const Container = styled.div`
-  flex: 1 1 20em;
+  flex: 1 1 auto;
   max-width: 38em;
   min-width: 15em;
   margin: 1em 1em 0 1em;
