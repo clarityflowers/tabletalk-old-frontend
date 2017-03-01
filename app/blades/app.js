@@ -55,7 +55,7 @@ class App extends React.Component {
       return reduceCharacter(data);
     }
     if (what == 'crew') {
-      result.crews = update(this.state.crews, reduceCrew(data));
+      return reduceCrew(data);
     }
     return result;
   }

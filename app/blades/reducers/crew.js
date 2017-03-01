@@ -72,7 +72,8 @@ const actions = {
       rep: {$set: c.rep - 1}
     }
   },
-  toggle_claim: (ch, {r, c}) => {
+  toggle_claim: (ch, {value}) => {
+    const { r, c } = value;
     return {
      claims: {
        claims: {
@@ -87,23 +88,13 @@ const actions = {
      }
     }
   },
-  increment_xp: (c) => {
-    if (c.xp < 7) {
-      return {xp: {$set: c.xp + 1}};
-    }
-    else {
-      return {
-        xp: {$set: 0},
-        availableUpgrades: {$set: c.availableUpgrades + 2}
-      }
-    }
-  },
   decrement_xp: (c) => {
     if (c.xp > 0) {
       return {xp: {$set: c.xp - 1}};
     }
   },
-  cohort: (c, {id, field, value}) => {
+  cohort: (c, props) => {
+    let { id, field, value } = props.value;
     if (["weak", "impaired", "broken", "armor"].includes(field)) {
       let index = null;
       for (let i=0; i < c.cohorts.length; i++) {
@@ -117,7 +108,8 @@ const actions = {
       }
     }
   },
-  add_upgrade: (c, name) => {
+  add_upgrade: (c, {value}) => {
+    const name = value;
     let result = null;
     let category = null;
     if (c.crewUpgrades[name]) {
@@ -148,28 +140,56 @@ const actions = {
 }
 
 const reduce = ({action, id, value}) => {
-  let params = {};
-  if (action in actions) {
+  return (state) => {
     if (action == "create") {
     }
     else {
-      params = {$apply: c => {
-        let result = c;
-        if (c != null) {
-          const params = actions[action](c, value);
-          if (params) {
-            result = update(c, params);
+      const crew = state.crews[id];
+      const params = {};
+      const result = {};
+      if (action == "increment_xp") {
+        if (crew.xp < 7) {
+          params[id] = {xp: {$apply: (xp) => (xp + 1)}};
+        }
+        else {
+          const characterParams = {};
+          params[id] = {
+            xp: {$set: 0},
+            availableUpgrades: {$apply: (up) => (up + 2)}
+          };
+          result.characters = {};
+          const characterIds = Object.keys(state.characters);
+          for (let i=0; i < characterIds.length; i++) {
+            const characterId = characterIds[i];
+            const character = state.characters[characterId];
+            if (character.crewId == id && character) {
+              characterParams[characterId] = {
+                stash: {
+                  $apply: (stash) => (stash + 1 + (2 * crew.tier))
+                }
+              };
+            }
+          }
+          result.characters = update(state.characters, characterParams);
+        }
+      }
+      else if (action in actions) {
+        let result = crew;
+        if (crew != null) {
+          const crewParams = actions[action](crew, {value});
+          if (crewParams) {
+            result = update(crew, crewParams);
           }
         }
-        return result;
-      }};
+        params[id] = {$set: result};
+      }
+      else {
+        console.error(`"${action}" is not a valid crew action`);
+      }
+      result.crews = update(state.crews, params);
+      return result;
     }
-    params = {[id]: params};
   }
-  else {
-    console.error(`"${action}" is not a valid crew action`);
-  }
-  return params;
 }
 
 export default reduce;
