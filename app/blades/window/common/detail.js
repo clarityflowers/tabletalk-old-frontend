@@ -43,9 +43,9 @@ const Body = styled.div`
 
 class Detail extends React.PureComponent {
   render() {
-    const { name, children, className } = this.props;
+    const { name, children, className, alwaysShow } = this.props;
     let short = false;
-    if (children == null) { return null }
+    if (children == null && !alwaysShow) { return null }
     if (typeof children == 'string') {
       if (children.length == 0) { return null}
       if (children.length < 30) {
@@ -79,9 +79,10 @@ class Detail extends React.PureComponent {
   }
 }
 
-const { string } = React.PropTypes;
+const { string, bool } = React.PropTypes;
 Detail.propTypes = {
-  name: string.isRequired
+  name: string.isRequired,
+  alwaysShow: bool
 }
 
 export default Detail;

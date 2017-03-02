@@ -18,6 +18,8 @@ import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
 import Side from 'blades/window/styles/side';
 
+import Detail from 'blades/window/common/detail';
+
 const StatusRow = styled.div`
   display: flex;
   flex-flow: row nowrap;
@@ -27,6 +29,10 @@ const Column = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
+  flex: 0 1 auto;
+`
+const AbilityColumn = styled(Column)`
+  flex: 1 1 auto;
 `
 
 class Crew extends React.PureComponent {
@@ -84,9 +90,9 @@ class Crew extends React.PureComponent {
               <Vaults coin={coin} vaults={lairUpgrades["Vault"].value} disabled={disabled}/>
             </StatusRow>
           </Column>
-          <Column>
+          <AbilityColumn>
             <Abilities xp={xp} abilities={abilities} disabled={disabled}/>
-          </Column>
+          </AbilityColumn>
           {cohortDOM}
         </SheetRow>
         <SheetRow>
@@ -98,6 +104,13 @@ class Crew extends React.PureComponent {
                     available={availableUpgrades} disabled={disabled}/>
           <Upgrades upgrades={trainingUpgrades} name="Training"
                     available={availableUpgrades} disabled={disabled}/>
+          <Column>
+            <Detail name="Reputation">{reputation}</Detail>
+            <Detail name="Lair">{lair}</Detail>
+            <Detail name={"Hunting Grounds: " + huntingGrounds} alwaysShow>
+              {huntingGroundsDescription}
+            </Detail>
+          </Column>
         </SheetRow>
       </Sheet>
     );
