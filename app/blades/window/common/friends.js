@@ -3,20 +3,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import StrangeFriend from './strange-friend';
+import Friend from './friend';
 
 const Container = styled.div`
   flex: 1 1 auto;
 `
 
-class StrangeFriends extends React.PureComponent {
+class Friends extends React.PureComponent {
   render() {
-    const { strangeFriends } = this.props;
+    const { strangeFriends, contacts } = this.props;
     let friends = [];
     for (let i=0; i < strangeFriends.length; i++) {
       const friend = strangeFriends[i];
       friends.push(
-        <StrangeFriend key={i} {...friend}/>
+        <Friend key={i} contact={contacts} {...friend}/>
       )
     }
     return (
@@ -27,9 +27,10 @@ class StrangeFriends extends React.PureComponent {
   }
 };
 
-const { array } = React.PropTypes;
-StrangeFriends.propTypes = {
-  strangeFriends: array.isRequired
+const { array, bool } = React.PropTypes;
+Friends.propTypes = {
+  strangeFriends: array.isRequired,
+  contacts: bool
 }
 
-export default StrangeFriends;
+export default Friends;

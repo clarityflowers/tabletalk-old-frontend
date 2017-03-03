@@ -12,6 +12,7 @@ import Vaults from './vaults';
 import Abilities from './abilities';
 import Cohorts from './cohorts/cohorts';
 import Upgrades from './upgrades/upgrades';
+import Friends from 'blades/window/common/friends';
 
 import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
@@ -33,6 +34,9 @@ const Column = styled.div`
 `
 const AbilityColumn = styled(Column)`
   flex: 1 1 auto;
+`
+const CrewRow = styled(SheetRow)`
+  justify-content: flex-start;
 `
 
 class Crew extends React.PureComponent {
@@ -78,7 +82,7 @@ class Crew extends React.PureComponent {
     return (
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
-        <SheetRow>
+        <CrewRow>
           <Column>
             <StatusRow>
               <Rep rep={rep} turf={turf} disabled={disabled}/>
@@ -94,8 +98,8 @@ class Crew extends React.PureComponent {
             <Abilities xp={xp} abilities={abilities} disabled={disabled}/>
           </AbilityColumn>
           {cohortDOM}
-        </SheetRow>
-        <SheetRow>
+        </CrewRow>
+        <CrewRow>
           <Upgrades upgrades={crewUpgrades} name="Upgrades" showAvailable
                     available={availableUpgrades} disabled={disabled}/>
           <Upgrades upgrades={lairUpgrades} name="Lair"
@@ -111,7 +115,14 @@ class Crew extends React.PureComponent {
               {huntingGroundsDescription}
             </Detail>
           </Column>
-        </SheetRow>
+        </CrewRow>
+        <CrewRow>
+          <Column>
+            <Detail name="Contacts">
+              <Friends strangeFriends={contacts}/>
+            </Detail>
+          </Column>
+        </CrewRow>
       </Sheet>
     );
   }

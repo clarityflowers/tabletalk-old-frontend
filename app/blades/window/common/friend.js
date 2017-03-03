@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Icon from './icon';
+import Icon from './friend-icon';
 
 import Colors from 'blades/common/colors';
 import Fonts from 'blades/common/fonts';
@@ -34,13 +34,13 @@ const Title = styled.div`
 `
 const Description = 'div';
 
-class StrangeFriend extends React.PureComponent {
+class Friend extends React.PureComponent {
   render() {
-    const { name, title, description, isFriend } = this.props;
+    const { name, title, description, isFriend, contact, favorite } = this.props;
     return (
       <Container>
         <Header>
-          <Icon isFriend={isFriend}/>
+          <Icon isFriend={isFriend} isFavorite={favorite}/>
           <Name>{name}</Name>
           <Title>{title}</Title>
         </Header>
@@ -51,11 +51,12 @@ class StrangeFriend extends React.PureComponent {
 }
 
 const { string, bool } = React.PropTypes;
-StrangeFriend.propTypes = {
+Friend.propTypes = {
   name: string.isRequired,
   title: string.isRequired,
   description: string,
-  isFriend: bool
+  isFriend: bool,
+  favorite: bool
 }
 
-export default StrangeFriend;
+export default Friend;

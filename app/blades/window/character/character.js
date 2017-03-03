@@ -14,7 +14,7 @@ import ArmorHealing from './armor-healing/armor-healing';
 import Equipment from './equipment/equipment';
 import Abilities from 'blades/window/common/abilities/abilities';
 import Detail from 'blades/window/common/detail';
-import StrangeFriends from './friends/strange-friends';
+import Friends from 'blades/window/common/friends';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
 
@@ -161,7 +161,7 @@ class Character extends React.PureComponent {
       friendDom = (
         <MiddleColumn>
           <Detail name="Strange Friends">
-            <StrangeFriends strangeFriends={strangeFriends}/>
+            <Friends strangeFriends={strangeFriends}/>
           </Detail>
         </MiddleColumn>
       );

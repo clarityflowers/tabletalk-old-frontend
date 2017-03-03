@@ -43,6 +43,14 @@ class Enemy extends React.PureComponent {
   }
 }
 
+class Favorite extends React.PureComponent {
+  render() {
+    return (
+      <FriendTriangle strokeWidth="10" points="105,65 45,25 45,105"/>
+    )
+  }
+}
+
 class Triangle extends React.PureComponent {
   render() {
     const { children } = this.props;
@@ -61,19 +69,31 @@ class Triangle extends React.PureComponent {
 
 class Icon extends React.PureComponent {
   render() {
-    const { isFriend } = this.props;
+    const { isFriend, isFavorite } = this.props;
+    let triangle = null;
+    if (isFavorite) {
+      triangle = <Favorite/>
+    }
+    else if (isFriend) {
+      triangle = <Friend/>
+    }
+    else if (isFriend === false){
+      triangle = <Enemy/>
+    }
     return (
       <Container>
         <Triangle>
-          {isFriend ? <Friend/> : <Enemy/>}
+          {triangle}
         </Triangle>
       </Container>
     );
   }
 }
 
+const { bool } = React.PropTypes;
 Icon.propTypes = {
-  isFriend: React.PropTypes.bool
+  isFriend: bool,
+  isFavorite: bool
 }
 
 export default Icon;
