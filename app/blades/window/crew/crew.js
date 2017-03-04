@@ -78,7 +78,14 @@ class Crew extends React.PureComponent {
         </Column>
       )
     }
-
+    let huntingGroundsDOM = null;
+    if (huntingGrounds) {
+      huntingGroundsDOM = (
+        <Detail name={"Hunting Grounds: " + huntingGrounds} alwaysShow>
+          {huntingGroundsDescription}
+        </Detail>
+      )
+    }
     return (
       <Sheet>
         <Title name={name} playbook={playbook} crew/>
@@ -110,10 +117,8 @@ class Crew extends React.PureComponent {
                     available={availableUpgrades} disabled={disabled}/>
           <Column>
             <Detail name="Reputation">{reputation}</Detail>
+            {huntingGroundsDOM}
             <Detail name="Lair">{lair}</Detail>
-            <Detail name={"Hunting Grounds: " + huntingGrounds} alwaysShow>
-              {huntingGroundsDescription}
-            </Detail>
           </Column>
         </CrewRow>
         <CrewRow>
