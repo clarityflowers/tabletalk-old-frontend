@@ -132,7 +132,7 @@ class Character extends React.PureComponent {
       hunt, study, survey, tinker, insightXP,
       finesse, prowl, skirmish, wreck, prowessXP,
       attune, command, consort, sway, resolveXP,
-      mastery: !!crew.trainingUpgrades["Mastery"].value
+      mastery
     };
     const harm = {
       severe: harmSevere,
