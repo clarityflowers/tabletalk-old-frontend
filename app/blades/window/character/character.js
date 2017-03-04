@@ -123,6 +123,10 @@ class Character extends React.PureComponent {
       }
     }
     const names = {name, playbook, alias};
+    let mastery = false;
+    if (crew && crew.trainingUpgrades && crew.trainingUpgrades["Mastery"]) {
+      mastery = !!crew.trainingUpgrades["Mastery"].value
+    }
     const stats = {
       coin, stash, playbookXP,
       hunt, study, survey, tinker, insightXP,
