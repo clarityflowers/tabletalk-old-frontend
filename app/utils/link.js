@@ -1,5 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
 import cx from 'classnames';
+
+import cz from 'utils/styled-classes';
+
+const A = styled(cz('a', 'disabled'))`
+  &:not(.disabled) {
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      text-decoration: underline;
+    }
+  }
+`
 
 class Link extends React.Component {
   constructor(props) {
@@ -21,10 +34,10 @@ class Link extends React.Component {
     const { route, className, disabled, children, ...rest } = this.props;
     const name = cx(className, {disabled});
     return (
-      <a {...rest} className={name} tabIndex={disabled ? null : "0"}
+      <A {...rest} className={name} tabIndex={disabled ? null : "0"}
          onClick={this.go} onKeyDown={this.handleKeyDown}>
         {children}
-      </a>
+      </A>
     );
   }
 }

@@ -80,7 +80,6 @@ class Claim extends React.PureComponent {
   handleClick() {
     const { r, c, dispatch } = this.props;
     dispatch('toggle_claim', {r, c});
-    console.log('toggle', r, c);
   }
   render() {
     const { name, description, available, owned, disabled } = this.props;

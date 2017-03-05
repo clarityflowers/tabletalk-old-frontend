@@ -94,7 +94,7 @@ class Window extends React.Component {
         if (i == activeTab) {
           portal = (
             <Dispatcher dispatch={this.sendCharacter(character.id)}>
-              <Character {...character} crew={data.crew} me={me}/>
+              <Character {...character} crew={data.crew} me={me} route={activeRoute}/>
             </Dispatcher>
           )
         }
@@ -111,7 +111,7 @@ class Window extends React.Component {
         if (i == activeTab) {
           portal = (
             <Dispatcher dispatch={this.sendCrew(crew.id)}>
-              <Crew {...crew} me={me}/>
+              <Crew {...crew} me={me} route={activeRoute}/>
             </Dispatcher>
           )
         }
@@ -121,9 +121,7 @@ class Window extends React.Component {
       <Container>
         <OptionsMenu route={route} on={options} auth={auth}/>
         <DiceRoller onChat={onChat}/>
-        <Portal>
-          {portal}
-        </Portal>
+        {portal}
         <Tabs>
           {tabDoms}
         </Tabs>

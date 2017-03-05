@@ -3,43 +3,31 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Title from 'blades/common/components/title';
-import Rep from './rep';
-import Tier from './tier';
-import Claims from './claims/claims';
-import Heat from './heat';
-import Vaults from './vaults';
-import Abilities from './abilities';
-import Cohorts from './cohorts/cohorts';
-import Upgrades from './upgrades/upgrades';
-import Friends from 'blades/window/common/friends';
+import Sheet from './sheet/sheet';
+import NewAbility from './new-ability/new-ability';
 
-import Sheet from 'blades/window/styles/sheet';
-import Row from 'common/row';
-import SheetRow from 'blades/window/styles/sheet-row';
-import Side from 'blades/window/styles/side';
-
-import Detail from 'blades/window/common/detail';
-
-const StatusRow = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-`
-const Column = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  flex: 0 1 auto;
-`
-const AbilityColumn = styled(Column)`
-  flex: 1 1 auto;
-`
-const CrewRow = styled(SheetRow)`
-  justify-content: flex-start;
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 `
 
 class Crew extends React.PureComponent {
+  componentWillMount() {
+    this.checkRoute(this.props);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.checkRoute(nextProps);
+  }
+  checkRoute(props) {
+    const { route, availableUpgrades } = props;
+    if (!route.isExact) {
+      if (route.nextName == 'new_ability') {
+        if (availableUpgrades < 2) {
+          route.replace();
+        }
+      }
+    }
+  }
   render() {
     const {
       id,
@@ -54,12 +42,12 @@ class Crew extends React.PureComponent {
       claims, cohorts,
       abilities, contacts,
       edit, view,
-      me
+      me,
+      route
     } = this.props;
     const disabled = !edit.includes(me.id);
     let turf = 0;
     let vaults = 0;
-    let cohortDOM = null;
 
     for (let r=0; r < claims.claims.length; r++) {
       const row = claims.claims[r];
@@ -71,64 +59,29 @@ class Crew extends React.PureComponent {
       }
     }
 
-    if (cohorts.length > 0) {
-      cohortDOM = (
-        <Column>
-          <Cohorts cohorts={[]} disabled={disabled}/>
-        </Column>
-      )
+    let portal = 'sheet';
+    if (!route.isExact) {
+      if (route.nextName = 'new_ability') {
+        portal = 'new_ability';
+      }
     }
-    let huntingGroundsDOM = null;
-    if (huntingGrounds) {
-      huntingGroundsDOM = (
-        <Detail name={"Hunting Grounds: " + huntingGrounds} alwaysShow>
-          {huntingGroundsDescription}
-        </Detail>
-      )
+
+    const sheetProps = {
+      name, playbook, reputation, rep, turf, strong, tier, heat, wantedLevel,
+      coin, vaults, xp, huntingGrounds, huntingGroundsDescription, lair,
+      availableUpgrades, claims, cohorts, abilities, contacts, lairUpgrades,
+      qualityUpgrades, trainingUpgrades, crewUpgrades, route, disabled,
+      off: portal != 'sheet'
     }
+    const abilityProps = {
+      off: portal != 'new_ability'
+    }
+
     return (
-      <Sheet>
-        <Title name={name} playbook={playbook} crew/>
-        <CrewRow>
-          <Column>
-            <StatusRow>
-              <Rep rep={rep} turf={turf} disabled={disabled}/>
-              <Tier tier={tier} strong={strong}/>
-            </StatusRow>
-            <Claims {...claims} disabled={disabled}/>
-            <StatusRow>
-              <Heat heat={heat} wantedLevel={wantedLevel} disabled={disabled}/>
-              <Vaults coin={coin} vaults={lairUpgrades["Vault"].value} disabled={disabled}/>
-            </StatusRow>
-          </Column>
-          <AbilityColumn>
-            <Abilities xp={xp} abilities={abilities} disabled={disabled}/>
-          </AbilityColumn>
-          {cohortDOM}
-        </CrewRow>
-        <CrewRow>
-          <Upgrades upgrades={crewUpgrades} name="Upgrades" showAvailable
-                    available={availableUpgrades} disabled={disabled}/>
-          <Upgrades upgrades={lairUpgrades} name="Lair"
-                    available={availableUpgrades} disabled={disabled}/>
-          <Upgrades upgrades={qualityUpgrades} name="Quality"
-                    available={availableUpgrades} disabled={disabled}/>
-          <Upgrades upgrades={trainingUpgrades} name="Training"
-                    available={availableUpgrades} disabled={disabled}/>
-          <Column>
-            <Detail name="Reputation">{reputation}</Detail>
-            {huntingGroundsDOM}
-            <Detail name="Lair">{lair}</Detail>
-          </Column>
-        </CrewRow>
-        <CrewRow>
-          <Column>
-            <Detail name="Contacts">
-              <Friends strangeFriends={contacts}/>
-            </Detail>
-          </Column>
-        </CrewRow>
-      </Sheet>
+      <Container>
+        <Sheet {...sheetProps}/>
+        <NewAbility {...abilityProps}/>
+      </Container>
     );
   }
 };
@@ -160,7 +113,8 @@ Crew.propTypes = {
   qualityUpgrades: object.isRequired,
   trainingUpgrades: object.isRequired,
   crewUpgrades: object.isRequired,
-  me: object.isRequired
+  me: object.isRequired,
+  route: object.isRequired
 }
 
 export default Crew;

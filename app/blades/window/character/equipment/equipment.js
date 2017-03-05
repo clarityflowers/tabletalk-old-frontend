@@ -64,14 +64,12 @@ const Equipment = (props) => {
   for (let r=0; r < rigging.length; r++) {
     riggingAvailable.push(2);
   }
-  console.log(itemList, rigging);
   for (let i=0; i < itemList.length; i++) {
     const item = itemList[i];
     let cost = item.load;
     if (item.used) {
       let free = false;
       for (let rig=0; rig < rigging.length; rig++) {
-        console.log(item.name, rigging[rig]);
         for (let r=0; r < rigging[rig].length; r++) {
           const match = (
             item.name.toLowerCase().includes(rigging[rig][r].toLowerCase()) || (

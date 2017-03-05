@@ -22,7 +22,7 @@ const Blades = styled.div`
   height: 100%;
   overflow: hidden;
   ::-webkit-scrollbar {
-    width: .25em;
+    width: .4em;
     padding: 1em;
   }
   ::-webkit-scrollbar-track {

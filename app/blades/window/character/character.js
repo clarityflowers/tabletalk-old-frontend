@@ -5,7 +5,6 @@ import React from 'react';
 import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
-import Sheet from 'blades/window/styles/sheet';
 import Title from 'blades/common/components/title';
 import Stats from './stats/stats';
 import Stress from './stress/stress-and-trauma';
@@ -18,6 +17,8 @@ import Friends from 'blades/window/common/friends';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
 
+import Portal from 'blades/window/common/portal';
+import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
 import Side from 'blades/window/styles/side';
@@ -171,39 +172,41 @@ class Character extends React.PureComponent {
       );
     }
     return (
-      <Sheet>
-        <Title {...names}/>
-        <SheetRow>
-          <Side>
-            <Stats {...stats} disabled={disabled}/>
-          </Side>
-          <Center>
-            <MiddleRow>
-              <Health>
-                <StressHarm>
-                  <Stress stress={stress} trauma={trauma} disabled={disabled}
-                          stressBonus={stressBonus} traumaBonus={traumaBonus}/>
-                  <Harm {...harm} disabled={disabled}/>
-                </StressHarm>
-                <ArmorHealing {...armorHealing} disabled={disabled}/>
-              </Health>
-              {abilityDom}
-            </MiddleRow>
-            <MiddleRow>
-              {friendDom}
-              <MiddleColumn>
-                <Detail name="Look">{look}</Detail>
-                <Detail name="Heritage">{heritage}</Detail>
-                <Detail name="Background">{background}</Detail>
-                <Detail name="Vice">{vice}</Detail>
-              </MiddleColumn>
-            </MiddleRow>
-          </Center>
-          <RightSide>
-            <Equipment {...equipment} disabled={disabled}/>
-          </RightSide>
-        </SheetRow>
-      </Sheet>
+      <Portal>
+        <Sheet>
+          <Title {...names}/>
+          <SheetRow>
+            <Side>
+              <Stats {...stats} disabled={disabled}/>
+            </Side>
+            <Center>
+              <MiddleRow>
+                <Health>
+                  <StressHarm>
+                    <Stress stress={stress} trauma={trauma} disabled={disabled}
+                            stressBonus={stressBonus} traumaBonus={traumaBonus}/>
+                    <Harm {...harm} disabled={disabled}/>
+                  </StressHarm>
+                  <ArmorHealing {...armorHealing} disabled={disabled}/>
+                </Health>
+                {abilityDom}
+              </MiddleRow>
+              <MiddleRow>
+                {friendDom}
+                <MiddleColumn>
+                  <Detail name="Look">{look}</Detail>
+                  <Detail name="Heritage">{heritage}</Detail>
+                  <Detail name="Background">{background}</Detail>
+                  <Detail name="Vice">{vice}</Detail>
+                </MiddleColumn>
+              </MiddleRow>
+            </Center>
+            <RightSide>
+              <Equipment {...equipment} disabled={disabled}/>
+            </RightSide>
+          </SheetRow>
+        </Sheet>
+      </Portal>
     )
   }
 };

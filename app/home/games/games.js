@@ -489,7 +489,6 @@ class Games extends React.Component {
     id = null
   }
   ) {
-    console.log('UPDATE GAME DETAILS', type, name, player, join, id)
     this.setState((state) => {
       if (id == null) {
         id = 'new'
