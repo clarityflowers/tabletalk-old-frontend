@@ -66,13 +66,13 @@ class Abilities extends React.PureComponent {
     }
   }
   render() {
-    const { abilities, xp, disabled, route, available } = this.props;
+    const { abilities, library, xp, disabled, route, available } = this.props;
     return (
       <Container>
         <XP name="Crew XP" value={xp} length={8}
           increment={this.increment} decrement={this.decrement}
           disabled={disabled}/>
-        <StyledAbilities specialAbilities={abilities}/>
+        <StyledAbilities specialAbilities={abilities} def={library}/>
         <Add route={route.push('new_ability')} disabled={available < 2}>New Ability</Add>
       </Container>
     )
@@ -83,6 +83,7 @@ const { number, array, bool, func, object } = React.PropTypes;
 Abilities.propTypes = {
   xp: number.isRequired,
   abilities: array.isRequired,
+  library: object.isRequired,
   disabled: bool.isRequired,
   dispatch: func.isRequired,
   route: object.isRequired,

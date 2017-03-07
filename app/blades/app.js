@@ -41,7 +41,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       characters: {},
-      crews: {}
+      crews: {},
+      library: {}
     }
     this.updates = {};
     this.actionKeys = {};
@@ -111,7 +112,7 @@ class App extends React.Component {
     this.props.onLoad(args);
     const { data } = args;
     if (data) {
-      const { characters, crews } = data;
+      const { characters, crews, library } = data;
       const ids = Object.keys(characters);
       let newCharacters = update(this.state.characters, {
         $merge: characters
@@ -121,7 +122,8 @@ class App extends React.Component {
       })
       this.setState({
         characters: newCharacters,
-        crews: newCrews
+        crews: newCrews,
+        library: library
       });
     }
   }
@@ -130,7 +132,7 @@ class App extends React.Component {
     this.processAction({data: data.data, what: data.what, key: key});
   }
   render() {
-    const { characters, crews, width } = this.state;
+    const { characters, crews, library, width } = this.state;
     let tabData = [];
     {
       const keys = Object.keys(characters);
@@ -165,6 +167,7 @@ class App extends React.Component {
                 auth={this.props.auth}
                 game={this.props.game}
                 options={true}
+                library={library}
                 send={this.send}
                 me={me}
                 breakpoint={MOBILE_BREAKPOINT}/>

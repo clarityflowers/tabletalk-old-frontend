@@ -42,8 +42,9 @@ class Sheet extends React.PureComponent {
     const {
       name, playbook, reputation, rep, turf, strong, tier, heat, wantedLevel,
       coin, vaults, xp, huntingGrounds, huntingGroundsDescription, lair,
-      availableUpgrades, claims, cohorts, abilities, contacts, lairUpgrades,
-      qualityUpgrades, trainingUpgrades, crewUpgrades, route, disabled, off
+      availableUpgrades, claims, cohorts, abilities, defAbilities, contacts,
+      lairUpgrades, qualityUpgrades, trainingUpgrades, crewUpgrades,
+      route, disabled, off, library
     } = this.props;
 
     let cohortDOM = null;
@@ -81,7 +82,9 @@ class Sheet extends React.PureComponent {
               </StatusRow>
             </Column>
             <AbilityColumn>
-              <Abilities xp={xp} abilities={abilities} disabled={disabled} route={route} available={availableUpgrades}/>
+              <Abilities xp={xp} abilities={abilities} disabled={disabled}
+                         route={route} available={availableUpgrades}
+                         library={library.abilities.def}/>
             </AbilityColumn>
             {cohortDOM}
           </CrewRow>
@@ -141,6 +144,7 @@ Sheet.propTypes = {
   crewUpgrades: object.isRequired,
   route: object.isRequired,
   off: bool.isRequired,
+  library: object.isRequired,
 }
 
 export default Sheet;

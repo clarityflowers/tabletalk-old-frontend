@@ -43,7 +43,7 @@ class Crew extends React.PureComponent {
       abilities, contacts,
       edit, view,
       me,
-      route
+      route, library
     } = this.props;
     const disabled = !edit.includes(me.id);
     let turf = 0;
@@ -69,8 +69,9 @@ class Crew extends React.PureComponent {
     const sheetProps = {
       name, playbook, reputation, rep, turf, strong, tier, heat, wantedLevel,
       coin, vaults, xp, huntingGrounds, huntingGroundsDescription, lair,
-      availableUpgrades, claims, cohorts, abilities, contacts, lairUpgrades,
-      qualityUpgrades, trainingUpgrades, crewUpgrades, route, disabled,
+      availableUpgrades, claims, cohorts, abilities, contacts,
+      lairUpgrades, qualityUpgrades, trainingUpgrades, crewUpgrades,
+      route, disabled, library,
       off: portal != 'sheet'
     }
     const abilityProps = {
@@ -108,6 +109,7 @@ Crew.propTypes = {
   claims: object.isRequired,
   cohorts: array.isRequired,
   abilities: array.isRequired,
+  library: object.isRequired,
   contacts: array.isRequired,
   lairUpgrades: object.isRequired,
   qualityUpgrades: object.isRequired,
