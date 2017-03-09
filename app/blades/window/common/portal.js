@@ -29,6 +29,11 @@ const Container = styled(cz('div', ['left', 'right']))`
       background: ${fadeout(fire, 0.5)};
     }
   }
+  &.left, &.right {
+    &::-webkit-scrollbar-thumb {
+      background: ${stone};
+    }
+  }
   &.left {
     left: -100%;
   }
