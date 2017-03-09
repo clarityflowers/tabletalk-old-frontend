@@ -5,7 +5,7 @@ class Route {
     this.historyPush = historyPush;
     this.historyReplace = historyReplace;
     this.name = path[location];
-    this.nextName = this.path[this.location + 1];
+    this.nextName = path[location + 1];
     this.isExact = location == path.length - 1;
   }
   next() {
@@ -40,9 +40,14 @@ class Route {
   }
   push(name) {
     let location = this.location + 1;
-    let path = this.path.slice(0, location);
-    path.push(name);
-    return new Route(path, location, this.historyPush, this.historyReplace);
+    if (this.nextName == name) {
+      return new Route(this.path, location, this.historyPush, this.historyReplace);
+    }
+    else {
+      let path = this.path.slice(0, location);
+      path.push(name);
+      return new Route(path, location, this.historyPush, this.historyReplace);
+    }
   }
   pop() {
     let path = this.path.slice(0, this.location);

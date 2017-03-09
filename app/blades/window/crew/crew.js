@@ -48,6 +48,7 @@ class Crew extends React.PureComponent {
     const disabled = !edit.includes(me.id);
     let turf = 0;
     let vaults = 0;
+    let next = route;
 
     for (let r=0; r < claims.claims.length; r++) {
       const row = claims.claims[r];
@@ -61,10 +62,11 @@ class Crew extends React.PureComponent {
 
     let portal = 'sheet';
     if (!route.isExact) {
-      if (route.nextName = 'new_ability') {
+      if (route.nextName == 'new_ability' && !disabled) {
         portal = 'new_ability';
       }
     }
+    const nextRoute = route.push(portal);
 
     const sheetProps = {
       name, playbook, reputation, rep, turf, strong, tier, heat, wantedLevel,
@@ -75,7 +77,10 @@ class Crew extends React.PureComponent {
       off: portal != 'sheet'
     }
     const abilityProps = {
-      off: portal != 'new_ability'
+      abilities, playbook,
+      library: library.abilities,
+      off: portal != 'new_ability',
+      route: nextRoute,
     }
 
     return (
