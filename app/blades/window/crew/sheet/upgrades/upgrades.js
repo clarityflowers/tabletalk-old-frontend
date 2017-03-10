@@ -16,9 +16,10 @@ const { sand, shadow } = Colors;
 
 const Container = styled(cz('div', ['checked', 'unlocked']))`
   display: flex;
+  flex: 1 0 auto;
   flex-flow: column nowrap;
   align-items: stretch;
-  min-width: 8em;
+  min-width: 6em;
   margin: .5em;
 `
 const Label = styled(CommonLabel)`
