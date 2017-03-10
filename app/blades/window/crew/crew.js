@@ -62,7 +62,11 @@ class Crew extends React.PureComponent {
 
     let portal = 'sheet';
     if (!route.isExact) {
-      if (route.nextName == 'new_ability' && !disabled) {
+      if (
+        route.nextName == 'new_ability' &&
+        !disabled &&
+        availableUpgrades > 2
+      ) {
         portal = 'new_ability';
       }
     }
