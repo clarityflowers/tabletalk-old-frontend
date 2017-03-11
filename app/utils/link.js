@@ -5,10 +5,12 @@ import cx from 'classnames';
 import cz from 'utils/styled-classes';
 
 const A = styled(cz('a', 'disabled'))`
+  &:focus {
+    outline: none;
+  }
   &:not(.disabled) {
     cursor: pointer;
     &:focus {
-      outline: none;
       text-decoration: underline;
     }
   }
@@ -21,7 +23,11 @@ class Link extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
   go() {
-    this.props.route.go();
+    const { disabled, route } = this.props;
+    if (!disabled) {
+      console.log(disabled);
+      route.go();
+    }
   }
   handleKeyDown(e) {
     if (e.which == '32' || e.which == '13') {
@@ -33,6 +39,7 @@ class Link extends React.Component {
   render() {
     const { route, className, disabled, children, ...rest } = this.props;
     const name = cx(className, {disabled});
+    console.log(children, disabled);
     return (
       <A {...rest} className={name} tabIndex={disabled ? null : "0"}
          onClick={this.go} onKeyDown={this.handleKeyDown}>

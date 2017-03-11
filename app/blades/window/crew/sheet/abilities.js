@@ -30,7 +30,7 @@ const StyledAbilities = styled(CommonAbilities)`
   font-size: 0.8em;
   margin-top: 0.5em;
 `
-const Add = styled(cz(Link, 'disabled'))`
+const Add = styled(cz(Link, null, 'disabled'))`
   align-self: center;
   color: ${darken(stone, 0.1)};
   transition: color .15s, text-shadow .15s;
