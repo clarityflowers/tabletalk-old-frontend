@@ -67,7 +67,8 @@ class App extends React.Component {
   }
   /* ---------- load ---------------------------------------------------------*/
   load(args) {
-    const { players, me, chats, data } = args;
+    const { players, me, data } = args;
+    const { chats } = data;
     if (players) {
       this.props.onLoad({players, me, data});
     }
