@@ -67,12 +67,14 @@ class Abilities extends React.PureComponent {
   }
   render() {
     const { abilities, library, xp, disabled, route, available } = this.props;
+    const abilityList = abilities.map((a) => a.name)
+    console.log(abilities, abilityList);
     return (
       <Container>
         <XP name="Crew XP" value={xp} length={8}
           increment={this.increment} decrement={this.decrement}
           disabled={disabled}/>
-        <StyledAbilities specialAbilities={abilities} def={library}/>
+        <StyledAbilities specialAbilities={abilityList} def={library}/>
         <Add route={route.push('new_ability')} disabled={available < 2}>New Ability</Add>
       </Container>
     )

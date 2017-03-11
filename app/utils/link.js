@@ -25,7 +25,6 @@ class Link extends React.Component {
   go() {
     const { disabled, route } = this.props;
     if (!disabled) {
-      console.log(disabled);
       route.go();
     }
   }

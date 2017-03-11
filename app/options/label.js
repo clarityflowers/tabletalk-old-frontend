@@ -45,6 +45,9 @@ const Button = styled(CommonButton)`
   &focus: {
     outline: 1px solid white;
   }
+  &:disabled {
+    pointer-events: none;
+  }
 `
 
 class Label extends React.Component {
@@ -102,7 +105,7 @@ class Label extends React.Component {
       <Container style={style} state={menuState} isTitle={isTitle}>
         <Button  innerRef={e => this.label = e}
                  onClick={this.click.bind(this)}
-                 disabled={disabled}
+                 disabled={disabled || !on}
                  onMouseEnter={this.mouseEnter.bind(this)}
                  onMouseLeave={this.mouseLeave.bind(this)}
                  onTouchMove={this.mouseLeave.bind(this)}>

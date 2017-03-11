@@ -20,8 +20,15 @@ class NewAbility extends React.PureComponent {
     this.handleAdd = this.handleAdd.bind(this);
   }
   handleAdd(name) {
-    const { dispatch, route } = this.props;
-    dispatch('add_ability', name);
+    const { dispatch, route, library, playbook } = this.props;
+    const pb = library.playbook[playbook];
+    const result = {name, veteran: false};
+    if (pb) {
+      if (!pb.includes(name)) {
+        result.veteran = true;
+      }
+    }
+    dispatch('add_ability', result);
     route.pop().replace();
   }
   render() {

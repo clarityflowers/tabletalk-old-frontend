@@ -25,8 +25,8 @@ class Self extends React.PureComponent {
     const abilityList = listAbilities(names, abilities, def, onAdd);
     let veteran = 0;
     for (let i=0; i < abilities.length; i++) {
-      const name = abilities[i];
-      if (!names.includes(name) && def[name]) {
+      const ability = abilities[i];
+      if (ability.veteran) {
         veteran++;
       }
     }
