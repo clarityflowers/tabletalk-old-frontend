@@ -21,8 +21,8 @@ const { sun, sand, fire } = Colors;
 
 class Self extends React.PureComponent {
   render() {
-    const { abilities, names, def, route, left, right } = this.props;
-    const abilityList = listAbilities(names, abilities, def);
+    const { abilities, names, def, route, left, right, onAdd } = this.props;
+    const abilityList = listAbilities(names, abilities, def, onAdd);
     let veteran = 0;
     for (let i=0; i < abilities.length; i++) {
       const name = abilities[i];
@@ -51,13 +51,14 @@ class Self extends React.PureComponent {
   }
 }
 
-const { array, object, bool } = React.PropTypes;
+const { array, object, bool, add, func } = React.PropTypes;
 Self.propTypes = {
   abilities: array.isRequired,
   def: object.isRequired,
   route: object.isRequired,
   left: bool.isRequired,
-  right: bool.isRequired
+  right: bool.isRequired,
+  onAdd: func.isRequired
 }
 
 export default Self;

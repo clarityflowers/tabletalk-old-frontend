@@ -6,6 +6,8 @@ import styled, { css }  from 'styled-components';
 import Self from './self';
 import Veteran from './veteran';
 
+import connect from 'utils/connect';
+
 const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -13,6 +15,15 @@ const Container = styled.div`
 `
 
 class NewAbility extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.handleAdd = this.handleAdd.bind(this);
+  }
+  handleAdd(name) {
+    const { dispatch, route } = this.props;
+    dispatch('add_ability', name);
+    route.pop().replace();
+  }
   render() {
     const {
       abilities, playbook, library, off, route
@@ -27,9 +38,9 @@ class NewAbility extends React.PureComponent {
       <Container>
         <Self abilities={abilities} def={library.def}
               names={library.playbook[playbook]} route={route}
-              right={off} left={nextName == 'veteran'}/>
+              right={off} left={nextName == 'veteran'} onAdd={this.handleAdd}/>
         <Veteran abilities={abilities} playbook={playbook} library={library}
-                 route={route} off={nextName != 'veteran'}/>
+                 off={nextName != 'veteran'} onAdd={this.handleAdd}/>
       </Container>
     )
   }
@@ -44,4 +55,4 @@ NewAbility.propTypes = {
   route: object.isRequired
 }
 
-export default NewAbility;
+export default connect(NewAbility);
