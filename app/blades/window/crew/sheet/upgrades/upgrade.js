@@ -21,6 +21,7 @@ const Button = styled(cz(CommonButton, ['checked', 'unlocked']))`
   color: ${darken(stone, 0.05)};
   margin-right: .4em;
   transition: color .15s, text-shadow .15s;
+  text-align: left;
   &.checked {
     font-weight: 700;
     color: ${sun};

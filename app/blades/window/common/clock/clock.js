@@ -116,7 +116,6 @@ class Clock extends React.Component {
   }
   render() {
     const { className, value, size, disabled, increment, decrement, lock } = this.props;
-    console.log('CLOCK', lock);
     const { hover, click } = this.state;
     const r = .5;
     const stroke = 0.1;

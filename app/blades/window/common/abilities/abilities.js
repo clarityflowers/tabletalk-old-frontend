@@ -31,10 +31,15 @@ const Container = styled.div`
 `
 
 const Abilities = (props) => {
-  const { playbook, specialAbilities, ...rest } = props;
+  const { specialAbilities, def, ...rest } = props;
   let abilities = [];
   for (let i=0; i < specialAbilities.length; i++) {
-    const ability = specialAbilities[i];
+    const name = specialAbilities[i];
+    let ability = def[name];
+    if (!ability) {
+      ability = {};
+    }
+    ability.name = name;
     abilities.push(
       <Ability key={i} {...ability}/>
     );
@@ -46,8 +51,10 @@ const Abilities = (props) => {
   )
 }
 
+const { string, array, object } = React.PropTypes;
 Abilities.propTypes = {
-  specialAbilities: React.PropTypes.array.isRequired
+  specialAbilities: array.isRequired,
+  def: object.isRequired
 }
 
 export default Abilities;

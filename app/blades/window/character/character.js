@@ -5,7 +5,6 @@ import React from 'react';
 import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
-import Sheet from 'blades/window/styles/sheet';
 import Title from 'blades/common/components/title';
 import Stats from './stats/stats';
 import Stress from './stress/stress-and-trauma';
@@ -18,6 +17,8 @@ import Friends from 'blades/window/common/friends';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
 
+import Portal from 'blades/window/common/portal';
+import Sheet from 'blades/window/styles/sheet';
 import Row from 'common/row';
 import SheetRow from 'blades/window/styles/sheet-row';
 import Side from 'blades/window/styles/side';
@@ -89,7 +90,7 @@ class Character extends React.PureComponent {
       editPermission, viewPermission,
       specialAbilities, strangeFriends,
       crew,
-      me
+      me, library
     } = this.props;
     let stressBonus = 0;
     let traumaBonus = 0;
@@ -155,7 +156,7 @@ class Character extends React.PureComponent {
       abilityDom = (
         <MiddleColumn>
           <Detail name="Special Abilities">
-            <Abilities specialAbilities={specialAbilities}/>
+            <Abilities specialAbilities={specialAbilities} def={library.abilities.def}/>
           </Detail>
         </MiddleColumn>
       );
@@ -171,90 +172,94 @@ class Character extends React.PureComponent {
       );
     }
     return (
-      <Sheet>
-        <Title {...names}/>
-        <SheetRow>
-          <Side>
-            <Stats {...stats} disabled={disabled}/>
-          </Side>
-          <Center>
-            <MiddleRow>
-              <Health>
-                <StressHarm>
-                  <Stress stress={stress} trauma={trauma} disabled={disabled}
-                          stressBonus={stressBonus} traumaBonus={traumaBonus}/>
-                  <Harm {...harm} disabled={disabled}/>
-                </StressHarm>
-                <ArmorHealing {...armorHealing} disabled={disabled}/>
-              </Health>
-              {abilityDom}
-            </MiddleRow>
-            <MiddleRow>
-              {friendDom}
-              <MiddleColumn>
-                <Detail name="Look">{look}</Detail>
-                <Detail name="Heritage">{heritage}</Detail>
-                <Detail name="Background">{background}</Detail>
-                <Detail name="Vice">{vice}</Detail>
-              </MiddleColumn>
-            </MiddleRow>
-          </Center>
-          <RightSide>
-            <Equipment {...equipment} disabled={disabled}/>
-          </RightSide>
-        </SheetRow>
-      </Sheet>
+      <Portal>
+        <Sheet>
+          <Title {...names}/>
+          <SheetRow>
+            <Side>
+              <Stats {...stats} disabled={disabled}/>
+            </Side>
+            <Center>
+              <MiddleRow>
+                <Health>
+                  <StressHarm>
+                    <Stress stress={stress} trauma={trauma} disabled={disabled}
+                            stressBonus={stressBonus} traumaBonus={traumaBonus}/>
+                    <Harm {...harm} disabled={disabled}/>
+                  </StressHarm>
+                  <ArmorHealing {...armorHealing} disabled={disabled}/>
+                </Health>
+                {abilityDom}
+              </MiddleRow>
+              <MiddleRow>
+                {friendDom}
+                <MiddleColumn>
+                  <Detail name="Look">{look}</Detail>
+                  <Detail name="Heritage">{heritage}</Detail>
+                  <Detail name="Background">{background}</Detail>
+                  <Detail name="Vice">{vice}</Detail>
+                </MiddleColumn>
+              </MiddleRow>
+            </Center>
+            <RightSide>
+              <Equipment {...equipment} disabled={disabled}/>
+            </RightSide>
+          </SheetRow>
+        </Sheet>
+      </Portal>
     )
   }
 };
 
+const { number, string, array, bool, object } = React.PropTypes
 Character.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  name: React.PropTypes.string.isRequired,
-  playbook: React.PropTypes.string,
-  alias: React.PropTypes.string,
-  look: React.PropTypes.string,
-  heritage: React.PropTypes.string,
-  background: React.PropTypes.string,
-  vice: React.PropTypes.string,
-  playbookXP: React.PropTypes.number.isRequired,
-  coin: React.PropTypes.number.isRequired,
-  stash: React.PropTypes.number.isRequired,
-  insightXP: React.PropTypes.number.isRequired,
-  hunt: React.PropTypes.number.isRequired,
-  study: React.PropTypes.number.isRequired,
-  survey: React.PropTypes.number.isRequired,
-  tinker: React.PropTypes.number.isRequired,
-  prowessXP: React.PropTypes.number.isRequired,
-  finesse: React.PropTypes.number.isRequired,
-  prowl: React.PropTypes.number.isRequired,
-  skirmish: React.PropTypes.number.isRequired,
-  wreck: React.PropTypes.number.isRequired,
-  resolveXP: React.PropTypes.number.isRequired,
-  attune: React.PropTypes.number.isRequired,
-  command: React.PropTypes.number.isRequired,
-  consort: React.PropTypes.number.isRequired,
-  sway: React.PropTypes.number.isRequired,
-  stress: React.PropTypes.number.isRequired,
-  trauma: React.PropTypes.array.isRequired,
-  healingUnlocked: React.PropTypes.bool.isRequired,
-  healingClock: React.PropTypes.number.isRequired,
-  harmSevere: React.PropTypes.string.isRequired,
-  harmModerate1: React.PropTypes.string.isRequired,
-  harmModerate2: React.PropTypes.string.isRequired,
-  harmLesser1: React.PropTypes.string.isRequired,
-  harmLesser2: React.PropTypes.string.isRequired,
-  armor: React.PropTypes.bool.isRequired,
-  heavyArmor: React.PropTypes.bool.isRequired,
-  specialArmor: React.PropTypes.bool.isRequired,
-  load: React.PropTypes.number.isRequired,
-  items: React.PropTypes.array.isRequired,
-  editPermission: React.PropTypes.array.isRequired,
-  viewPermission: React.PropTypes.array.isRequired,
-  specialAbilities: React.PropTypes.array.isRequired,
-  strangeFriends: React.PropTypes.array.isRequired,
-  me: React.PropTypes.object.isRequired,
-  crew: React.PropTypes.object
+  id: number.isRequired,
+  name: string.isRequired,
+  playbook: string,
+  alias: string,
+  look: string,
+  heritage: string,
+  background: string,
+  vice: string,
+  playbookXP: number.isRequired,
+  coin: number.isRequired,
+  stash: number.isRequired,
+  insightXP: number.isRequired,
+  hunt: number.isRequired,
+  study: number.isRequired,
+  survey: number.isRequired,
+  tinker: number.isRequired,
+  prowessXP: number.isRequired,
+  finesse: number.isRequired,
+  prowl: number.isRequired,
+  skirmish: number.isRequired,
+  wreck: number.isRequired,
+  resolveXP: number.isRequired,
+  attune: number.isRequired,
+  command: number.isRequired,
+  consort: number.isRequired,
+  sway: number.isRequired,
+  stress: number.isRequired,
+  trauma: array.isRequired,
+  healingUnlocked: bool.isRequired,
+  healingClock: number.isRequired,
+  harmSevere: string.isRequired,
+  harmModerate1: string.isRequired,
+  harmModerate2: string.isRequired,
+  harmLesser1: string.isRequired,
+  harmLesser2: string.isRequired,
+  armor: bool.isRequired,
+  heavyArmor: bool.isRequired,
+  specialArmor: bool.isRequired,
+  load: number.isRequired,
+  items: array.isRequired,
+  editPermission: array.isRequired,
+  viewPermission: array.isRequired,
+  specialAbilities: array.isRequired,
+  strangeFriends: array.isRequired,
+  me: object.isRequired,
+  crew: object,
+  library: object.isRequired
 }
 
 export default Character;

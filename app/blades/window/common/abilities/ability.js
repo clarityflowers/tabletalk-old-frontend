@@ -43,7 +43,7 @@ const Ability = (props) => {
   }
   return (
     <P>
-        <Name>{title}</Name>
+        <Name className='name'>{title}</Name>
         {result}
     </P>
   )

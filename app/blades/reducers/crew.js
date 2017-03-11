@@ -136,6 +136,15 @@ const actions = {
         }
       }
     }
+  },
+  add_ability: (c, {value}) => {
+    const { name, veteran } = value;
+    if (c.availableUpgrades >= 2) {
+      return {
+        abilities: {$push: [value]},
+        availableUpgrades: {$apply: (value) => value - 2}
+      };
+    }
   }
 }
 

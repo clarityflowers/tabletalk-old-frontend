@@ -67,7 +67,13 @@ class Window extends React.Component {
     return this.send("crew", id)
   }
   render() {
-    const { update, send, me, game, tabs, route, options, auth, onChat } = this.props;
+    const {
+      send,
+      me,
+      game, tabs,
+      library,
+      route, options, auth, onChat
+    } = this.props;
     let activeRoute = this.props.route;
     let portal = null;
     let tabDoms = [];
@@ -94,7 +100,8 @@ class Window extends React.Component {
         if (i == activeTab) {
           portal = (
             <Dispatcher dispatch={this.sendCharacter(character.id)}>
-              <Character {...character} crew={data.crew} me={me}/>
+              <Character {...character} crew={data.crew} me={me}
+                         route={activeRoute} library={library.character}/>
             </Dispatcher>
           )
         }
@@ -111,7 +118,8 @@ class Window extends React.Component {
         if (i == activeTab) {
           portal = (
             <Dispatcher dispatch={this.sendCrew(crew.id)}>
-              <Crew {...crew} me={me}/>
+              <Crew {...crew} me={me} route={activeRoute}
+                    library={library.crew}/>
             </Dispatcher>
           )
         }
@@ -121,9 +129,7 @@ class Window extends React.Component {
       <Container>
         <OptionsMenu route={route} on={options} auth={auth}/>
         <DiceRoller onChat={onChat}/>
-        <Portal>
-          {portal}
-        </Portal>
+        {portal}
         <Tabs>
           {tabDoms}
         </Tabs>
@@ -132,4 +138,16 @@ class Window extends React.Component {
   }
 }
 
+const { object, func, number, array, bool } = React.PropTypes;
+Window.propTypes = {
+  send: func.isRequired,
+  me: object,
+  game: object.isRequired,
+  tabs: array.isRequired,
+  library: object.isRequired,
+  route: object.isRequired,
+  options: bool.isRequired,
+  auth: object.isRequired,
+  onChat: func.isRequired
+}
 export default Window;
