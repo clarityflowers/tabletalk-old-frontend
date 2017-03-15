@@ -88,7 +88,7 @@ class Character extends React.PureComponent {
       armor, heavyArmor, specialArmor,
       load, items,
       editPermission, viewPermission,
-      specialAbilities, strangeFriends,
+      abilities, strangeFriends,
       crew,
       me, library
     } = this.props;
@@ -114,13 +114,16 @@ class Character extends React.PureComponent {
     let vigor = 0;
     let loadBonus = 0;
     const disabled = !editPermission.includes(me.id);
-    for (let i=0; i < specialAbilities.length; i++) {
-      const ability = specialAbilities[i];
-      if (ability.vigor != undefined) {
-        vigor += ability.vigor;
-      }
-      if (ability.load != undefined) {
-        loadBonus += ability.load;
+    for (let i=0; i < abilities.length; i++) {
+      const ability = abilities[i];
+      const def = library.abilities.def[ability.name];
+      if (def) {
+        if (def.vigor != undefined) {
+          vigor += def.vigor;
+        }
+        if (def.load != undefined) {
+          loadBonus += def.load;
+        }
       }
     }
     const names = {name, playbook, alias};
@@ -152,11 +155,11 @@ class Character extends React.PureComponent {
     };
     const equipment = {load, items, playbook, rigging, bonus: loadBonus};
     let abilityDom = null;
-    if (specialAbilities.length > 0) {
+    if (abilities.length > 0) {
       abilityDom = (
         <MiddleColumn>
           <Detail name="Special Abilities">
-            <Abilities specialAbilities={specialAbilities} def={library.abilities.def}/>
+            <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def}/>
           </Detail>
         </MiddleColumn>
       );
@@ -255,7 +258,7 @@ Character.propTypes = {
   items: array.isRequired,
   editPermission: array.isRequired,
   viewPermission: array.isRequired,
-  specialAbilities: array.isRequired,
+  abilities: array.isRequired,
   strangeFriends: array.isRequired,
   me: object.isRequired,
   crew: object,

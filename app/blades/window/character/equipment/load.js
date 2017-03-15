@@ -144,7 +144,6 @@ class Load extends React.PureComponent {
   };
   render() {
     const { load, bonus, carrying, disabled } = this.props;
-    console.log('RENDER LOAD', load, bonus, carrying);
     const clear = null;
     const over = carrying > load;
     let buttons = [];

@@ -55,6 +55,7 @@ class Focus extends React.PureComponent {
     const { onClick, disabled } = this.props;
     if (onClick && !disabled) {
       onClick();
+      console.log('onClick focus');
       if (keepFocus !== true) {
         document.activeElement.blur();
       }
@@ -141,12 +142,6 @@ class Clock extends React.Component {
       if (!disabled) {
         props.onMouseOver = this.mouseOver(i);
         props.onMouseLeave = this.mouseLeave(i);
-        if (value <= i) {
-          props.onClick = increment;
-        }
-        else {
-          props.onClick = decrement;
-        }
         if (hover != null) {
           if (i < value && i == value + highlight) {
             props.highlight = true;

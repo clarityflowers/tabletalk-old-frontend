@@ -38,7 +38,6 @@ class Link extends React.Component {
   render() {
     const { route, className, disabled, children, ...rest } = this.props;
     const name = cx(className, {disabled});
-    console.log(children, disabled);
     return (
       <A {...rest} className={name} tabIndex={disabled ? null : "0"}
          onClick={this.go} onKeyDown={this.handleKeyDown}>

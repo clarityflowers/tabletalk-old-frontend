@@ -2,10 +2,11 @@
 
 import update from 'react-addons-update';
 
-const vigor = (c) => {
-  for (let i=0; i < c.specialAbilities.length; i++) {
-    let ability = c.specialAbilities[i];
-    if (ability && ability.vigor) {
+const vigor = (c, library) => {
+  for (let i=0; i < c.abilities.length; i++) {
+    const ability = c.abilities[i];
+    const def = library[ability.name];
+    if (def && def.vigor) {
       return 1;
     }
   }
@@ -135,13 +136,13 @@ const actions = {
   unlock_healing: (c, {value}) => {
     return {healingUnlocked: {$set: value}};
   },
-  increment_healing: (c) => {
+  increment_healing: (c, {library}) => {
     if (c.healingClock < 4) {
       return {healingClock: {$set: c.healingClock + 1}};
     }
     else {
       return {
-        healingClock: {$set: vigor(c)},
+        healingClock: {$set: vigor(c, library.abilities.def)},
         harmSevere: {$set: ""},
         harmModerate1: {$set: ""},
         harmModerate2: {$set: ""},
@@ -151,8 +152,8 @@ const actions = {
       };
     }
   },
-  decrement_healing: (c) => {
-    if (c.healingClock > vigor(c)) {
+  decrement_healing: (c, {library}) => {
+    if (c.healingClock > vigor(c, library.abilities.def)) {
       return {healingClock: {$set: c.healingClock - 1}};
     }
   },
@@ -213,9 +214,10 @@ const reduce = ({action, id, value}) => {
       else {
         const character = state.characters[id];
         const crew = state.crews[character.crewId];
+        const library = state.library.character;
         let result = character;
         if (character != null) {
-          const params = actions[action](character, {value, crew});
+          const params = actions[action](character, {value, crew, library});
           if (params) {
             result = update(character, params);
           }

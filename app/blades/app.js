@@ -61,6 +61,7 @@ class App extends React.Component {
     return result;
   }
   processAction({what, data, key}) {
+    console.log('ACTION', what, data, key);
     if (key in this.actionKeys) {
       delete this.actionKeys[key];
       return;

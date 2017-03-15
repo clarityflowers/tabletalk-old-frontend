@@ -31,29 +31,29 @@ const Container = styled.div`
 `
 
 const Abilities = (props) => {
-  const { specialAbilities, def, ...rest } = props;
-  let abilities = [];
-  for (let i=0; i < specialAbilities.length; i++) {
-    const name = specialAbilities[i];
+  const { abilities, def, ...rest } = props;
+  let list = [];
+  for (let i=0; i < abilities.length; i++) {
+    const name = abilities[i];
     let ability = def[name];
     if (!ability) {
       ability = {};
     }
     ability.name = name;
-    abilities.push(
+    list.push(
       <Ability key={i} {...ability}/>
     );
   }
   return (
     <Container {...rest}>
-      {abilities}
+      {list}
     </Container>
   )
 }
 
 const { string, array, object } = React.PropTypes;
 Abilities.propTypes = {
-  specialAbilities: array.isRequired,
+  abilities: array.isRequired,
   def: object.isRequired
 }
 
