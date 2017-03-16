@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Ability from './ability';
+import NewAbilityLink from 'blades/window/styles/new-ability-link';
 
 import Colors from 'blades/common/colors';
 import {
@@ -14,9 +15,8 @@ const { sun, stone } = Colors;
 
 const Container = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-content: flex-start;
+  flex-flow: column nowrap;
+  align-items: center;
   width: 100%;
   max-width: 38em;
   min-width: 15em;
@@ -30,8 +30,15 @@ const Container = styled.div`
   }
 `
 
+const List = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+`
+
 const Abilities = (props) => {
-  const { abilities, def, ...rest } = props;
+  const { abilities, def, route, disabled, ...rest } = props;
   let list = [];
   for (let i=0; i < abilities.length; i++) {
     const name = abilities[i];
@@ -47,14 +54,17 @@ const Abilities = (props) => {
   return (
     <Container {...rest}>
       {list}
+      <NewAbilityLink route={route.push('new_ability')} disabled={disabled}>New Ability</NewAbilityLink>
     </Container>
   )
 }
 
-const { string, array, object } = React.PropTypes;
+const { string, array, object, bool } = React.PropTypes;
 Abilities.propTypes = {
   abilities: array.isRequired,
-  def: object.isRequired
+  def: object.isRequired,
+  route: object.isRequired,
+  disabled: bool.isRequired,
 }
 
 export default Abilities;

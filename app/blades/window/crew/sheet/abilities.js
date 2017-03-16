@@ -6,13 +6,6 @@ import styled from 'styled-components';
 import CommonDetail from 'blades/window/common/detail';
 import CommonAbilities from 'blades/window/common/abilities/abilities';
 import XP from 'blades/window/common/xp';
-import Link from 'utils/link';
-
-import Colors from 'blades/common/colors';
-import { lighten, darken } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
-
-const { fire, sand, stone, textShadow } = Colors;
 
 import connect from 'utils/connect';
 
@@ -27,24 +20,8 @@ const Detail = styled(CommonDetail)`
   margin: 0;
 `
 const StyledAbilities = styled(CommonAbilities)`
-  font-size: 0.8em;
   margin-top: 0.5em;
-`
-const Add = styled(cz(Link, null, 'disabled'))`
-  align-self: center;
-  color: ${darken(stone, 0.1)};
-  transition: color .15s, text-shadow .15s;
-  margin-top: .5em;
-  &:not(.disabled) {
-    text-shadow: ${textShadow};
-    color: ${sand};
-    &:hover {
-      color: ${fire};
-    }
-    &:active {
-      color: ${lighten(fire, 0.3)};
-    }
-  }
+  font-size: 0.8em;
 `
 
 class Abilities extends React.PureComponent {
@@ -73,8 +50,7 @@ class Abilities extends React.PureComponent {
         <XP name="Crew XP" value={xp} length={8}
           increment={this.increment} decrement={this.decrement}
           disabled={disabled}/>
-        <StyledAbilities abilities={abilityList} def={library}/>
-        <Add route={route.push('new_ability')} disabled={available < 2}>New Ability</Add>
+          <StyledAbilities abilities={abilityList} def={library} route={route} disabled={disabled || available < 2}/>
       </Container>
     )
   }

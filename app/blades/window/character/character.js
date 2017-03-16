@@ -14,6 +14,7 @@ import Equipment from './equipment/equipment';
 import Abilities from 'blades/window/common/abilities/abilities';
 import Detail from 'blades/window/common/detail';
 import Friends from 'blades/window/common/friends';
+import NewAbilityLink from 'blades/window/styles/new-ability-link';
 
 import { SPECIAL_ABILITIES } from './data/special-abilities';
 
@@ -90,7 +91,8 @@ class Character extends React.PureComponent {
       editPermission, viewPermission,
       abilities, strangeFriends,
       crew,
-      me, library
+      me, library,
+      route
     } = this.props;
     let stressBonus = 0;
     let traumaBonus = 0;
@@ -159,7 +161,7 @@ class Character extends React.PureComponent {
       abilityDom = (
         <MiddleColumn>
           <Detail name="Special Abilities">
-            <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def}/>
+            <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def} route={route} disabled={playbookXP < 8}/>
           </Detail>
         </MiddleColumn>
       );
