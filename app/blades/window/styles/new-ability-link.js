@@ -20,6 +20,7 @@ const NewAbilityLink = styled(cz(Link, null, 'disabled'))`
   transition: color .15s, text-shadow .15s;
   margin-top: .5em;
   font-size: 1.25em;
+  user-select: none;
   &:not(.disabled) {
     text-shadow: ${textShadow};
     color: ${sand};
@@ -29,6 +30,9 @@ const NewAbilityLink = styled(cz(Link, null, 'disabled'))`
     &:active {
       color: ${lighten(fire, 0.3)};
     }
+  }
+  &.disabled {
+    cursor: default;
   }
 `
 
