@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Sheet from './sheet/sheet';
-import NewAbility from './new-ability/new-ability';
+import NewAbility from 'blades/window/common/pages/new-ability/new-ability';
 
 const Container = styled.div`
   width: 100%;
@@ -85,6 +85,7 @@ class Crew extends React.PureComponent {
       library: library.abilities,
       off: portal != 'new_ability',
       route: nextRoute,
+      maxVeteran: 2
     }
 
     return (
