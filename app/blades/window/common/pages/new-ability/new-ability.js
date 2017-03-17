@@ -33,7 +33,7 @@ class NewAbility extends React.PureComponent {
   }
   render() {
     const {
-      abilities, playbook, library, off, route, maxVeteran
+      abilities, playbook, library, off, route, crew
     } = this.props;
     let next = null;
     let nextName = null;
@@ -46,7 +46,7 @@ class NewAbility extends React.PureComponent {
         <Self abilities={abilities} def={library.def}
               names={library.playbook[playbook]} route={route}
               right={off} left={nextName == 'veteran'} onAdd={this.handleAdd}
-              maxVeteran={maxVeteran}/>
+              crew={crew}/>
         <Veteran abilities={abilities} playbook={playbook} library={library}
                  off={nextName != 'veteran'} onAdd={this.handleAdd}/>
       </Container>
@@ -54,14 +54,14 @@ class NewAbility extends React.PureComponent {
   }
 }
 
-const { array, string, object, bool, number } = React.PropTypes;
+const { array, string, object, bool } = React.PropTypes;
 NewAbility.propTypes = {
   abilities: array.isRequired,
   playbook: string.isRequired,
   library: object.isRequired,
   off: bool.isRequired,
   route: object.isRequired,
-  maxVeteran: number.isRequired,
+  crew: bool,
 }
 
 export default connect(NewAbility);

@@ -84,14 +84,13 @@ class Crew extends React.PureComponent {
       abilities, playbook,
       library: library.abilities,
       off: portal != 'new_ability',
-      route: nextRoute,
-      maxVeteran: 2
+      route: nextRoute
     }
 
     return (
       <Container>
         <Sheet {...sheetProps}/>
-        <NewAbility {...abilityProps}/>
+        <NewAbility {...abilityProps} crew/>
       </Container>
     );
   }

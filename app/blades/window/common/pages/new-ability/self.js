@@ -22,9 +22,10 @@ const { sun, sand, fire } = Colors;
 class Self extends React.PureComponent {
   render() {
     const {
-      abilities, names, def, route, left, right, onAdd, maxVeteran
+      abilities, names, def, route, left, right, onAdd, crew
     } = this.props;
     const abilityList = listAbilities(names, abilities, def, onAdd);
+    const maxVeteran = crew ? 2 : 3;
     let veteran = 0;
     for (let i=0; i < abilities.length; i++) {
       const ability = abilities[i];
@@ -36,7 +37,7 @@ class Self extends React.PureComponent {
       abilityList.push(
         <Link key={`v${veteran}`} route={route.push('veteran')}>
           <Ability name={'Veteran'}
-                   description={`Choose a special ability from another crew. _${maxVeteran - veteran} more available._`}/>
+                   description={`Choose a special ability from another ${crew ? 'crew' : 'playbook'}. _${maxVeteran - veteran} more available._`}/>
         </Link>
       )
     }
@@ -53,7 +54,7 @@ class Self extends React.PureComponent {
   }
 }
 
-const { array, object, bool, func, number } = React.PropTypes;
+const { array, object, bool, func, crew } = React.PropTypes;
 Self.propTypes = {
   abilities: array.isRequired,
   def: object.isRequired,
@@ -61,7 +62,7 @@ Self.propTypes = {
   left: bool.isRequired,
   right: bool.isRequired,
   onAdd: func.isRequired,
-  maxVeteran: number.isRequired
+  crew: bool
 }
 
 export default Self;

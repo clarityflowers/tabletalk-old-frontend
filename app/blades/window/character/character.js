@@ -5,57 +5,13 @@ import React from 'react';
 import styled from 'styled-components';
 import autobind from 'autobind-decorator';
 
-import Title from 'blades/common/components/title';
-import Stats from './stats/stats';
-import Stress from './stress/stress-and-trauma';
-import Harm from './harm/harm'
-import ArmorHealing from './armor-healing/armor-healing';
-import Equipment from './equipment/equipment';
-import Abilities from 'blades/window/common/abilities/abilities';
-import Detail from 'blades/window/common/detail';
-import Friends from 'blades/window/common/friends';
-import NewAbilityLink from 'blades/window/styles/new-ability-link';
+import Sheet from './sheet/sheet';
+import NewAbility from 'blades/window/common/pages/new-ability/new-ability';
 
-import { SPECIAL_ABILITIES } from './data/special-abilities';
 
-import Portal from 'blades/window/common/portal';
-import Sheet from 'blades/window/styles/sheet';
-import Row from 'common/row';
-import SheetRow from 'blades/window/styles/sheet-row';
-import Side from 'blades/window/styles/side';
-import CommonColumn from 'common/column';
-
-const Column = CommonColumn;
-const Center = styled(Column)`
-  flex: 50 1 auto;
-  max-width: 50em;
-`
-const RightSide = styled(Side)`
-  width: 13em;
-  margin-left: 0;
-`
-const StressHarm = styled(Column)`
-  flex: 1 1 23em;
-  align-items: stretch;
-  justify-content: space-between;
-  min-width: 15em;
-  max-width: 40em;
-`
-const MiddleRow = styled(Row)`
-  flex-flow: row wrap;
-  align-items: stretch;
-  justify-content: center;
+const Container = styled.div`
   width: 100%;
-`
-const MiddleColumn = styled(Column)`
-  flex: 1 1 0;
-`
-const Health = styled(Row)`
-  margin: 1em;
-  align-items: stretch;
-  display: flex;
-  flex-flow: row nowrap;
-  flex: 3 1 25em;
+  height: 100%;
 `
 
 class Character extends React.PureComponent {
@@ -128,90 +84,59 @@ class Character extends React.PureComponent {
         }
       }
     }
-    const names = {name, playbook, alias};
     let mastery = false;
     if (crew && crew.trainingUpgrades && crew.trainingUpgrades["Mastery"]) {
       mastery = !!crew.trainingUpgrades["Mastery"].value
     }
-    const stats = {
-      coin, stash, playbookXP,
-      hunt, study, survey, tinker, insightXP,
-      finesse, prowl, skirmish, wreck, prowessXP,
-      attune, command, consort, sway, resolveXP,
-      mastery
-    };
-    const harm = {
-      severe: harmSevere,
-      moderate1: harmModerate1,
-      moderate2: harmModerate2,
-      lesser1: harmLesser1,
-      lesser2: harmLesser2,
-    };
-    const armorHealing = {
-      armorUsed: armor,
+
+
+    let portal = 'sheet';
+    if (!route.isExact) {
+      if (
+        route.nextName == 'new_ability' &&
+        !disabled &&
+        playbookXP >= 8
+      ) {
+        portal = 'new_ability';
+      }
+    }
+    const nextRoute = route.push(portal);
+
+
+    const sheetProps = {
       armorAvailable: items.includes("Armor"),
-      heavyUsed: heavyArmor,
       heavyAvailable: armor && items.includes("+Heavy"),
-      specialUsed: specialArmor,
-      healingClock, healingUnlocked, vigor
-    };
-    const equipment = {load, items, playbook, rigging, bonus: loadBonus};
-    let abilityDom = null;
-    if (abilities.length > 0) {
-      abilityDom = (
-        <MiddleColumn>
-          <Detail name="Special Abilities">
-            <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def} route={route} disabled={playbookXP < 8}/>
-          </Detail>
-        </MiddleColumn>
-      );
+      name, playbook, alias,
+      look, heritage, background, vice,
+      playbookXP,
+      coin, stash,
+      insightXP, hunt, study, survey, tinker,
+      prowessXP, finesse, prowl, skirmish, wreck,
+      resolveXP, attune, command, consort, sway,
+      mastery,
+      stress, trauma, stressBonus, traumaBonus,
+      healingUnlocked, healingClock, vigor,
+      harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
+      armor, heavyArmor, specialArmor,
+      load, items, rigging, loadBonus,
+      abilities, strangeFriends,
+      crew,
+      me, library,
+      route, disabled,
+      off: portal != 'sheet'
     }
-    let friendDom = null;
-    if (strangeFriends.length > 0) {
-      friendDom = (
-        <MiddleColumn>
-          <Detail name="Strange Friends">
-            <Friends strangeFriends={strangeFriends}/>
-          </Detail>
-        </MiddleColumn>
-      );
+    const abilityProps = {
+      abilities, playbook,
+      library: library.abilities,
+      off: portal != 'new_ability',
+      route: nextRoute
     }
+
     return (
-      <Portal>
-        <Sheet>
-          <Title {...names}/>
-          <SheetRow>
-            <Side>
-              <Stats {...stats} disabled={disabled}/>
-            </Side>
-            <Center>
-              <MiddleRow>
-                <Health>
-                  <StressHarm>
-                    <Stress stress={stress} trauma={trauma} disabled={disabled}
-                            stressBonus={stressBonus} traumaBonus={traumaBonus}/>
-                    <Harm {...harm} disabled={disabled}/>
-                  </StressHarm>
-                  <ArmorHealing {...armorHealing} disabled={disabled}/>
-                </Health>
-                {abilityDom}
-              </MiddleRow>
-              <MiddleRow>
-                {friendDom}
-                <MiddleColumn>
-                  <Detail name="Look">{look}</Detail>
-                  <Detail name="Heritage">{heritage}</Detail>
-                  <Detail name="Background">{background}</Detail>
-                  <Detail name="Vice">{vice}</Detail>
-                </MiddleColumn>
-              </MiddleRow>
-            </Center>
-            <RightSide>
-              <Equipment {...equipment} disabled={disabled}/>
-            </RightSide>
-          </SheetRow>
-        </Sheet>
-      </Portal>
+      <Container>
+        <Sheet {...sheetProps}/>
+        <NewAbility {...abilityProps}/>
+      </Container>
     )
   }
 };
