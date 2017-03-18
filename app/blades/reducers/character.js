@@ -202,6 +202,15 @@ const actions = {
   },
   set_load: (c, {value}) => {
     return {load: {$set: value}};
+  },
+  add_ability: (c, {value}) => {
+    const { name, veteran } = value;
+    if (c.playbookXP >= 8) {
+      return {
+        abilities: {$push: [value]},
+        playbookXP: {$set: 0}
+      };
+    }
   }
 }
 
