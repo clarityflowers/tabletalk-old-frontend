@@ -76,16 +76,6 @@ class Sheet extends React.PureComponent {
     const names = {name, playbook, alias};
 
     const equipment = {load, items, playbook, rigging, bonus: loadBonus};
-    let abilityDom = null;
-    if (abilities.length > 0) {
-      abilityDom = (
-        <MiddleColumn>
-          <Detail name="Special Abilities">
-            <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def} route={route} disabled={playbookXP < 8}/>
-          </Detail>
-        </MiddleColumn>
-      );
-    }
     let friendDom = null;
     if (strangeFriends.length > 0) {
       friendDom = (
@@ -137,7 +127,11 @@ class Sheet extends React.PureComponent {
                   </StressHarm>
                   <ArmorHealing {...armorHealing} disabled={disabled}/>
                 </Health>
-                {abilityDom}
+                <MiddleColumn>
+                  <Detail name="Special Abilities">
+                    <Abilities abilities={abilities.map((a) => (a.name))} def={library.abilities.def} route={route} disabled={playbookXP < 8}/>
+                  </Detail>
+                </MiddleColumn>
               </MiddleRow>
               <MiddleRow>
                 {friendDom}
