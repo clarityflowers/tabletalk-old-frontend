@@ -21,9 +21,6 @@ const P = styled.p`
   strong {
     font-weight: 500;
   }
-  em {
-    color: ${fadeout(sun, 0.5)};
-  }
 `
 const Name = styled.span`
   font: ${Fonts.h1};
