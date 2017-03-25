@@ -36,21 +36,23 @@ const TabLink = styled(cz(Link, 'active'))`
   }
 `
 
-const Tab = (props) => {
-  const { route, index, name, active } = props;
-  return (
-    <TabLink route={route} disabled={active}>
-      {name}
-    </TabLink>
-  )
+class TabButton extends React.PureComponent {
+  render () {
+    const { route, index, name, active } = this.props;
+    return (
+      <TabLink route={route} disabled={active}>
+        {name}
+      </TabLink>
+    )
+  }
 }
 
 const { object, number, string, bool } = React.PropTypes;
-Tab.propTypes = {
+TabButton.propTypes = {
   route: object.isRequired,
   index: number.isRequired,
   name: string.isRequired,
   active: bool.isRequired
 }
 
-export default Tab;
+export default TabButton;

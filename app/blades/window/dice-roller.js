@@ -26,7 +26,7 @@ const Dice = styled(Row)`
   justify-content: flex-start;
 `
 
-class DiceRoller extends React.Component {
+class DiceRoller extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

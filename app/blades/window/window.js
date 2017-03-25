@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Tab from './tab';
+import TabButton from './tab-button';
 import DiceRoller from './dice-roller';
 import Portal from './common/portal';
 import Character from './character/character';
@@ -14,6 +14,7 @@ import Dispatcher from 'utils/dispatcher';
 import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 import { TAB_TYPES } from 'blades/common/enums';
 import Colors from 'blades/common/colors';
+import cz from 'utils/styled-classes';
 
 const Container = styled.div`
   position: relative;
@@ -26,7 +27,7 @@ const Container = styled.div`
     margin-bottom: 20px;
   }
 `
-const Tabs = styled.div`
+const TabButtons = styled.div`
   position: absolute;
   bottom: 0;
   height: 2em;
@@ -40,12 +41,58 @@ const Tabs = styled.div`
   z-index: 100;
 `
 
+const Tab = styled(cz('div', ['left', 'right']))`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: left .15s;
+  overflow: hidden;
+  left: 0;
+  &.left {
+    left: -100%;
+  }
+  &.right {
+    left: 100%;
+  }
+`
+
+const Tabs = styled.div`
+  width: 100%;
+  height: 100%;
+`
+
 class Window extends React.Component {
   constructor(props) {
     super(props);
     this.send = this.send.bind(this);
     this.sendCharacter = this.sendCharacter.bind(this);
     this.sendCrew = this.sendCrew.bind(this);
+  }
+  shouldComponentUpdate(newProps) {
+    const tabsEqual = (a, b) => {
+      if (a.length !== b.length) { return false; }
+      for (let i=0; i < a.length; i++) {
+        if (
+          a[i].type !== b[i].type ||
+          a[i].character !== b[i].character ||
+          a[i].crew !== b[i].crew
+        ) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (
+      newProps.game !== this.props.game ||
+      !tabsEqual(newProps.tabs, this.props.tabs) ||
+      newProps.library !== this.props.library ||
+      !newProps.route.equals(this.props.route) ||
+      newProps.options !== this.props.options ||
+      newProps.auth !== this.props.auth
+    ) {
+      return true;
+    }
+    return false;
   }
   send(what, id) {
     const { send } = this.props;
@@ -75,64 +122,65 @@ class Window extends React.Component {
       route, options, auth, onChat
     } = this.props;
     let activeRoute = this.props.route;
-    let portal = null;
-    let tabDoms = [];
+    let portals = [];
+    const tabDoms = [];
+    let tabButtons = [];
     let baseUrl = `/games/${game.id}/go`;
     let activeTab = null;
-    if (route.isExact) {
-      portal = null;
-    }
-    else {
+    if (!route.isExact) {
       activeRoute = route.next();
       activeTab = parseInt(activeRoute.name);
     }
     for (let i=0; i < tabs.length; i++) {
       let data = tabs[i];
+      let dom = null;
       if (data.type == TAB_TYPES.CHARACTER) {
         let character = data.character;
-        tabDoms.push(
-          <Tab route={route.push(i)}
+        tabButtons.push(
+          <TabButton route={route.push(i)}
                name={character.name}
                active={i == activeTab}
                key={`${data.type}_${character.id}`}
                index={i}/>
         );
-        if (i == activeTab) {
-          portal = (
-            <Dispatcher dispatch={this.sendCharacter(character.id)}>
-              <Character {...character} crew={data.crew} me={me}
-                         route={activeRoute} library={library.character}/>
-            </Dispatcher>
-          )
-        }
+        dom = (
+          <Dispatcher dispatch={this.sendCharacter(character.id)}>
+            <Character character={character} crew={data.crew} me={me}
+                       route={activeRoute} library={library.character}/>
+          </Dispatcher>
+        );
       }
       else if (data.type == TAB_TYPES.CREW) {
         let crew = data.crew;
-        tabDoms.push(
-          <Tab route={route.push(i)}
+        tabButtons.push(
+          <TabButton route={route.push(i)}
                active={i == activeTab}
                name={crew.name}
                key={`${data.type}_${crew.id}`}
                index={i}/>
         )
-        if (i == activeTab) {
-          portal = (
-            <Dispatcher dispatch={this.sendCrew(crew.id)}>
-              <Crew {...crew} me={me} route={activeRoute}
-                    library={library.crew}/>
-            </Dispatcher>
-          )
-        }
+        dom = (
+          <Dispatcher dispatch={this.sendCrew(crew.id)}>
+            <Crew crew={crew} me={me} route={activeRoute}
+                  library={library.crew}/>
+          </Dispatcher>
+        );
       }
+      tabDoms.push(
+        <Tab key={i} left={i < activeTab} right={i > activeTab}>
+          {dom}
+        </Tab>
+      )
     }
+
     return (
       <Container>
         <OptionsMenu route={route} on={options} auth={auth}/>
         <DiceRoller onChat={onChat}/>
-        {portal}
-        <Tabs>
-          {tabDoms}
-        </Tabs>
+        {tabDoms}
+        <TabButtons>
+          {tabButtons}
+        </TabButtons>
       </Container>
     );
   }

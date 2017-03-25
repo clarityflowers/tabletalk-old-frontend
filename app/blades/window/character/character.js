@@ -14,10 +14,20 @@ const Container = styled.div`
   height: 100%;
 `
 
-class Character extends React.PureComponent {
+class Character extends React.Component {
   constructor(props) {
     super(props);
     this.update = this.update.bind(this);
+  }
+  shouldComponentUpdate(newProps) {
+    if (
+      newProps.character !== this.props.character ||
+      !newProps.route.equals(this.props.route) ||
+      newProps.library !== this.props.library
+    ) {
+      return true;
+    }
+    return false;
   }
   update (action, value) {
     const data = {
@@ -30,6 +40,11 @@ class Character extends React.PureComponent {
     this.props.send(data);
   }
   render() {
+    const {
+      character,
+      me, library,
+      route
+    } = this.props;
     const {
       id,
       name, playbook, alias,
@@ -46,10 +61,9 @@ class Character extends React.PureComponent {
       load, items,
       editPermission, viewPermission,
       abilities, strangeFriends,
-      crew,
-      me, library,
-      route
-    } = this.props;
+      crew
+    } = character;
+
     let stressBonus = 0;
     let traumaBonus = 0;
     let rigging = [];
@@ -143,52 +157,8 @@ class Character extends React.PureComponent {
 
 const { number, string, array, bool, object } = React.PropTypes
 Character.propTypes = {
-  id: number.isRequired,
-  name: string.isRequired,
-  playbook: string,
-  alias: string,
-  look: string,
-  heritage: string,
-  background: string,
-  vice: string,
-  playbookXP: number.isRequired,
-  coin: number.isRequired,
-  stash: number.isRequired,
-  insightXP: number.isRequired,
-  hunt: number.isRequired,
-  study: number.isRequired,
-  survey: number.isRequired,
-  tinker: number.isRequired,
-  prowessXP: number.isRequired,
-  finesse: number.isRequired,
-  prowl: number.isRequired,
-  skirmish: number.isRequired,
-  wreck: number.isRequired,
-  resolveXP: number.isRequired,
-  attune: number.isRequired,
-  command: number.isRequired,
-  consort: number.isRequired,
-  sway: number.isRequired,
-  stress: number.isRequired,
-  trauma: array.isRequired,
-  healingUnlocked: bool.isRequired,
-  healingClock: number.isRequired,
-  harmSevere: string.isRequired,
-  harmModerate1: string.isRequired,
-  harmModerate2: string.isRequired,
-  harmLesser1: string.isRequired,
-  harmLesser2: string.isRequired,
-  armor: bool.isRequired,
-  heavyArmor: bool.isRequired,
-  specialArmor: bool.isRequired,
-  load: number.isRequired,
-  items: array.isRequired,
-  editPermission: array.isRequired,
-  viewPermission: array.isRequired,
-  abilities: array.isRequired,
-  strangeFriends: array.isRequired,
+  character: object.isRequired,
   me: object.isRequired,
-  crew: object,
   library: object.isRequired
 }
 

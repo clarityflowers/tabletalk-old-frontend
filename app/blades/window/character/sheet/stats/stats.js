@@ -23,8 +23,21 @@ class Stats extends React.PureComponent {
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
+  shouldComponentUpdate(newProps) {
+    const keys = Object.keys(newProps);
+    const oldKeys = Object.keys(this.props);
+    if (keys.length != oldKeys.length) {
+      return true;
+    }
+    for (let i=0; i < keys.length; i++) {
+      const key = keys[i];
+      if (typeof newProps[key] !== "function") {
+        if (newProps[key] !== this.props[key]) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   increment () {
     const { dispatch } = this.props;

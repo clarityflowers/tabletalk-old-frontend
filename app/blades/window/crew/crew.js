@@ -11,12 +11,22 @@ const Container = styled.div`
   height: 100%;
 `
 
-class Crew extends React.PureComponent {
+class Crew extends React.Component {
   componentWillMount() {
     this.checkRoute(this.props);
   }
   componentWillReceiveProps(nextProps) {
     this.checkRoute(nextProps);
+  }
+  shouldComponentUpdate(newProps) {
+    if (
+      newProps.crew != this.props.crew ||
+      !newProps.route.equals(this.props.route) ||
+      newProps.library !== this.props.library
+    ) {
+      return true;
+    }
+    return false;
   }
   checkRoute(props) {
     const { route, availableUpgrades } = props;
@@ -30,6 +40,11 @@ class Crew extends React.PureComponent {
   }
   render() {
     const {
+      crew,
+      me,
+      route, library
+    } = this.props;
+    const {
       id,
       name, playbook, reputation,
       rep, strong, tier,
@@ -41,10 +56,8 @@ class Crew extends React.PureComponent {
       availableUpgrades,
       claims, cohorts,
       abilities, contacts,
-      edit, view,
-      me,
-      route, library
-    } = this.props;
+      edit, view
+    } = crew;
     const disabled = !edit.includes(me.id);
     let turf = 0;
     let vaults = 0;
@@ -98,32 +111,8 @@ class Crew extends React.PureComponent {
 
 const { string, number, bool, array, object } = React.PropTypes;
 Crew.propTypes = {
-  id: number.isRequired,
-  name: string.isRequired,
-  playbook: string,
-  reputation: string,
-  rep: number.isRequired,
-  strong: bool.isRequired,
-  tier: number.isRequired,
-  heat: number.isRequired,
-  wantedLevel: number.isRequired,
-  coin: number.isRequired,
-  xp: number.isRequired,
-  huntingGrounds: string,
-  huntingGroundsDescription: string,
-  lair: string,
-  availableUpgrades: number.isRequired,
-  edit: array.isRequired,
-  view: array.isRequired,
-  claims: object.isRequired,
-  cohorts: array.isRequired,
-  abilities: array.isRequired,
+  crew: object.isRequired,
   library: object.isRequired,
-  contacts: array.isRequired,
-  lairUpgrades: object.isRequired,
-  qualityUpgrades: object.isRequired,
-  trainingUpgrades: object.isRequired,
-  crewUpgrades: object.isRequired,
   me: object.isRequired,
   route: object.isRequired
 }

@@ -1,3 +1,5 @@
+import arraysEqual from 'utils/arrays-equal';
+
 class Route {
   constructor(path, location, historyPush, historyReplace) {
     this.path = path;
@@ -58,6 +60,15 @@ class Route {
     let path = Route.splitPathname(pathname);
     let location = path.length - 1;
     return new Route(path, location, this.historyPush, this.historyReplace);
+  }
+  equals(route) {
+    if (
+      arraysEqual(route.path, this.path) &&
+      route.location == this.location
+    ) {
+      return true;
+    }
+    return false;
   }
 }
 

@@ -19,6 +19,19 @@ class NewAbility extends React.PureComponent {
     super(props);
     this.handleAdd = this.handleAdd.bind(this);
   }
+  shouldComponentUpdate(newProps) {
+    if (
+      this.props.abilities !== newProps.abilities ||
+      this.props.playbook !== newProps.playbook ||
+      this.props.library !== newProps.library ||
+      this.props.off !== newProps.off ||
+      this.props.crew !== newProps.crew ||
+      !this.props.route.equals(newProps.route)
+    ) {
+      return true;
+    }
+    return false;
+  }
   handleAdd(name) {
     const { dispatch, route, library, playbook } = this.props;
     const pb = library.playbook[playbook];

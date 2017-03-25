@@ -87,7 +87,7 @@ const Container = styled.div`
 
 const ANIM_TIMES = [200, 600];
 
-class OptionsMenu extends React.Component {
+class OptionsMenu extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
