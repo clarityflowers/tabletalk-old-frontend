@@ -87,7 +87,7 @@ const Container = styled.div`
 
 const ANIM_TIMES = [200, 600];
 
-class OptionsMenu extends React.PureComponent {
+class OptionsMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,6 +96,19 @@ class OptionsMenu extends React.PureComponent {
       hoverAnim: [0, 0, 0, 0]
     };
     this.timeouts = [];
+  }
+  shouldComponentUpdate(newProps, newState) {
+    if (
+      newProps.on !== this.props.on ||
+      newProps.auth.online !== this.props.auth.online ||
+      newProps.auth.name !== this.props.auth.name ||
+      newState.open !== this.state.open ||
+      newState.hovering !== this.state.hovering ||
+      newState.hoverAnim !== this.state.hoverAnim
+    ) {
+      return true;
+    }
+    return false;
   }
   componentWillUnmount() {
   }

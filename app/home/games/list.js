@@ -100,9 +100,15 @@ class List extends React.Component {
   }
 }
 
-const { array } = React.PropTypes;
+const { array, object, bool, func, string } = React.PropTypes;
 List.PropTypes = {
-
+    games: array.isRequired,
+    game: object.isRequirerd,
+    route: object.isRequired,
+    leaving: bool.isRequired,
+    online: bool.isRequired,
+    onUpdateGameDetails: func.isRequired,
+    target: string.isRequired
 };
 
 export default List;

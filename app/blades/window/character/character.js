@@ -21,8 +21,10 @@ class Character extends React.Component {
   }
   shouldComponentUpdate(newProps) {
     if (
-      newProps.character !== this.props.character ||
-      !newProps.route.equals(this.props.route) ||
+      newProps.character !== this.props.character || (
+        newProps.active &&
+        !newProps.route.equals(this.props.route)
+      ) ||
       newProps.library !== this.props.library
     ) {
       return true;
@@ -46,63 +48,9 @@ class Character extends React.Component {
       route
     } = this.props;
     const {
-      id,
-      name, playbook, alias,
-      look, heritage, background, vice,
-      playbookXP,
-      coin, stash,
-      insightXP, hunt, study, survey, tinker,
-      prowessXP, finesse, prowl, skirmish, wreck,
-      resolveXP, attune, command, consort, sway,
-      stress, trauma,
-      healingUnlocked, healingClock,
-      harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
-      armor, heavyArmor, specialArmor,
-      load, items,
-      editPermission, viewPermission,
-      abilities, strangeFriends,
-      crew
+      editPermission, viewPermission, playbookXP, abilities, playbook
     } = character;
-
-    let stressBonus = 0;
-    let traumaBonus = 0;
-    let rigging = [];
-    if (crew) {
-      const upgrades = Object.keys(crew.crewUpgrades);
-      for (let i=0; i < upgrades.length; i++) {
-        const name = upgrades[i];
-        const upgrade = crew.crewUpgrades[name];
-        if (upgrade.stress) {
-          stressBonus += 1;
-        }
-        if (upgrade.trauma) {
-          traumaBonus += 1;
-        }
-        if (upgrade.rigging) {
-          rigging.push(upgrade.rigging);
-        }
-      }
-    }
-    let vigor = 0;
-    let loadBonus = 0;
     const disabled = !editPermission.includes(me.id);
-    for (let i=0; i < abilities.length; i++) {
-      const ability = abilities[i];
-      const def = library.abilities.def[ability.name];
-      if (def) {
-        if (def.vigor != undefined) {
-          vigor += def.vigor;
-        }
-        if (def.load != undefined) {
-          loadBonus += def.load;
-        }
-      }
-    }
-    let mastery = false;
-    if (crew && crew.trainingUpgrades && crew.trainingUpgrades["Mastery"]) {
-      mastery = !!crew.trainingUpgrades["Mastery"].value
-    }
-
 
     let portal = 'sheet';
     if (!route.isExact) {
@@ -118,23 +66,7 @@ class Character extends React.Component {
 
 
     const sheetProps = {
-      armorAvailable: items.includes("Armor"),
-      heavyAvailable: armor && items.includes("+Heavy"),
-      name, playbook, alias,
-      look, heritage, background, vice,
-      playbookXP,
-      coin, stash,
-      insightXP, hunt, study, survey, tinker,
-      prowessXP, finesse, prowl, skirmish, wreck,
-      resolveXP, attune, command, consort, sway,
-      mastery,
-      stress, trauma, stressBonus, traumaBonus,
-      healingUnlocked, healingClock, vigor,
-      harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
-      armor, heavyArmor, specialArmor,
-      load, items, rigging, loadBonus,
-      abilities, strangeFriends,
-      crew,
+      character,
       me, library,
       route, disabled,
       off: portal != 'sheet'

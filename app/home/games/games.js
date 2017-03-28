@@ -6,16 +6,10 @@ import ReactTransitionGroup from 'react-addons-transition-group';
 import cx from 'classnames';
 
 import GameWindow from 'common/game-window';
-import OptionsMenu from 'options/options-menu';
 import Game from './game/game';
-import List from './list';
+import ListPanel from './list-panel';
 
-import Colors from 'common/colors';
 import GameApi from 'api/game';
-
-import cz from 'utils/styled-classes';
-
-const { boxShadow, balloons } = Colors;
 
 const Container = styled.div`
   width: 100%;
@@ -27,26 +21,7 @@ const Container = styled.div`
   font-size: 10px;
   z-index: 1;
 `
-const Panel = styled(cz('div', 'off'))`
-  z-index: 7;
-  background-color: ${balloons};
-  position: absolute;
-  overflow-y: scroll;
-  width: 100%;
-  min-height: 100vh;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  flex: none;
-  top: -10vh;
-  margin-top: 10vh;
-  padding: 10vh 0 10vh 0;
-  box-shadow: ${boxShadow};
-  transition: top .7s cubic-bezier(0.730, -0.300, 0.375, 1.360);
-  &.off {
-    top: -200vh;
-  }
-`
+
 
 class Games extends React.Component {
   constructor(props) {
@@ -587,16 +562,12 @@ class Games extends React.Component {
     }
     return (
       <Container>
-        <Panel off={go}>
-          <List games={games} route={route} creatingNewGame={creatingNewGame}
-                online={auth.online} game={game}
-                onDoneLeaving={this.leaveCallback ? this.leaveCallback : doneAnimating}
-                leaving={leaving}
-                onUpdateGameDetails={this.handleUpdateGameDetails}/>
-          <OptionsMenu route={route}
-                       auth={auth}
-                       on={options}/>
-        </Panel>
+        <ListPanel off={go} games={games} route={route} creatingNewGame={creatingNewGame}
+               game={game}
+               onDoneLeaving={this.leaveCallback ? this.leaveCallback : doneAnimating}
+               leaving={leaving}
+               onUpdateGameDetails={this.handleUpdateGameDetails}
+               auth={auth} options={options}/>
         {gameWindow}
       </Container>
     );

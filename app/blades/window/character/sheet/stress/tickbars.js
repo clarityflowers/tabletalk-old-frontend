@@ -18,14 +18,16 @@ const Container = styled.div`
 `
 
 
-const Tickbars = (props) => {
-  const { trauma, stress, disabled, stressBonus, traumaBonus } = props;
-  return(
-    <Container>
-      <Stress stress={stress} disabled={disabled} bonus={stressBonus}/>
-      <TraumaBar trauma={trauma} bonus={traumaBonus}/>
-    </Container>
-  );
+class Tickbars extends React.PureComponent {
+  render() {
+    const { trauma, stress, disabled, stressBonus, traumaBonus } = this.props;
+    return(
+      <Container>
+        <Stress stress={stress} disabled={disabled} bonus={stressBonus}/>
+        <TraumaBar trauma={trauma} bonus={traumaBonus}/>
+      </Container>
+    );
+  }
 }
 
 const { number, array, bool } = React.PropTypes;

@@ -55,7 +55,6 @@ class Focus extends React.PureComponent {
     const { onClick, disabled } = this.props;
     if (onClick && !disabled) {
       onClick();
-      console.log('onClick focus');
       if (keepFocus !== true) {
         document.activeElement.blur();
       }

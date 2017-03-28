@@ -36,7 +36,17 @@ const TabLink = styled(cz(Link, 'active'))`
   }
 `
 
-class TabButton extends React.PureComponent {
+class TabButton extends React.Component {
+  shouldComponentUpdate(newProps) {
+    if (
+      newProps.index !== this.props.index ||
+      newProps.name !== this.props.name ||
+      newProps.active !== this.props.active
+    ) {
+      return true;
+    }
+    return false;
+  }
   render () {
     const { route, index, name, active } = this.props;
     return (

@@ -21,7 +21,10 @@ class Crew extends React.Component {
   shouldComponentUpdate(newProps) {
     if (
       newProps.crew != this.props.crew ||
-      !newProps.route.equals(this.props.route) ||
+      newProps.active !== this.props.active || (
+        newProps.active &&
+        !newProps.route.equals(this.props.route)
+      ) ||
       newProps.library !== this.props.library
     ) {
       return true;

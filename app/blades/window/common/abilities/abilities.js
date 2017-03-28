@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Ability from './ability';
 import NewAbilityLink from 'blades/window/styles/new-ability-link';
 
+import arraysEqual from 'utils/arrays-equal';
 import Colors from 'blades/common/colors';
 import {
   SPECIAL_ABILITIES, PLAYBOOK_ABILITIES
@@ -37,26 +38,39 @@ const List = styled.div`
   align-content: flex-start;
 `
 
-const Abilities = (props) => {
-  const { abilities, def, route, disabled, ...rest } = props;
-  let list = [];
-  for (let i=0; i < abilities.length; i++) {
-    const name = abilities[i];
-    let ability = def[name];
-    if (!ability) {
-      ability = {};
+class Abilities extends React.Component {
+  shouldComponentUpdate(newProps) {
+    if (
+      !arraysEqual(newProps.abilities, this.props.abilities) ||
+      newProps.def !== this.props.def ||
+      newProps.disabled !== this.props.disabled ||
+      Object.keys(newProps).length !== Object.keys(this.props).length
+    ) {
+      return true;
     }
-    ability.name = name;
-    list.push(
-      <Ability key={i} {...ability}/>
-    );
+    return false;
   }
-  return (
-    <Container {...rest}>
-      {list}
-      <NewAbilityLink route={route.push('new_ability')} disabled={disabled}>New Ability</NewAbilityLink>
-    </Container>
-  )
+  render() {
+    const { abilities, def, route, disabled, ...rest } = this.props;
+    let list = [];
+    for (let i=0; i < abilities.length; i++) {
+      const name = abilities[i];
+      let ability = def[name];
+      if (!ability) {
+        ability = {};
+      }
+      ability.name = name;
+      list.push(
+        <Ability key={i} {...ability}/>
+      );
+    }
+    return (
+      <Container {...rest}>
+        {list}
+        <NewAbilityLink route={route.push('new_ability')} disabled={disabled}>New Ability</NewAbilityLink>
+      </Container>
+    )
+  }
 }
 
 const { string, array, object, bool } = React.PropTypes;

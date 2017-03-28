@@ -25,8 +25,10 @@ class NewAbility extends React.PureComponent {
       this.props.playbook !== newProps.playbook ||
       this.props.library !== newProps.library ||
       this.props.off !== newProps.off ||
-      this.props.crew !== newProps.crew ||
-      !this.props.route.equals(newProps.route)
+      this.props.crew !== newProps.crew || (
+        !newProps.off &&
+        !this.props.route.equals(newProps.route)
+      )
     ) {
       return true;
     }

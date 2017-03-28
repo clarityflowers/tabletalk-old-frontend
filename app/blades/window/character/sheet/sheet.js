@@ -52,9 +52,24 @@ const Health = styled(Row)`
   flex: 3 1 25em;
 `
 
-class Sheet extends React.PureComponent {
+class Sheet extends React.Component {
+  shouldComponentUpdate(newProps) {
+    return (
+      newProps.character !== this.props.character ||
+      newProps.me !== this.props.me ||
+      newProps.library !== this.props.library ||
+      newProps.off !== this.props.off ||
+      newProps.disabled !== this.props.disabled
+    );
+  }
   render() {
     const {
+      character,
+      me, library,
+      route, off, disabled
+    } = this.props;
+    const {
+      id,
       name, playbook, alias,
       look, heritage, background, vice,
       playbookXP,
@@ -62,17 +77,57 @@ class Sheet extends React.PureComponent {
       insightXP, hunt, study, survey, tinker,
       prowessXP, finesse, prowl, skirmish, wreck,
       resolveXP, attune, command, consort, sway,
-      mastery,
-      stress, trauma, stressBonus, traumaBonus,
-      healingUnlocked, healingClock, vigor,
+      stress, trauma,
+      healingUnlocked, healingClock,
       harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
-      armor, armorAvailable, heavyArmor, heavyAvailable, specialArmor,
-      load, items, rigging, loadBonus,
+      armor, heavyArmor, specialArmor,
+      load, items,
       abilities, strangeFriends,
-      crew,
-      me, library,
-      route, disabled, off
-    } = this.props;
+      crew
+    } = character;
+
+    let stressBonus = 0;
+    let traumaBonus = 0;
+    let rigging = [];
+    if (crew) {
+      const upgrades = Object.keys(crew.crewUpgrades);
+      for (let i=0; i < upgrades.length; i++) {
+        const name = upgrades[i];
+        const upgrade = crew.crewUpgrades[name];
+        if (upgrade.stress) {
+          stressBonus += 1;
+        }
+        if (upgrade.trauma) {
+          traumaBonus += 1;
+        }
+        if (upgrade.rigging) {
+          rigging.push(upgrade.rigging);
+        }
+      }
+    }
+    let vigor = 0;
+    let loadBonus = 0;
+    for (let i=0; i < abilities.length; i++) {
+      const ability = abilities[i];
+      const def = library.abilities.def[ability.name];
+      if (def) {
+        if (def.vigor != undefined) {
+          vigor += def.vigor;
+        }
+        if (def.load != undefined) {
+          loadBonus += def.load;
+        }
+      }
+    }
+    let mastery = false;
+    if (crew && crew.trainingUpgrades && crew.trainingUpgrades["Mastery"]) {
+      mastery = !!crew.trainingUpgrades["Mastery"].value
+    }
+
+
+    const armorAvailable = items.includes("Armor");
+    const heavyAvailable = armor && items.includes("+Heavy");
+
     const names = {name, playbook, alias};
 
     const equipment = {load, items, playbook, rigging, bonus: loadBonus};
@@ -155,55 +210,7 @@ class Sheet extends React.PureComponent {
 
 const { string, number, bool, array, object } = React.PropTypes;
 Sheet.propTypes = {
-  name: string.isRequired,
-  playbook: string,
-  alias: string,
-  look: string,
-  heritage: string,
-  background: string,
-  vice: string,
-  playbookXP: number.isRequired,
-  coin: number.isRequired,
-  stash: number.isRequired,
-  insightXP: number.isRequired,
-  hunt: number.isRequired,
-  study: number.isRequired,
-  survey: number.isRequired,
-  tinker: number.isRequired,
-  prowessXP: number.isRequired,
-  finesse: number.isRequired,
-  prowl: number.isRequired,
-  skirmish: number.isRequired,
-  wreck: number.isRequired,
-  resolveXP: number.isRequired,
-  attune: number.isRequired,
-  command: number.isRequired,
-  consort: number.isRequired,
-  sway: number.isRequired,
-  mastery: bool.isRequired,
-  stress: number.isRequired,
-  trauma: array.isRequired,
-  stressBonus: number.isRequired,
-  traumaBonus: number.isRequired,
-  healingUnlocked: bool.isRequired,
-  healingClock: number.isRequired,
-  vigor: number.isRequired,
-  harmSevere: string.isRequired,
-  harmModerate1: string.isRequired,
-  harmModerate2: string.isRequired,
-  harmLesser1: string.isRequired,
-  harmLesser2: string.isRequired,
-  armor: bool.isRequired,
-  armorAvailable: bool.isRequired,
-  heavyArmor: bool.isRequired,
-  heavyAvailable: bool.isRequired,
-  specialArmor: bool.isRequired,
-  load: number.isRequired,
-  items: array.isRequired,
-  rigging: array.isRequired,
-  loadBonus: number.isRequired,
-  abilities: array.isRequired,
-  strangeFriends: array.isRequired,
+  character: object.isRequired,
   me: object.isRequired,
   crew: object,
   library: object.isRequired,
