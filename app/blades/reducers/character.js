@@ -158,13 +158,11 @@ const actions = {
     }
   },
   use_item: (c, {value}) => {
-    if (!c.items.includes(value)) {
-      let array = [value];
-      if (value == "+Heavy" && !c.items.includes("Armor")) {
-        array.push("Armor");
-      }
-      return {items: {$push: array}};
+    let array = [value];
+    if (value == "+Heavy" && !c.items.includes("Armor")) {
+      array.push("Armor");
     }
+    return {items: {$push: array}};
   },
   clear_item: (c, {value}) => {
     const index = c.items.indexOf(value);

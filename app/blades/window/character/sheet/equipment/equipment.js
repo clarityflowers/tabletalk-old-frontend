@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Items from './items';
 import Load from './load';
+import Alchemy from './alchemy';
 
 import {
   ITEMS, COMMON_ITEMS, PLAYBOOK_ITEMS
@@ -15,6 +16,7 @@ import arraysEqual from 'utils/arrays-equal';
 const getItemsFromList = (list, items, rigging) => {
   let itemList = [];
   let carrying = 0;
+  const itemsCopy = items.slice(0);
   for (let i=0; i < list.length; i++) {
     const name = list[i];
     const defItem = ITEMS[name];
@@ -26,12 +28,17 @@ const getItemsFromList = (list, items, rigging) => {
       }
       type = defItem.type;
     }
-    const used = items.includes(name);
+    const index = itemsCopy.indexOf(name);
+    var used = false;
+    if (index > -1) {
+      used = true;
+      itemsCopy.splice(index, 1);
+    }
     let item = {
       name: name,
       load: load,
       type: type,
-      used: items.includes(name)
+      used: used
     }
     itemList.push(item);
   }
@@ -39,13 +46,16 @@ const getItemsFromList = (list, items, rigging) => {
 }
 
 const Container = styled.div`
+  flex: 1 1 auto;
+`
+
+const EquipmentContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
   position: relative;
-  flex: 1 1 auto;
   margin: 1em 0 2em 0;
 `
 
@@ -64,9 +74,12 @@ class Equipment extends React.Component {
     return false;
   }
   render() {
-    const { load, items, playbook, bonus, rigging, disabled } = this.props;
+    const { load, items, playbook, bonus, rigging, disabled, bandolier1, bandolier2 } = this.props;
+    var alchemy = null;
+
     let itemList = [];
     let carrying = 0;
+    let bandoliers = 0;
 
     itemList = getItemsFromList(COMMON_ITEMS, items);
 
@@ -101,13 +114,24 @@ class Equipment extends React.Component {
           }
         }
         carrying += cost;
+        if (item.name == "Bandolier of Alchemicals") {
+          bandoliers++;
+        }
       }
     }
-
+    if (playbook == "Leech") {
+      alchemy = (
+        <Alchemy bandolier1={bandolier1} bandolier2={bandolier2}
+                 count={bandoliers} disabled={disabled}/>
+      )
+    }
     return (
       <Container>
-        <Load load={load} carrying={carrying} disabled={disabled} bonus={bonus}/>
-        <Items items={itemList} disabled={disabled}/>
+        <EquipmentContainer>
+          <Load load={load} carrying={carrying} disabled={disabled} bonus={bonus}/>
+          <Items items={itemList} disabled={disabled}/>
+        </EquipmentContainer>
+        {alchemy}
       </Container>
     );
   }
