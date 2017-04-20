@@ -146,7 +146,7 @@ class Window extends React.Component {
         dom = (
           <Dispatcher dispatch={this.sendCharacter(character.id)}>
             <Character character={character} crew={data.crew}
-                       active={i == activeTab} me={me} route={activeRoute}
+                       active={i == activeTab} me={me} route={route.push(i)}
                        library={library.character}/>
           </Dispatcher>
         );
@@ -163,7 +163,7 @@ class Window extends React.Component {
         dom = (
           <Dispatcher dispatch={this.sendCrew(crew.id)}>
             <Crew crew={crew} active={i == activeTab} me={me}
-                  route={activeRoute} library={library.crew}/>
+                  route={route.push(i)} library={library.crew}/>
           </Dispatcher>
         );
       }
