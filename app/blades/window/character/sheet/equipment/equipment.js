@@ -56,7 +56,7 @@ const EquipmentContainer = styled.div`
   align-items: stretch;
   align-content: stretch;
   position: relative;
-  margin: 1em 0 2em 0;
+  margin: 1em 0 1em 0;
 `
 
 class Equipment extends React.Component {
