@@ -18,7 +18,8 @@ const Container = styled.div`
   background-color: black;
   width: 100vw;
   height: 100%;
-  overflow: hidden;
+  overflow: scroll;
+  padding: 2em;
   ::-webkit-scrollbar {
     width: .4em;
     padding: 1em;
