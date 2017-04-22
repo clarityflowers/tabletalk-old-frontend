@@ -56,6 +56,10 @@ const Blades = styled(TypeButton)`
     border-color: ${BladesColors.fire};
   }
 `
+const QueenKiller = styled(TypeButton)`
+
+`
+
 const Container = 'div';
 const Header = styled.div`
   padding: 1em;
@@ -65,7 +69,8 @@ const List = 'div';
 
 const TYPE = {
   "World of Adventure": Adventure,
-  "Blades in the Dark": Blades
+  "Blades in the Dark": Blades,
+  "Queen-Killer": QueenKiller
 }
 
 const GameTypeList = (props) => {

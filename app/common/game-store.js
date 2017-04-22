@@ -1,6 +1,7 @@
 import React from 'react';
 import WorldOfAdventure from 'adventure/app.js';
 import BladesInTheDark from 'blades/app.js';
+import QueenKiller from 'queenkiller/app.js';
 import { GameTypes } from 'utils/enums.js';
 import { ACTIONS } from 'common/enums.js';
 
@@ -8,7 +9,7 @@ class GameStore extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: [],
+      players: {},
       events: [],
       perform: null
     };
@@ -113,6 +114,7 @@ class GameStore extends React.Component {
   perform(action, data) {
     const key = Math.floor(Math.random() * (1000000000));
     data.key = key;
+    console.log('perform', {data: {action, data}});
     this.state.perform(action, data);
     return key;
   }
@@ -157,6 +159,12 @@ class GameStore extends React.Component {
         {
           result = (
             <BladesInTheDark  {...props}/>
+          )
+        }
+        else if (gameType.name == "Queen-Killer")
+        {
+          result = (
+            <QueenKiller {...props}/>
           )
         }
       }
