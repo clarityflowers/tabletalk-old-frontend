@@ -1,16 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import CommonButton from 'common/button';
 
 import connect from 'utils/connect'
 
-const Container = styled.div`
-`
-const Button = styled(CommonButton)`
+const Container = 'div'
+const Button = rx(CommonButton)`--1
   color: white;
 `
 const Innocent = 'p';
-const Murderous = styled.p`
+const Murderous = rx('p')`
   color: red;
 `
 

@@ -1,20 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Join from './join';
 import CommonButton from 'common/button';
+import connect from 'utils/connect';
 
-const Button = styled(cz(CommonButton, 'ready'))`
+const Button = rx(CommonButton)`
   color: white;
   display: block;
 `
 
-import cz from 'utils/styled-classes';
-import connect from 'utils/connect';
+const Container = 'div';
 
-const Container = styled.div`
-`
-const Player = styled(cz('div', 'ready'))`
+const Player = rx('div')`--1
   color: white;
   &.ready {
     color: red;
@@ -63,7 +61,7 @@ class Lobby extends React.PureComponent {
       const id = playerIds[i];
       const player = playersCopy[id];
       list.push(
-        <Player ready={player.ready} key={player.id}>{player.name}</Player>
+        <Player rx={{ready: player.ready}} key={player.id}>{player.name}</Player>
       );
       if (!player.ready) {
         canGo = false;

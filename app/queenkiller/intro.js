@@ -1,20 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import CommonButton from 'common/button';
 
 import connect from 'utils/connect';
 
-const Container = styled.div`
+const Container = rx('div')`
   color: white;
 `
-const List = styled.ul`
+const List = rx('ul')`
   margin: 0 1.5em;
   padding: 0;
 `
-const Item = styled.li`
+const Item = rx('li')`
   padding: 0;
 `
-const Button = styled(CommonButton)`
+const Button = rx(CommonButton)`--1
   color: white;
 `
 

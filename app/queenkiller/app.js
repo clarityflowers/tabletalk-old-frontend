@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
 import update from 'react-addons-update';
 
 import GameApp from 'common/app';

@@ -1,16 +1,15 @@
 import React from 'react';
-import styled from 'styled-components'
+import rx from 'resplendence'
 import CommonButton from 'common/button';;
 
 import TextInput from 'common/text-input';
 import connect from 'utils/connect';
 
-const Container = styled.div`
-`
-const Input = styled(TextInput)`
+const Container = 'div'
+const Input = rx(TextInput)`--1
   font-size: 1em;
 `
-const Button = styled(CommonButton)`
+const Button = rx(CommonButton)`--1
   color: white;
 `
 

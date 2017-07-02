@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Lobby from './lobby/lobby';
 import Intro from './intro';
@@ -14,7 +14,7 @@ import ReallyClaim from './really-claim';
 import Claimed from './claimed';
 import Kissed from './kissed';
 
-const Container = styled.div`
+const Container = rx('div')`
   background-color: black;
   width: 100vw;
   height: 100%;

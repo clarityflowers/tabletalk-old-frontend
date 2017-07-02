@@ -1,12 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonButton from 'common/button';
 
-import cz from 'utils/styled-classes';
 import connect from 'utils/connect';
 
-const Button = styled(cz(CommonButton, 'ready'))`
+const Button = rx(CommonButton)`--1
   color: white;
   &.ready {
     color: red;
@@ -31,7 +30,7 @@ class Join extends React.PureComponent {
     const { ready } = this.props;
     if (ready) {
       return (
-        <Button onClick={this.leave} ready>=> Cancel</Button>
+        <Button onClick={this.leave} rx={"ready"}>=> Cancel</Button>
       )
     }
     else {
