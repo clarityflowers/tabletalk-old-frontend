@@ -7,9 +7,9 @@ const Input = rx('input')`
   }
 `
 
-const TextInput = (props) => {
+const TextInput = ({innerRef, ...rest}) => {
   return (
-    <Input type='text' {...props}/>
+    <Input type='text' innerRef={innerRef} {...rest}/>
   );
 }
 
