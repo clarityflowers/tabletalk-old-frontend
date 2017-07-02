@@ -10,5 +10,10 @@ export let GameTypes = [
     name: 'Blades in the Dark',
     className: 'blades-in-the-dark',
     channel: 'BladesInTheDarkChannel'
+  },
+  {
+    name: 'Queen-Killer',
+    className: 'queen-killer',
+    channel: 'QueenKillerChannel'
   }
 ];

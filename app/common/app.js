@@ -61,18 +61,18 @@ class App extends React.Component {
   }
   handleReceive(data) {
     const result = this.props.processEvent(data);
-    if (result) {
+    if (result && this.props.logEvents) {
       this.props.logEvents(result);
     }
   }
   /* ---------- load ---------------------------------------------------------*/
   load(args) {
     const { players, me, data } = args;
-    const { chats } = data;
     if (players) {
       this.props.onLoad({players, me, data});
     }
-    if (chats) {
+    if (data && data.chats && this.props.processEvent && this.props.logEvents) {
+      const chats = data.chats;
       let result = [];
       for (let i=0; i < chats.length; i++) {
         const processResult = this.props.processEvent(chats[i]);
@@ -98,9 +98,9 @@ App.propTypes = {
   game: React.PropTypes.object.isRequired,
   auth: React.PropTypes.object.isRequired,
   onLoad: React.PropTypes.func.isRequired,
-  logEvents: React.PropTypes.func.isRequired,
+  logEvents: React.PropTypes.func,
   onConnect: React.PropTypes.func.isRequired,
-  processEvent: React.PropTypes.func.isRequired
+  processEvent: React.PropTypes.func
 
 }
 

@@ -25,7 +25,7 @@ const Center = styled(Column)`
   max-width: 50em;
 `
 const RightSide = styled(Side)`
-  width: 13em;
+  width: 13.5em;
   margin-left: 0;
 `
 const StressHarm = styled(Column)`

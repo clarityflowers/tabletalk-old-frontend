@@ -13,6 +13,10 @@ const ITEMS = {
   "A Cane-Sword": {
     type: 'weapons'
   },
+  "Blowgun & Darts, Syringes": {
+    type: 'weapons',
+    load: 0
+  },
   "Climbing Gear": {
     load: 2,
   },
@@ -48,6 +52,9 @@ const ITEMS = {
   },
   "Fine Pair of Blasters": {
     type: 'weapons'
+  },
+  "Fine Wrecker Tools": {
+    load: 2
   },
   "A Large Weapon": {
     load: 2,
@@ -100,6 +107,11 @@ const PLAYBOOK_ITEMS = {
   "Cutter": [
     "Fine Hand Weapon", "Fine Heavy Weapon", "Fine Scary Weapon or Tool",
     "Manacles & Chain", "Rage Essence Vial", "Spiritbane Charm"
+  ],
+  "Leech": [
+    "Fine Tinkering Tools", "Fine Wrecker Tools", "Blowgun & Darts, Syringes",
+    "Bandolier of Alchemicals", "Bandolier of Alchemicals", "Gadget", "Gadget",
+    "Gadget"
   ],
   "Slide": [
     "Fine Clothes & Jewelry", "Fine Disguise Kit",

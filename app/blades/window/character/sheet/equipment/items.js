@@ -19,7 +19,7 @@ const Container = styled.div`
 
 class Items extends React.PureComponent {
   render() {
-    const { items, use, clear, disabled } = this.props;
+    const { items, clear, disabled } = this.props;
     let itemDoms = [];
     for (let i=0; i < items.length; i++) {
       itemDoms.push(
