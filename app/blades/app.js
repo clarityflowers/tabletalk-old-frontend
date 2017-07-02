@@ -1,23 +1,26 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import update from 'react-addons-update';
 
 import GameApp from 'common/app';
 import Chatbox from './chatbox/chatbox';
 import Window from './window/window';
 import { ACTIONS, TAB_TYPES } from 'blades/common/enums';
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
 import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 
 import reduceCharacter from './reducers/character';
 import reduceCrew from './reducers/crew';
 
-const Blades = styled.div`
-  background-color: ${Colors.stone};
-  font: ${Fonts.h1};
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const Blades = rx('div')`
+  background-color: $stone;
+  font: $h1;
   width: 100vw;
   height: 100%;
   overflow: hidden;

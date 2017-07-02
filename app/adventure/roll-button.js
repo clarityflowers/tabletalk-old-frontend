@@ -1,29 +1,30 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'adventure/colors';
-import Fonts from 'adventure/fonts';
 import { bonusString } from 'adventure/utils.js';
 import { HoverWiggle } from 'utils/hover-animate';
 
 import CommonButton from 'common/button';
 
-const { fireworth, coldBreath, necessita, shadow } = Colors;
+rx`
+@import "~adventure/colors";
+@import "~adventure/fonts";
+`
 
-const Button = styled(CommonButton)`
+const Button = rx(CommonButton)`--1
   margin: .5em;
-  font: ${Fonts.h1};
-  color: ${fireworth};
-  background-color: ${coldBreath};
-  box-shadow: ${shadow};
+  font: $h1;
+  color: $fireworth;
+  background-color: $cold-breath;
+  box-shadow: $shadow;
   border: none;
   font-size: 25px;
   padding: .2em .6em 0 .6em;
   &:active {
-    background-color: ${fireworth};
-    color: ${coldBreath};
+    background-color: $fireworth;
+    color: $cold-breath;
   }
 `
 
@@ -38,7 +39,7 @@ class RollButton extends React.Component {
   render () {
     return (
       <HoverWiggle>
-        <Button Click={this.handleClick.bind(this)}>
+        <Button onClick={this.handleClick.bind(this)}>
           Roll {bonusString(this.props.bonus)}
         </Button>
       </HoverWiggle>

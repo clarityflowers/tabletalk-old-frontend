@@ -1,14 +1,17 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import GameApp from 'common/app';
 import Chatbox from './chatbox';
 import Window from './window';
-import Colors from 'adventure/colors'
 import { ACTIONS } from 'adventure/enums';
 
-const Container = styled.div`
-  ${Colors.stripesBackground(.5, .5, .2, 20)};
+rx`
+@import "~adventure/colors";
+`
+
+const Container = rx('div')`
+  @include stripes-background(.5, .5, 20%, 20px);
 `
 
 class App extends React.Component {

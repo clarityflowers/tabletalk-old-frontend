@@ -1,22 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonButton from 'common/button';
 import { HoverBuzz } from 'utils/hover-animate';
 
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
-import cz from 'utils/styled-classes';
+rx`
+@import "~common/fonts";
+@import "~common/colors";
+`
 
-const { hearts, heartsLight, boxShadow, borderShadow, confetti } = Colors;
-
-const buttonClasses = ['clicked', 'entering', 'leaving', 'animating']
-const Button = styled(cz(CommonButton, buttonClasses))`
-  font: ${Fonts.h1};
-  color: ${hearts};
-  box-shadow: ${boxShadow}, ${borderShadow};
-  background-color: ${heartsLight};
-  border: .25em solid ${hearts};
+const Button = rx(CommonButton)`--1
+  font: $h1;
+  color: $hearts;
+  box-shadow: $boxShadow, $borderShadow;
+  background-color: white;
+  border: .25em solid $hearts;
   outline: none;
   width: 11.4em;
   height: 2em;
@@ -31,7 +29,7 @@ const Button = styled(cz(CommonButton, buttonClasses))`
     border: 0;
   }
   &.clicked {
-    background-color: ${confetti};
+    background-color: $confetti;
   }
   &:not(.clicked) {
     cursor: pointer;
@@ -75,10 +73,7 @@ class GoogleLogin extends React.PureComponent {
     return (
       <HoverBuzz off={clicked}>
         <Button id='google-login'
-                clicked={clicked}
-                entering={entering}
-                leaving={leaving}
-                animating={animating}
+                rx={{clicked, leaving, entering, animating}}
                 onClick={this.onClick}>
           Sign in with Google
         </Button>

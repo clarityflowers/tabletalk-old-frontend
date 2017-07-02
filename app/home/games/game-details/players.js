@@ -1,21 +1,22 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Player from './player';
 
-import Colors from 'common/colors';
-const { color } = Colors.details;
+rx`
+@import "~common/colors";
+`
 
 const Container = 'div';
-const List = styled.ul`
+const List = rx('ul')`
   margin: 0;
   list-style: none;
   list-style-type: none;
   padding-left: 1em;
 `
-const H1 = styled.h1`
+const H1 = rx('h1')`
   font-size: 1em;
-  border-bottom: .25em solid ${color};
+  border-bottom: .25em solid $details-color;
   margin-bottom: .5em;
 `
 
@@ -39,7 +40,7 @@ class Players extends React.Component {
     }
     else {
       playerCount += 'player';
-      if (players.length > 1) {
+      if (players.length != 1) {
         playerCount += 's';
       }
     }

@@ -1,9 +1,9 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-const Button = styled.button`
+const Button = rx('button')`
   border: none;
   background: none;
   margin: 0;

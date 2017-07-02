@@ -1,12 +1,12 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import RollButton from './roll-button';
 import OptionsMenu from 'options/options-menu';
 
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 0;
   position: relative;
   display: flex;

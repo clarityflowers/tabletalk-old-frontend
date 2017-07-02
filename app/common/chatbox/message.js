@@ -1,10 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Talk from './talk';
 import { ACTIONS } from 'common/enums';
 
-const Header = styled.h1`
+const Header = rx('h1')`
   border-bottom: 1px solid black;
   font-size: 1em;
   position: relative;

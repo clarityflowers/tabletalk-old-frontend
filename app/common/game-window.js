@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import GameStore from './game-store.js';
 
-const Window = styled.div`
+const Window = rx('div')`
   background-color: red;
   width: 100%;
   height: 100vh;

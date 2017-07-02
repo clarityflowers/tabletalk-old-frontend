@@ -1,45 +1,44 @@
 import React from 'react';
-import styled from 'styled-components';
-import cx from 'classnames';
+import rx from 'resplendence';
 
 import Roll from './roll';
 
 import CommonChatbox from 'common/chatbox/chatbox';
 
-import Colors from 'adventure/colors';
-import Fonts from 'adventure/fonts';
 import { ACTIONS } from 'adventure/enums';
-import { fadeout } from 'utils/color-tools';
 
-const { coldBreath, necessita, shadow, rainedFlowersToday, deep } = Colors;
+rx`
+@import "~adventure/colors";
+@import "~adventure/fonts";
+`
 
-const StyledChatbox = styled(CommonChatbox)`
-  font: ${Fonts.body};
+const StyledChatbox = rx(CommonChatbox)`--1
+  background: $cold-breath;
+  font: $body;
   font-size: 16px;
-  background: ${coldBreath};
-  color: ${necessita};
-  box-shadow: ${shadow};
+  color: $necessita;
+  box-shadow: $shadow;
   button {
-      text-shadow: -1px 1px 1px ${fadeout(necessita, .7)};
-      box-shadow: 0 1px 1px 1px ${fadeout(necessita, .8)};
-      color: ${rainedFlowersToday};
-      background: ${coldBreath};
+      text-shadow: -1px 1px 1px fade-out($necessita, .7);
+      box-shadow: 0 1px 1px 1px fade-out($necessita, .8);
+      color: $rained-flowers-today;
+      background: $cold-breath;
       &:focus {
         outline: none;
       }
       &.notify {
-        background: ${rainedFlowersToday};
-        color: ${coldBreath};
+        background: $rained-flowers-today;
+        color: $cold-breath;
       }
   }
   h1 {
-    border-bottom: 1px solid ${necessita};
+    border-bottom: 1px solid $necessita;
   }
   .divider {
-    border: 1px inset ${deep};
+    border: 1px inset $deep;
   }
   textarea {
-    background: ${coldBreath};
+    background: $cold-breath;
   }
 `
 

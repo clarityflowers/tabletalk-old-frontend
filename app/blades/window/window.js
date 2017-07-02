@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import TabButton from './tab-button';
 import DiceRoller from './dice-roller';
@@ -11,23 +11,24 @@ import Crew from './crew/crew';
 import OptionsMenu from 'options/options-menu';
 import Dispatcher from 'utils/dispatcher';
 
-import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 import { TAB_TYPES } from 'blades/common/enums';
-import Colors from 'blades/common/colors';
-import cz from 'utils/styled-classes';
 
-const Container = styled.div`
+rx`
+@import "~blades/common/colors";
+`
+
+const Container = rx('div')`
   position: relative;
   font-size: 20px;
   width: 100%;
   max-height: 100%;
   display: flex;
   flex-flow: column nowrap;
-  @media only screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+  @media only screen and (max-width: 800px) {
     margin-bottom: 20px;
   }
 `
-const TabButtons = styled.div`
+const TabButtons = rx('div')`
   position: absolute;
   bottom: 0;
   height: 2em;
@@ -36,12 +37,12 @@ const TabButtons = styled.div`
   font-size: .75em;
   flex-direction: row;
   align-items: center;
-  background-color: ${Colors.stone};
-  box-shadow: 0 0 1em 1em ${Colors.stone};
+  background-color: $stone;
+  box-shadow: 0 0 1em 1em $stone;
   z-index: 100;
 `
 
-const Tab = styled(cz('div', ['left', 'right']))`
+const Tab = rx('div')`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -56,7 +57,7 @@ const Tab = styled(cz('div', ['left', 'right']))`
   }
 `
 
-const Tabs = styled.div`
+const Tabs = rx('div')`
   width: 100%;
   height: 100%;
 `
@@ -168,7 +169,7 @@ class Window extends React.Component {
         );
       }
       tabDoms.push(
-        <Tab key={i} left={i < activeTab} right={i > activeTab}>
+        <Tab key={i} rx={{left: i < activeTab, right: i > activeTab}}>
           {dom}
         </Tab>
       )

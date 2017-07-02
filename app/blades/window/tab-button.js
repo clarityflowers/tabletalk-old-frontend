@@ -1,25 +1,27 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts'
 import Link from 'utils/link';
-import cz from 'utils/styled-classes';
 
-const TabLink = styled(cz(Link, 'active'))`
-  font: ${Fonts.h1};
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const TabLink = rx(Link)`--1
+  font: $h1;
   color: $sun;
-  background-color: ${Colors.mud};
+  background-color: $mud;
   text-decoration: none;
-  box-shadow: ${Colors.shadow};
+  box-shadow: $shadow;
   border-radius: .5em;
   padding: 0em .4em;
   margin: 0 .5em;
   &.disabled {
-    color: ${Colors.fire};
-    background-color: ${Colors.sun};
+    color: $fire;
+    background-color: $sun;
   }
   &:not(.disabled) {
     cursor: pointer;
@@ -28,10 +30,10 @@ const TabLink = styled(cz(Link, 'active'))`
       text-decoration: underline;
     }
     &:hover {
-      background-color: ${Colors.sand};
+      background-color: $sand;
     }
     &:focus {
-      color: ${Colors.mud};
+      color: $mud;
     }
   }
 `
@@ -50,7 +52,7 @@ class TabButton extends React.Component {
   render () {
     const { route, index, name, active } = this.props;
     return (
-      <TabLink route={route} disabled={active}>
+      <TabLink route={route} rx={{disabled: active}}>
         {name}
       </TabLink>
     )

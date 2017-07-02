@@ -1,24 +1,23 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'common/colors';
-import { lighten } from 'utils/color-tools';
-import Fonts from 'common/fonts';
 import CommonButton from 'common/button';
 import Link from 'utils/link';
 import { HoverWiggle } from 'utils/hover-animate';
 
-const { hearts, heartsLight, boxShadow, balloons } = Colors;
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+$active: lighten($hearts, 15%);
 
-const active = lighten(hearts, 0.15);
-const commonStyle = css`
+@mixin common {
   text-decoration: none;
-  background-color: ${hearts};
-  box-shadow: ${boxShadow};
-  color: ${heartsLight};
+  background-color: $hearts;
+  box-shadow: $boxShadow;
+  color: $heartsLight;
   padding: .5em .5em .2em .5em;
   border: none;
-  font-family: ${Fonts.h1};
+  font-family: $h1;
   font-size: 1em;
   cursor: pointer;
   &:focus {
@@ -26,16 +25,18 @@ const commonStyle = css`
     outline: none;
   }
   &:active {
-    background: ${active};
+    background: $active;
   }
+}
 `
-const Enter = styled(Link)`
-  ${commonStyle}
+
+const Enter = rx(Link)`--1
+  @include common;
 `
-const Join = styled(CommonButton)`
-  ${commonStyle}
+const Join = rx(CommonButton)`--1
+  @include common;
 `
-const Wiggle = styled(HoverWiggle)`
+const Wiggle = rx(HoverWiggle)`--1
   display: inline-block;
   width: auto;
 `

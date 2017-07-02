@@ -1,25 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Players from './players';
 import Button from './button';
 
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
 import { GameTypes } from 'utils/enums';
 
-const { color } = Colors.details;
-
-const Container = styled.div`
+const Container = rx('div')`
   padding: 1em;
   height: auto;
   z-index: 1;
 `
-const Header = styled.div`
+const Header = rx('div')`
   padding: 1em;
   text-align: center;
 `
-const Body = styled.div`
+const Body = rx('div')`
   width: auto;
   max-width: 300px;
 `

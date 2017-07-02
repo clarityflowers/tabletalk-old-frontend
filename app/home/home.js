@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Login from './login/login.js';
 import Games from './games/games.js';
 import Auth from 'utils/auth.js';
 
-const Container = styled.div`
+const Container = rx('div')`
   background-color: transparent;
   width: 100%;
   height: auto;

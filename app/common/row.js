@@ -1,9 +1,9 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-const Row = styled.div`
+const Row = rx('div')`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;

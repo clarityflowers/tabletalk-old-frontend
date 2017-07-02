@@ -1,40 +1,42 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import autobind from 'autobind-decorator';
 
 import Roll from './roll';
 import Log from './log';
 
-import Colors from 'blades/common/colors';
-const { sun, mud, sky, shadow } = Colors;
-import Fonts from 'blades/common/fonts';
 import CommonChatbox from 'common/chatbox/chatbox';
 import { ACTIONS } from 'blades/common/enums';
 
-const StyledChatbox = styled(CommonChatbox)`
-  background-color: ${sun};
-  color: ${mud};
-  font: ${Fonts.body};
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const StyledChatbox = rx(CommonChatbox)`--1
+  background-color: $sun;
+  color: $mud;
+  font: $body;
   font-size: 16px;
-  box-shadow: ${shadow};
+  box-shadow: $shadow;
   button {
     text-shadow: -1px 1px 1px fade-out($stone, .7);
     box-shadow: 0 1px 1px 1px fade-out($stone, .8);
-    color: ${sky};
-    background-color: ${sun};
+    color: $sky;
+    background-color: $sun;
     &.notify {
-      background-color: ${sky};
-      color: ${sun};
+      background-color: $sky;
+      color: $sun;
     }
   }
   textarea {
     font-size: 1em;
     font-family: 'Raleway';
     font-weight: 300;
-    background: ${sun};
+    background: $sun;
   }
   .divider {
-    border: 1px inset ${mud};
+    border: 1px inset $mud;
   }
 `
 

@@ -1,43 +1,38 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import cx from 'classnames';
 import { bonusString } from 'adventure/utils';
-import Fonts from 'adventure/fonts';
-import Colors from 'adventure/colors';
 
-const { fireworth, rainedFlowersToday, necessita } = Colors;
+rx`
+@import "~adventure/colors";
+@import "~adventure/fonts";
+`
 
-const Container = styled.div`
+const Container = rx('div')`
   text-align: center;
 `
-const Header = styled.div`
-  color: ${rainedFlowersToday};
+const Header = rx('div')`
+  color: $rained-flowers-today;
 `
-const Dice = styled.span`
+const Dice = rx('span')`
   margin: 0 .2em;
   position: relative;
-  font: ${Fonts.icon};
+  font: $icon;
   font-size: 1.5em;
   bottom: -0.15em;
 `
-const numberColor = ({color}) => {
-  if (color == 'hit') {
-    return rainedFlowersToday;
-  }
-  else if (color == 'miss') {
-    return fireworth;
-  }
-  else {
-    return necessita;
-  }
-}
-const Number = styled.div`
+const Number = rx('div')`
   margin-top: .2em;
-  font: ${Fonts.h1};
+  font: $h1;
   font-size: 3em;
   text-align: center;
-  color: ${numberColor};
+  color: $necessita;
+  &.hit {
+    color: $rained-flowers-today;
+  }
+  &.miss {
+    color: $fireworth;
+  }
 `
 /* -----loading, for when this is implemented ----
 .loading {
@@ -80,7 +75,7 @@ let Roll = (props) => {
         </Dice>
         {bonus}
       </Header>
-      <Number color={color}>
+      <Number rx={{hit: total >= 10, miss: total <= 6}}>
         {total}
       </Number>
     </Container>

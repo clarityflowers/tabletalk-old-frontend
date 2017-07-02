@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import cx from 'classnames';
+import rx from 'resplendence';
 
 import Talk from './talk';
 import Message from './message';
@@ -11,7 +10,11 @@ import { ACTIONS } from 'common/enums';
 import Button from 'common/button';
 import props from 'utils/props';
 
-const Container = styled.div`
+rx`
+$breakpoint: 1000px;
+`
+
+const Container = rx('div')`
   background-color: white;
   color: black;
   box-shadow: -2px 0px 2px 1px fade-out(black, .5);
@@ -29,17 +32,20 @@ const Container = styled.div`
   -ms-user-select: text;
   user-select: text;
   cursor: text;
-  @media only screen and (max-width: ${props => props.breakpoint}px) {
+  @media only screen and (max-width: $breakpoint) {
     box-shadow: 0px -6px 2px 1px fade-out(black, .5);
     width: 100%;
-    height: ${props => props.off ? '2em' : '100%'};
+    height: 100%;
     position: fixed;
     top: 0;
     left: 0;
     transition: height 0.5s cubic-bezier(1, -0.3, 0, 1.3);
+    &.off {
+      height: 2em;
+    }
   }
 `
-const Body = styled.div`
+const Body = rx('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,11 +54,14 @@ const Body = styled.div`
   height: 0;
   flex: 1 1 auto;
   overflow: hidden;
-  @media only screen and (max-width: ${props => props.breakpoint}px) {
-    height: ${props => props.off ? 0 : 'auto'};
+  @media only screen and (max-width: $breakpoint) {
+    height: auto;
+    &.off {
+      height: 0;
+    }
   }
 `
-const Toggle = styled(Button)`
+const Toggle = rx(Button)`--1
   display: none;
   transition-property: color, background-color;
   transition-duration: 0.5s;
@@ -75,11 +84,11 @@ const Toggle = styled(Button)`
     background-color: black;
     color: white;
   }
-  @media only screen and (max-width: ${props => props.breakpoint}px) {
+  @media only screen and (max-width: $breakpoint) {
     display: block;
   }
 `
-const Conversation = styled.div`
+const Conversation = rx('div')`
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
   width: 100%;
@@ -90,7 +99,7 @@ const Conversation = styled.div`
   display: block;
   vertical-align: bottom;
 `
-const Divider = styled.div`
+const Divider = rx('div')`
   height: 0px;
   border: 1px inset black;
   flex: none;
@@ -154,15 +163,12 @@ class Chatbox extends React.PureComponent {
     }
     const notify = !off;
     return (
-      <Container className={className} breakpoint={breakpoint} off={off}>
-        <Toggle className={cx('toggle', {notify})}
-          notify={!off}
-          breakpoint={breakpoint}
-          onClick={this.handleToggle.bind(this)}
-          breakpoint={breakpoint}>
+      <Container className={className} rx={{off}}>
+        <Toggle rx={{toggle: true, notify}}
+          onClick={this.handleToggle.bind(this)}>
           {off ? '%' : '^'}
         </Toggle>
-        <Body off={off} breakpoint={breakpoint}>
+        <Body rx={{off}}>
           <Conversation innerRef={e => this.conversation = e}>
             {messages}
           </Conversation>

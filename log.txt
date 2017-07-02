@@ -1,0 +1,10 @@
+[OKAY] package.json file found - trying 'npm start'
+[OKAY] Loaded ENV .env File as KEY=VALUE Format
+[OKAY] package.json file found - trying 'npm start'
+8:45:11 PM web.1 |  > tabletalk@0.0.1 start /mnt/c/projects/tabletalk
+8:45:11 PM web.1 |  > bin/start.sh
+8:45:11 PM web.1 |  Initializing development server
+8:45:13 PM web.1 |  Generating app/.generated/resplendent--395608906.g.scss
+8:45:13 PM web.1 |  Generating app/.generated/resplendent--395608906.g.scss
+8:45:13 PM web.1 |  Listening at 0.0.0.0:8080
+[DONE] Killing all processes with signal  SIGINT

@@ -1,35 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styled from 'styled-components';
-import cx from 'classnames';
+import rx from 'resplendence';
 
 import Details from './details';
 import GameTypeList from './game-type-list';
 import NewGameForm from './new-game-form';
 
 import Link from 'utils/link';
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
 import { GameTypes } from 'utils/enums';
 
-const { balloons, boxShadow } = Colors;
-const { background, color } = Colors.details;
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
-const Container = styled.div`
+const Container = rx('div')`
   max-width: 100%;
-  background-color: ${background};
-  color: ${color};
-  box-shadow: ${boxShadow};
-  font: ${Fonts.h1};
+  background-color: $details-background;
+  color: $details-color;
+  box-shadow: $boxShadow;
+  font: $h1;
   font-size: 20px;
   position: relative;
   overflow: hidden;
-  top: ${p => p.off ? '100vh' : 0};
+  top: 0;
   transition-property: top, height;
   transition-duration: .5s;
   transition-timing-function: cubic-bezier(0.7,-0.3,0.3,1.1);
+  &.off {
+    top: 100vh;
+  }
 `
-const Content = styled.div`
+const Content = rx('div')`
   padding: 1em;
   height: auto;
   z-index: 1;
@@ -149,7 +151,7 @@ class GameDetails extends React.Component {
       );
     }
     return (
-      <Container off={off} style={style}>
+      <Container rx={{off}} style={style}>
         <NewGameForm off={!formMode} game={game} joining={joining}
                      onSubmit={this.handleSubmit.bind(this)}/>
         <Content innerRef={e => this.content = e}>

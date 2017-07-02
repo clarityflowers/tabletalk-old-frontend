@@ -1,0 +1,9 @@
+$stone: hsla(  0,  0%, 24%, 1);
+$sand:  hsla( 32, 78%, 72%, 1);
+$fire:  hsla(  3, 56%, 54%, 1);
+$sky:   hsla(171, 20%, 54%, 1);
+$mud:   hsla( 26, 25%, 39%, 1);
+$sun: lighten($sand, 20%);
+$shadowColor: fade-out(darken($stone, 50%), .6);
+$shadow: -3px 2px 2px 1px $shadowColor;
+$textShadow: -2px 2px 1px $shadowColor;

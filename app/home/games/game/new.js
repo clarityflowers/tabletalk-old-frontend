@@ -100,8 +100,8 @@ class New extends React.Component {
       )
     }
     return (
-      <Link route={this.props.route.push('new')} off={this.props.position == 0}
-            disabled={selected}>
+      <Link route={this.props.route.push('new')} 
+            rx={{off: this.props.position == 0, disabled: selected}}>
         {content}
       </Link>
     );

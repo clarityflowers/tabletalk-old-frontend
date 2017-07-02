@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CableApi from 'api/cable';
 import Game from 'api/game';
 import { MOBILE_BREAKPOINT } from 'blades/common/constants';
 
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -24,7 +24,7 @@ const Container = styled.div`
       align-items: stretch;
       pointer-events: auto;
       box-sizing: border-box;
-      @media only screen and (max-width: ${MOBILE_BREAKPOINT}px) {
+      @media only screen and (max-width: 800px) {
         padding-top: 32px;
       }
   }

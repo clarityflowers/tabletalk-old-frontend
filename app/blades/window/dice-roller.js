@@ -1,25 +1,26 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import RollButton from './roll-button';
 import Row from 'common/row';
-import Colors from 'blades/common/colors';
-import { fadeout } from 'utils/color-tools';
 
-const background = fadeout(Colors.sun, 0.2);
-const Container = styled.div`
+rx`
+@import "~blades/common/colors";
+`
+
+const Container = rx('div')`
   z-index: 30;
   position: absolute;
   left: .25em;
   top: .25em;
-  background: ${background};
+  background: fade-out($sun, 0.2);
   border-radius: 2em;
-  box-shadow: ${Colors.shadow};
+  box-shadow: $shadow;
   padding: 0 0 0 0;
 `;
-const Dice = styled(Row)`
+const Dice = rx(Row)`--1
   flex-wrap: wrap;
   align-items: center;
   align-content: center;

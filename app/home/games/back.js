@@ -1,23 +1,21 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonLink from 'utils/link.js';
 import { HoverWiggle } from 'utils/hover-animate.js';
 
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
-import cz from 'utils/styled-classes';
-import { lighten } from 'utils/color-tools';
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
-const { hearts, heartsLight, boxShadow } = Colors;
-
-const Link = styled(cz(CommonLink, 'off'))`
-  font: ${Fonts.icon};
-  color: ${heartsLight};
-  background: ${hearts};
-  box-shadow: ${boxShadow};
+const Link = rx(CommonLink)`--1
+  font: $icon;
+  color: $heartsLight;
+  background: $hearts;
+  box-shadow: $boxShadow;
   border-radius: .4em;
   padding: .2em;
   width: auto;
@@ -26,10 +24,10 @@ const Link = styled(cz(CommonLink, 'off'))`
   text-decoration: none;
   &:focus {
     outline: none;
-    background: ${lighten(hearts, 0.1)}
+    background: lighten($hearts, 10%);
   }
 `
-const Wiggle = styled(cz(HoverWiggle, null, 'off'))`
+const Wiggle = rx(HoverWiggle)`--1
   font-size: 2.5em;
   position: relative;
   left: .9em;

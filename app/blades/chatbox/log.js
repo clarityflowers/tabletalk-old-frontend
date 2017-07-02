@@ -1,15 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { fadeout } from 'utils/color-tools';
-const { stone } = Colors;
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const color = fadeout(stone, .6);
-const Container = styled.div`
-  color: ${color};
-  font: ${Fonts.h2};
+const Container = rx('div')`
+  color: fade-out($stone, 0.6);
+  font: $h2;
   line-height: 1.1;
   margin: .2em 0;
 `

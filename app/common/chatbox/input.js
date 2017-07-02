@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import AutosizeTextarea from 'react-textarea-autosize';
 
-const Textarea = styled(AutosizeTextarea)`
+const Textarea = rx(AutosizeTextarea)`--1
   flex: none;
   width: 100%;
   height: auto;

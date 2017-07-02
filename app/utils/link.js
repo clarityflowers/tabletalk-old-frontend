@@ -1,10 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import cx from 'classnames';
 
-import cz from 'utils/styled-classes';
-
-const A = styled(cz('a', 'disabled'))`
+const A = rx('a')`
   &:focus {
     outline: none;
   }

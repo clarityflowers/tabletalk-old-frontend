@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-const Input = styled.input`
+const Input = rx('input')`
   &:focus {
     outline: none;
   }

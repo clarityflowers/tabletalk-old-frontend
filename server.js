@@ -19,8 +19,8 @@ else {
   config.output.path = '/public';
   config.devtool = 'cheap-module-eval-source-map';
   config.entry.unshift('webpack-hot-middleware/client');
-  config.module.loaders[0].loaders.unshift('react-hot');
-  config.module.loaders[1].loaders.unshift('react-hot');
+  config.module.rules[0].use.unshift('react-hot-loader');
+  config.module.rules[1].use.unshift('react-hot-loader');
   config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 
   var compiler = webpack(config);

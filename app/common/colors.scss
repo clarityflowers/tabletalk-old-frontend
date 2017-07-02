@@ -1,0 +1,17 @@
+$confetti: hsla(2, 94%, 80%, 1);
+$hearts:   hsla(349, 99%, 63%, 1);
+$balloons: hsla(153, 22%, 60%, 1);
+$champaign:hsla(25, 86%, 83%, 1);
+$euphoria: hsla(60, 22%, 72%, 1);
+
+$shadowColor: fade-out(darken($confetti, 60%), 0.6);
+$boxShadow: -2px 2px 2px 1px $shadowColor;
+$borderShadow: $boxShadow inset;
+$heartsLight: lighten($hearts, 35%);
+$hearts-shadow: darken($hearts, 20%);
+$text-shadow: -2px 2px 2px $shadowColor;
+
+$details-background: lighten($balloons, 30%);
+$details-color: darken($balloons, 30%);
+$details-middleground: darken($balloons, 10%);
+$details-shadow: fade-out(darken($details-color, 70%), 0.5);

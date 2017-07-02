@@ -2,6 +2,11 @@ const path = require('path');
 var webpack = require('webpack');
 const InlineEnvironmentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 
+const src = path.join(__dirname, 'app');
+
+const resplendence = require('resplendence');
+const rxConfig = resplendence.config({src: src, ext: '.scss'});
+
 module.exports = {
   entry: [
     './app/index.js'
@@ -11,27 +16,66 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/'
   },
+  resolve: {
+    alias: {
+      common: path.resolve(__dirname, 'app/common'),
+      utils: path.resolve(__dirname, 'app/utils')
+    },
+    modules: [
+      "node_modules",
+      path.resolve(src),
+    ]
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader?presets[]=latest&presets[]=react&presets[]=stage-3']
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["stage-3", "react", "latest"]
+            },
+          },
+          rxConfig.loader
+        ],
+        include: src
       },
       {
         test: /\.scss$/,
-        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
+        use: [
+          {
+            loader: "style-loader", 
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ],
+        include: src
       },
-      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+      { 
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 100000
+            }
+          }
+        ],
+        include: src 
+      }
     ]
-  },
-  resolve: {
-    root: [
-      path.resolve('./app')
-    ]
-  },
-  sassLoader: {
-    includePaths: [ 'app' ]
   },
   plugins: [
     new InlineEnvironmentVariablesPlugin([
@@ -39,6 +83,13 @@ module.exports = {
       'PORT',
       'NODE_ENV',
       'API_URL'
-    ])
-  ]
+    ]),
+    rxConfig.plugin
+  ],
+  node: {
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+  }
 };

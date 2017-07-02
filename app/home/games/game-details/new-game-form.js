@@ -1,48 +1,47 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 import CommonTextInput from 'common/text-input';
 import CommonSubmit from 'common/submit';
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
 
-const { background, middleground, color, shadow } = Colors.details;
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
-const formTransition = ({off}) => {
-  if (off) {
-    return `top .5s cubic-bezier(0.7,-0.3,0.3,0.7)`;
-  }
-  return `top .5s cubic-bezier(0.7,0.3,0.3,1.3)`;
-}
-const Container = styled.div`
+const Container = rx('div')`
   position: absolute;
   width: 100%;
   height: 150%;
-  color: ${background};
+  color: $details-background;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: ${p => p.off ? `-150%` : `-25%`};
+  top: -25%;
   left: 0%;
-  background-color: ${color};
-  transition: ${formTransition};
+  background-color: $details-color;
+  transition: top .5s cubic-bezier(0.7,0.3,0.3,1.3);
   z-index: 2;
   flex-direction: column;
   vertical-align: middle;
+  &.off {
+    top: -150%;
+    transition:top .5s cubic-bezier(0.7,-0.3,0.3,0.7);
+  }
 `
-const Form = styled.form`
+const Form = rx('form')`
   position: relative;
 `
-const Transition = styled(CSSTransitionGroup)`
+const Transition = rx(CSSTransitionGroup)`
   position: relative;
   top: -1.1em;
   height: 1em;
   width: 100%;
 `
-const LabelContainer = styled.div`
+const LabelContainer = rx('div')`
   right: 0;
   width: 100%;
   height: 100%;
@@ -65,23 +64,23 @@ const LabelContainer = styled.div`
     }
   }
 `
-const Label = styled.label`
+const Label = rx('label')`
   display: inline-block;
 `
-const FormInput = styled.div`
+const FormInput = rx('div')`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 1.6em;
   position: relative;
 `
-const TextInput = styled(CommonTextInput)`
+const TextInput = rx(CommonTextInput)`--1
   -webkit-appearance: none;
   border: none;
-  font: ${Fonts.body};
-  color: ${color};
+  font: $body;
+  color: $details-color;
   border-radius: 0;
-  background-color: ${middleground};
+  background-color: $details-middleground;
   font-weight: bold;
   padding: .3em .3em 0em .3em;
   display: inline-block;
@@ -91,58 +90,63 @@ const TextInput = styled(CommonTextInput)`
   line-height: 1.2em;
   vertical-align: middle;
   width: 12em;
-  box-shadow: -1px 1px 1px 1px ${shadow} inset;
+  box-shadow: -1px 1px 1px 1px $details-shadow inset;
   z-index: 3;
   &:focus {
     outline: none;
-    background-color: $background;
+    background-color: $details-background;
   }
 `
-const InputCover = styled.div`
+const InputCover = rx('div')`
   position: absolute;
   top: -5%;
   content: '';
-  width: ${p => p.off ? '0%' : '110%'};
-  left: ${p => p.off ? '105%' : '-5%'};
+  width: 110%;
+  left: -5%;
   height: 110%;
-  background-color: ${color};
+  background-color: $details-color;
   z-index: 4;
   transition-duration: .4s;
   transition-timing-function: ease-in-out;
-  transition-property: ${p => p.off ? 'width, left' : 'width'};
+  transition-property: width;
+  &.off {
+    width: 0%;
+    left: 105%;
+    transition-property: width, left;
+  }
 `
-const Submit = styled(CommonSubmit)`
+const Submit = rx(CommonSubmit)`--1
   -webkit-appearance: none;
   display: inline-block;
   border: none;
   padding: .3em;
-  font: ${Fonts.icon};
+  font: $icon;
   border-radius: .2em;
   margin-left: .2em;
   font-size: 1.1em;
   height: 1.6em;
   vertical-align: middle;
-  box-shadow: -1px 1px 1px 1px ${shadow} inset;
-  text-shadow: -1px 1px 1px ${shadow}, .5);
+  box-shadow: -1px 1px 1px 1px $details-shadow inset;
+  text-shadow: -1px 1px 1px $details-shadow;
   z-index: 5;
   transition-duration: .7s;
   transition-timing-function: ease-in-out;
   transition-property: color, background-color, box-shadow, text-shadow;
   &:not(:disabled) {
-    background-color: ${middleground};
-    color: ${color};
+    background-color: $details-middleground;
+    color: $details-color;
     &:active, &:focus, &:hover {
-      background-color: ${background};
+      background-color: $details-background;
       outline: none;
     }
     &:active {
-      color: ${middleground};
-      background-color: ${color};
+      color: $details-middleground;
+      background-color: $details-color;
     }
   }
   &:disabled {
-    background-color: ${color};
-    color: ${color};
+    background-color: $details-color;
+    color: $details-color;
     box-shadow: none;
     text-shadow: none;
   }
@@ -215,7 +219,7 @@ class NewGameForm extends React.Component {
       </LabelContainer>
     )
     return (
-      <Container off={off}>
+      <Container rx={{off}}>
         <Form onSubmit={this.handleSubmit.bind(this, key)}>
           <Transition transitionName="anim"
                       component='div'
@@ -226,9 +230,9 @@ class NewGameForm extends React.Component {
           <FormInput>
             <TextInput value={value}
                        onChange={this.handleChange.bind(this)}
-                       ref={e => this.input = e}
+                       innerRef={e => this.input = e}
                        disabled={off}/>
-            <InputCover off={showInput}/>
+            <InputCover rx={{off: showInput}}/>
             <Submit value='>' disabled={!showInput}/>
           </FormInput>
         </Form>

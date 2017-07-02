@@ -1,16 +1,15 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonLink from 'utils/link';
-import cz from 'utils/styled-classes';
-import Colors from 'common/colors';
-import { lighten } from 'utils/color-tools';
 
-const { hearts } = Colors;
+rx`
+@import "~common/colors";
+`
 
-const Link = styled(cz(CommonLink, 'off'))`
+const Link = rx(CommonLink)`--1
   display: block;
   pointer-events: auto;
   position: relative;
@@ -49,7 +48,7 @@ const Link = styled(cz(CommonLink, 'off'))`
     }
     &:hover {
       .label {
-        color: ${lighten(hearts, 0.2)}
+        color: lighten($hearts, 20%);
       }
     }
   }

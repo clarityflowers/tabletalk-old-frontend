@@ -1,13 +1,10 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
 
 import Link from './link';
 import Label from './label';
 import Icon from './icon';
-
-import cz from 'utils/styled-classes';
 
 const Existing = (props) => {
   const {
@@ -18,7 +15,7 @@ const Existing = (props) => {
   let boxPosition = Math.max(position - 3, 0);
   const off = position == 0;
   return (
-    <Link off={position == 0} disabled={selected} route={route.push(gameId)}>
+    <Link rx={{off: position == 0, disabled: selected}} route={route.push(gameId)}>
       <Icon position={iconPosition}
             entering={entering}
             leaving={leaving}

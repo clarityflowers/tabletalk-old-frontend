@@ -1,14 +1,14 @@
 'use strict';
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
-const { heartsLight, textShadow } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   pointer-events: auto;
   text-align: left;
   overflow: hidden;
@@ -17,12 +17,12 @@ const Container = styled.div`
   transition-duration: .5s;
   transition-timing-function: cubic-bezier(0.730, -0.300, 0.375, 1.360);
 `
-const Content = styled.span`
+const Content = rx('span')`
   flex: 1;
-  font: ${Fonts.h1};
+  font: $h1;
   font-size: 3em;
-  color: ${heartsLight};
-  text-shadow: ${textShadow};
+  color: $heartsLight;
+  text-shadow: $text-shadow;
   padding: .3em 0px .1em .6em;
   display: inline-block;
   white-space: nowrap;

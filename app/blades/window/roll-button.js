@@ -1,17 +1,17 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonButton from 'common/button';
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { lighten, darken } from 'utils/color-tools';
 import { HoverWiggle } from 'utils/hover-animate.js';
-import props from 'utils/props';
-import cz from 'utils/styled-classes';
 
-const Container = styled(cz('div', 'off'))`
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const Container = rx('div')`
   z-index: 9;
   position: relative;
   width: 2.5em;
@@ -23,11 +23,10 @@ const Container = styled(cz('div', 'off'))`
     width: 0em;
   }
 `
-const focus = lighten(Colors.fire, 0.2);
-const Button = styled(CommonButton)`
+const Button = rx(CommonButton)`--1
   margin: .5em;
-  color: ${Colors.sun};
-  background-color: ${Colors.fire};
+  color: $sun;
+  background-color: $fire;
   box-sizing: border-box;
   font-family: 'League Spartan';
   padding-top: .2em;
@@ -40,19 +39,19 @@ const Button = styled(CommonButton)`
   left: 0;
   z-index: 10;
   &:focus {
-    border: .1em solid ${Colors.stone};
+    border: .1em solid $stone;
     padding-top: .15em
   }
   &:hover {
-    background-color: ${Colors.sand};
+    background-color: $sand;
   }
   &:active {
-    background-color: ${Colors.sky};
+    background-color: $sky;
   }
 `
-const ToggleButton = styled(Button)`
+const ToggleButton = rx(Button)`--1
   z-index: 11;
-  font: ${Fonts.icon};
+  font: $icon;
   padding: 0 0 0 .05em;
   width: 2em;
   height: 2em;
@@ -76,7 +75,7 @@ const RollButton = (props) => {
     text = '6';
   }
   return (
-    <Container off={off}>
+    <Container rx={{off}}>
       <HoverWiggle off={off}>
         <Node onClick={handleClick} disabled={off}>
           {text}

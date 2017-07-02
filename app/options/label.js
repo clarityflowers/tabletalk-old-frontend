@@ -2,10 +2,16 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Colors from 'common/colors';
 import Fonts from 'common/fonts';
 import CommonButton from 'common/button';
+
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
 const { textShadow } = Colors;
 const leftAnim = `left .15s ease-in-out`;
@@ -28,13 +34,13 @@ const Container = styled.div`
   padding-left: .5em;
   transition: width .3s ${easing} ${delay}s, ${leftAnim};
 `
-const Button = styled(CommonButton)`
-  font: ${Fonts.h1};
+const Button = rx(CommonButton)`--1
+  font: $h1;
   color: white;
   pointer-events: auto;
   position: relative;
   white-space: nowrap;
-  text-shadow: ${textShadow};
+  text-shadow: $text-shadow;
   padding: .8em 0.8em .5em 1em;
   margin: -.5em;
   left: 0;
@@ -42,7 +48,7 @@ const Button = styled(CommonButton)`
   overflow: visible;
   width: auto;
   font-weight: bold;
-  &focus: {
+  &:focus {
     outline: 1px solid white;
   }
   &:disabled {

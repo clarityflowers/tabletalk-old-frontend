@@ -13,6 +13,7 @@ function post(url, token, data, onload, onerror) {
 
 export default class Auth {
   static login(token, cb) {
+    console.log('LOGIN token: ', token);
     let onload = function() {
       if (this.status >= 200 && this.status < 400) {
         var data = JSON.parse(this.responseText);

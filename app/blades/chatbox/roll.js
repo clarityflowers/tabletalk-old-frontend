@@ -1,52 +1,50 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import cx from 'classnames';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { fadeout } from 'utils/color-tools';
-const { fire, sky, stone } = Colors;
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
 
-const rollColor = ({color}) => {
-  if (color == 'crit' || color == 'strong') {
-    return fire;
+@mixin roll-color {
+  transition: color 60s;
+  color: fade-out($stone, 0.3);
+  &.dim {
+    color: fade-out($stone, 0.6);
   }
-  else if (color == 'weak') {
-    return sky;
+  &.miss {
+    color: $stone;
   }
-  else if (color == 'miss') {
-    return stone;
+  &.weak {
+    color: $sky;
   }
-  else if (color == 'dim') {
-    return fadeout(stone, .6);
-  }
-  else {
-    return fadeout(stone, .3);
+  &.crit, &.strong {
+    color: $fire;
   }
 }
-const Die = styled.div`
-  color: ${rollColor};
-  transition: color 60s;
 `
-const Dice = styled.div`
+const Die = rx('div')`
+  @include roll-color;
+`
+const Dice = rx('div')`
   margin: 0 .2em;
   position: relative;
   bottom: -0.15em;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
-  font: ${Fonts.icon};
+  font: $icon;
   font-size: 1.5em;
 `
-const Number = styled.div`
+const Number = rx('div')`
   margin-top: 0em;
   font-family: 'Rajdhani';
   font-weight: 700;
   font-size: 3em;
   text-align: center;
-  transition: color 60s;
-  color: ${rollColor};
+  @include roll-color;
 `
+const Container = 'div';
 
 let Roll = (props) => {
   let { newest } = props;
@@ -71,32 +69,26 @@ let Roll = (props) => {
     }
   }
   let dice = [];
-  let color = null;
+  let rx = {};
   if (newest) {
-    if (crit) {
-      color = 'crit';
-    }
-    else if (result == 6) {
-      color = 'strong';
-    }
-    else if (result >= 4) {
-      color = 'weak';
-    }
-    else {
-      color = 'miss';
+    rx = {
+      crit,
+      strong: result == 6,
+      weak: result >= 4 && result <= 5,
+      miss: result <= 3
     }
   }
   let searching = true;
   for (let i=0; i < props.result.length; i++) {
-    let dieColor = 'dim';
+    let dieRx = 'dim';
     if (props.result[i] == result && searching) {
       if (result < 6) {
         searching = false;
       }
-      dieColor = color;
+      dieRx = rx;
     }
     dice.push(
-      <Die key={i} color={dieColor}>{props.result[i]}</Die>
+      <Die key={i} rx={dieRx}>{props.result[i]}</Die>
     )
   }
   let rollClassName = cx(
@@ -117,14 +109,14 @@ let Roll = (props) => {
     result = 'CRIT';
   }
   return (
-    <div className={rollClassName}>
+    <Container>
       <Dice>
         {dice}
       </Dice>
-      <Number color={color}>
+      <Number rx={rx}>
         {result}
       </Number>
-    </div>
+    </Container>
   )
 }
 

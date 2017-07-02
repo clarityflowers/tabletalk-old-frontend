@@ -1,17 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'common/colors';
-import Fonts from 'common/fonts';
+rx`
+@import "~common/colors";
+@import "~common/fonts";
+`
 
-import cz from 'utils/styled-classes';
-
-const { color, background } = Colors.details;
-
-const Container = styled.li`
+const Container = rx('li')`
   white-space: nowrap;
 `
-const Icon = styled(cz('span','me'))`
+const Icon = rx('span')`
   position: relative;
   top: .1em;
   border-radius: 1em;
@@ -21,10 +19,10 @@ const Icon = styled(cz('span','me'))`
   text-align: center;
   padding: .25em .25em .25em .25em;
   margin-right: .25em;
-  font: ${Fonts.icon};
+  font: $icon;
   &.me {
-    background: ${color};
-    color: ${background};
+    background: $details-color;
+    color: $details-background;
   }
 `
 const Name = 'span';
@@ -35,7 +33,7 @@ class Player extends React.PureComponent {
     const icon = admin ? '*' : 'u';
     return (
       <Container>
-        <Icon me={me}>{icon}</Icon>
+        <Icon rx={{me}}>{icon}</Icon>
         <Name>
           {name}
         </Name>
