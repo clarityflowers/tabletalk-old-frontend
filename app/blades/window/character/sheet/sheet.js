@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import Container from 'blades/window/styles/sheet';
 
 import Title from 'blades/common/components/title';
@@ -20,31 +20,31 @@ import Side from 'blades/window/styles/side';
 import CommonColumn from 'common/column';
 
 const Column = CommonColumn;
-const Center = styled(Column)`
+const Center = rx(Column)`--1
   flex: 50 1 auto;
   max-width: 50em;
 `
-const RightSide = styled(Side)`
+const RightSide = rx(Side)`--1
   width: 13.5em;
   margin-left: 0;
 `
-const StressHarm = styled(Column)`
+const StressHarm = rx(Column)`--1
   flex: 1 1 23em;
   align-items: stretch;
   justify-content: space-between;
   min-width: 15em;
   max-width: 40em;
 `
-const MiddleRow = styled(Row)`
+const MiddleRow = rx(Row)`--1
   flex-flow: row wrap;
   align-items: stretch;
   justify-content: center;
   width: 100%;
 `
-const MiddleColumn = styled(Column)`
+const MiddleColumn = rx(Column)`--1
   flex: 1 1 0;
 `
-const Health = styled(Row)`
+const Health = rx(Row)`--1
   margin: 1em;
   align-items: stretch;
   display: flex;
@@ -82,6 +82,7 @@ class Sheet extends React.Component {
       harmSevere, harmModerate1, harmModerate2, harmLesser1, harmLesser2,
       armor, heavyArmor, specialArmor,
       load, items,
+      bandolier1, bandolier2,
       abilities, strangeFriends,
       crew
     } = character;
@@ -130,7 +131,7 @@ class Sheet extends React.Component {
 
     const names = {name, playbook, alias};
 
-    const equipment = {load, items, playbook, rigging, bonus: loadBonus};
+    const equipment = {load, items, playbook, rigging, bonus: loadBonus, bandolier1, bandolier2};
     let friendDom = null;
     if (strangeFriends.length > 0) {
       friendDom = (

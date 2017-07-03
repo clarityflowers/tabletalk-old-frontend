@@ -1,14 +1,14 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Stress from './stress';
 import TraumaBar from './trauma-bar';
 
 import { TickArray } from 'blades/window/common/tick';
 
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: row wrap;
   position: relative;

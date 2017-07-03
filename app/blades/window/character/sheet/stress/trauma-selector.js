@@ -1,13 +1,11 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Trauma from './trauma';
 
-import cz from 'utils/styled-classes';
-
-const Container = styled(cz('div', 'off'))`
+const Container = rx('div')`
   font-size: .8em;
   flex: 0 0 auto;
   height: 2.5em;
@@ -59,7 +57,7 @@ class TraumaSelector extends React.PureComponent {
       }
     }
     return (
-      <Container off={off}>
+      <Container rx={{off}}>
         {traumas}
       </Container>
     );

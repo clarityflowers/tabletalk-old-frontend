@@ -1,16 +1,16 @@
 'use strict'
 
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import TickArray from 'blades/window/styles/tick-array.js';
-import Colors from 'blades/common/colors';
-import { lighten, darken } from 'utils/color-tools';
 
-const { fire, sun, shadow, stone } = Colors;
-const light = lighten(fire, 0.3);
-const dark = darken(fire, 0.2);
+rx`
+@import "~blades/common/colors";
+`
 
-const ThinTickArray = styled(TickArray)`
+const ThinTickArray = rx(TickArray)`--1
+  $dark: darken($fire, 20%);
+  $light: lighten($fire, 30%);
   z-index: 3;
   div.check {
     &:after {
@@ -20,7 +20,7 @@ const ThinTickArray = styled(TickArray)`
       top: 0;
       width: .16em;
       height: .34em;
-      background: ${sun};
+      background: $sun;
     }
   }
   button:first-child .check:first-child:after {
@@ -29,27 +29,27 @@ const ThinTickArray = styled(TickArray)`
   button:not(:disabled) {
     &:focus .check {
       &.checked:last-child svg polygon {
-        fill: ${light};
+        fill: $light;
       }
       &:not(.checked):first-child svg polygon {
-        stroke: ${light};
+        stroke: $light;
       }
     }
     &:hover .check {
       &.checked:last-child svg polygon {
-        fill: ${fire};
-        stroke: ${fire};
+        fill: $fire;
+        stroke: $fire;
       }
       &:not(.checked):first-child svg polygon {
-        fill: ${fire};
+        fill: $fire;
       }
     }
     &:active .check {
       &.checked:last-child svg polygon {
-        fill: ${light};
+        fill: $light;
       }
       &:not(.checked):first-child svg polygon {
-        fill: ${light};
+        fill: $light;
       }
     }
   }

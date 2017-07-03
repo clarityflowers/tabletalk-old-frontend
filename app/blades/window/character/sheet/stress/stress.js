@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Bar from 'blades/window/styles/bar';
 import Label from 'blades/window/styles/label-button';
@@ -9,7 +9,7 @@ import Array from 'blades/window/styles/thin-tick-array';
 
 import connect from 'utils/connect';
 
-const StressBar = styled(Bar)`
+const StressBar = rx(Bar)`--1
   flex: 1 1 auto;
   z-index: 5;
 `

@@ -1,14 +1,13 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Tickbar from './tickbar';
 
 import connect from 'utils/connect';
-import cz from 'utils/styled-classes';
 
-const Bar = styled(cz(Tickbar, 'top'))`
+const Bar = rx(Tickbar)`--1
   flex: 1 1 auto;
   position: relative;
   z-index: 2;

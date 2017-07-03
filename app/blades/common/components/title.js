@@ -1,36 +1,35 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts'
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const { h1 } = Fonts;
-const { sun, sand, fire, sky } = Colors;
-
-const Container = styled.div`
-  font: ${h1};
+const Container = rx('div')`
+  font: $h1;
   font-size: 2em;
-  color: ${sun};
+  color: $sun;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   padding: 0 1em;
 `
-const Span = styled.div`
+const Span = rx('div')`
   white-space: nowrap;
   margin: 0 0.25em;
 `
 const Name = Span;
-const Playbook = styled(Span)`
-  color: ${sand};
+const Playbook = rx(Span)`
+  color: $sand;
 `
-const Alias = styled(Span)`
-  color: ${fire};
+const Alias = rx(Span)`
+  color: $fire;
 `
-const Crew = styled(Span)`
-  color: ${sky};
+const Crew = rx(Span)`
+  color: $sky;
 `
 
 class Title extends React.PureComponent {

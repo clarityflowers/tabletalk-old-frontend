@@ -1,28 +1,37 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import props from 'utils/props';
+import inlined from 'utils/inlined';
 
-const { sand, shadow } = Colors;
+rx`
+@import "~blades/common/colors";
+`
 
-const Mark = styled.div`
+const Mark = rx('div')`
   width: .4em;
   height: 100%;
-  background: ${sand};
+  background: $sand;
   margin-left: .2em;
-  box-shadow: ${shadow};
+  box-shadow: $shadow;
 `
-const Container = styled(props('div', 'max'))`
+const RxContainer = rx('div')`
   flex: 0 0 auto;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   align-self: stretch;
-  width: ${p => p.max * 0.6}em;
 `
+const Container = inlined(rx('div')`
+  flex: 0 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  align-self: stretch;
+`, (max) => { 
+  return {width: `${max * 0.6}em`}
+});
 
 class Tier extends React.PureComponent {
   render() {
@@ -32,7 +41,7 @@ class Tier extends React.PureComponent {
       marks.push(<Mark key={i}/>);
     }
     return (
-      <Container max={max}>
+      <Container style={max}>
         {marks}
       </Container>
     )

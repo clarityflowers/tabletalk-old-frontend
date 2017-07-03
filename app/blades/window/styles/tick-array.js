@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import { TickArray } from 'blades/window/common/tick.js';
 
-const Array = styled(TickArray)`
+const Array = rx(TickArray)`
   font-size: 1.5em;
   position: relative;
   button:first-child:not(:last-child) {

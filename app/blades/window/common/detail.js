@@ -1,14 +1,14 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const { stone, sun, sand } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 auto;
   max-width: 38em;
   min-width: 15em;
@@ -16,29 +16,29 @@ const Container = styled.div`
   align-self: flex-start;
   * {
     &::selection {
-      background: ${sun};
-      color: ${stone};
+      background: $sun;
+      color: $stone;
     }
   }
 `
-const Long = styled(Container)`
+const Long = rx(Container)`
   order: 2;
 `
-const Short = styled(Container)`
+const Short = rx(Container)`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
 `
-const Header = styled.div`
-  color: ${sand};
+const Header = rx('div')`
+  color: $sand;
   margin-right: 0.5em;
 `
-const Body = styled.div`
+const Body = rx('div')`
   cursor: auto;
   user-select: text;
-  font: ${Fonts.body};
+  font: $body;
   font-size: 0.8em;
-  color: ${sun};
+  color: $sun;
 `
 
 class Detail extends React.PureComponent {

@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Friend from './friend';
 
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 auto;
 `
 

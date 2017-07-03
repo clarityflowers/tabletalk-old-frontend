@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Header from 'blades/window/common/xp';
 import Money from './money';
@@ -10,7 +10,7 @@ import Stat from './stat';
 
 import connect from 'utils/connect';
 
-const Div = styled.div`
+const Div = rx('div')`
   display: flex;
   flex-flow: column wrap;
   justify-content: center;

@@ -1,62 +1,67 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import { Coin } from 'blades/window/common/coin';
 
-import Colors from 'blades/common/colors';
 import Button from 'common/button';
-import { darken, lighten } from 'utils/color-tools';
-import props from 'utils/props';
 import connect from 'utils/connect';
 
-const Container = styled.div`
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+
+$active-background: lighten($fire, 30%);
+`
+
+const Container = rx('div')`
   position: relative;
   width: 1.8em;
   height: 1.8em;
   flex: 0 0 auto;
 `
-const activeBackground = lighten(Colors.fire, 0.3);
-const ZButton = styled(props(Button, 'top'))`
+const ZButton = rx(Button)`--1
   position: absolute;
-  z-index: ${props => props.top ? 2 : 1};
+  z-index: 1;
   &:focus .check:last-child {
-    outline: 1px solid ${Colors.fire};
+    outline: 1px solid $fire;
+  }
+  &.top {
+    z-index: 2;
   }
 `
-const Square = styled.div`
+const Square = rx('div')`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   align-content: space-between;
 `;
-const Checked = styled(ZButton)`
+const Checked = rx(ZButton)`--1
   top: 0;
   left: 0;
   &:hover .check:last-child {
-    background-color: ${Colors.fire};
+    background-color: $fire;
   }
   &:active .check:last-child {
-    background: ${activeBackground};
+    background: $active-background;
   }
 `;
-const uncheckedBackground = darken(Colors.sand, 0.4);
-const Unchecked = styled(ZButton)`
+const Unchecked = rx(ZButton)`--1
   bottom: 0;
   right: 0;
   &:hover .check:last-child {
-    background-color: ${uncheckedBackground};
+    background-color: darken($sand, 40%);
   }
   &:active .check:last-child {
-    background: ${activeBackground};
+    background: $active-background;
   }
 `;
-const CheckedSquare = styled(Square)`
+const CheckedSquare = rx(Square)`
   flex-flow: row wrap;
   align-items: flex-start;
 `;
-const UncheckedSquare = styled(Square)`
+const UncheckedSquare = rx(Square)`
   flex-flow: row-reverse wrap-reverse;
 `;
 
@@ -84,7 +89,7 @@ class Wallet extends React.Component {
         );
       }
       checked = (
-        <Checked onClick={this.decrement} top={value <= 1}>
+        <Checked onClick={this.decrement} rx={{top: value <= 1}}>
           <CheckedSquare>
             {coins}
           </CheckedSquare>
@@ -99,7 +104,7 @@ class Wallet extends React.Component {
         )
       }
       unchecked = (
-        <Unchecked onClick={this.increment} top={value >= 3}>
+        <Unchecked onClick={this.increment} rx={{top: value >= 3}}>
           <UncheckedSquare>
             {coins}
           </UncheckedSquare>

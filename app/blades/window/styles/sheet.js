@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-const Window = styled.div`
+const Sheet = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
@@ -10,4 +10,4 @@ const Window = styled.div`
   margin-bottom: 3em;
 `
 
-export default Window;
+export default Sheet;

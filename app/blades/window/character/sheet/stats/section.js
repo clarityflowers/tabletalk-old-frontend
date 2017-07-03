@@ -1,9 +1,9 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-const Section = styled.div`
+const Section = rx('div')`
   width: 10.5em;
   max-width: 11em;
   margin: .5em 0;

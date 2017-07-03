@@ -1,38 +1,33 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import { darken, lighten, fadeout } from 'utils/color-tools';
-import Colors from 'blades/common/colors';
 import { Check, extendCheckArray } from 'blades/window/common/check';
 
-const shadow = darken(Colors.stone, 0.5);
-const inset = `-1px 1px 1px 1px ${fadeout(shadow, .5)} inset`;
-const outset = `-2px 2px 1px 0px ${fadeout(shadow, .7)}`;
+rx`
+@import "~blades/common/colors";
+`
 
-const background = ({checked, highlight}) => {
-  if (checked && highlight) {
-    return Colors.fire;
-  }
-  if (!checked && highlight) {
-    return darken(Colors.sand, 0.4);
-  }
-  if (checked && !highlight) {
-    return Colors.sand;
-  }
-  if (!checked && !highlight) {
-    return lighten(Colors.stone, 0.1);
-  }
-}
-const Coin = styled(Check)`
+const Coin = rx(Check)`
+  $shadow: darken($stone, 50%);
+
   font-size: .5em;
   width: 1em;
   height: 1em;
-  background-color: ${background};
-  box-shadow: ${props => props.checked ? outset : inset};
   margin: 0.4em;
-  box-shadow: $inset;
+  background: lighten($stone, 10%);
+  box-shadow: -1px 1px 1px 1px fade-out($shadow, .5) inset;
+  &.highlight {
+    background: darken($sand, 40%);
+  }
+  &.checked {
+    box-shadow: -2px 2px 1px 0px fade-out($shadow, .7);
+    background: $sand;
+    &.highlight {
+      background: $fire;
+    }
+  }
 `;
 
 const CoinArray = extendCheckArray(Coin);

@@ -1,32 +1,29 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
-import cx from 'classnames';
+import rx from 'resplendence';
 
 import CommonClock  from 'blades/window/common/clock/clock';
 import Tickbar from './tickbar';
 
-import Colors from 'blades/common/colors';
 import connect from 'utils/connect';
-import { darken, fadeout, lighten } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
 
-const { sky, stone, sun, fire } = Colors;
 
-const locked = lighten(stone, 0.2);
+rx`
+@import "~blades/common/colors";
+`
 
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   margin-top: 1em;
 `
-const Bar = styled(Tickbar)`
+const Bar = rx(Tickbar)`--1
   width: 100%;
 `
 
-const Clock = styled(cz(CommonClock, 'locked'))`
+const Clock = rx(CommonClock)`--1
   position: relative;
   z-index: 5;
   margin: .2em .2em 0 .2em;
@@ -37,27 +34,28 @@ const Clock = styled(cz(CommonClock, 'locked'))`
   }
   .mark {
     transition: fill .2s;
-    fill: ${darken(stone, 0.2)};
+    fill: darken($stone, 20%);
     &.checked {
-      fill: ${sun};
+      fill: $sun;
     }
   }
   a:focus {
   }
   &:not(.locked) {
     .mark.highlight {
-      fill: ${fadeout(sun, 0.5)};
+      fill: fade-out($sun, 0.5);
       &.checked {
-        fill: ${fire};
+        fill: $fire;
       }
     }
   }
   &.locked {
+    $locked: lighten($stone, 20%);
     .stroke {
-      stroke: ${locked};
+      stroke: $locked;
     }
     .mark.checked, .center {
-      fill: ${locked};
+      fill: $locked;
     }
   }
 `
@@ -93,7 +91,7 @@ class Healing extends React.PureComponent {
           HEALING
         </Bar>
         <Clock value={clock} size={4} disabled={!unlocked || disabled}
-               locked={!unlocked} lock={vigor ? 1 : 0}
+               rx={{locked: !unlocked}} lock={vigor ? 1 : 0}
                increment={this.increment}
                decrement={this.decrement}/>
       </Container>

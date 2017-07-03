@@ -1,24 +1,19 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import ArmorTickbar from './armor-tickbar';
 import CommonRow from 'common/row';
 
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
   flex: 1 1 auto;
 `
 
-const ArmorBar = styled(ArmorTickbar)`
-  position: relative;
-  z-index: 3;
-`
-
-const Row = styled(CommonRow)`
+const Row = rx(CommonRow)`
   flex-flow: row wrap;
 `
 

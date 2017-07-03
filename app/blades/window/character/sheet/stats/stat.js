@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import autobind from 'autobind-decorator';
 
 import Action from './action';
@@ -10,7 +10,7 @@ import Section from './section';
 
 import connect from 'utils/connect';
 
-const Actions = styled.div`
+const Actions = rx('div')`
   margin: 0 .5em;
   display: flex;
   flex-flow: column nowrap;

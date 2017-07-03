@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Items from './items';
 import Load from './load';
@@ -45,11 +45,11 @@ const getItemsFromList = (list, items, rigging) => {
   return itemList;
 }
 
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 auto;
 `
 
-const EquipmentContainer = styled.div`
+const EquipmentContainer = rx('div')`
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;

@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { PureComponent } from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import StashRow from './stash-row';
 import Wallet from './wallet';
@@ -9,49 +9,51 @@ import Wallet from './wallet';
 import Row from 'common/row';
 import Column from 'common/column';
 import Button from 'common/button';
-import Colors from 'blades/common/colors';
-import { lighten } from 'utils/color-tools';
-import Fonts from 'blades/common/fonts';
 import connect from 'utils/connect';
 
-const Div = styled(Row)`
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const Div = rx(Row)`--1
   justify-content: center;
   font-size: .8em;
   margin-bottom: 1em;
 `
-const labelActiveColor = lighten(Colors.fire, 0.3);
-const labelDisabledColor = lighten(Colors.stone, 0.3);
-const Label = styled(Button)`
-  font: ${Fonts.h1};
+const Label = rx(Button)`--1
+  $label-active-color: lighten($fire, 30%);
+  $label-disabled-color: lighten($stone, 30%);
+
+  font: $h1;
   font-size: 0.8em;
-  text-shadow: ${Colors.textShadow};
+  text-shadow: $textShadow;
   &:disabled {
-    color: ${labelDisabledColor};
+    color: $label-disabled-color;
   }
   &:not(:disabled) {
     &:focus {
       text-decoration: underline;
     }
     &:hover {
-      color: ${Colors.fire};
+      color: $fire;
     }
     &:active {
-      color: ${labelActiveColor};
+      color: $label-active-color;
     }
   }
 `
-const coinHover = lighten(Colors.sand, 0.15);
-const CoinLabel = styled(Label)`
-  color: ${Colors.sand};
+const CoinLabel = rx(Label)`--1
+  color: $sand;
 `
-const StashLabel = styled(Label)`
-  color: ${Colors.sky};
+const StashLabel = rx(Label)`--1
+  color: $sky;
   margin-right: -0.7em;
 `
-const Left = styled(Column)`
+const Left = rx(Column)`--1
   padding-right: 0.7em;
 `
-const Right = styled(Column)`
+const Right = rx(Column)`--1
   align-self: flex-end;
 `
 

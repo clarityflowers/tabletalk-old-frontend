@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import Column from 'common/column';
+import rx from 'resplendence';
 
-const Side = styled(Column)`
+const Side = rx('div')`
+  display: flex;
+  flex-flow: column nowrap;
   margin: 0 1em;
   flex: 0 0 auto;
   align-items: stretch;

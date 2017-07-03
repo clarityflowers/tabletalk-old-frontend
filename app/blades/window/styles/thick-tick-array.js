@@ -1,24 +1,23 @@
-import styled from 'styled-components';
+import rx from 'resplendence';
 import TickArray from 'blades/window/styles/tick-array';
 
-import Colors from 'blades/common/colors';
-import { darken } from 'utils/color-tools';
+rx`
+@import "~blades/common/colors";
+`
 
-const { stone, sun } = Colors;
-const dark = darken(stone, 0.1);
-
-const ThickTickArray = styled(TickArray)`
+const ThickTickArray = rx(TickArray)`--1
+  $dark: darken($stone, 10%);
   z-index: 2;
   position: relative;
   .check {
     svg polygon {
-      fill: ${dark};
-      stroke: ${dark};
+      fill: $dark;
+      stroke: $dark;
     }
     &.checked svg {
       polygon {
-        stroke: ${sun};
-        fill: ${sun};
+        stroke: $sun;
+        fill: $sun;
       }
     }
   }

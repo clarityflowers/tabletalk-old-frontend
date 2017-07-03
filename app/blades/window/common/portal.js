@@ -1,15 +1,13 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import { darken, fadeout } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
+rx`
+@import "~blades/common/colors";
+`
 
-const { stone, fire } = Colors;
-
-const Container = styled(cz('div', ['left', 'right']))`
+const Container = rx('div')`
   position: absolute;
   top: 0;
   left: 0;
@@ -24,14 +22,14 @@ const Container = styled(cz('div', ['left', 'right']))`
   padding: .5em .5em 2.5em .5em;
   transition: left .15s ease-in-out;
   &::-webkit-scrollbar-thumb {
-    background: ${darken(stone, 0.2)};
+    background: darken($stone, 20%);
     &:hover {
-      background: ${fadeout(fire, 0.5)};
+      background: fade-out($fire, 0.5);
     }
   }
   &.left, &.right {
     &::-webkit-scrollbar-thumb {
-      background: ${stone};
+      background: $stone;
     }
   }
   &.left {
@@ -46,7 +44,7 @@ class Portal extends React.PureComponent {
   render() {
     const { children, left, right } = this.props;
     return (
-      <Container left={left} right={right}>
+      <Container rx={{left, right}}>
         {children}
       </Container>
     );

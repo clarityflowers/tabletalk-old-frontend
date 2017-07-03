@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Bar from 'blades/window/styles/bar';
 import Label from 'blades/window/styles/label-button';
@@ -10,13 +10,7 @@ import TraumaList from './trauma-list';
 import TickArray from 'blades/window/styles/tick-array';
 import Array from 'blades/window/styles/thick-tick-array'
 
-import Colors from 'blades/common/colors';
-import { darken } from 'utils/color-tools';
-
-const { stone, sun } = Colors;
-const dark = darken(stone, 0.1);
-
-const Container = styled(Bar)`
+const Container = rx(Bar)`
   flex: 1 1 auto;
   margin-left: 0em;
   z-index: 1;
@@ -25,12 +19,12 @@ const Container = styled(Bar)`
     z-index: 0;
   }
 `
-const Ticks = styled.div`
+const Ticks = rx('div')`
   display: flex;
   flex-flow: row nowrap;
   position: relative;
 `
-const TraumaLabel = styled(Label)`
+const TraumaLabel = rx(Label)`--1
   text-align: center;
   box-shadow: none;
   box-sizing: border-box;

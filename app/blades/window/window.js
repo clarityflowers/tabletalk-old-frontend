@@ -99,7 +99,7 @@ class Window extends React.Component {
     const { send } = this.props;
     return (action, value) => {
       const data = {action};
-      if (value) {
+      if (value !== undefined) {
         data.value = value;
       }
       if (id) {

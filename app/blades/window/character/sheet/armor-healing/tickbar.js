@@ -1,21 +1,21 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import { Tick } from 'blades/window/common/tick';
 import CommonButton from 'common/button';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { darken, lighten } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
 
-const { stone, sun, shadow, fire } = Colors;
-const dark = darken(stone, 0.1);
-const light = lighten(stone, 0.1);
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
 
-const Button = styled(CommonButton)`
+$dark: darken($stone, 10%);
+$light: lighten($stone, 10%);
+`
+
+const Button = rx(CommonButton)`--1
   &:not(:disabled) {
     &:focus {
       .label {
@@ -24,18 +24,18 @@ const Button = styled(CommonButton)`
     }
     &:hover {
       .label {
-        color: ${fire};
+        color: $fire;
         &:after {
-          background: ${fire};
+          background: $fire;
         }
       }
       .check {
         polygon {
-          stroke: ${fire};
+          stroke: $fire;
         }
         &.checked {
           polygon {
-            fill: ${fire};
+            fill: $fire;
           }
         }
       }
@@ -43,18 +43,18 @@ const Button = styled(CommonButton)`
     &:active {
       .check {
         svg polygon {
-          fill: ${lighten(fire, 0.3)};
+          fill: lighten($fire, 30%);
         }
         &.checked svg polygon {
-          fill: ${lighten(fire, 0.3)};
+          fill: lighten($fire, 30%);
         }
       }
     }
   }
 `;
-const Label = styled(cz('div', 'off'))`
-  font: ${Fonts.h1};
-  color: ${sun};
+const Label = rx('div')`
+  font: $h1;
+  color: $sun;
   height: auto;
   padding: .1em .2em;
   z-index: 3;
@@ -71,33 +71,33 @@ const Label = styled(cz('div', 'off'))`
     width: 100%;
     height: .2em;
     z-index: 2;
-    background: ${sun};
-    box-shadow: ${shadow};
+    background: $sun;
+    box-shadow: $shadow;
   }
   &.off {
-    color: ${light};
+    color: $light;
     &:after {
-      background: ${light};
+      background: $light;
     }
   }
 `;
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: row nowrap;
   align-items: flex-start;
   justify-content: flex-end;
 `;
-const StyledTick = styled(cz(Tick, 'off'))`
+const StyledTick = rx(Tick)`--1
   font-size: 1.5em;
   svg polygon {
     transition: stroke .1s, fill .1s;
   }
   &.off {
     svg polygon {
-      stroke: ${light};
+      stroke: $light;
     }
     &.checked svg polygon {
-      fill: ${light};
+      fill: $light;
     }
   }
 `;
@@ -109,10 +109,10 @@ const Tickbar = (props) => {
     <Button className={className} onClick={handleClick.bind(this)}
             disabled={disabled || off}>
       <Container>
-        <Label className='label' off={off}>
+        <Label className='label' rx={{off}}>
           {children}
         </Label>
-        <StyledTick checked={checked} off={off} isButton={false}/>
+        <StyledTick checked={checked} rx={{off}} isButton={false}/>
       </Container>
     </Button>
   )

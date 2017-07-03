@@ -1,63 +1,63 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import { Dot } from 'blades/window/common/dot';
 import Row from 'common/row';
 import Button from 'common/button';
 
-import Colors from 'blades/common/colors';
-import { lighten, darken } from 'utils/color-tools';
-import Fonts from 'blades/common/fonts';
-import props from 'utils/props';
 import connect from 'utils/connect';
-import cz from 'utils/styled-classes';
 
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
 
-const unchecked = darken(Colors.stone, 0.05);
-const ActionDot = styled(props(Dot, 'active'))`
-  border-color: ${unchecked};
-  background: ${unchecked};
+$unchecked: darken($stone, 5%);
+`
+
+const ActionDot = rx(Dot)`--1
+  border-color: $unchecked;
+  background: $unchecked;
   &.checked {
-    border-color: ${Colors.sun};
-    background: ${Colors.sun};
+    border-color: $sun;
+    background: $sun;
   }
   &.highlight {
-    border-color: ${Colors.sand};
-    background: ${Colors.sand};
+    border-color: $sand;
+    background: $sand;
   }
 `;
-const Divider = styled(cz('div', 'highlight'))`
+const Divider = rx('div')`
   margin: 0 .2em;
-  background: ${Colors.sun};
+  background: $sun;
   width: 1px;
   align-self: stretch;
   transition: background 1s;
   &.highlight {
-    background: ${Colors.sand};
+    background: $sand;
   }
 `
-const Name = styled.div`
-  font: ${Fonts.h2};
+const Name = rx('div')`
+  font: $h2;
   font-size: 0.8em;
   transition: color .5s;
   margin-left: .3em;
   font-weight: 500;
 `;
-const ActionButton = styled(Button)`
-  color: ${Colors.sun};
+const ActionButton = rx(Button)`--1
+  color: $sun;
   &:not(:disabled) {
-    color: ${Colors.sand};
+    color: $sand;
     &:focus {
       text-decoration: underline;
     }
     &:hover {
-      color: ${Colors.fire};
+      color: $fire;
       .check:not(.checked) {
-        background: ${Colors.fire};
-        border-color: ${Colors.fire};
+        background: $fire;
+        border-color: $fire;
         & ~ .check:not(.checked) {
-          background: ${unchecked};
-          border-color: ${unchecked};
+          background: $unchecked;
+          border-color: $unchecked;
         }
       }
     }
@@ -93,11 +93,11 @@ class Action extends React.Component {
       const active = !disabled && unlocked && i == value + 1
       dots.push(
         <ActionDot key={i} checked={value >= i}
-                   highlight={active} isButton={false}/>
+                   rx={{highlight: active}} isButton={false}/>
       )
       if (i == 1) {
         dots.push(
-          <Divider key={'d'} highlight={unlocked}/>
+          <Divider key={'d'} rx={{highlight: unlocked}}/>
         );
       }
     }
@@ -115,7 +115,7 @@ class Action extends React.Component {
       <ActionButton {...handlers} disabled={!active}>
         <Row>
           {dots}
-          <Name dataset={{active}}>
+          <Name>
             {name[0].toUpperCase() + name.substring(1)}
           </Name>
         </Row>

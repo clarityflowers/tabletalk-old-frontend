@@ -1,30 +1,29 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
-import { darken } from 'utils/color-tools';
+rx`
+@import "~blades/common/colors";
+`
 
-const { stone, sky, fire } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   width: 1em;
   margin: 0 .5em;
 `
-const Svg = styled.svg`
-  -webkit-filter: drop-shadow($text-shadow);
-  filter: drop-shadow($text-shadow);
-  -webkit-svg-shadow: $text-shadow;
+const Svg = rx('svg')`
+  -webkit-filter: drop-shadow($textShadow);
+  filter: drop-shadow($textShadow);
+  -webkit-svg-shadow: $textShadow;
 `
-const Polygon = styled.polygon`
-  fill: ${darken(stone, 0.15)};
+const Polygon = rx('polygon')`
+  fill: darken($stone, 15%);
 `
-const FriendTriangle = styled(Polygon)`
-  stroke: ${sky};
+const FriendTriangle = rx(Polygon)`
+  stroke: $sky;
 `
-const EnemyTriangle = styled(Polygon)`
-  stroke: ${fire};
+const EnemyTriangle = rx(Polygon)`
+  stroke: $fire;
 `
 
 class Friend extends React.PureComponent {

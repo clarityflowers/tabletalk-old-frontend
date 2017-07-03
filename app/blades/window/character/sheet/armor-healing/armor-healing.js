@@ -1,16 +1,16 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Armor from './armor';
 import Healing from './healing';
 
-import Colors from 'blades/common/colors';
+rx`
+@import "~blades/common/colors";
+`
 
-const { sun, shadow} = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 auto;
   display: flex;
   flex-flow: column nowrap;
@@ -31,9 +31,9 @@ const Container = styled.div`
     height: 100%;
     box-sizing: border-box;
     width: .5em;
-    background: ${sun};
+    background: $sun;
     z-index: 11;
-    box-shadow: ${shadow};
+    box-shadow: $shadow;
   }
 `
 

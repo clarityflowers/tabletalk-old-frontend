@@ -1,29 +1,29 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Value from './value';
 import CommonRow from 'common/row';
 
-import Colors from './colors';
-import cz from 'utils/styled-classes';
 import connect from 'utils/connect';
 
-const { dark, darkText, highlight, highlightText } = Colors;
+rx`
+@import "~blades/window/character/sheet/harm/colors";
+`
 
-const Container = styled(CommonRow)`
+const Container = rx(CommonRow)`--1
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
   &.highlight {
     div.level, div.penalty {
-      background: ${highlight};
-      color: ${highlightText};
+      background: $highlight;
+      color: $highlightText;
     }
   }
 `
-const Box = styled.div`
+const Box = rx('div')`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -31,25 +31,25 @@ const Box = styled.div`
   text-align: center;
   vertical-align: middle;
 `
-const Label = styled(cz(Box, 'highlight'))`
+const Label = rx(Box)`
   flex: 0 0 auto;
-  background: ${dark};
-  color: ${darkText};
+  background: $dark;
+  color: $darkText;
   transition-property: background-color, color;
   transition-duration: 1s;
   &.highlight {
-    background: ${highlight};
-    color: ${highlightText};
+    background: $highlight;
+    color: $highlightText;
   }
 `
-const Penalty = styled(Label)`
+const Penalty = rx(Label)`
   width: 4em;
   font-size: .6em;
 `
-const Level = styled(Label)`
+const Level = rx(Label)`
   width: 2em;
 `
-const Values = styled(Box)`
+const Values = rx(Box)`
   flex: 1 1 auto;
   display: flex;
   flex-flow: row wrap;
@@ -100,9 +100,9 @@ class Row extends React.PureComponent {
     const highlight = harm1 || harm2
     return (
       <Container>
-        <Level highlight={highlight}>{level}</Level>
+        <Level rx={{highlight}}>{level}</Level>
         <Values>{values}</Values>
-        <Penalty highlight={highlight}>{penalty.toUpperCase()}</Penalty>
+        <Penalty rx={{highlight}}>{penalty.toUpperCase()}</Penalty>
       </Container>
     );
   }

@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Label from 'blades/window/styles/label-button';
 import Bar from 'blades/window/styles/bar';
@@ -14,25 +14,25 @@ import connect from 'utils/connect';
 
 const { shadow } = Colors;
 
-const HeatBar = styled(Bar)`
+const HeatBar = rx(Bar)`--1
   padding-right: .5em;
 `
-const Wanted = styled.div`
+const Wanted = rx('div')`
   position: relative;
 `
-const WantedLabel = styled(Label)`
+const WantedLabel = rx(Label)`--1
   box-shadow: none;
   position: relative;
   z-index: 2;
   min-width: 7em;
 `
-const Shadow = styled(Label)`
+const Shadow = rx(Label)`--1
   width: 100%;
   height: 100%;
   position: absolute;
   z-index: 0;
 `
-const WantedArray = styled(ThickArray)`
+const WantedArray = rx(ThickArray)`--2
   position: absolute;
   top: 0;
   right: 0;
@@ -86,7 +86,7 @@ class Heat extends React.PureComponent {
             HEAT
           </Label>
           <HeatArray value={heat} length={9} disabled={disabled}
-                 higlight={hover ? -heat : 0}
+                 highlight={hover ? -heat : 0}
                  increment={this.increment}
                  decrement={this.decrement}/>
         </HeatBar>

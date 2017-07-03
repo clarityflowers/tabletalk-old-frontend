@@ -1,33 +1,33 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Row from './row';
 
-import Colors from 'blades/common/colors';
+rx`
+@import "~blades/common/colors";
+`
 
-const { stone, sun, shadow } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
   flex: 0 0 auto;
   width: 100%;
 `
-const Header = styled.div`
-  color: ${stone};
-  background: ${sun};
+const Header = rx('div')`
+  color: $stone;
+  background: $sun;
   padding: 0 .2em;
-  box-shadow: ${shadow};
+  box-shadow: $shadow;
   z-index: 10;
 `
-const Body = styled.div`
+const Body = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   flex-align: stretch;
-  box-shadow: ${shadow};
+  box-shadow: $shadow;
   z-index: 9;
 `
 

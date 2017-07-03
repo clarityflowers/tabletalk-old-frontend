@@ -1,25 +1,26 @@
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import { DotArray } from 'blades/window/common/dot';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import cz from 'utils/styled-classes';
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const Header = styled(cz('div', 'highlight'))`
-  font: ${Fonts.h1};
+const Header = rx('div')`
+  font: $h1;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-  background: ${Colors.sun};
+  background: $sun;
   transition: background-color 1s;
-  color: ${Colors.stone};
+  color: $stone;
   padding: 0 .25em;
-  box-shadow: ${Colors.shadow};
+  box-shadow: $shadow;
   &.highlight {
-    background: ${Colors.sand};
+    background: $sand;
   }
 `
 
@@ -59,7 +60,7 @@ class XP extends React.PureComponent {
     }
     const highlight = this.getChange(hover);
     return (
-      <Header highlight={value == length}>
+      <Header rx={{highlight: value == length }}>
         {name.toUpperCase()}
         <DotArray value={value}
                   length={length}

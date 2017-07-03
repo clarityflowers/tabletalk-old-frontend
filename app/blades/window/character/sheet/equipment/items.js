@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Item from './item';
 
-const Container = styled.div`
+const Container = rx('div')`
   min-width: 12.8em;
   font-size: .8em;
   display: flex;

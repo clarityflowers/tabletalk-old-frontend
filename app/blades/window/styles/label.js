@@ -1,12 +1,13 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import labelStyle from './label-style';
-
-const Label = styled.div`
-  ${labelStyle}
+rx`
+@import "~blades/window/styles/label";
+`
+const Label = rx('div')`
+  @include label;
 `
 
 export default Label

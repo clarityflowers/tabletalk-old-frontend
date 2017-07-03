@@ -2,14 +2,14 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 import autobind from 'autobind-decorator';
 
 import Sheet from './sheet/sheet';
 import NewAbility from 'blades/window/common/pages/new-ability/new-ability';
 
 
-const Container = styled.div`
+const Container = rx('div')`
   width: 100%;
   height: 100%;
 `

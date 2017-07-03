@@ -1,22 +1,24 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import { background, color, shadow } from './colors';
-import Fonts from 'blades/common/fonts';
-import cz from 'utils/styled-classes';
-import props from 'utils/props';
+import inlined from 'utils/inlined';
 
-const Container = styled(props(cz('div', 'on'), 'width', 'over'))`
-  font: ${Fonts.h1};
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const Container = inlined(rx('div')`
+  font: $h1;
   font-size: .75em;
   padding-right: 0.2em;
   padding-left: 0;
-  color: ${color};
-  background: ${background}
+  color: $stone;
+  background: $sun;
   position: absolute;
-  box-shadow: ${shadow};
+  box-shadow: $shadow;
   transition: opacity .3s;
   width: 0em;
   left: .75em;
@@ -29,14 +31,17 @@ const Container = styled(props(cz('div', 'on'), 'width', 'over'))`
               background 1s;
   overflow: hidden;
   &.on {
-    width: ${p => p.width}px;
     padding-left: 1.3em;
   }
-`
+  &.over {
+    color: $sun;
+    background: $fire;
+  }
+`, width => {
+  return {width: `${width}px`};
+});
 
-const Content = styled.div`
-
-`
+const Content = 'div'
 
 class Label extends React.PureComponent {
   constructor(props) {
@@ -55,10 +60,10 @@ class Label extends React.PureComponent {
     const { name, on, over } = this.props;
     const { width } = this.state;
     return (
-      <Container className='label' width={width} on={on} over={over}>
-        <div ref={this.updateWidth}>
+      <Container className='label' style={on ? width : 0} rx={{on, over}}>
+        <Content ref={this.updateWidth}>
           {name.toUpperCase()}
-        </div>
+        </Content>
       </Container>
     );
   }

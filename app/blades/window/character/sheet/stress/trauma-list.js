@@ -1,16 +1,16 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Bar from 'blades/window/styles/bar';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const { sky, textShadow } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex: 1 1 auto;
   flex-flow: row wrap;
@@ -21,12 +21,12 @@ const Container = styled.div`
   height: auto;
 `
 
-const Trauma = styled.div`
-  font: ${Fonts.h1};
+const Trauma = rx('div')`
+  font: $h1;
   margin: 0 .5em;
   font-size: 0.8em;
-  color: ${sky};
-  text-shadow: ${textShadow};
+  color: $sky;
+  text-shadow: $textShadow;
 `
 
 const TraumaList = (props) => {

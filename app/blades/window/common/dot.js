@@ -1,22 +1,19 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-
-import Colors from 'blades/common/colors.js';
-import { lighten, darken, mix, desaturate } from 'utils/color-tools';
 import { Check, extendCheckArray } from 'blades/window/common/check.js';
 
-const unchecked = mix(Colors.stone, desaturate(Colors.sun, .6), 0.8);
-const checked = mix(Colors.stone, desaturate(Colors.sun, .6), 0.1);
-const lightHover = lighten(Colors.fire, 0.1);
-const focusChecked = Colors.sun;
-const active = lighten(Colors.fire, 0.3);
+rx`
+@import "~blades/common/colors";
 
-const Dot = styled(Check)`
+$unchecked: mix($stone, desaturate($sun, 30%), 30%);
+$checked: mix($stone, desaturate($sun, 20%), 90%);
+
+`
+const Dot = rx(Check)`
   font-size: .6em;
-  background: $sun;
   width: 1em;
   height: 1em;
   position: relative;
@@ -24,36 +21,44 @@ const Dot = styled(Check)`
   padding: 0;
   box-sizing: border-box;
   margin: 0 1px;
-  border: 4px solid ${props => props.checked ? checked : unchecked};
-  background: ${props => props.checked ? checked : unchecked};
+  border: 4px solid $unchecked;
+  background: $unchecked; 
+  &.checked {
+    border-color: $checked;
+    background: $checked;
+  }
 `;
 
-const DotArray = styled(extendCheckArray(Dot))`
+const DotArray = rx(extendCheckArray(Dot))`
+  $light-hover: lighten($fire, 10%);
+  $focus-checked: $sun;
+  $active: lighten($fire, 30%);
+
   button {
     font-size: 1em;
     &:not(:disabled) {
       &:focus .check {
         &.checked:last-child {
-          background: ${Colors.sun}
+          background: $sun;
         }
         &:not(.checked):first-child {
-          background: ${checked}
+          background: $checked;
         }
       }
       &:hover .check {
         &.checked:last-child {
-          border: ${Colors.fire};
-          background: ${Colors.fire};
+          border: $fire;
+          background: $fire;
         }
         &:not(.checked):first-child {
-          border: ${lightHover};
-          background: ${lightHover};
+          border: $light-hover;
+          background: $light-hover;
         }
       }
       &:active .check {
         &.checked:last-child, &:not(.checked):first-child {
-          border: ${active};
-          background: ${active};
+          border: $active;
+          background: $active;
         }
       }
     }

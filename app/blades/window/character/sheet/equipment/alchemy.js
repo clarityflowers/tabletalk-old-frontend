@@ -1,30 +1,32 @@
 import React from 'react';
-import styled from 'styled-components'
+import rx from 'resplendence';
 
 import Bandolier from './bandolier';
 
-import Fonts from 'blades/common/fonts';
-import Colors from 'blades/common/colors';
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const Container = styled.div`
-  font: ${Fonts.body};
-  color: ${Colors.sun};
+const Container = rx('div')`
+  font: $body;
+  color: $sun;
   padding-left: 3em;
 `
-const Header = styled.div`
-  font: ${Fonts.h1};
-  color: ${Colors.sand};
+const Header = rx('div')`
+  font: $h1;
+  color: $sand;
 `
-const Instructions = styled.div`
+const Instructions = rx('div')`
   font-size: 0.8em;
   font-style: italic;
 `
-const Alchemicals = styled.ul`
+const Alchemicals = rx('ul')`
   font-size: 0.8em;
   margin: .5em 0;
   padding: 0 1.5em;
 `;
-const Alchemical = styled.li`
+const Alchemical = rx('li')`
   margin: .1em 0;
 `
 

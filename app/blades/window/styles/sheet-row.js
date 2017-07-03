@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Row from 'common/row';
-
-const SheetRow = styled(Row)`
+const SheetRow = rx('div')`
+  display: flex;
+  flex-flow: row nowrap;
   justify-content: center;
   align-items: flex-start;
   flex: 1 1 auto;

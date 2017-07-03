@@ -1,35 +1,41 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Button from 'common/button';
+rx`
+@import "~blades/common/colors";
+@import "~blades/window/styles/label";
+`
 
-import labelStyle from './label-style';
+const LabelButton = rx('button')`
+  @include label;
+  border: none;
+  margin: 0;
+  font-size: 1em;
+  user-select: none;
+  &::-moz-focus-inner {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+  }
 
-import Colors from 'blades/common/colors';
-import { lighten } from 'utils/color-tools';
-
-const { fire } = Colors;
-const light = lighten(fire, 0.3);
-
-const LabelButton = styled(Button)`
-  ${labelStyle}
   &:not(:disabled) {
     cursor: pointer;
     &:focus {
+      outline: none;
       text-decoration: underline;
     }
     &:hover {
-      color: ${fire};
+      color: $fire;
       & + div {
         button div.check:not(.checked):first-child svg polygon {
-          fill: ${fire};
+          fill: $fire;
         }
       }
     }
     &:active {
-      color: ${light};
+      color: lighten($fire, 30%);
     }
   }
 `

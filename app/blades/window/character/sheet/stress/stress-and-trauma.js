@@ -1,12 +1,12 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import TraumaSelector from './trauma-selector';
 import Tickbars from './tickbars';
 
-const Container = styled.div`
+const Container = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   flex: 1 1 auto;

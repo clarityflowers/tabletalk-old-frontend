@@ -1,13 +1,13 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
-import Colors from 'blades/common/colors';
+rx`
+@import "~blades/common/colors";
+`
 
-const { shadow, sun } = Colors;
-
-const Bar = styled.div`
+const Bar = rx('div')`
   margin-bottom: .5em;
   display: flex;
   flex-flow: row nowrap;
@@ -21,8 +21,8 @@ const Bar = styled.div`
     content: "";
     width: 100%;
     height: .5em;
-    background: ${sun};
-    box-shadow: ${shadow};
+    background: $sun;
+    box-shadow: $shadow;
   }
 `
 

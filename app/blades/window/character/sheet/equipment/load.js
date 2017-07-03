@@ -1,18 +1,20 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Diamond from './diamond';
 import Button from 'common/button';
 
-import { background, color, dark, hover, active, shadow, shadowColor } from './colors';
-import Fonts from 'blades/common/fonts';
 import connect from 'utils/connect';
-import props from 'utils/props';
-import cz from 'utils/styled-classes';
+import inlined from 'utils/inlined';
 
-const Container = styled.div`
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
+
+const Container = rx('div')`
   margin: 0 .25em 1em .25em;
   display: flex;
   flex-flow: column nowrap;
@@ -21,7 +23,7 @@ const Container = styled.div`
   align-items: center;
 `
 
-const InnerContainer = styled.div`
+const InnerContainer = rx('div')`
   position: relative;
   display: flex;
   flex: 1 1 auto;
@@ -30,16 +32,16 @@ const InnerContainer = styled.div`
   justify-content: center;
 `
 
-const Label = styled(props(Button, 'over'))`
+const Label = rx(Button)`--1
   transform: rotate(90deg);
-  font: ${Fonts.h1};
+  font: $h1;
   position: relative;
-  background: ${background};
+  background: $sun;
   padding: 0 .2em;
   box-sizing: border-box;
-  color: ${color};
+  color: $stone;
   margin: .6em 0;
-  box-shadow: 3px 2px 2px 1px ${shadowColor};
+  box-shadow: 3px 2px 2px 1px $shadowColor;
   cursor: pointer;
   transition: background 1s;
   &:not(:disabled) {
@@ -47,15 +49,25 @@ const Label = styled(props(Button, 'over'))`
       text-decoration: underline;
     }
     &:hover {
-      color: ${hover};
+      color: $fire;
+      &.over {
+        color: lighten($fire, 20%);
+      }
     }
     &:active {
-      color: ${active};
+      color: lighten($fire, 30%);
+      &.over {
+        color: lighten($fire, 50%);
+      }
     }
+  }
+  &.over {
+    background: $fire;
+    color: $sun;
   }
 `
 
-const Gap = styled('div')`
+const Gap = rx('div')`
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
@@ -64,41 +76,53 @@ const Gap = styled('div')`
   flex: 1 0 0;
 `
 
-const Dash = styled(props('div', 'length', 'over', 'max'))`
+const Overline = inlined(rx('div')`
+  z-index: 3;
+  background: $sun;
+  &.over {
+    background: $fire;
+  }
+  content: "";
+  position: absolute;
+  left: .4em;
+  top: 0;
+  width: .5em;
+  transition: height 1s ease-in-out, background 1s;
+  pointer-events: none;
+`, ({max, length}) => { return {
+  height: `${length * 100 / max}%`
+}});
+
+const Underline = inlined(rx('div')`
+  z-index: 1;
+  box-shadow: $shadow;
+  content: "";
+  position: absolute;
+  left: .4em;
+  top: 0;
+  width: .5em;
+  transition: height 1s ease-in-out, background 1s;
+  pointer-events: none;
+`, ({max, length}) => { return {
+  height: `${length * 100 / max}%`
+}});
+
+const Dash = rx('div')`
   position: relative;
   width: 1.3em;
   background: none;
   min-height: 7.4em;
   flex: 1 1 auto;
   display: flex;
-  height: 100
+  height: 100%;
   flex-flow: column nowrap;
   align-items: center;
-  &:before {
-    content: "";
-    z-index: 1;
-    box-shadow: ${shadow};
-  }
-  &:after {
-    z-index: 3;
-    background-color: ${background};
-  }
-  &:before, &:after {
-    content: "";
-    position: absolute;
-    left: .4em;
-    top: 0;
-    height: ${p => (100 / p.max) * p.length}%;
-    width: .5em;
-    transition: height 1s ease-in-out, background 1s;
-    pointer-events: none;
-  }
 `
 
-const Dot = styled.div`
+const Dot = rx('div')`
   height: .2em;
   width: .2em;
-  background: ${dark};
+  background: darken($stone, 20%);
   border-radius: .5em;
   position: relative;
   z-index: 6;
@@ -193,13 +217,19 @@ class Load extends React.PureComponent {
       </Gap>
     );
     i++;
+    const style = {
+      length: carrying, 
+      max: DEFAULT[2] + bonus
+    };
     return (
       <Container>
-        <Label disabled={disabled} onClick={this.clear} over={over}>
+        <Label disabled={disabled} onClick={this.clear} rx={{over}}>
           LOAD
         </Label>
-        <Dash length={carrying} max={DEFAULT[2] + bonus} over={over}>
+        <Dash>
+          <Underline style={style}/>
           {buttons}
+          <Overline style={style} rx={{over}}/>
         </Dash>
       </Container>
     );

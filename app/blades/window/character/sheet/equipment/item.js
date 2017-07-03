@@ -1,68 +1,67 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import CommonButton from 'common/button';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { lighten, fadeout, fadein } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
 import connect from 'utils/connect';
 
-const { stone, sky, sand, fire } = Colors;
-const normal = lighten(stone, 0.3);
-const normalUsed = lighten(normal, 0.2);
-const light = sky;
-const lightUsed = lighten(light, 0.1);
-const heavy = fadeout(sand, 0.4);
-const heavyUsed = fadein(heavy, 0.3);
-const huge = fadeout(fire, 0.1);
-const hugeUsed = fadein(huge, 0.3);
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const Button = styled(cz(CommonButton, ['heavy', 'huge', 'light', 'used']))`
-  font: ${Fonts.body};
+const Button = rx(CommonButton)`
+  $normal: lighten($stone, 30%);
+  $normal-used: lighten($normal, 20%);
+  $light: $sky;
+  $light-used: lighten($light, 10%);
+  $heavy: fade-out($sand, 0.4);
+  $heavy-used: fade-in($heavy, 0.3);
+  $huge: fade-out($fire, 0.1);
+  $huge-used: fade-in($huge, 0.3);
+  font: $body;
   text-align: left;
   font: $body;
-  color: ${normal};
+  color: $normal;
   margin: 0 1em .2em 0;
   &.heavy {
-    color: ${heavy};
+    color: $heavy;
   }
   &.huge {
-    color: ${huge}
+    color: $huge
   }
   &.light {
-    color: ${light};
+    color: $light;
   }
   &.used {
     font-weight: 700;
-    color: ${normalUsed};
+    color: $normal-used;
     &.heavy {
-      color: ${heavyUsed};
+      color: $heavy-used;
     }
     &.huge {
-      color: ${hugeUsed};
+      color: $huge-used;
     }
     &.light {
-      color: ${lightUsed};
+      color: $light-used;
     }
   }
   &:not(:disabled) {
     cursor: pointer;
     $hover: lighten($fire, 10%);
     &:active {
-      color: lighten(mix(${normalUsed}, $hover, 20%), 20%);
+      color: lighten(mix($normal-used, $hover, 20%), 20%);
     }
     &.heavy {
       &:active {
-        color: lighten(mix(${heavyUsed}, $hover, 20%), 20%);
+        color: lighten(mix($heavy-used, $hover, 20%), 20%);
       }
     }
     &.light {
       &:active {
-        color: lighten(mix(${lightUsed}, $hover, 20%), 20%);
+        color: lighten(mix($light-used, $hover, 20%), 20%);
       }
     }
     @media only screen and (max-width: 900px) {
@@ -76,17 +75,17 @@ const Button = styled(cz(CommonButton, ['heavy', 'huge', 'light', 'used']))`
         outline: none;
       }
       &:hover {
-        color: mix(${normalUsed}, $hover, 40%);
+        color: mix($normal-used, $hover, 40%);
       }
       &.heavy {
         &:hover {
-          color: mix(${heavyUsed}, $hover, 50%);
+          color: mix($heavy-used, $hover, 50%);
         }
       }
     }
     &.light {
       &:hover {
-        color: mix(${lightUsed}, $hover, 50%);
+        color: mix($light-used, $hover, 50%);
       }
     }
   }
@@ -110,7 +109,7 @@ class Item extends React.PureComponent {
     const { name, load, used, disabled } = this.props;
     return (
       <Button disabled={disabled} onClick={this.handleClick}
-              used={used} heavy={load == 2} huge={load > 2} light={load < 1}>
+              rx={{used, heavy: load == 2, huge: load > 2, light: load < 1}}>
         {name}
       </Button>
     )

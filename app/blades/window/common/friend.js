@@ -1,36 +1,35 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
+import rx from 'resplendence';
 
 import Icon from './friend-icon';
 
-import Colors from 'blades/common/colors';
-import Fonts from 'blades/common/fonts';
-import { lighten } from 'utils/color-tools';
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const { sky } = Colors;
-
-const Container = styled.div`
+const Container = rx('div')`
   max-width: 40em;
   width: 100%;
   margin-bottom: 1em;
 `
-const Header = styled.div`
-  font: ${Fonts.h1};
+const Header = rx('div')`
+  font: $h1;
   font-size: 1.25em;
   display: flex;
   flex-flow: row wrap;
   margin-left: -2em;
   white-space: nowrap;
 `
-const Name = styled.div`
+const Name = rx('div')`
   margin-right: .75em;
-  color: ${lighten(sky, 0.15)};
+  color: lighten($sky, 15%);
 `
-const Title = styled.div`
+const Title = rx('div')`
   white-space: nowrap;
-  color: ${sky};
+  color: $sky;
 `
 const Description = 'div';
 

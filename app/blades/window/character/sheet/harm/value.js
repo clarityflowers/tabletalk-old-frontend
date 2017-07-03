@@ -1,22 +1,16 @@
 'use strict'
 
 import React from 'react';
-import styled, { css } from 'styled-components';
+import rx from 'resplendence';
 
-import TextArea from 'react-textarea-autosize';
+import TextArea from 'react-autosize-textarea';
 
-import Colors from './colors';
-import Fonts from 'blades/common/fonts';
-import { lighten, darken } from 'utils/color-tools';
-import cz from 'utils/styled-classes';
-import props from 'utils/props';
+rx`
+@import "~blades/window/character/sheet/harm/colors";
+@import "~blades/common/fonts";
+`
 
-const { dark, darkText, highlight, highlightText } = Colors;
-const background = darken(dark, 0.5);
-const color = darken(darkText, 0.25);
-const focusHighlight = lighten(highlight, 0.1);
-
-const Container = styled.div`
+const Container = rx('div')`
   flex: 1 1 auto;
   height: auto;
   display: flex;
@@ -24,14 +18,16 @@ const Container = styled.div`
   align-items: stretch;
   width: 10em;
 `
-const highlighted = css`
-`
-const Text = styled(cz(TextArea, 'highlight'))`
+const Text = rx(TextArea)`
+  $background: darken($dark, 50%);
+  $color: darken($darkText, 25%);
+  $focusHighlight: lighten($highlight, 10%);
+
   flex: 1 1 auto;
   align-self: stretch;
-  font: ${Fonts.h1};
-  background: ${background};
-  color: ${color};
+  font: $h1;
+  background: $background;
+  color: $color;
   transition-property: background-color, color;
   transition-duration: 1s;
   border: none;
@@ -52,14 +48,14 @@ const Text = styled(cz(TextArea, 'highlight'))`
     }
   }
   &::selection {
-    background: ${highlight};
+    background: $highlight;
   }
   &.highlight {
-    background: ${highlight};
-    color: ${highlightText};
+    background: $highlight;
+    color: $highlightText;
     &:not(:disabled) {
       &:focus {
-        background: ${focusHighlight};
+        background: $focusHighlight;
       }
     }
   }
@@ -113,7 +109,7 @@ class Value extends React.Component {
     const text = (value || focused) ? value : name
     return (
       <Container>
-        <Text highlight={!!value}
+        <Text rx={{highlight: !!value}}
               value={text}
               onChange={this.handleChange.bind(this)}
               onBlur={this.handleBlur.bind(this)}

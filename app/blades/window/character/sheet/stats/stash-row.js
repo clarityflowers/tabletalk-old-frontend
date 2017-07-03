@@ -1,25 +1,26 @@
 'use strict'
 
 import React from 'react';
-import styled from 'styled-components';
-import cx from 'classnames';
+import rx from 'resplendence';
 
 import Row from 'common/row';
 import { CoinArray } from 'blades/window/common/coin';
-import Colors from 'blades/common/colors';
-import { darken } from 'utils/color-tools';
 
-const StashArray = styled(CoinArray)`
+rx`
+@import "~blades/common/colors";
+`
+
+const StashArray = rx(CoinArray)`--1
   height: 1em;
   .check:not(:last-child) {
-    background: ${darken(Colors.stone, 0.05)};
+    background: darken($stone, 5%);
     &.highlight {
-      background: ${darken(Colors.sky, 0.2)};
+      background: darken($sky, 20%);
     }
     &.checked {
-      background: ${Colors.sky};
+      background: $sky;
       &.highlight {
-        background: ${Colors.fire};
+        background: $fire;
       }
     }
   }

@@ -1,17 +1,16 @@
 import React from 'react';
-import styled from 'styled-components'
+import rx from 'resplendence'
 
 import { CoinArray } from 'blades/window/common/coin';
 
-import Fonts from 'blades/common/fonts';
-import Colors from 'blades/common/colors';
-import cx from 'utils/styled-classes';
-import { fadeout, darken, lighten } from 'utils/color-tools';
 import connect from 'utils/connect';
 
-const { sun, stone, fire } = Colors;
+rx`
+@import "~blades/common/colors";
+@import "~blades/common/fonts";
+`
 
-const Container = styled(cx('div', 'off'))`
+const Container = rx('div')`
   display: flex;
   flex-flow: row nowrap;
   &.off {
@@ -19,38 +18,38 @@ const Container = styled(cx('div', 'off'))`
   }
   margin: 0.2em 0;
 `
-const Label = styled(cx('div', 'off'))`
-  font: ${Fonts.body};
+const Label = rx('div')`
+  font: $body;
   font-size: .8em;
   margin-right: .2em;
 `
-const Checks = styled(CoinArray)`
+const Checks = rx(CoinArray)`--1
   .check {
     &.checked {
-      background-color: ${sun};
+      background-color: $sun;
       &.highlight {
-        background-color: ${fire}
+        background-color: $fire;
       }
     }
     &:not(.checked) {
-      background-color: ${darken(stone, 0.05)};
+      background-color: darken($stone, 5%);
     }
   }
   button:not(:disabled) {
     &:hover {
       .check.checked:last-child {
-        background-color: ${fire};
+        background-color: $fire;
       }
       .check:not(.checked):first-child {
-        background-color: ${darken(fire, 0.2)};
+        background-color: darken($fire, 20%);
       }
     }
     &:active {
       .check.checked:last-child {
-        background-color: ${darken(fire, 0.2)};
+        background-color: darken($fire, 20%);
       }
       .check:not(.checked):first-child {
-        background-color: ${fire};
+        background-color: $fire;
       }
     }
   }
@@ -74,7 +73,7 @@ class Bandolier extends React.PureComponent {
     const { on, used, id, disabled } = this.props;
     const off = disabled || !on;
     return (
-      <Container off={off}>
+      <Container rx={{off}}>
         <Label>Bandolier</Label>
         <Checks value={used} length={3} disabled={off} increment={this.increment} decrement={this.decrement}/>
       </Container>
