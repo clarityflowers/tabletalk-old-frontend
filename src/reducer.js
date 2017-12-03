@@ -3,8 +3,12 @@ import {
   START_LOGIN,
   LOGIN,
   FAIL_LOGIN,
-  LOGOUT
+  LOGOUT,
+  ROUTE
 } from './actions';
+
+
+import splitPathname from 'utils/splitPathname';
 
 export default combineReducers({
   auth: combineReducers({
@@ -42,5 +46,14 @@ export default combineReducers({
           return state;
       }
     }
-  })
+  }),
+
+  path: (state = [], action) => {
+    switch(action.type) {
+      case ROUTE:
+        return splitPathname(action.path);
+      default:
+        return state;
+    }
+  }
 });
