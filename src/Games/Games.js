@@ -56,13 +56,17 @@ class GamesList extends React.Component {
 
 class Games extends React.Component {
   route = () => {
-    const { path, list, lastLoaded, error, getGames, getGame } = this.props;
     const currentGame = this.currentGame();
-    if (currentGame) {
-      getGame({id: currentGame});
+    
+    if (currentGame !== null) {
+      const { gamesById, getGame } = this.props;
+      if (gamesById === null || gamesById[currentGame] === undefined) {
+        getGame({id: currentGame});
+      }
     }
     else
     {
+      const { list, error, lastLoaded, getGames } = this.props;
       if ((list === null && !error) || expired(lastLoaded, 10)) {
         getGames();
       }
@@ -97,14 +101,15 @@ class Games extends React.Component {
     }
   }
   render() {
-    const { here, path, list, gamesById, playersById } = this.props;
+    const { list, gamesById, playersById } = this.props;
 
     let content;
     let returnButton;
-    if (list === null || gamesById[this.currentGame()] === undefined) {
+    const currentGame = this.currentGame();
+    if (gamesById === null || (currentGame === null && list === null) || (currentGame !== null && gamesById[currentGame] === undefined)) {
       content = <Spinner/>
     }
-    else if (path.length === 0) {
+    else if (currentGame === null) {
       const listGames = list.map(id => {
         const { kind, name } = gamesById[id];
         return {

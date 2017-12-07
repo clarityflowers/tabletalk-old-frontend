@@ -18,7 +18,7 @@ const mapGames = games => {
   const playersById = {};
   for (let i=0; i < games.length; i++) {
     const { id, kind, maxPlayers, name, players, me } = games[i];
-    games.push(id);
+    list.push(id);
     const game = { kind, maxPlayers, name, me, players: [] };
     for (let j=0; j < players.length; j++) {
       const { id, name, admin } = players[j];
@@ -47,7 +47,6 @@ export const getGame = ({id}) => (dispatch, getState) => {
   dispatch(startLoadingGames());
   api.get(id, auth.jwt)
     .then(game => {
-      console.log(game);
       const {gamesById, playersById} = mapGames([game]);
       dispatch(addGames({gamesById, playersById}));
     })

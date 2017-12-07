@@ -14,10 +14,13 @@ import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory();
 
-const enhance = compose(
-  applyMiddleware(thunk.withExtraArgument({history})),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+
+let enhance = applyMiddleware(thunk.withExtraArgument({history}));
+
+if (devTools) {
+  enhance = compose(enhance, devTools);
+}
 
 const pathToArray = pathname => {
   let path = pathname.split('/');

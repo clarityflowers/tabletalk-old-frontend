@@ -9,8 +9,6 @@ import { getStatus } from 'Status/actionCreators';
 import { login, loginReady } from 'Auth/actionCreators';
 import { replace } from 'Routing/actionCreators';
 
-import { subPath } from 'utils/pathTools';
-
 import Spinner from 'common/components/Spinner';
 
 const Container = rx('div')`
