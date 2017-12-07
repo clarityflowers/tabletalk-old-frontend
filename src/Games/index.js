@@ -1,20 +1,16 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
-class Games extends React.Component {
-  componentDidUpdate(prevProps) {
-    const { route } = this.props;
-    if 
-  }
-  render() {
-    const {r}
-  }
-}
+import Games from './Games';
 
-const mapStateToProps = (state, ownProps) => ({
-  ...ownProps
+import { goTo } from 'Routing/actionCreators';
+import { getGames, getGame } from './actionCreators';
+
+const mapStateToProps = ({games}, {path, here}) => ({
+  ...games,
+  path,
+  here
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {goTo, getGames, getGame};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Games);

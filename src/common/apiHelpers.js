@@ -10,7 +10,7 @@ const checkStatus = response => {
 
 const deserialize = response => response.json(); 
 
-const request = (urlInput, {method = "GET", queries, urlParams, body, auth}) => {
+const request = (urlInput, {method = "GET", queries, urlParams, body, jwt}) => {
   // build url with url params
   const urlParts = urlInput.split("/");
   let url = urlParts[0];
@@ -38,8 +38,8 @@ const request = (urlInput, {method = "GET", queries, urlParams, body, auth}) => 
   }
 
   const headers = {}
-  if (auth) {
-    headers['Auth'] = auth;
+  if (jwt) {
+    headers['Authorization'] = "Bearer " + jwt;
   }
   if (method !== "GET") {
     headers['Content-Type'] = 'application/json';
@@ -50,32 +50,24 @@ const request = (urlInput, {method = "GET", queries, urlParams, body, auth}) => 
     body: (method === "GET") ? undefined : body,
     headers
   }
-  return fetch(url, opts)
+  return fetch(`${process.env.REACT_APP_API_URL}/${url}`, opts)
     .then(checkStatus)
     .then(deserialize);
-} 
-
-const makeApi = (baseUrl, delegate, auth) => {
-  const helpers = {
-    path: (path, map) => makeApi(`${baseUrl}/${path}`, map, auth),
-    auth: (path, jwt, map) => makeApi(`${baseUrl}/${path}`, map, jwt),
-    get: (url, {queries, urlParams, auth}) => request(`${baseUrl}/${url}`, {method: "GET", queries, urlParams, auth}),
-    post: (url, {body, urlParams, auth}) => request(`${baseUrl}/${url}`, {method: "POST", body, urlParams, auth}),
-  }
-
-  return delegate(helpers);
 }
 
-const api = makeApi(process.env.REACT_APP_API_URL, ({path, get}) => ({
-  auth: path("auth", ({get}) => ({
-    login: (provider, jwt) => get("login", {queries: {provider, jwt}})
-  }))
-}))
+export const get = (url, {queries, urlParams, jwt} = {}) => request(url, {method: "GET", queries, urlParams, jwt});
+export const post = (url, {body, urlParams, jwt} = {}) => request(url, {method: "POST", body, urlParams, jwt});
 
-export default {
-  auth: {
-    login: api.auth.login
+const addUrl = (fn, added) => (url, opts) => fn(`${added}/${url}`, opts);
+
+export const withUrl = (args, added) => {
+  if (added === undefined) return withUrl({get, post}, args);
+  else if (typeof args === "function") return addUrl(args, added);
+  else {
+    const result = {};
+    for (const key in args) {
+      result[key] = withUrl(args[key], added);
+    }
+    return result;
   }
-};
-
-window.api = api;
+} 

@@ -1,0 +1,32 @@
+@mixin card {
+  background: hsla(0, 100%, 100%, 1);
+  box-shadow: -1px 1px 1px 1px hsla(0, 0%, 0%, .1);
+}
+
+@mixin game-kind-background {
+  color: white;
+  font-family: "League Spartan";
+  text-align: center;
+  text-shadow: -1px 1px 1px hsla(0, 0%, 0%, .1);
+  &.TheSprawl {
+    background: linear-gradient(-45deg, #ff5ea3, #0d0d4f);
+  }
+  &.BladesInTheDark {
+    background: linear-gradient(160deg, #17171c, #b22a2a);
+  }
+  &.StrangerRoads {
+    background: linear-gradient(20deg, #20befc, #fff9f9);
+  }
+}
+
+@mixin game-kind-header {
+  padding: 20px;
+  font-size: 40px;
+  @include game-kind-background;
+}
+
+@mixin button {
+  background: none;
+  border: none;
+  border-radius: none;
+}

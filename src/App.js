@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import rx from 'resplendence';
 
+import Games from 'Games';
+import Auth from 'Auth';
 
+import { getStatus } from 'Status/actionCreators';
+import { login, loginReady } from 'Auth/actionCreators';
+import { replace } from 'Routing/actionCreators';
 
-import {
-  goTo,
-  goBack
-} from './actionCreators';
+import { subPath } from 'utils/pathTools';
 
+import Spinner from 'common/components/Spinner';
 
 const Container = rx('div')`
   display: flex;
@@ -16,76 +19,79 @@ const Container = rx('div')`
   align-items: center;
   justify-content: center;
   height: 100vh;
-`
-
-const Card = rx('div')`
-  background: hsla(0, 100%, 100%, 1);
-  box-shadow: -1px 1px 1px 1px hsla(0, 0%, 0%, .1);
-  padding: 40px;
-  min-width: 800px;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-`
-
-const Title = rx('div')`
-  font-family: "Marvin Visions";
-  color: #B24592;
-  font-size: 160px;
-  margin: 10px 0;
-  text-align: center;
-`
-
-const Status = rx('div')`
-  font-family: "League Spartan";
-  color: #F15F79;
-  font-size: 40px;
-  margin: 10px 0;
-  text-align: center;
-`
-
-let GoogleLoginButton = ({className}) => <div className={`g-signin2 ${className}`} data-onsuccess="onSignIn"/>;
-GoogleLoginButton = rx(GoogleLoginButton)`
-  display: none;
-  &.show {
-    display: block;
-  }
+  user-select: none;
 `
 
 class App extends Component {
+  componentDidMount() {
+    const { getStatus } = this.props;
+    getStatus();
+  }
+  componentDidUpdate(prevProps) {
+    {
+      const { up, googleLoggedIn, login } = this.props;
+
+      const canLogIn = (up && googleLoggedIn);
+      const couldLogIn = (prevProps.up && prevProps.googleLoggedIn);
+      if (!couldLogIn && canLogIn) {
+        login();
+      }
+    }
+    {
+      const { up, loginReady } = this.props;
+      if (!prevProps.up && up) {
+        setTimeout(loginReady, 500);
+      }
+    }
+    {
+      const { path, loggedIn, replace } = this.props;
+      if (loggedIn && path.length === 0) {
+        replace(["games"]);
+      }
+    }
+  }
   render() {
-    const { loggingIn, loggedIn, loginError } = this.props;
-    
-    const { path, goTo, goBack } = this.props;
+    const { loggedIn, ready, path } = this.props;
+
+    const paths = [
+      {
+        path: "games",
+        className: Games
+      }
+    ]
 
     let content;
-    if (loggedIn) content = <Status onClick={goBack}>Logged in!</Status>
-    else if (loggingIn) content = <Status>....logging in</Status>
-    else if (loginError) content = <Status>failed!</Status>
-
-    const here = [""];
+    if (!ready) content = <Spinner/>;
+    else if (loggedIn) {
+      for (let i=0; i < paths.length; i++) {
+        const entry = paths[i];
+        const [here, ...tail] = path;
+        if (here === entry.path) {
+          const Node = entry.className;
+          content = <Node here={[here]} path={tail}/>
+        }
+      }
+    }
 
     return (
       <Container>
-        <Card>
-          <Title onClick={() => goTo([...here, "games"])}>Tabletalk</Title>
-          {content}
-          <GoogleLoginButton rx={{show: (!loggedIn && !loggedIn)}}/>
-        </Card>
+        <Auth/>
+        {content}
       </Container>
     );
   }
 }
 
-const mapStateToProps = ({auth, path}) => {
+const mapStateToProps = ({auth, path, status}) => {
   return {
-    loggingIn: auth.pending,
+    up: status.up,
+    ready: auth.ready,
+    googleLoggedIn: !!auth.googleJwt,
     loggedIn: !!auth.jwt,
-    loginError: auth.error,
     path
   }
 }
 
-const mapDispatchToProps = {goTo, goBack}
+const mapDispatchToProps = { getStatus, login, loginReady, replace };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

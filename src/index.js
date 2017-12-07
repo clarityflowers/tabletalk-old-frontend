@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './reducer';
-import { loginWithGoogle, setPath } from './actionCreators';
+import { setGoogleJWT } from 'Auth/actionCreators';
+import { route } from 'Routing/actionCreators';
 import './fonts/fonts.scss';
 import { createBrowserHistory } from 'history';
 
@@ -18,16 +19,35 @@ const enhance = compose(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
+const pathToArray = pathname => {
+  let path = pathname.split('/');
+  if (path[path.length - 1] === '') {
+    path = path.slice(0, path.length - 1);
+  }
+  if (path[0] === '') {
+    path = path.slice(1);
+  }
+  return path;
+}
+
+
 const store = createStore(
   reducer, 
   {}, 
   enhance
 );
-history.listen((location, action) => store.dispatch(setPath({path: location.pathname})));
 
-window.onSignIn = ({Zi}) => {
-  const token = Zi.id_token;
-  store.dispatch(loginWithGoogle(token));
+const handleHistoryChange = (location) => {
+  store.dispatch(route(pathToArray(location.pathname)));
+}
+
+handleHistoryChange(history.location);
+
+history.listen(handleHistoryChange);
+
+window.onSignIn = (args) => {
+  const jwt = args.Zi.id_token;
+  store.dispatch(setGoogleJWT({jwt}));
 }
 
 
